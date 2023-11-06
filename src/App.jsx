@@ -1,43 +1,42 @@
-import React from "react";
 import Login from "./components/Login";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Admin from "./components/Admin/Admin";
-import ProductsAll from "./components/Admin/Products/ProductsAll";
-import ProductsCreate from "./components/Admin/Products/ProductsCreate";
-import ProductsEdit from "./components/Admin/Products/ProductsEdit";
-import ProductDetails from "./components/Admin/Products/ProductDetails";
-import CategoryAll from "./components/Admin/Category/CategoryAll";
-import CategoryCreate from "./components/Admin/Category/CategoryCreate";
-import CategoryEdit from "./components/Admin/Category/CategoryEdit";
-import CategoryDetail from "./components/Admin/Category/CategoryDetail";
-import PartnerAll from "./components/Admin/Partner/PartnerAll";
-import PartnerCreate from "./components/Admin/Partner/PartnerCreate";
-import PartnerEdit from "./components/Admin/Partner/PartnerEdit";
-import PartnerDetail from "./components/Admin/Partner/PartnerDetail";
-import LocationAll from "./components/Admin/Location/LocationAll";
-import LocationCreate from "./components/Admin/Location/LocationCreate";
-import LocationEdit from "./components/Admin/Location/LocationEdit";
-import LocationDetail from "./components/Admin/Location/LocationDetail";
-import SaleOrderAll from "./components/Admin/SaleOrder/SaleOrderAll";
-import SaleOrderCreate from "./components/Admin/SaleOrder/SaleOrderCreate";
-import SaleOrderDetail from "./components/Admin/SaleOrder/SaleOrderDetail";
-import PosItems from "./components/Admin/POS/PosItems";
+import Dashboard from "./components/Dashboard/Dashboard";
+import ProductsAll from "./components/Dashboard/Products/ProductsAll";
+import ProductsCreate from "./components/Dashboard/Products/ProductsCreate";
+import ProductsEdit from "./components/Dashboard/Products/ProductsEdit";
+import ProductDetails from "./components/Dashboard/Products/ProductDetails";
+import CategoryAll from "./components/Dashboard/Category/CategoryAll";
+import CategoryCreate from "./components/Dashboard/Category/CategoryCreate";
+import CategoryEdit from "./components/Dashboard/Category/CategoryEdit";
+import CategoryDetail from "./components/Dashboard/Category/CategoryDetail";
+import PartnerAll from "./components/Dashboard/Partner/PartnerAll";
+import PartnerCreate from "./components/Dashboard/Partner/PartnerCreate";
+import PartnerEdit from "./components/Dashboard/Partner/PartnerEdit";
+import PartnerDetail from "./components/Dashboard/Partner/PartnerDetail";
+import LocationAll from "./components/Dashboard/Location/LocationAll";
+import LocationCreate from "./components/Dashboard/Location/LocationCreate";
+import LocationEdit from "./components/Dashboard/Location/LocationEdit";
+import LocationDetail from "./components/Dashboard/Location/LocationDetail";
+import SaleOrderAll from "./components/Dashboard/SaleOrder/SaleOrderAll";
+import SaleOrderCreate from "./components/Dashboard/SaleOrder/SaleOrderCreate";
+import SaleOrderDetail from "./components/Dashboard/SaleOrder/SaleOrderDetail";
+import PosItems from "./components/Dashboard/POS/PosItems";
 import Register from "./components/Register";
 import GuardRouter from "./components/GuardRoute";
 import Home from "./components/Home";
 import ErrorBoundary from "./components/ErrorBoundary";
-import Profile from "./components/utility/Profile";
-import OverView from "./components/utility/OverView";
-import Customer from "./components/Admin/Customer/Customer";
-import Vendors from "./components/Admin/Customer/Vendors";
-import View from "./components/Admin/SaleOrder/View";
-import PurchaseAll from "./components/Admin/Purchase/PurchaseAll";
-import PurchaseCreate from "./components/Admin/Purchase/PurchaseCreate";
-import PurchaseDetail from "./components/Admin/Purchase/PurchaseDetail";
-import PurchaseView from "./components/Admin/Purchase/PurchaseView";
-import Stock from "./components/Admin/Stock/Stock";
-import AdjustmentView from "./components/Admin/Ajustment/AjusmentView";
+import Profile from "./components/utils/Profile";
+import OverView from "./components/utils/OverView";
+import Customer from "./components/Dashboard/Customer/Customer";
+import Vendors from "./components/Dashboard/Customer/Vendors";
+import View from "./components/Dashboard/SaleOrder/View";
+import PurchaseAll from "./components/Dashboard/Purchase/PurchaseAll";
+import PurchaseCreate from "./components/Dashboard/Purchase/PurchaseCreate";
+import PurchaseDetail from "./components/Dashboard/Purchase/PurchaseDetail";
+import PurchaseView from "./components/Dashboard/Purchase/PurchaseView";
+import Stock from "./components/Dashboard/Stock/Stock";
+import AdjustmentView from "./components/Dashboard/Ajustment/AjusmentView";
 
 function App() {
   return (
@@ -51,7 +50,7 @@ function App() {
             path="/admin"
             element={
               <GuardRouter>
-                <Admin />
+                <Dashboard />
               </GuardRouter>
             }
           >

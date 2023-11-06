@@ -1,13 +1,31 @@
-body{
+body {
   margin: 0;
-  padding: 0                                                                                                ;
+  padding: 0;
+  background-color: whitesmoke;
+}
+@page {
+  size: 58mm 297mm;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 5px; 
+  width: 5px;
 }
 
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: gainsboro; 
+  background-color: #f9fafb;
+}
+.Toastify__toast {
+  height: 100px;
+  background-color: #f4f4f5;
+}
+
+.Toastify__toast-body {
+  text-align: center;
+  color: #ef4444;
+  font-size: 20px;
+}
+
+.filter-box {
+  transform: translateX(0); /* Start visible */
+  transition: transform 0.3s ease-in-out; /* Transition effect */
 }

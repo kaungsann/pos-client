@@ -35,7 +35,7 @@ export const FormPostApi = async (route, data, token) => {
   return resData;
 };
 
-export const FormPathApi = async (route, data, token) => {
+export const FormPathApi = async (route, data,token) => {
   const response = await fetch(`${BASE_URL}${route}`, {
     method: "PATCH",
     body: data,
