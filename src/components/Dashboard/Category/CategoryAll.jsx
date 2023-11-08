@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getApi, deleteApi, FormPostApi } from "../../Api";
+import { getApi, deleteApi, FormPostApi, deleteMultiple } from "../../Api";
 import { BsFillTrashFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
@@ -7,7 +7,8 @@ import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
 import FadeLoader from "react-spinners/FadeLoader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 import { FaEye } from "react-icons/fa6";
 
 export default function CategoryAll() {
@@ -23,6 +24,7 @@ export default function CategoryAll() {
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dipatch = useDispatch();
 
   const [importFile, setimportFile] = useState(null);
 
@@ -32,6 +34,10 @@ export default function CategoryAll() {
   const getCategorysApi = async () => {
     setLoading(true);
     let resData = await getApi("/category", token.accessToken);
+    console.log("expire message is", resData);
+    if (resData.success && resData.success == false) {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
       setCategory(resData.data);
@@ -39,7 +45,7 @@ export default function CategoryAll() {
       setLoading(true);
     }
   };
-  
+
   const deleteCategoryApi = async (id) => {
     const response = await deleteApi(`/category/${id}`);
     getCategorysApi();
@@ -116,6 +122,30 @@ export default function CategoryAll() {
     setSelectAll(!selectAll);
   };
 
+  const deleteCateogrys = async () => {
+    if (selectedItems.length === 0) {
+      toast("No category selected for deletion.");
+      return;
+    }
+
+    const response = await deleteMultiple(
+      "/category/multiple-delete",
+      {
+        categoryIds: selectedItems,
+      },
+      token.accessToken
+    );
+
+    if (response.status) {
+      toast("Selected category deleted successfully.");
+      setSelectedItems([]);
+      setSelectAll(false);
+      getCategorysApi();
+    } else {
+      toast("Failed to delete selected category.");
+    }
+  };
+
   useEffect(() => {
     getCategorysApi();
   }, []);
@@ -147,7 +177,7 @@ export default function CategoryAll() {
               className="rounded-sm mx-3 shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"
             >
               <BiImport className="text-xl mx-2" />
-              <h4> Export Excel</h4>
+              <h4>Export Excel</h4>
             </div>
             <div
               onClick={handleFileImportClick}
@@ -176,12 +206,15 @@ export default function CategoryAll() {
         </div>
       </div>
       <h2 className="lg:text-2xl font-bold my-4">Categorys</h2>
-      {selectAll && (
+      {selectedItems.length > 0 && (
         <div className="flex justify-between mb-2 items-center px-2 py-2 bg-red-100">
           <h3 className="text-orange-400 font-semibold">
             {selectedItems.length} rows selected
           </h3>
-          <button className="bg-red-500 py-2 px-4 rounded-md text-white">
+          <button
+            className="bg-red-500 py-2 px-4 rounded-md text-white hover:opacity-70"
+            onClick={deleteCateogrys}
+          >
             Delete
           </button>
         </div>
@@ -193,7 +226,7 @@ export default function CategoryAll() {
               <input
                 type="checkbox"
                 onChange={toggleSelectAll}
-                checked={selectAll}
+                checked={selectAll && selectedItems.length > 0}
               />
             </th>
             <th className="lg:px-4 py-2 text-center">No</th>

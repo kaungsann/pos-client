@@ -3,15 +3,23 @@ import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 import { TbEdit } from "react-icons/tb";
 import FadeLoader from "react-spinners/FadeLoader";
+import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 
 export default function CategoryDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
+
   const singleProducts = async () => {
     setLoading(true);
-    let resData = await getApi(`/category/${id}`);
+    let resData = await getApi(`/category/${id}`, token.accessToken);
+    if (resData.success && resData.success == false) {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
       setDetails(resData.data);

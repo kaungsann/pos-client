@@ -4,13 +4,15 @@ import { Link } from "react-router-dom";
 import { jsonStringPostData } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 
 export default function CategoryCreate() {
   let [name, setName] = useState("");
   const [showNameError, setShowNameError] = useState(false);
   const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const createCategoryApi = async () => {
     if (name.trim() === "") {
@@ -28,6 +30,9 @@ export default function CategoryCreate() {
         data,
         token.accessToken
       );
+      if (resData.success && resData.success == false) {
+        dipatch(removeData(null));
+      }
       if (resData.status) {
         navigate("/admin/categorys/all");
       } else {

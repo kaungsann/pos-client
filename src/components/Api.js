@@ -1,6 +1,6 @@
 //const BASE_URL = "http://18.143.238.45";
 //const BASE_URL = "http://127.0.0.1:8080";
-const BASE_URL = "http://3.0.102.114";
+const BASE_URL = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/";
 export const getApi = async (route, token = null) => {
   const headers = {
     "Content-Type": "application/json",
@@ -14,9 +14,10 @@ export const getApi = async (route, token = null) => {
     headers,
   });
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch data");
-  }
+  // if (!response.ok) {
+  //   console.log("res daata is", response);
+  //   throw new Error("Failed to fetch data");
+  // }
 
   const resData = await response.json();
 
@@ -35,7 +36,7 @@ export const FormPostApi = async (route, data, token) => {
   return resData;
 };
 
-export const FormPathApi = async (route, data,token) => {
+export const FormPathApi = async (route, data, token) => {
   const response = await fetch(`${BASE_URL}${route}`, {
     method: "PATCH",
     body: data,
@@ -82,6 +83,19 @@ export const deleteApi = async (route) => {
     headers: {
       "content-type": "application/json",
     },
+  });
+  let resData = await response.json();
+  return resData;
+};
+
+export const deleteMultiple = async (route, ids, token) => {
+  const response = await fetch(`${BASE_URL}${route}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(ids),
   });
   let resData = await response.json();
   return resData;

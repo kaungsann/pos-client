@@ -5,6 +5,7 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import { GrNext } from "react-icons/gr";
 import { getApi } from "../../Api";
 import FadeLoader from "react-spinners/FadeLoader";
+import { useSelector } from "react-redux";
 
 export default function PosItems() {
   const [search, setSearch] = useState("");
@@ -16,6 +17,8 @@ export default function PosItems() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+
+  const token = useSelector((state) => state.IduniqueData);
 
   const handleNextButtonClick = () => {
     const nextPage = currentPage + 1;
@@ -43,7 +46,7 @@ export default function PosItems() {
   };
 
   const getCategorysApi = async () => {
-    let resData = await getApi("/category");
+    let resData = await getApi("/category", token.accessToken);
     setCategory(resData.data);
   };
 

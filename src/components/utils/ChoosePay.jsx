@@ -17,12 +17,13 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
   const orderData = useSelector((state) => state.orderData);
   const user = useSelector((state) => state.loginData);
+  const token = useSelector((state) => state.IduniqueData);
 
   const dispatch = useDispatch();
   dispatch(add(true));
 
   const getPartner = async () => {
-    let resData = await getApi("/partner");
+    let resData = await getApi("/partner", token.accessToken);
 
     const filteredPartners = resData.data.filter(
       (partner) => partner.isCustomer === true
@@ -61,7 +62,11 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
       };
 
       try {
-        let resData = await jsonStringPostData("/sale", data);
+        let resData = await jsonStringPostData(
+          "/sale",
+          data,
+          token.accessToken
+        );
         if (resData.status) {
           setOrder(resData.data);
           toast(resData.message);

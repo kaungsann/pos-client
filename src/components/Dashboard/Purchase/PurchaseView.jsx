@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 
 export default function PurchaseView() {
   const [purchase, setPurchase] = useState([]);
+  const [product, setProduct] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
 
@@ -37,8 +39,26 @@ export default function PurchaseView() {
     { name: "Group C", value: 300 },
     { name: "Group D", value: 200 },
   ];
+  const getProduct = async () => {
+    setLoading(true);
+    let resData = await getApi("/product", token.accessToken);
+    if (resData.status) {
+      setLoading(false);
+      setProduct(resData.data);
+    } else {
+      setLoading(true);
+    }
+  };
+
+  const todayDate = format(new Date(), "dd.MM.yyyy"); // Get today's date in the same format as orderDate
+
+  const filteredPurchase = purchase.filter((pur) => {
+    const formattedOrderDate = format(new Date(pur.orderDate), "dd.MM.yyyy");
+    return formattedOrderDate === todayDate;
+  });
 
   useEffect(() => {
+    getProduct();
     getPurchase();
   }, []);
 
@@ -85,7 +105,6 @@ export default function PurchaseView() {
               </h4>
             </div>
           </div>
-
           <div className="mt-6">
             <div className="w-full flex my-4">
               <div className="w-3/5 bg-white p-2 rounded-md shadow-md">
@@ -127,6 +146,84 @@ export default function PurchaseView() {
                     <Pie dataKey="value" data={data} fill="#8884d8" label />
                   </PieChart>
                 </ResponsiveContainer>
+              </div>
+            </div>
+            <div className="w-full flex">
+              <div className="w-3/4 bg-white p-2 rounded-md">
+                <h2 className="text-slate-600 font-semibold text-lg mb-3">
+                  Recents Order
+                </h2>
+                <table className="w-full">
+                  <tr className="bg-[#e2e8f0]">
+                    <th className="lg:px-4 py-2 text-center text-slate-800">
+                      Customer Name
+                    </th>
+                    <th className="lg:px-4 py-2 text-center text-slate-800">
+                      Order Date
+                    </th>
+                    <th className="lg:px-4 py-2 text-center text-slate-800">
+                      Order Total
+                    </th>
+                    <th className="lg:px-4 py-2 text-center text-slate-800">
+                      Address
+                    </th>
+                    <th className="lg:px-4 py-2 text-center text-slate-800">
+                      Order Status
+                    </th>
+                  </tr>
+
+                  <tbody className="w-full space-y-10">
+                    {filteredPurchase.length > 0 &&
+                      filteredPurchase.map((sal) => (
+                        <tr key={sal.id}>
+                          <td className="lg:px-4 py-2 text-center">
+                            {sal.partner && sal.partner.name}
+                          </td>
+                          <td className="lg:px-4 py-2 text-center">
+                            {format(new Date(sal.orderDate), "yyyy-MM-dd")}
+                          </td>
+                          <td className="lg:px-4 py-2 text-center">
+                            {sal.total}
+                          </td>
+                          <td className="lg:px-4 py-2 text-center">
+                            {sal.location && sal.location.name}
+                          </td>
+                          <td className="lg:px-4 py-2 text-center">
+                            {sal.state && sal.state}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="items-center w-1/4 bg-white p-2 ml-4 rounded-md h-fix">
+                <h1 className="text-slate-600 font-semibold text-lg mb-6">
+                  Popular Products
+                </h1>
+                <div className="px-2">
+                  {[product].length > 0 &&
+                    product.slice(0, 3).map((item) => (
+                      <div
+                        key={item._id}
+                        className="w-full flex justify-between mb-3 border-b-2 pb-3"
+                      >
+                        <div className="flex flex-col">
+                          <h4 className="text-md text-slate-700 font-bold">
+                            {item.name}
+                          </h4>
+                          <h4 className="font-bold text-green-700">
+                            Stock in 30
+                          </h4>
+                        </div>
+
+                        {item.listPrice && (
+                          <p className="text-slate-500 font-semibold">
+                            {item.listPrice} mmk
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                </div>
               </div>
             </div>
           </div>

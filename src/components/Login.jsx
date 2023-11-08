@@ -27,7 +27,7 @@ export default function Login() {
 
   const loginApi = async () => {
     let user = {
-      username: name,
+      // username: name,
       email: email,
       password: password,
     };
@@ -36,8 +36,6 @@ export default function Login() {
 
     if (resData.success) {
       setLoading(false);
-      console.log("res data is", resData);
-
       toast(resData.message);
       dispatch(addData(resData.data));
       dispatch(idAdd(resData.tokens));
@@ -89,7 +87,7 @@ export default function Login() {
               method="POST"
               onSubmit={loginUser}
             >
-              <div>
+              {/* <div>
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
@@ -111,7 +109,7 @@ export default function Login() {
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 ></label>
-              </div>
+              </div> */}
               <div>
                 <label
                   htmlFor="email"

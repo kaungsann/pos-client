@@ -3,8 +3,11 @@ body {
   padding: 0;
   background-color: whitesmoke;
 }
-@page {
-  size: 58mm 297mm;
+
+@media print {
+  @page {
+    size: 70mm 297mm;
+  }
 }
 
 .custom-scrollbar::-webkit-scrollbar {

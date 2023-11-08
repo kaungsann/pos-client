@@ -8,15 +8,15 @@ import img from "../../assets/posbox.jpeg";
 import userIcons from "../../assets/user.jpeg";
 import { useSelector } from "react-redux";
 
-export default function Dashboard() {
+export default function Admin() {
   const location = useLocation();
 
   const user = useSelector((state) => state.loginData);
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-30">
-        <div className="flex items-center justify-between lg:p-4 md:p-3 bg-slate-50 w-full cursor-pointer">
+      <div className="fixed top-0 left-0 right-0 z-30 bg-white">
+        <div className="flex items-center justify-between lg:p-4 md:p-3 w-full cursor-pointer">
           <Link to="/">
             <img
               src={Pos}
@@ -31,7 +31,7 @@ export default function Dashboard() {
                   <h3 className="font-semibold text-slate-500 text-xl mr-4">
                     {user.username}
                   </h3>
-                  <Link to={`/admin/user/edit/${user._id}`}>
+                  <Link to={`/admin/user/info/${user._id}`}>
                     <img
                       src={user.image ? user.image : userIcons}
                       alt="User Icon"
@@ -49,7 +49,7 @@ export default function Dashboard() {
       </div>
       <div className="w-full flex mt-20 relative">
         <div
-          className={`w-52 fixed top-10 mt-10 z-20  left-0 bottom-0 bg-[#F8FAFC]  p-4 flex flex-col transform transition-transform duration-500 ease-in-out`}
+          className={`w-52 fixed top-10 mt-10 z-20 shadow-md  left-0 bottom-0 bg-white  p-4 flex flex-col transform transition-transform duration-500 ease-in-out`}
         >
           <div className=" flex justify-items-start mt-4 cursor-pointer font-serif">
             <MdOutlineInventory2 className="text-3xl hover:text-blue-600" />

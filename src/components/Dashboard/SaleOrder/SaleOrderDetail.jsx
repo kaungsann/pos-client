@@ -3,13 +3,15 @@ import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 
 import { MdAddShoppingCart } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 export default function SaleOrderDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
+  const token = useSelector((state) => state.IduniqueData);
 
   const singleSaleOrder = async () => {
-    let resData = await getApi(`/sale/${id}`);
+    let resData = await getApi(`/sale/${id}`, token.accessToken);
     setDetails(resData.data);
   };
 
@@ -49,13 +51,13 @@ export default function SaleOrderDetail() {
                     Customer Name
                   </h4>
                   <h3 className="font-bold text-lg text-blue-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
-                    {detail[0].partner.name}
+                    {detail[0].partner ? detail[0].partner.name : "none"}
                   </h3>
                 </div>
                 <div className="flex justify-between my-3">
                   <h4 className="font-bold text-lg text-slate-500">Location</h4>
                   <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
-                    {detail[0].location.name}
+                    {detail[0].location ? detail[0].location.name : "none"}
                   </h3>
                 </div>
               </div>

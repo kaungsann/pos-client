@@ -5,12 +5,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
 import { BiSolidUser } from "react-icons/bi";
 import { IoLogOutSharp } from "react-icons/io5";
+import { TiBusinessCard } from "react-icons/ti";
 import DeleteAlert from "./DeleteAlert";
-import { AiTwotoneEdit, AiOutlineUsergroupAdd } from "react-icons/ai";
+import {
+  AiTwotoneEdit,
+  AiOutlineUsergroupAdd,
+  AiOutlineUsergroupDelete,
+} from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Register from "../Register";
 import user from "../../assets/user.jpeg";
+import BusinessRegister from "./BusinessRegister";
+import EditBusinessInfo from "./EditBusinessInfo";
+import Staff from "./Staff";
 
 export default function Profile() {
   const { id } = useParams();
@@ -94,6 +102,10 @@ export default function Profile() {
     setActiveSection("addUser");
   };
 
+  const handleCompanyRegister = () => {
+    setActiveSection("company");
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     EditUserApi();
@@ -117,7 +129,7 @@ export default function Profile() {
         theme="light"
       />
       <div className="flex mb-8 cursor-pointer">
-        <div className="w-1/4 flex flex-col justify-items-center items-center">
+        <div className="w-72 flex flex-col justify-items-center items-center">
           <div className="relative">
             <img
               loading="eager | lazy"
@@ -142,7 +154,7 @@ export default function Profile() {
               {usr.isAdmin ? "( Admin )" : "Guest"}
             </h3>
           </div>
-          <div className="w-full mx-3 mt-6">
+          <div className="w-full mt-6">
             <div
               className={`flex w-full py-2 items-center justify-start rounded-2xl ${
                 activeSection === "personal"
@@ -160,14 +172,64 @@ export default function Profile() {
               />
               <h3
                 className={`text-lg ${
-                  activeSection === "personal" && "text-slate-800"
+                  activeSection === "personal"
+                    ? "text-slate-800 font-bold"
+                    : "text-slate-500"
                 }`}
               >
                 Personal Information
               </h3>
             </div>
             <div
-              className={`flex w-full mt-4 py-1.5 items-center justify-start rounded-2xl ${
+              className={`flex py-2  mt-4 w-full items-center justify-start rounded-2xl ${
+                activeSection === "company"
+                  ? "bg-blue-100 font-bold"
+                  : "text-slate-400"
+              }`}
+              onClick={handleCompanyRegister}
+            >
+              <TiBusinessCard
+                className={`text-2xl font-bold  mx-4 ${
+                  activeSection === "company"
+                    ? "text-blue-500"
+                    : "text-slate-500"
+                }`}
+              />
+              <h3
+                className={`text-lg ${
+                  activeSection === "company"
+                    ? "text-slate-800 font-bold"
+                    : "text-slate-500"
+                }`}
+              >
+                Company Information
+              </h3>
+            </div>
+            <div
+              className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
+                activeSection === "staff"
+                  ? "bg-blue-100 font-bold"
+                  : "text-slate-400"
+              }`}
+              onClick={() => setActiveSection("staff")}
+            >
+              <AiOutlineUsergroupDelete
+                className={`text-2xl font-bold mx-4 ${
+                  activeSection === "staff" ? "text-blue-500" : "text-slate-600"
+                }`}
+              />
+              <h3
+                className={`text-lg ${
+                  activeSection === "staff"
+                    ? "text-slate-800 font-bold"
+                    : "text-slate-500"
+                }`}
+              >
+                Staff Information
+              </h3>
+            </div>
+            <div
+              className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
                 activeSection === "addUser"
                   ? "bg-blue-100 font-bold"
                   : "text-slate-400"
@@ -188,11 +250,11 @@ export default function Profile() {
                     : "text-slate-500"
                 }`}
               >
-                Add User
+                Staff Register
               </h3>
             </div>
             <div
-              className={`flex w-full mt-4 py-1.5 items-center justify-start rounded-2xl ${
+              className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
                 logout ? "bg-blue-100 font-bold" : "text-slate-400"
               }}`}
               onClick={() => {
@@ -214,17 +276,34 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        <div className="ml-6 w-3/5">
-          {activeSection === "addUser" ? (
+
+        <div
+          className={`ml-6 ${activeSection === "staff" ? "w-full" : "w-3/5"}`}
+        >
+          {activeSection === "addUser" && (
             <>
               <Register />
             </>
-          ) : (
+          )}
+
+          {activeSection === "personal" && (
             <div>
-              <h3 className="text-2xl font-bold border-b pb-2">
+              <h3 className="text-2xl font-bold text-slate-700 pb-6 border-b-2 border-b-slate-300">
                 Personal Information
               </h3>
-              <div className="mt-8">
+              <div className="mt-4">
+                <div className="flex">
+                  <h3
+                    className="text-blue-600 font-semibold text-lg mb-6 underline underline-offset-6 hover:font-bold"
+                    onClick={() => setActiveSection("EditInfo")}
+                  >
+                    click here
+                  </h3>
+                  <span className="text-lg font-semibold ml-1 text-slate-400">
+                    → ( Company Info )
+                  </span>
+                </div>
+
                 <div className="flex ">
                   <div className="flex">
                     <label
@@ -243,7 +322,6 @@ export default function Profile() {
                       disabled={usr.gender === "female"}
                     />
                   </div>
-
                   <div className="flex mx-6">
                     <label
                       for="female"
@@ -262,6 +340,7 @@ export default function Profile() {
                     />
                   </div>
                 </div>
+
                 <div className="mt-4 flex flex-wrap justify-between">
                   <div className="flex w-full justify-between">
                     <div className="w-6/12">
@@ -272,7 +351,7 @@ export default function Profile() {
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-slate-100 focus:outline-none my-3 text-slate-500 font-semibold text-xl"
+                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
                       />
                     </div>
                     <div className="w-6/12 ml-2">
@@ -283,7 +362,7 @@ export default function Profile() {
                         type="text"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-slate-100 focus:outline-none my-3 text-slate-500 font-semibold text-xl"
+                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
                       />
                     </div>
                   </div>
@@ -296,7 +375,7 @@ export default function Profile() {
                       type="text"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-3 py-2 rounded-md border-2 bg-slate-100 focus:outline-none my-3 text-slate-500 font-semibold text-xl"
+                      className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
                     />
                   </div>
 
@@ -308,7 +387,7 @@ export default function Profile() {
                       <select
                         value={gender}
                         onChange={(e) => setGender(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-slate-100 focus:outline-none my-3 text-slate-500 font-semibold text-xl"
+                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
                       >
                         <option disabled value>
                           Select an option
@@ -326,7 +405,7 @@ export default function Profile() {
                         type="text"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-slate-100 focus:outline-none my-3 text-slate-500 font-semibold text-xl"
+                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
                       />
                     </div>
                   </div>
@@ -340,7 +419,7 @@ export default function Profile() {
                         type="text"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-slate-100 focus:outline-none my-3 text-slate-500 font-semibold text-xl"
+                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
                       />
                     </div>
                     <div className="w-6/12 ml-2">
@@ -351,11 +430,12 @@ export default function Profile() {
                         type="text"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-slate-100 focus:outline-none my-3 text-slate-500 font-semibold text-xl"
+                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
                       />
                     </div>
                   </div>
                 </div>
+
                 <div className="flex">
                   <button
                     onClick={() => navigate("/admin/pos/all")}
@@ -373,6 +453,22 @@ export default function Profile() {
                 </div>
               </div>
             </div>
+          )}
+
+          {activeSection === "company" && (
+            <>
+              <BusinessRegister />
+            </>
+          )}
+          {activeSection === "EditInfo" && (
+            <>
+              <EditBusinessInfo />
+            </>
+          )}
+          {activeSection === "staff" && (
+            <>
+              <Staff />
+            </>
           )}
         </div>
       </div>

@@ -211,10 +211,14 @@ export default function SaleOrderAll() {
                         : "no have"}
                     </td>
                     <td className="lg:px-4 py-2 text-center">
-                      {sale.partner.name ? sale.partner.name : "nohave"}
+                      {sale.partner && sale.partner.name
+                        ? sale.partner.name
+                        : "nohave"}
                     </td>
                     <td className="lg:px-4 py-2 text-center">
-                      {sale.location.name ? sale.location.name : "no have"}
+                      {sale.location && sale.location.name
+                        ? sale.location.name
+                        : "no have"}
                     </td>
                     <td className="lg:px-4 py-2 text-center">{sale.state}</td>
                     <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">

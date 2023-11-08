@@ -5,6 +5,7 @@ import { getApi, jsonStringPostData } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
+import { BsTrash } from "react-icons/bs";
 
 export default function SaleOrderCreate() {
   const [product, setProduct] = useState([]);
@@ -41,6 +42,8 @@ export default function SaleOrderCreate() {
   const [showErrorDate, setShowErrorDate] = useState("");
 
   const userData = useSelector((state) => state.loginData);
+  const token = useSelector((state) => state.IduniqueData);
+
   const createProductApi = async () => {
     if (date === "") {
       setShowErrorDate(true);
@@ -93,7 +96,13 @@ export default function SaleOrderCreate() {
     };
 
     try {
-      let resData = await jsonStringPostData("/purchase", data);
+      let resData = await jsonStringPostData(
+        "/purchase",
+        data,
+        token.accessToken
+      );
+      console.log("purchase orderis ", resData);
+
       if (resData.status) {
         toast(resData.message);
         navigate("/admin/purchase/all");
@@ -107,15 +116,15 @@ export default function SaleOrderCreate() {
     createProductApi();
   };
   const getLocation = async () => {
-    const resData = await getApi("/location");
+    const resData = await getApi("/location", token.accessToken);
     setLocation(resData.data);
   };
   const getProduct = async () => {
-    const resData = await getApi("/product");
+    const resData = await getApi("/product", token.accessToken);
     setProduct(resData.data);
   };
   const getPartner = async () => {
-    const resData = await getApi("/partner");
+    const resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
       (partner) => partner.isCustomer === false
     );
@@ -157,6 +166,14 @@ export default function SaleOrderCreate() {
     setPd(null);
     setQuantity(0);
     setUnitPrice(0);
+  };
+
+  const removeProduct = (id) => {
+    // Filter out the product with the specified id
+    const updatedSaleOrderLines = saleOrderLines.filter(
+      (line) => line.id !== id
+    );
+    setSaleOrderLines(updatedSaleOrderLines);
   };
 
   useEffect(() => {
@@ -329,15 +346,25 @@ export default function SaleOrderCreate() {
             >
               State:
             </label>
-            <input
-              type="text"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
+
+            <select
+              id="payment"
               className={`border-b ml-3 outline-none w-36 ${
                 showErrorState ? "border-red-600" : "border-slate-400"
               }`}
-              placeholder="Enter State"
-            />
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+            >
+              <option value="pending" className="py-2">
+                Pending
+              </option>
+              <option value="deliver" className="py-2">
+                Deliver
+              </option>
+              <option value="arrived" className="py-2">
+                Arrived
+              </option>
+            </select>
           </div>
 
           <div className="flex mt-8">
@@ -408,8 +435,8 @@ export default function SaleOrderCreate() {
                   (pt) => pt.id === e.target.value
                 );
                 if (selectedProduct) {
-                  setUnitPrice(selectedProduct.listPrice);
-                  setTotalPrice(selectedProduct.listPrice);
+                  setUnitPrice(selectedProduct.salePrice);
+                  setTotalPrice(selectedProduct.salePrice);
                   setTax(selectedProduct.tax);
                   setItem(selectedProduct);
                 }
@@ -466,7 +493,6 @@ export default function SaleOrderCreate() {
               type="number"
               value={unitPrice}
               className="border-b border-slate-400 outline-none w-36"
-              onChange={(e) => setUnitPrice(e.target.value)}
             />
           </div>
           <div>
@@ -488,6 +514,7 @@ export default function SaleOrderCreate() {
             <th className="lg:px-4 py-2 text-center">Tax</th>
             <th className="lg:px-4 py-2 text-center">Unit Price</th>
             <th className="lg:px-4 py-2 text-center">SubTotal</th>
+            <th className="lg:px-4 py-2 text-center">Remove</th>
           </tr>
         </thead>
 
@@ -495,7 +522,7 @@ export default function SaleOrderCreate() {
           {saleOrderLines.map((line) => (
             <tr
               key={line.id}
-              className="odd:bg-white even:bg-slate-200 space-y-10  mb-8 w-full items-center cursor-pointer hover:text-white hover:bg-[#60a5fa] "
+              className="odd:bg-white even:bg-slate-200 space-y-10  mb-8 w-full items-center cursor-pointer"
             >
               <td className="lg:px-4 py-2 text-center">
                 {line.product && line.product.image ? (
@@ -512,6 +539,14 @@ export default function SaleOrderCreate() {
               <td className="lg:px-4 py-2 text-center">{line.tax}</td>
               <td className="lg:px-4 py-2 text-center">{line.unitPrice}</td>
               <td className="lg:px-4 py-2 text-center">{line.subTotal}</td>
+              <td className="lg:px-4 py-2">
+                <div className="text-center flex justify-center">
+                  <BsTrash
+                    className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
+                    onClick={() => removeProduct(line.id)}
+                  />
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>

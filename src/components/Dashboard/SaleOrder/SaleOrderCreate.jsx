@@ -41,7 +41,7 @@ export default function SaleOrderCreate() {
   const [showErrorDate, setShowErrorDate] = useState("");
 
   const userData = useSelector((state) => state.loginData);
-  console.log("user data is a", userData);
+  const token = useSelector((state) => state.IduniqueData);
 
   const createProductApi = async () => {
     if (date === "") {
@@ -95,10 +95,10 @@ export default function SaleOrderCreate() {
     };
 
     try {
-      let resData = await jsonStringPostData("/sale", data);
+      let resData = await jsonStringPostData("/sale", data, token.accessToken);
       if (resData.status) {
         toast(resData.message);
-        navigate("/admin/sales/all");
+        navigate("/admin/saleorders/all");
       }
     } catch (error) {
       toast(resData.message);
@@ -109,15 +109,15 @@ export default function SaleOrderCreate() {
     createProductApi();
   };
   const getLocation = async () => {
-    const resData = await getApi("/location");
+    const resData = await getApi("/location", token.accessToken);
     setLocation(resData.data);
   };
   const getProduct = async () => {
-    const resData = await getApi("/product");
+    const resData = await getApi("/product", token.accessToken);
     setProduct(resData.data);
   };
   const getPartner = async () => {
-    const resData = await getApi("/partner");
+    const resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
       (partner) => partner.isCustomer === false
     );
@@ -330,15 +330,24 @@ export default function SaleOrderCreate() {
             >
               State:
             </label>
-            <input
-              type="text"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
+            <select
+              id="payment"
               className={`border-b ml-3 outline-none w-36 ${
                 showErrorState ? "border-red-600" : "border-slate-400"
               }`}
-              placeholder="Enter State"
-            />
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+            >
+              <option value="pending" selected className="py-2">
+                Pending
+              </option>
+              <option value="deliver" className="py-2">
+                Deliver
+              </option>
+              <option value="arrived" className="py-2">
+                Arrived
+              </option>
+            </select>
           </div>
 
           <div className="flex mt-8">
@@ -489,6 +498,7 @@ export default function SaleOrderCreate() {
             <th className="lg:px-4 py-2 text-center">Tax</th>
             <th className="lg:px-4 py-2 text-center">Unit Price</th>
             <th className="lg:px-4 py-2 text-center">SubTotal</th>
+            <th className="lg:px-4 py-2 text-center">Remove</th>
           </tr>
         </thead>
 
@@ -513,6 +523,7 @@ export default function SaleOrderCreate() {
               <td className="lg:px-4 py-2 text-center">{line.tax}</td>
               <td className="lg:px-4 py-2 text-center">{line.unitPrice}</td>
               <td className="lg:px-4 py-2 text-center">{line.subTotal}</td>
+              <td className="lg:px-4 py-2 text-center">Delete</td>
             </tr>
           ))}
         </tbody>

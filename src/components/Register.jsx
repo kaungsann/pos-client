@@ -50,8 +50,7 @@ export default function () {
     });
 
     const resData = await response.json();
-    console.log("user register is ", resData.results);
-    console.log("user  is ", resData);
+
     if (resData.con) {
       setLoading(false);
       toast(resData.message);
@@ -78,7 +77,9 @@ export default function () {
       />
       <div className="flex min-h-full w-full flex-col">
         <div className="mb-3">
-          <h2 className="text-2xl font-bold border-b pb-2">Create Account</h2>
+          <h2 className="text-2xl font-bold text-slate-700 pb-6 border-b-2 border-b-slate-300">
+            Create Account
+          </h2>
         </div>
         <form
           onSubmit={registerUser}

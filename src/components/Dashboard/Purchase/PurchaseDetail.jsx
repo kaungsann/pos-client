@@ -3,13 +3,15 @@ import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 
 import { MdAddShoppingCart } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 export default function SaleOrderDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
+  const token = useSelector((state) => state.IduniqueData);
 
   const singlePurchaseOrder = async () => {
-    let resData = await getApi(`/purchase/${id}`);
+    let resData = await getApi(`/purchase/${id}`, token.accessToken);
     setDetails(resData.data);
     console.log(resData);
   };

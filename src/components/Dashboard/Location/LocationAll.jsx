@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getApi, deleteApi } from "../../Api";
+import { getApi, deleteApi, deleteMultiple } from "../../Api";
 import { BsFillTrashFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
@@ -116,6 +116,29 @@ export default function LocationAll() {
     }
     setSelectAll(!selectAll);
   };
+  const deleteLocations = async () => {
+    if (selectedItems.length === 0) {
+      toast("No locations selected for deletion.");
+      return;
+    }
+
+    const response = await deleteMultiple(
+      "/location/multiple-delete",
+      {
+        locationIds: selectedItems,
+      },
+      token.accessToken
+    );
+
+    if (response.status) {
+      toast("Selected locations deleted successfully.");
+      setSelectedItems([]);
+      setSelectAll(false);
+      getLocationApi();
+    } else {
+      toast("Failed to locations selected locations.");
+    }
+  };
   useEffect(() => {
     getLocationApi();
   }, []);
@@ -176,13 +199,15 @@ export default function LocationAll() {
       </div>
       <div className="mx-auto">
         <h2 className="lg:text-2xl font-bold my-4">Locations</h2>
-
-        {selectAll && (
+        {selectedItems.length > 0 && (
           <div className="flex justify-between mb-2 items-center px-2 py-2 bg-red-100">
             <h3 className="text-orange-400 font-semibold">
               {selectedItems.length} rows selected
             </h3>
-            <button className="bg-red-500 py-2 px-4 rounded-md text-white">
+            <button
+              className="bg-red-500 py-2 px-4 rounded-md text-white hover:opacity-70"
+              onClick={deleteLocations}
+            >
               Delete
             </button>
           </div>
@@ -194,7 +219,7 @@ export default function LocationAll() {
               <input
                 type="checkbox"
                 onChange={toggleSelectAll}
-                checked={selectAll}
+                checked={selectAll && selectedItems.length > 0}
               />
             </th>
             <th className="lg:px-4 py-2 text-center">No</th>
@@ -214,6 +239,7 @@ export default function LocationAll() {
               .map((loc) => (
                 <tr
                   key={loc._id}
+                  onClick={() => toggleSelectItem(loc.id)}
                   className={`${
                     selectedItems.includes(loc.id)
                       ? "bg-[#60a5fa] text-white"

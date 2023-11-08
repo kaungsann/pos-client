@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getApi, deleteApi } from "../../Api";
+import { getApi, deleteApi, deleteMultiple } from "../../Api";
 import { BsFillTrashFill } from "react-icons/bs";
 import { BiSolidEdit } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { FaEye } from "react-icons/fa6";
 import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function PartnerAll() {
   let count = 0;
@@ -109,6 +111,30 @@ export default function PartnerAll() {
     setIsFilterActive(false);
   };
 
+  const deleteVendors = async () => {
+    if (selectedItems.length === 0) {
+      toast("No vendor selected for deletion.");
+      return;
+    }
+
+    const response = await deleteMultiple(
+      "/partner/multiple-delete",
+      {
+        partnerIds: selectedItems,
+      },
+      token.accessToken
+    );
+
+    if (response.status) {
+      toast("Selected vendor deleted successfully.");
+      setSelectedItems([]);
+      setSelectAll(false);
+      getPartnersApi();
+    } else {
+      toast("Failed to delete selected vendor.");
+    }
+  };
+
   useEffect(() => {
     getPartnersApi();
     if (filterAddress || filterPhone || filterCompay) {
@@ -120,6 +146,18 @@ export default function PartnerAll() {
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="flex w-full">
         <div className="flex w-full justify-between items-center">
           <div className="flex md:mr-8 justify-around">
@@ -160,12 +198,15 @@ export default function PartnerAll() {
             </button>
           )}
         </div>
-        {selectAll && (
+        {selectedItems.length > 0 && (
           <div className="flex justify-between mb-2 items-center px-2 py-2 bg-red-100">
             <h3 className="text-orange-400 font-semibold">
               {selectedItems.length} rows selected
             </h3>
-            <button className="bg-red-500 py-2 px-4 rounded-md text-white">
+            <button
+              className="bg-red-500 py-2 px-4 rounded-md text-white hover:opacity-70"
+              onClick={deleteVendors}
+            >
               Delete
             </button>
           </div>
@@ -177,7 +218,7 @@ export default function PartnerAll() {
                 <input
                   type="checkbox"
                   onChange={toggleSelectAll}
-                  checked={selectAll}
+                  checked={selectAll && selectedItems.length > 0}
                 />
               </th>
               <th className=" py-2 text-center">No</th>

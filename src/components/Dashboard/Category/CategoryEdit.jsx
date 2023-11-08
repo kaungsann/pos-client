@@ -2,19 +2,24 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getApi, PathData } from "../../Api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { removeData } from "../../../redux/actions";
 
 export default function CategoryEdit() {
   let [name, setName] = useState("");
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
   const { id } = useParams();
+  const dipatch = useDispatch();
 
   const getCategory = async () => {
     try {
       const response = await getApi(`/category/${id}`, token.accessToken);
+      if (response.success && response.success == false) {
+        dipatch(removeData(null));
+      }
       setName(response.data[0].name);
     } catch (error) {
       console.error("Error fetching category:", error);

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Card from "../utility/Card";
+import Card from "../utils/Card";
 
 export default function Products({ pd }) {
   const [search, setSearch] = useState("");

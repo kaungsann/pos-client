@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getApi, deleteApi, FormPostApi } from "../../Api";
+import { getApi, deleteApi, FormPostApi, deleteMultiple } from "../../Api";
 import { BsFillTrashFill } from "react-icons/bs";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
 import { FiFilter } from "react-icons/fi";
@@ -9,7 +9,6 @@ import { FaEye } from "react-icons/fa6";
 import DeleteAlert from "../../utils/DeleteAlert";
 import FadeLoader from "react-spinners/FadeLoader";
 import img from "../../../assets/tablet.png";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
@@ -53,7 +52,8 @@ export default function ProductsAll() {
   };
 
   const categoryApi = async () => {
-    let resData = await getApi("/category");
+    let resData = await getApi("/category", token.accessToken);
+    console.log("categoryApi daat is", resData);
     setCategorys(resData.data);
   };
 
@@ -130,6 +130,9 @@ export default function ProductsAll() {
 
   // Handle select all items
   const toggleSelectAll = () => {
+    if (selectedItems.length == 0) {
+      setSelectAll(false);
+    }
     if (selectAll) {
       // If Select All is checked, uncheck all items in the filtered tbody
       setSelectedItems([]);
@@ -191,6 +194,26 @@ export default function ProductsAll() {
     setIsFilterActive(false);
   };
 
+  const deleteProducts = async () => {
+    if (selectedItems.length === 0) {
+      toast("No products selected for deletion.");
+      return;
+    }
+
+    const response = await deleteMultiple("/product/multiple-delete", {
+      productIds: selectedItems,
+    });
+
+    if (response.status) {
+      toast("Selected products deleted successfully.");
+      setSelectedItems([]);
+      setSelectAll(false);
+      productApi();
+    } else {
+      toast("Failed to delete selected products.");
+    }
+  };
+
   useEffect(() => {
     productApi();
     categoryApi();
@@ -217,6 +240,7 @@ export default function ProductsAll() {
         theme="light"
         style={{ width: "450px" }}
       />
+
       <div className="flex cursor-pointer">
         <div className="flex w-full justify-between items-center">
           <div className="flex md:mr-8 justify-around">
@@ -227,7 +251,7 @@ export default function ProductsAll() {
             </Link>
             <div
               onClick={toggleFilterBox}
-              className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
+              className="rounded-sm ml-3 transition-transform transform shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
             >
               <FiFilter className="text-xl mx-2" />
               <h4>Filter</h4>
@@ -276,12 +300,15 @@ export default function ProductsAll() {
         )}
       </div>
 
-      {selectAll && (
-        <div className="flex justify-between mb-2 items-center px-2 py-2 bg-red-100">
+      {selectedItems.length > 0 && (
+        <div className="flex justify-between mb-2 items-center px-2 py-2 bg-red-100 hover:opacity-70">
           <h3 className="text-orange-400 font-semibold">
             {selectedItems.length} rows selected
           </h3>
-          <button className="bg-red-500 py-2 px-4 rounded-md text-white">
+          <button
+            className="bg-red-500 py-2 px-4 rounded-md hover:opacity-70 text-white"
+            onClick={deleteProducts}
+          >
             Delete
           </button>
         </div>
@@ -295,7 +322,7 @@ export default function ProductsAll() {
                 <input
                   type="checkbox"
                   onChange={toggleSelectAll}
-                  checked={selectAll}
+                  checked={selectAll && selectedItems.length > 0}
                 />
               </th>
               <th className="lg:px-4 py-2 text-center">Photo</th>
@@ -405,11 +432,11 @@ export default function ProductsAll() {
       </div>
 
       {/* Filter Box */}
-      {showFilter && (
+      {showFilter ? (
         <div
-          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-40 transform transition-all ease-in-out duration-700 ${
-            showFilter ? "right-0" : "right-[-384px]"
-          }`}
+          className={`w-96 bg-slate-50 h-screen fixed top-0 right-0 p-4 z-30 transition-transform transform ${
+            showFilter ? "translate-x-0" : "-translate-x-full"
+          }ease-in-out duration-700`}
         >
           <div className="flex justify-between my-6">
             <h2 className="text-xl font-bold text-slate-700">
@@ -483,6 +510,8 @@ export default function ProductsAll() {
             </div>
           </div>
         </div>
+      ) : (
+        ""
       )}
     </>
   );

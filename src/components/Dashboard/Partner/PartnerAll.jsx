@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getApi, deleteApi } from "../../Api";
+import { getApi, deleteApi, deleteMultiple } from "../../Api";
 import { BsFillTrashFill } from "react-icons/bs";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
@@ -102,26 +102,6 @@ export default function PartnerAll() {
     }
   };
 
-  const toggleSelectItem = (partnerID) => {
-    setSelectAll(true);
-    const isSelected = selectedItems.includes(partnerID);
-    if (isSelected) {
-      setSelectedItems(selectedItems.filter((id) => id !== partnerID));
-    } else {
-      setSelectedItems([...selectedItems, partnerID]);
-    }
-  };
-
-  const toggleSelectAll = () => {
-    if (selectAll) {
-      setSelectedItems([]);
-    } else {
-      const allProductIds = partners.map((product) => product.id);
-      setSelectedItems(allProductIds);
-    }
-    setSelectAll(!selectAll);
-  };
-
   const toggleFilterBox = () => {
     setShowFilter(!showFilter);
   };
@@ -148,12 +128,57 @@ export default function PartnerAll() {
     return true;
   });
 
+  const toggleSelectItem = (partnerID) => {
+    setSelectAll(true);
+    const isSelected = selectedItems.includes(partnerID);
+    if (isSelected) {
+      setSelectedItems(selectedItems.filter((id) => id !== partnerID));
+    } else {
+      setSelectedItems([...selectedItems, partnerID]);
+    }
+  };
+
+  // Handle select all items
+  const toggleSelectAll = () => {
+    if (selectAll) {
+      setSelectedItems([]);
+    } else {
+      const allProductIds = partners.map((product) => product.id);
+      setSelectedItems(allProductIds);
+    }
+    setSelectAll(!selectAll);
+  };
+
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
     setFilterAddress("");
     setFilterCompany("");
     setFilterPhone("");
     setIsFilterActive(false);
+  };
+
+  const deleteCustomers = async () => {
+    if (selectedItems.length === 0) {
+      toast("No partners selected for deletion.");
+      return;
+    }
+
+    const response = await deleteMultiple(
+      "/partner/multiple-delete",
+      {
+        partnerIds: selectedItems,
+      },
+      token.accessToken
+    );
+
+    if (response.status) {
+      toast("Selected partners deleted successfully.");
+      setSelectedItems([]);
+      setSelectAll(false);
+      getPartnersApi();
+    } else {
+      toast("Failed to partners selected partners.");
+    }
   };
 
   useEffect(() => {
@@ -240,12 +265,15 @@ export default function PartnerAll() {
             </button>
           )}
         </div>
-        {selectAll && (
+        {selectedItems.length > 0 && (
           <div className="flex justify-between mb-2 items-center px-2 py-2 bg-red-100">
             <h3 className="text-orange-400 font-semibold">
               {selectedItems.length} rows selected
             </h3>
-            <button className="bg-red-500 py-2 px-4 rounded-md text-white">
+            <button
+              className="bg-red-500 py-2 px-4 rounded-md text-white hover:opacity-70"
+              onClick={deleteCustomers}
+            >
               Delete
             </button>
           </div>
@@ -257,7 +285,7 @@ export default function PartnerAll() {
                 <input
                   type="checkbox"
                   onChange={toggleSelectAll}
-                  checked={selectAll}
+                  checked={selectAll && selectedItems.length > 0}
                 />
               </th>
               <th className=" py-2 text-center">No</th>
@@ -283,6 +311,7 @@ export default function PartnerAll() {
                 .map((partner) => (
                   <tr
                     key={partner.id}
+                    onClick={() => toggleSelectItem(partner.id)}
                     className={`${
                       selectedItems.includes(partner.id)
                         ? "bg-[#60a5fa] text-white"
