@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getApi, deleteApi, deleteMultiple } from "../../Api";
-import { BsFillTrashFill } from "react-icons/bs";
+import { getApi, deleteMultiple } from "../../Api";
 import { BiSolidEdit } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
@@ -29,7 +28,6 @@ export default function PartnerAll() {
   const [alert, setAlert] = useState(false);
   const [searchItems, setSearchItems] = useState([]);
   const [partners, setPartners] = useState([]);
-  const [partnerId, setPartnerId] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -48,14 +46,7 @@ export default function PartnerAll() {
       setLoading(true);
     }
   };
-  const deletePartnerApi = async (id) => {
-    const response = await deleteApi(`/partner/${id}`);
-    getPartnersApi();
-  };
-  const deletePartnerId = (id) => {
-    setAlert(true);
-    setPartnerId(id);
-  };
+
   const toggleSelectItem = (partnerID) => {
     setSelectAll(true);
     const isSelected = selectedItems.includes(partnerID);
@@ -204,7 +195,7 @@ export default function PartnerAll() {
             </h3>
             <button
               className="bg-red-500 py-2 px-4 rounded-md text-white hover:opacity-70"
-              onClick={deleteCustomers}
+              onClick={() => setAlert(true)}
             >
               Delete
             </button>
@@ -287,14 +278,6 @@ export default function PartnerAll() {
                             navigate(`/admin/partners/edit/${partner.id}`);
                           }}
                         />
-
-                        <BsFillTrashFill
-                          className="text-2xl text-red-600 hover:opacity-75"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deletePartnerId(partner.id);
-                          }}
-                        />
                       </div>
                     </td>
                   </tr>
@@ -319,10 +302,10 @@ export default function PartnerAll() {
         <DeleteAlert
           cancel={() => {
             setAlert(false);
-            setPartnerId(null);
+            setSelectedItems([]);
           }}
           onDelete={() => {
-            deletePartnerApi(partnerId);
+            deleteCustomers();
             setAlert(false);
           }}
         />

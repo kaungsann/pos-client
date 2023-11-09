@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getApi, deleteApi, deleteMultiple } from "../../Api";
-import { BsFillTrashFill } from "react-icons/bs";
+import { getApi, deleteMultiple } from "../../Api";
+
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
@@ -40,14 +40,6 @@ export default function LocationAll() {
     } else {
       setLoading(true);
     }
-  };
-  const deleteLocationApi = async (id) => {
-    const response = await deleteApi(`/location/${id}`, token);
-    getLocationApi();
-  };
-  const deleteLocationID = (id) => {
-    setAlert(true);
-    setDeleteCategoryId(id);
   };
 
   const receiveExcel = async () => {
@@ -206,7 +198,7 @@ export default function LocationAll() {
             </h3>
             <button
               className="bg-red-500 py-2 px-4 rounded-md text-white hover:opacity-70"
-              onClick={deleteLocations}
+              onClick={() => setAlert(true)}
             >
               Delete
             </button>
@@ -275,14 +267,6 @@ export default function LocationAll() {
                         navigate(`/admin/locations/edit/${loc.id}`);
                       }}
                     />
-
-                    <BsFillTrashFill
-                      className="lg:text-2xl text-red-500  hover:text-red-700"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteLocationID(loc.id);
-                      }}
-                    />
                   </td>
                 </tr>
               ))
@@ -304,10 +288,10 @@ export default function LocationAll() {
           <DeleteAlert
             cancel={() => {
               setAlert(false);
-              setDeleteCategoryId(null);
+              setSelectedItems([]);
             }}
             onDelete={() => {
-              deleteLocationApi(deleteCategoryId);
+              deleteLocations();
               setAlert(false);
             }}
           />

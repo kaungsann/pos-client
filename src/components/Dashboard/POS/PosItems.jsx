@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Card from "../../utils/Card";
 import PayBox from "../../utils/PayBox";
 import { MdArrowBackIosNew } from "react-icons/md";
@@ -16,6 +16,8 @@ export default function PosItems() {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const searchInputRef = useRef(null);
+
   const itemsPerPage = 8;
 
   const token = useSelector((state) => state.IduniqueData);
@@ -75,7 +77,9 @@ export default function PosItems() {
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold ml-2">Avaliable Items</h3>
               <input
+                ref={searchInputRef}
                 onChange={(e) => setSearch(e.target.value)}
+                autoFocus={true}
                 type="text"
                 className=" py-2 px-2 shadow-sm bg-slate-50 border-2 w-64 block rounded-md  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6"
                 placeholder="Enter Products Name"
@@ -129,9 +133,7 @@ export default function PosItems() {
             {products.length > 0 ? (
               products
                 .filter((item) =>
-                  search.toLowerCase === ""
-                    ? item
-                    : item.name.toLowerCase().includes(search)
+                  search === "" ? item : item.barcode.includes(search)
                 )
                 .filter((item) =>
                   selectedCategory

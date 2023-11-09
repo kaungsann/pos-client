@@ -60,7 +60,7 @@ function App() {
             </Route>
             <Route path="user">
               <Route path="register" element={<Register />} />
-              <Route path="edit/:id" element={<Profile />} />
+              <Route path="info/:id" element={<Profile />} />
             </Route>
             <Route path="stock">
               <Route path="all" element={<Stock />} />

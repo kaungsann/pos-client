@@ -50,14 +50,7 @@ export default function PartnerAll() {
       setLoading(true);
     }
   };
-  const deletePartnerApi = async (id) => {
-    const response = await deleteApi(`/partner/${id}`);
-    getPartnersApi();
-  };
-  const deletePartnerId = (id) => {
-    setAlert(true);
-    setPartnerId(id);
-  };
+
   const receiveExcel = async () => {
     try {
       const response = await fetch("http://3.0.102.114/partner/export-excel");
@@ -272,7 +265,7 @@ export default function PartnerAll() {
             </h3>
             <button
               className="bg-red-500 py-2 px-4 rounded-md text-white hover:opacity-70"
-              onClick={deleteCustomers}
+              onClick={() => setAlert(true)}
             >
               Delete
             </button>
@@ -356,14 +349,6 @@ export default function PartnerAll() {
                             navigate(`/admin/partners/edit/${partner.id}`);
                           }}
                         />
-
-                        <BsFillTrashFill
-                          className="text-2xl text-red-600 hover:opacity-75"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deletePartnerId(partner.id);
-                          }}
-                        />
                       </div>
                     </td>
                   </tr>
@@ -391,7 +376,7 @@ export default function PartnerAll() {
             setPartnerId(null);
           }}
           onDelete={() => {
-            deletePartnerApi(partnerId);
+            deleteCustomers();
             setAlert(false);
           }}
         />

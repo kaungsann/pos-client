@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getApi, deleteApi, FormPostApi, deleteMultiple } from "../../Api";
-import { BsFillTrashFill } from "react-icons/bs";
+import { getApi, FormPostApi, deleteMultiple } from "../../Api";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
 import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
@@ -29,7 +28,7 @@ export default function ProductsAll() {
 
   const [products, setProducts] = useState([]);
   const [alert, setAlert] = useState(false);
-  const [ProductId, setProductId] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [categorys, setCategorys] = useState([]);
 
@@ -55,17 +54,6 @@ export default function ProductsAll() {
     let resData = await getApi("/category", token.accessToken);
     console.log("categoryApi daat is", resData);
     setCategorys(resData.data);
-  };
-
-  const deleteProductApi = async (id) => {
-    const response = await deleteApi(`/product/${id}`, token);
-
-    productApi();
-  };
-
-  const deleteProductID = (id) => {
-    setAlert(true);
-    setProductId(id);
   };
 
   const editRoute = (id) => {
@@ -307,7 +295,7 @@ export default function ProductsAll() {
           </h3>
           <button
             className="bg-red-500 py-2 px-4 rounded-md hover:opacity-70 text-white"
-            onClick={deleteProducts}
+            onClick={() => setAlert(true)}
           >
             Delete
           </button>
@@ -391,13 +379,6 @@ export default function ProductsAll() {
                           editRoute(product.id);
                         }}
                       />
-                      <BsFillTrashFill
-                        className="text-2xl text-red-600 hover:opacity-75"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          deleteProductID(product.id);
-                        }}
-                      />
                     </div>
                   </td>
                 </tr>
@@ -421,10 +402,10 @@ export default function ProductsAll() {
           <DeleteAlert
             cancel={() => {
               setAlert(false);
-              setProductId(null);
+              setSelectedItems([]);
             }}
             onDelete={() => {
-              deleteProductApi(ProductId);
+              deleteProducts()
               setAlert(false);
             }}
           />

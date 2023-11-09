@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getApi, deleteApi, FormPostApi, deleteMultiple } from "../../Api";
-import { BsFillTrashFill } from "react-icons/bs";
+import { getApi, FormPostApi, deleteMultiple } from "../../Api";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
@@ -21,7 +20,7 @@ export default function CategoryAll() {
   const [alert, setAlert] = useState(false);
   const [searchItems, setSearchItems] = useState([]);
   const [categorys, setCategory] = useState([]);
-  const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dipatch = useDispatch();
@@ -46,15 +45,6 @@ export default function CategoryAll() {
     }
   };
 
-  const deleteCategoryApi = async (id) => {
-    const response = await deleteApi(`/category/${id}`);
-    getCategorysApi();
-  };
-
-  const deleteCategoryID = (id) => {
-    setAlert(true);
-    setDeleteCategoryId(id);
-  };
   const receiveExcel = async () => {
     try {
       const response = await fetch("http://3.0.102.114/category/export-excel");
@@ -213,7 +203,7 @@ export default function CategoryAll() {
           </h3>
           <button
             className="bg-red-500 py-2 px-4 rounded-md text-white hover:opacity-70"
-            onClick={deleteCateogrys}
+            onClick={() => setAlert(true)}
           >
             Delete
           </button>
@@ -279,14 +269,6 @@ export default function CategoryAll() {
                         navigate(`/admin/categorys/edit/${pd.id}`);
                       }}
                     />
-
-                    <BsFillTrashFill
-                      className="lg:text-2xl text-red-500 hover:text-red-700 cursor-pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteCategoryID(pd.id);
-                      }}
-                    />
                   </td>
                 </tr>
               ))
@@ -309,10 +291,10 @@ export default function CategoryAll() {
         <DeleteAlert
           cancel={() => {
             setAlert(false);
-            setDeleteCategoryId(null);
+            setSelectedItems([]);
           }}
           onDelete={() => {
-            deleteCategoryApi(deleteCategoryId);
+            deleteCateogrys();
             setAlert(false);
           }}
         />
