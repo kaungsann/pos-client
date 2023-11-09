@@ -15,7 +15,6 @@ import { jsonStringPostData } from "./Api";
 import Cookies from "js-cookie";
 
 export default function Login() {
-  const [name, setName] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
   const [see, setSee] = useState(false);
@@ -27,7 +26,6 @@ export default function Login() {
 
   const loginApi = async () => {
     let user = {
-      // username: name,
       email: email,
       password: password,
     };
@@ -67,12 +65,6 @@ export default function Login() {
           theme="light"
         />
         <div className="flex min-h-full flex-col justify-center px-6 py-8 lg:px-8">
-          <div className="w-4/5 mx-auto flex justify-between cursor-pointer">
-            <Link to="/">
-              <AiOutlineArrowLeft className="font-bold text-blue-500 text-3xl" />
-            </Link>
-          </div>
-
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img className="mx-auto w-36 h-26" src={logo} />
             <h2 className="mt-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -87,29 +79,6 @@ export default function Login() {
               method="POST"
               onSubmit={loginUser}
             >
-              {/* <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Name
-                </label>
-                <div className="mt-2">
-                  <input
-                    onChange={(e) => setName(e.target.value)}
-                    id="name"
-                    name="name"
-                    type="name"
-                    autocomplete="name"
-                    required
-                    className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-                  />
-                </div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                ></label>
-              </div> */}
               <div>
                 <label
                   htmlFor="email"
