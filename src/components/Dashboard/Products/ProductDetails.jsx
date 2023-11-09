@@ -6,6 +6,7 @@ import img from "../../../assets/user.jpeg";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
+import { useDispatch } from "react-redux";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -13,6 +14,8 @@ export default function ProductDetails() {
   const [loading, setLoading] = useState(false);
 
   const componentRef = useRef();
+  const dipatch = useDispatch();
+
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -20,6 +23,9 @@ export default function ProductDetails() {
   const singleProducts = async () => {
     setLoading(true);
     const response = await getApi(`/product/${id}`);
+    if (response.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (response.status) {
       setLoading(false);
       setDetails(response.data);

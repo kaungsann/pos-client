@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getApi, deleteApi, deleteMultiple } from "../../Api";
-import { BsFillTrashFill } from "react-icons/bs";
+import { getApi, deleteMultiple } from "../../Api";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
 import FadeLoader from "react-spinners/FadeLoader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaEye } from "react-icons/fa6";
 import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
@@ -29,7 +28,7 @@ export default function PartnerAll() {
   const [alert, setAlert] = useState(false);
   const [searchItems, setSearchItems] = useState([]);
   const [partners, setPartners] = useState([]);
-  const [partnerId, setPartnerId] = useState(null);
+
   const [loading, setLoading] = useState(false);
 
   const [importFile, setimportFile] = useState("");
@@ -38,10 +37,14 @@ export default function PartnerAll() {
 
   const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const getPartnersApi = async () => {
     setLoading(true);
     let resData = await getApi("/partner", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
       setPartners(resData.data);
@@ -354,12 +357,12 @@ export default function PartnerAll() {
                   </tr>
                 ))
             ) : (
-              <div className="absolute inset-0 flex justify-center items-center">
+              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={20}
+                    size={10}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />
@@ -373,7 +376,7 @@ export default function PartnerAll() {
         <DeleteAlert
           cancel={() => {
             setAlert(false);
-            setPartnerId(null);
+            setSelectedItems([]);
           }}
           onDelete={() => {
             deleteCustomers();

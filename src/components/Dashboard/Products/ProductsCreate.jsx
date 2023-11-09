@@ -6,7 +6,7 @@ import { RiImageAddFill } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ProductsCreate() {
   const [cat, setCat] = useState([]);
@@ -40,6 +40,7 @@ export default function ProductsCreate() {
   const [purchaseError, setPurchaseError] = useState(false);
   const [profitError, setProfitError] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const createProductApi = async () => {
     if (name.trim() === "") {
@@ -128,6 +129,9 @@ export default function ProductsCreate() {
   };
   const getCategory = async () => {
     const resData = await getApi("/category", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     setCat(resData.data);
   };
   const handleFileInputClick = () => {

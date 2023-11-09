@@ -44,8 +44,8 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
           product: item.id,
           qty: item.quantity,
           tax: item.tax,
-          unitPrice: item.listPrice,
-          subTotal: item.quantity * item.listPrice,
+          unitPrice: item.salePrice,
+          subTotal: item.quantity * item.salePrice,
         };
 
         orderLines.push(orderLine);
@@ -67,6 +67,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
           data,
           token.accessToken
         );
+        console.log("data is", resData);
         if (resData.status) {
           setOrder(resData.data);
           toast(resData.message);

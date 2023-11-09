@@ -3,15 +3,19 @@ import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 
 import { MdAddShoppingCart } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SaleOrderDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const singleSaleOrder = async () => {
     let resData = await getApi(`/sale/${id}`, token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     setDetails(resData.data);
   };
 

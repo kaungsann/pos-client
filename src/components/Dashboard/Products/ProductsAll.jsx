@@ -10,7 +10,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 import img from "../../../assets/tablet.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ProductsAll() {
   const navigate = useNavigate();
@@ -38,10 +38,14 @@ export default function ProductsAll() {
 
   const userData = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const productApi = async () => {
     setLoading(true);
     let resData = await getApi("/product");
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
       setProducts(resData.data);
@@ -52,7 +56,9 @@ export default function ProductsAll() {
 
   const categoryApi = async () => {
     let resData = await getApi("/category", token.accessToken);
-    console.log("categoryApi daat is", resData);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     setCategorys(resData.data);
   };
 
@@ -361,7 +367,7 @@ export default function ProductsAll() {
                     {product.barcode}
                   </td>
                   <td className="lg:px-4 py-2 text-center">
-                    {product.listPrice}
+                    {product.salePrice}
                   </td>
 
                   <td className="lg:px-4 py-2 text-center">
@@ -384,12 +390,12 @@ export default function ProductsAll() {
                 </tr>
               ))
             ) : (
-              <div className="absolute inset-0 flex justify-center items-center">
+              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={20}
+                    size={10}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />
@@ -405,7 +411,7 @@ export default function ProductsAll() {
               setSelectedItems([]);
             }}
             onDelete={() => {
-              deleteProducts()
+              deleteProducts();
               setAlert(false);
             }}
           />

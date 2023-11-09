@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { jsonStringPostData } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function PartnerCreate() {
   const [city, setCity] = useState("");
@@ -21,6 +21,7 @@ export default function PartnerCreate() {
   const [showErrorPhone, setShowErrorPhon] = useState(false);
   const [showErrorCity, setShowErrorCity] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const createPartnerApi = async () => {
     if (name.trim() === "") {
@@ -57,6 +58,9 @@ export default function PartnerCreate() {
         data,
         token.accessToken
       );
+      if (resData.message == "Token Expire , Please Login Again") {
+        dipatch(removeData(null));
+      }
       if (resData.status) {
         navigate("/admin/partners/all");
       } else {

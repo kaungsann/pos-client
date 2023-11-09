@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FormPathApi } from "../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,6 +14,7 @@ export default function EditBusinessInfo() {
   const [loading, setLoading] = useState(false);
 
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const uploadImage = (e) => {
     let selectImage = e.target.files[0];
@@ -35,6 +36,9 @@ export default function EditBusinessInfo() {
       formData,
       token.accessToken
     );
+    if (response.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (response.status) {
       setLoading(false);
       setName("");

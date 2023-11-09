@@ -5,7 +5,8 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import { GrNext } from "react-icons/gr";
 import { getApi } from "../../Api";
 import FadeLoader from "react-spinners/FadeLoader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { itemsAdd, updateItemQuantity } from "../../../redux/actions";
 
 export default function PosItems() {
   const [search, setSearch] = useState("");
@@ -18,9 +19,11 @@ export default function PosItems() {
   const [currentPage, setCurrentPage] = useState(1);
   const searchInputRef = useRef(null);
 
-  const itemsPerPage = 8;
+  const itemsPerPage = 5;
 
   const token = useSelector((state) => state.IduniqueData);
+  const selectProduct = useSelector((state) => state.orderData);
+  const dipatch = useDispatch();
 
   const handleNextButtonClick = () => {
     const nextPage = currentPage + 1;
@@ -39,6 +42,9 @@ export default function PosItems() {
   const getProducts = async () => {
     setLoading(true);
     let resData = await getApi("/product");
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
       setProducts(resData.data);
@@ -49,6 +55,9 @@ export default function PosItems() {
 
   const getCategorysApi = async () => {
     let resData = await getApi("/category", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     setCategory(resData.data);
   };
 
@@ -65,10 +74,36 @@ export default function PosItems() {
     }
   };
 
+  const handleBarcodeDetected = (barcode) => {
+    const productMatch = products.find(
+      (product) => product.barcode === barcode
+    );
+    if (productMatch) {
+      const existingProduct = selectProduct.find(
+        (pd) => pd.barcode === barcode
+      );
+      if (existingProduct) {
+        dipatch(
+          updateItemQuantity(
+            existingProduct.id,
+            (existingProduct.quantity += 1)
+          )
+        );
+        setSearch("");
+      } else {
+        dipatch(itemsAdd({ ...productMatch, quantity: 1 }));
+        setSearch("");
+      }
+    }
+  };
+
   useEffect(() => {
     getProducts();
     getCategorysApi();
-  }, []);
+    if (search) {
+      handleBarcodeDetected(search);
+    }
+  }, [search]);
   return (
     <>
       <div className="flex w-full">
@@ -78,11 +113,12 @@ export default function PosItems() {
               <h3 className="text-lg font-semibold ml-2">Avaliable Items</h3>
               <input
                 ref={searchInputRef}
+                value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 autoFocus={true}
                 type="text"
                 className=" py-2 px-2 shadow-sm bg-slate-50 border-2 w-64 block rounded-md  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6"
-                placeholder="Enter Products Name"
+                placeholder="search products barcode"
               />
             </div>
             <ul className="mt-4 flex flex-wrap cursor-pointer items-center max-w-3xl relative p-3">
@@ -142,12 +178,12 @@ export default function PosItems() {
                 )
                 .map((pd) => <Card key={pd.id} product={pd} />)
             ) : (
-              <div className="absolute inset-0 flex justify-center items-center">
+              <div className="w-10/12 mx-auto  mt-40 flex justify-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={20}
+                    size={10}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />

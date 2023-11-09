@@ -17,7 +17,7 @@ export default function CategoryDetail() {
   const singleProducts = async () => {
     setLoading(true);
     let resData = await getApi(`/category/${id}`, token.accessToken);
-    if (resData.success && resData.success == false) {
+    if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
     if (resData.status) {

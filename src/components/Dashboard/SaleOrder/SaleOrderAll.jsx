@@ -6,7 +6,7 @@ import { MdClear } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FadeLoader from "react-spinners/FadeLoader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import { FiFilter } from "react-icons/fi";
 
@@ -27,10 +27,14 @@ export default function SaleOrderAll() {
   const token = useSelector((state) => state.IduniqueData);
   const [importFile, setimportFile] = useState("");
   const importRef = useRef(null);
+  const dipatch = useDispatch();
 
   const saleOrderApi = async () => {
     setLoading(true);
     const resData = await getApi("/sale", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.data) {
       setLoading(false);
       setSaleOrders(resData.data);
@@ -232,12 +236,12 @@ export default function SaleOrderAll() {
                   </tr>
                 ))
             ) : (
-              <div className="absolute inset-0 flex justify-center items-center">
+              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={20}
+                    size={10}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />

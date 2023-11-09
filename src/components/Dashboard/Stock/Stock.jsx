@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { getApi } from "../../Api";
 import FadeLoader from "react-spinners/FadeLoader";
 import { BiImport } from "react-icons/bi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Stock() {
   let count = 0;
@@ -15,13 +15,14 @@ export default function Stock() {
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
 
-  const [importFile, setimportFile] = useState("");
-  const importRef = useRef(null);
+  const dipatch = useDispatch();
 
-  const navigate = useNavigate();
   const stockApi = async () => {
     setLoading(true);
     let resData = await getApi("/stock", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
       setStock(resData.data);
@@ -133,12 +134,12 @@ export default function Stock() {
                 </tr>
               ))
           ) : (
-            <div className="absolute inset-0 flex justify-center items-center">
+            <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
               {loading && (
                 <FadeLoader
                   color={"#0284c7"}
                   loading={loading}
-                  size={20}
+                  size={15}
                   aria-label="Loading Spinner"
                   data-testid="loader"
                 />

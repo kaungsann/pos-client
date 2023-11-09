@@ -4,7 +4,7 @@ import { getApi, FormPathApi } from "../../Api";
 import { useParams } from "react-router-dom";
 import { RiImageAddFill } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -30,6 +30,7 @@ export default function ProductsEdit() {
   const [purchasePrice, setPurchasePrice] = useState(0);
 
   const { id } = useParams();
+  const dipatch = useDispatch();
 
   const SingleProductApi = async () => {
     let resData = await getApi(`/product/${id}`);
@@ -85,6 +86,9 @@ export default function ProductsEdit() {
       formData,
       token.accessToken
     );
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
 
     if (resData.status) {
       navigate("/admin/products/all");

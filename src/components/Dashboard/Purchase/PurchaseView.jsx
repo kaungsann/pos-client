@@ -13,7 +13,7 @@ import {
 import { getApi } from "../../Api";
 import { format } from "date-fns";
 import FadeLoader from "react-spinners/FadeLoader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function PurchaseView() {
   const [purchase, setPurchase] = useState([]);
@@ -21,10 +21,14 @@ export default function PurchaseView() {
 
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const getPurchase = async () => {
     setLoading(true);
     let resData = await getApi("/purchase", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.success) {
       setLoading(false);
       setPurchase(resData.data);

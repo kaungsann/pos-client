@@ -3,17 +3,21 @@ import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 import { TbEdit } from "react-icons/tb";
 import FadeLoader from "react-spinners/FadeLoader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function LocationDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const singlecategory = async () => {
     setLoading(true);
     let response = await getApi(`/location/${id}`, token.accessToken);
+    if (response.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (response.status) {
       setLoading(false);
       setDetails(response.data);

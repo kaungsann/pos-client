@@ -42,6 +42,9 @@ export default function Profile() {
   const navigate = useNavigate();
   const singleUser = async () => {
     let response = await getApi(`/user/${id}`, token.accessToken);
+    if (response.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     setUsr(response.data);
     setName(response.data[0].username);
     setEmail(response.data[0].email);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getApi, PathData } from "../../Api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function PartnerEdit() {
   const { id } = useParams();
@@ -14,6 +14,7 @@ export default function PartnerEdit() {
   const [isCompany, setIsCompany] = useState(null);
   const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const getSinglePartnere = async () => {
     let resData = await getApi(`/partner/${id}`, token.accessToken);
@@ -47,6 +48,9 @@ export default function PartnerEdit() {
 
     try {
       let resData = await PathData(`/partner/${id}`, data, token.accessToken);
+      if (resData.message == "Token Expire , Please Login Again") {
+        dipatch(removeData(null));
+      }
       if (resData.status) {
         navigate("/admin/partners/all");
       } else {

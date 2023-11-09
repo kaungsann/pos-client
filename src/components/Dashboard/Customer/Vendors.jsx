@@ -4,7 +4,7 @@ import { BiSolidEdit } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
 import FadeLoader from "react-spinners/FadeLoader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaEye } from "react-icons/fa6";
 import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
@@ -31,6 +31,7 @@ export default function PartnerAll() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const getPartnersApi = async () => {
     setLoading(true);
@@ -38,6 +39,9 @@ export default function PartnerAll() {
     const filteredPartners = resData.data.filter(
       (partner) => partner.isCompany === true
     );
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
       setPartners(filteredPartners);
@@ -283,12 +287,12 @@ export default function PartnerAll() {
                   </tr>
                 ))
             ) : (
-              <div className="absolute inset-0 flex justify-center items-center">
+              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={20}
+                    size={10}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />

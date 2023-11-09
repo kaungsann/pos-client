@@ -7,7 +7,7 @@ import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
 import FadeLoader from "react-spinners/FadeLoader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaEye } from "react-icons/fa6";
 
 export default function LocationAll() {
@@ -20,7 +20,6 @@ export default function LocationAll() {
   const [alert, setAlert] = useState(false);
   const [searchItems, setSearchItems] = useState([]);
   const [locations, setLocations] = useState([]);
-  const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const [importFile, setimportFile] = useState("");
@@ -28,12 +27,16 @@ export default function LocationAll() {
   const importRef = useRef(null);
 
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const navigate = useNavigate();
 
   const getLocationApi = async () => {
     setLoading(true);
     let resData = await getApi("/location", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
       setLocations(resData.data);
@@ -271,12 +274,12 @@ export default function LocationAll() {
                 </tr>
               ))
           ) : (
-            <div className="absolute inset-0 flex justify-center items-center">
+            <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
               {loading && (
                 <FadeLoader
                   color={"#0284c7"}
                   loading={loading}
-                  size={20}
+                  size={10}
                   aria-label="Loading Spinner"
                   data-testid="loader"
                 />

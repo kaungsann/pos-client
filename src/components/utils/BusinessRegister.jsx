@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FormPostApi } from "../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
-import { Link } from "react-router-dom";
 
 export default function BusinessRegister() {
   const [name, setName] = useState("");
@@ -15,6 +14,7 @@ export default function BusinessRegister() {
   const [loading, setLoading] = useState(false);
 
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const uploadImage = (e) => {
     let selectImage = e.target.files[0];
@@ -36,6 +36,9 @@ export default function BusinessRegister() {
       formData,
       token.accessToken
     );
+    if (response.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (response.status) {
       setLoading(false);
       setName("");

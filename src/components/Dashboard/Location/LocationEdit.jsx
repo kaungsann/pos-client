@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getApi, PathData } from "../../Api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -11,9 +11,13 @@ export default function LocationEdit() {
   const navigate = useNavigate();
   const { id } = useParams();
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const getLocation = async () => {
     let resData = await getApi(`/location/${id}`, token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     setName(resData.data[0].name);
   };
 

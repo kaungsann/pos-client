@@ -24,7 +24,6 @@ import SaleOrderDetail from "./components/Dashboard/SaleOrder/SaleOrderDetail";
 import PosItems from "./components/Dashboard/POS/PosItems";
 import Register from "./components/Register";
 import GuardRouter from "./components/GuardRoute";
-import Home from "./components/Home";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Profile from "./components/utils/Profile";
 import OverView from "./components/utils/OverView";
@@ -43,9 +42,7 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/signin" element={<Login />} />
-
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route
             path="/admin"
             element={

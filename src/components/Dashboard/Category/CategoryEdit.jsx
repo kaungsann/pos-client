@@ -17,7 +17,7 @@ export default function CategoryEdit() {
   const getCategory = async () => {
     try {
       const response = await getApi(`/category/${id}`, token.accessToken);
-      if (response.success && response.success == false) {
+      if (response.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
       setName(response.data[0].name);

@@ -30,7 +30,7 @@ export default function CategoryCreate() {
         data,
         token.accessToken
       );
-      if (resData.success && resData.success == false) {
+      if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
       if (resData.status) {

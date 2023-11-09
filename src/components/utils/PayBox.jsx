@@ -44,8 +44,8 @@ export default function PayBox({ onContinueToPay }) {
   let totalTax = 0;
 
   product.forEach((sel) => {
-    totalTax += ((sel.tax * sel.quantity) / 100) * sel.listPrice;
-    subTotal += sel.listPrice * sel.quantity;
+    totalTax += ((sel.tax * sel.quantity) / 100) * sel.salePrice;
+    subTotal += sel.salePrice * sel.quantity;
   });
 
   const totalCost = subTotal + totalTax;
@@ -129,7 +129,7 @@ export default function PayBox({ onContinueToPay }) {
                         />
                       </div>
                       <span className="font-bold text-md text-blue-600">
-                        {(sel.listPrice * sel.quantity).toLocaleString("en-US")}{" "}
+                        {(sel.salePrice * sel.quantity).toLocaleString("en-US")}{" "}
                         mmk
                       </span>
                     </div>

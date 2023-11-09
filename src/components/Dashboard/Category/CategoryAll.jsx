@@ -33,8 +33,8 @@ export default function CategoryAll() {
   const getCategorysApi = async () => {
     setLoading(true);
     let resData = await getApi("/category", token.accessToken);
-    console.log("expire message is", resData);
-    if (resData.success && resData.success == false) {
+
+    if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
     if (resData.status) {

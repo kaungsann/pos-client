@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import { jsonStringPostData } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function LocationCreate() {
   let [name, setName] = useState("");
   const [showNameError, setShowNameError] = useState(false);
   const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const createCategoryApi = async () => {
     if (name.trim() === "") {
@@ -28,6 +29,9 @@ export default function LocationCreate() {
         data,
         token.accessToken
       );
+      if (resData.message == "Token Expire , Please Login Again") {
+        dipatch(removeData(null));
+      }
       if (resData.status) {
         navigate("/admin/locations/all");
       } else {

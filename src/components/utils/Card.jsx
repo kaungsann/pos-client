@@ -38,7 +38,7 @@ export default function Card({ product }) {
           {product.name.substring(0, 18)}
         </h3>
         <h2 className="font-bold text-blue-700 text-md">
-          {product.listPrice} MMK
+          {product.salePrice} MMK
         </h2>
       </div>
     </>

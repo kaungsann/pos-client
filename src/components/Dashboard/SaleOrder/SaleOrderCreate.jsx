@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { getApi, jsonStringPostData } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SaleOrderCreate() {
   const [product, setProduct] = useState([]);
@@ -42,6 +42,7 @@ export default function SaleOrderCreate() {
 
   const userData = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const createProductApi = async () => {
     if (date === "") {
@@ -96,6 +97,9 @@ export default function SaleOrderCreate() {
 
     try {
       let resData = await jsonStringPostData("/sale", data, token.accessToken);
+      if (resData.message == "Token Expire , Please Login Again") {
+        dipatch(removeData(null));
+      }
       if (resData.status) {
         toast(resData.message);
         navigate("/admin/saleorders/all");
@@ -418,8 +422,8 @@ export default function SaleOrderCreate() {
                   (pt) => pt.id === e.target.value
                 );
                 if (selectedProduct) {
-                  setUnitPrice(selectedProduct.listPrice);
-                  setTotalPrice(selectedProduct.listPrice);
+                  setUnitPrice(selectedProduct.salePrice);
+                  setTotalPrice(selectedProduct.salePrice);
                   setTax(selectedProduct.tax);
                   setItem(selectedProduct);
                 }

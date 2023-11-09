@@ -16,7 +16,7 @@ import {
 import { format } from "date-fns";
 import FadeLoader from "react-spinners/FadeLoader";
 import { getApi } from "../Api";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function OverView() {
   const [data, setData] = useState([]);
@@ -24,10 +24,14 @@ export default function OverView() {
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState([]);
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const saleOrderApi = async () => {
+    setLoading(true);
     const resData = await getApi("/sale", token.accessToken);
-
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
       setData(resData.data);
@@ -37,18 +41,28 @@ export default function OverView() {
   };
 
   const getProductApi = async () => {
+    setLoading(true);
     let resData = await getApi("/product", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     setProduct(resData.data);
+    if (resData.status) {
+      setLoading(false);
+      setData(resData.data);
+    } else {
+      setLoading(true);
+    }
   };
   useEffect(() => {
     saleOrderApi();
     getProductApi();
   }, []);
 
-  const formattedSaleData = data.map((item) => ({
-    ...item,
-    created: format(new Date(item.orderDate), "yyyy-MM-dd"),
-  }));
+  // const formattedSaleData = data.map((item) => ({
+  //   ...item,
+  //   created: format(new Date(item.orderDate), "yyyy-MM-dd"),
+  // }));
 
   const today = new Date().toISOString().split("T")[0];
   const todaySaleOrders = data.filter((order) => {
@@ -203,7 +217,7 @@ export default function OverView() {
           </div>
         </div>
       ) : (
-        <div className="absolute inset-0 flex justify-center items-center">
+        <div className="flex justify-center items-center mt-64">
           {loading && (
             <FadeLoader
               color={"#0284c7"}

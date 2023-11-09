@@ -15,17 +15,21 @@ import {
 import { getApi } from "../../Api";
 import { format } from "date-fns";
 import FadeLoader from "react-spinners/FadeLoader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function View() {
   const [sale, setSale] = useState([]);
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const getSaleOrder = async () => {
     setLoading(true);
     let resData = await getApi("/sale", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
       setSale(resData.data);
@@ -150,28 +154,6 @@ export default function View() {
                     <Pie dataKey="value" data={data} fill="#8884d8" label />
                   </PieChart>
                 </ResponsiveContainer>
-                {/* <div className="flex justify-center bg-cyan-600 ml-8">
-                  <PieChart width={300} height={500}>
-                    <Pie
-                      data={data}
-                      cx={120}
-                      cy={200}
-                      innerRadius={60}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      paddingAngle={5}
-                      dataKey="value"
-                      className="mx-auto"
-                    >
-                      {data.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                  </PieChart>
-                </div> */}
               </div>
             </div>
             <div className="w-full flex">
