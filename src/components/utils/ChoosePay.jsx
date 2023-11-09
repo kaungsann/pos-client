@@ -172,7 +172,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               required
               id="nameId"
               onChange={(e) => setName(e.target.value)}
-              value={partner.length > 0 ? partner[0].name : name}
+              // value={partner.length > 0 ? partner[0].name : name}
               className="ml-3 pl-2 py-1 border-2 hover:opacity-75 border-blue-500 rounded-md shadow-md"
             >
               <option disabled value selected>
