@@ -16,11 +16,13 @@ export default function Admin() {
     <>
       <div className="fixed top-0 left-0 right-0 z-30 bg-white">
         <div className="flex items-center justify-between lg:p-4 md:p-3 w-full cursor-pointer">
-          <img
-            src={Pos}
-            alt="pos"
-            className="w-32 h-14 rounded-full shadow-sm items-center ml-8"
-          />
+          <Link to={"/admin/inventory/overview"}>
+            <img
+              src={Pos}
+              alt="pos"
+              className="w-32 h-14 rounded-full shadow-sm items-center ml-8"
+            />
+          </Link>
 
           <div className="flex lg:w-96justify-end lg:mr-[30px] md:mr-[80px]">
             <div className="flex items-center">
