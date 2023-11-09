@@ -31,15 +31,9 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
         className="shadow-lg rounded-sm w-80 mx-auto text-center overflow-y-scroll custom-scrollbar h-3/5 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100"
       >
         <img src={logo} width={"60px"} height={"30px"} className="mx-auto" />
-        <h3 className="text-black text-xl font-bold">
-          Amitbound Technology
-        </h3>
-        <h3 className="text-black text-lg font-bold mt-1">
-          Tel+95-973426589
-        </h3>
-        <h3 className="text-black text-lg font-bold mt-1">
-          TextID:US39699
-        </h3>
+        <h3 className="text-black text-xl font-bold">Amitbound Technology</h3>
+        <h3 className="text-black text-lg font-bold mt-1">Tel+95-973426589</h3>
+        <h3 className="text-black text-lg font-bold mt-1">TextID:US39699</h3>
         <h3 className="text-black text-lg font-bold mt-1">
           kaungsann@ambitboundtech.com
         </h3>
@@ -59,7 +53,7 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
               >
                 <h4 className="w-2/5">{pd.name}</h4>
                 <h4>x{pd.quantity}</h4>
-                <h4>{pd.price * pd.quantity}</h4>
+                <h4>{pd.salePrice * pd.quantity}</h4>
               </div>
             ))}
         </div>
@@ -79,9 +73,7 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
           </div>
           <div className="flex justify-between mx-6">
             <h4 className="text-md font-bold text-black">Total Tax</h4>
-            <h4 className="text-md font-bold text-black">
-              {total} mmk
-            </h4>
+            <h4 className="text-md font-bold text-black">{total} mmk</h4>
           </div>
         </div>
         <div className="flex flex-col my-6 justify-center">
