@@ -224,7 +224,19 @@ export default function SaleOrderAll() {
                         ? sale.location.name
                         : "no have"}
                     </td>
-                    <td className="lg:px-4 py-2 text-center">{sale.state}</td>
+                    <td
+                      className={`lg:px-4 py-2 text-center ${
+                        sale.state === "pending"
+                          ? "text-red-400"
+                          : sale.state === "deliver"
+                          ? "text-cyan-600"
+                          : sale.state === "arrived"
+                          ? "text-green-600"
+                          : ""
+                      }`}
+                    >
+                      {sale.state}
+                    </td>
                     <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
                       {sale.lines.length}
                     </td>
