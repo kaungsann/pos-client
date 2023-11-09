@@ -103,8 +103,13 @@ export default function ProductsEdit() {
   };
 
   const getCategory = async () => {
-    const resData = await getApi("/category");
-    setCat(resData.data);
+    const resData = await getApi("/category", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
+    if (resData.status) {
+      setCat(resData.data);
+    }
   };
 
   const handleFileInputClick = () => {

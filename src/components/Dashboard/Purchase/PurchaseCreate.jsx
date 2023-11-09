@@ -249,6 +249,7 @@ export default function SaleOrderCreate() {
               value={payment}
               onChange={(e) => setPayment(e.target.value)}
             >
+              <option value="default">Select an option</option>
               <option value="BANK" className="py-2">
                 BANK
               </option>
@@ -293,7 +294,7 @@ export default function SaleOrderCreate() {
                 showErrorPartner ? "border-red-600" : "border-slate-400"
               }`}
             >
-              <option disabled value>
+              <option disabled value selected>
                 Select an option
               </option>
               {part.length > 0 &&
@@ -325,7 +326,7 @@ export default function SaleOrderCreate() {
                 showErrorLocation ? "border-red-600" : "border-slate-400"
               }`}
             >
-              <option disabled value>
+              <option disabled value selected>
                 Select an option
               </option>
               {location.length > 0 &&
@@ -358,6 +359,7 @@ export default function SaleOrderCreate() {
               value={state}
               onChange={(e) => setState(e.target.value)}
             >
+              <option value="default">Select an option</option>
               <option value="pending" className="py-2">
                 Pending
               </option>
@@ -448,9 +450,7 @@ export default function SaleOrderCreate() {
                 showErrorProduct ? "border-red-600" : "border-slate-400"
               }`}
             >
-              <option disabled value>
-                Select an option
-              </option>
+              <option value="default">Select an products</option>
               {product.length > 0 &&
                 product.map((pt) => (
                   <option
