@@ -11,7 +11,6 @@ import { removeData } from "../../../redux/actions";
 import { FaEye } from "react-icons/fa6";
 
 export default function CategoryAll() {
-  let count = 0;
   const inputRef = useRef();
 
   const [selectedItems, setSelectedItems] = useState([]);
@@ -219,7 +218,6 @@ export default function CategoryAll() {
                 checked={selectAll && selectedItems.length > 0}
               />
             </th>
-            <th className="lg:px-4 py-2 text-center">No</th>
             <th className="lg:px-4 py-2 text-center">Name</th>
             <th className="lg:px-4 py-2 text-center">Date</th>
             <th className="lg:px-4 py-2 text-center">Action</th>
@@ -249,7 +247,6 @@ export default function CategoryAll() {
                       checked={selectedItems.includes(pd.id)}
                     />
                   </td>
-                  <td className="py-3 lg:px-4">{(count += 1)}</td>
 
                   <td className="py-3 lg:px-4">{pd.name}</td>
 

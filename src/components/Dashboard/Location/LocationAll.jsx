@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaEye } from "react-icons/fa6";
 
 export default function LocationAll() {
-  let count = 0;
   const inputRef = useRef();
 
   const [selectedItems, setSelectedItems] = useState([]);
@@ -217,7 +216,6 @@ export default function LocationAll() {
                 checked={selectAll && selectedItems.length > 0}
               />
             </th>
-            <th className="lg:px-4 py-2 text-center">No</th>
             <th className="lg:px-4 py-2 text-center">Name</th>
             <th className="lg:px-4 py-2 text-center">Create Date</th>
             <th className="lg:px-4 py-2 text-center">Update Date</th>
@@ -248,7 +246,6 @@ export default function LocationAll() {
                       checked={selectedItems.includes(loc.id)}
                     />
                   </td>
-                  <td className="py-3">{(count += 1)}</td>
                   <td className="py-3">{loc.name}</td>
                   <td className="py-3">
                     {new Date(loc.createdAt).toLocaleDateString("en-US")}

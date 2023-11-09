@@ -12,7 +12,6 @@ import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
 
 export default function PartnerAll() {
-  let count = 0;
   const inputRef = useRef();
 
   const [selectedItems, setSelectedItems] = useState([]);
@@ -284,7 +283,6 @@ export default function PartnerAll() {
                   checked={selectAll && selectedItems.length > 0}
                 />
               </th>
-              <th className=" py-2 text-center">No</th>
               <th className=" py-2 text-center">Name</th>
               <th className=" py-2 text-center">Address</th>
               <th className=" py-2 text-center">City</th>
@@ -321,9 +319,7 @@ export default function PartnerAll() {
                         checked={selectedItems.includes(partner.id)}
                       />
                     </td>
-                    <td className="py-3 text-center">{(count += 1)}</td>
                     <td className="py-2 text-center">{partner.name}</td>
-
                     <td className=" py-2 text-center">{partner.address}</td>
                     <td className="py-2 text-center">{partner.city}</td>
                     <td className="py-2 text-center">{partner.phone}</td>

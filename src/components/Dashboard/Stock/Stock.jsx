@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Stock() {
-  let count = 0;
   const inputRef = useRef();
   const [searchItems, setSearchItems] = useState([]);
   const [stock, setStock] = useState([]);
@@ -104,7 +103,6 @@ export default function Stock() {
         <h2 className="lg:text-2xl font-bold my-4">Stocks</h2>
         <table className="w-full text-center">
           <tr className="bg-blue-600 text-white">
-            <th className="lg:px-4 py-2 text-center">No</th>
             <th className="lg:px-4 py-2 text-center">Name</th>
             <th className="lg:px-4 py-2 text-center">Quantity</th>
             <th className="lg:px-4 py-2 text-center">Date</th>
@@ -123,7 +121,6 @@ export default function Stock() {
                   key={stk.id}
                   className="odd:bg-white even:bg-slate-200 mt-3"
                 >
-                  <td className="py-3">{(count += 1)}</td>
                   <td className="py-3">
                     {stk.product && stk.product.name
                       ? stk.product.name
