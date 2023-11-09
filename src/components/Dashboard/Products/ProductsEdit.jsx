@@ -39,7 +39,7 @@ export default function ProductsEdit() {
     setName(resData.data[0].name);
     setDescription(resData.data[0].description);
     setExpiredate(new Date(resData.data[0].expiredAt).toLocaleDateString());
-    setPrice(resData.data[0].listPrice);
+    setPrice(resData.data[0].salePrice);
     setBar(resData.data[0].barcode);
     setCatName(resData.data[0].category.name);
     setSelect(resData.data[0].image);

@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
-import logo from "../../public/logo.png";
+import React, { useState } from "react";
+import logo from "../assets/text.jpeg";
 import { Link, useNavigate } from "react-router-dom";
 import { addData, idAdd } from "../redux/actions";
 import { useDispatch } from "react-redux";
-import {
-  AiOutlineArrowLeft,
-  AiOutlineEyeInvisible,
-  AiOutlineEye,
-} from "react-icons/ai";
+import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
@@ -64,9 +60,9 @@ export default function Login() {
           pauseOnHover
           theme="light"
         />
-        <div className="flex min-h-full flex-col justify-center px-6 py-8 lg:px-8">
-          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <img className="mx-auto w-36 h-26" src={logo} />
+        <div className="flex min-h-full flex-col justify-center px-6 lg:px-8 mt-20">
+          <div className="sm:mx-auto sm:w-full">
+            <img className="mx-auto w-96" src={logo} />
             <h2 className="mt-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Sign in to your account
             </h2>

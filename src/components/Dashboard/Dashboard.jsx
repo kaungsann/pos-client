@@ -1,5 +1,5 @@
 import React from "react";
-import Pos from "../../assets/op.jpeg";
+import Pos from "../../assets/logo.png";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { BiPurchaseTag } from "react-icons/bi";
 import { MdOutlineInventory2 } from "react-icons/md";
@@ -20,7 +20,7 @@ export default function Admin() {
             <img
               src={Pos}
               alt="pos"
-              className="w-32 h-14 rounded-full shadow-sm items-center ml-8"
+              className="w-16 h-14 rounded-full shadow-sm items-center ml-14"
             />
           </Link>
 
@@ -51,7 +51,7 @@ export default function Admin() {
         <div
           className={`w-52 fixed top-10 mt-10 z-20 shadow-md  left-0 bottom-0 bg-white  p-4 flex flex-col transform transition-transform duration-500 ease-in-out`}
         >
-          <div className=" flex justify-items-start mt-4 cursor-pointer font-serif">
+          <div className=" flex justify-items-start mt-4 cursor-pointer">
             <MdOutlineInventory2 className="text-3xl hover:text-blue-600" />
             <div className="flex flex-col  w-full">
               <div className="flex flex-col">
@@ -116,7 +116,7 @@ export default function Admin() {
               </div>
             </div>
           </div>
-          <div className=" flex justify-items-start mt-3 cursor-pointer font-serif">
+          <div className=" flex justify-items-start mt-3 cursor-pointer">
             <BiPurchaseTag className="text-3xl hover:text-blue-600" />
             <div className="flex flex-col justify-items-center w-full">
               <div className="flex flex-col">
@@ -159,7 +159,7 @@ export default function Admin() {
               </div>
             </div>
           </div>
-          <div className=" flex justify-items-start mt-3 cursor-pointer font-serif">
+          <div className=" flex justify-items-start mt-3 cursor-pointer">
             <GrCart className="text-3xl text-slate-500 hover:text-blue-600" />
             <div className="flex flex-col justify-items-center w-full">
               <div className="flex flex-col">
@@ -202,7 +202,7 @@ export default function Admin() {
               </div>
             </div>
           </div>
-          <div className=" flex justify-items-start mt-3 cursor-pointer font-serif">
+          <div className=" flex justify-items-start mt-3 cursor-pointer">
             <img src={img} className="w-7 h-8  hover:text-blue-600" />
             <div className="flex flex-col justify-items-center w-full">
               <div className="flex flex-col w-full">

@@ -29,6 +29,8 @@ export default function CategoryAll() {
   const importRef = useRef(null);
   const token = useSelector((state) => state.IduniqueData);
 
+  console.log("token is", token);
+
   const getCategorysApi = async () => {
     setLoading(true);
     let resData = await getApi("/category", token.accessToken);
@@ -46,7 +48,23 @@ export default function CategoryAll() {
 
   const receiveExcel = async () => {
     try {
-      const response = await fetch("http://3.0.102.114/category/export-excel");
+      // Define the request headers with the accessToken
+      const headers = new Headers();
+      headers.append("Authorization", token.accessToken);
+
+      // Create the request options
+      const requestOptions = {
+        method: "GET",
+        headers,
+        mode: "cors",
+        cache: "no-cache",
+      };
+
+      // Define the URL for downloading the file
+      const downloadUrl = "http://3.0.102.114/cateogry/export-excel";
+
+      const response = await fetch(downloadUrl, requestOptions);
+      console.log("res download is", response);
 
       if (response.ok) {
         const blob = await response.blob();

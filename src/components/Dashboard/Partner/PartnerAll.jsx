@@ -55,7 +55,23 @@ export default function PartnerAll() {
 
   const receiveExcel = async () => {
     try {
-      const response = await fetch("http://3.0.102.114/partner/export-excel");
+      // Define the request headers with the accessToken
+      const headers = new Headers();
+      headers.append("Authorization", token.accessToken);
+
+      // Create the request options
+      const requestOptions = {
+        method: "GET",
+        headers,
+        mode: "cors",
+        cache: "no-cache",
+      };
+
+      // Define the URL for downloading the file
+      const downloadUrl = "http://3.0.102.114/partner/export-excel";
+
+      const response = await fetch(downloadUrl, requestOptions);
+      console.log("res download is", response);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -132,7 +148,6 @@ export default function PartnerAll() {
       setSelectedItems([...selectedItems, partnerID]);
     }
   };
-
   // Handle select all items
   const toggleSelectAll = () => {
     if (selectAll) {
