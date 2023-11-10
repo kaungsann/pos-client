@@ -265,7 +265,7 @@ export default function PartnerAll() {
                     <td className="py-2 text-center">
                       {partner.isCompany ? "Yes" : "No"}
                     </td>
-                    <td className="py-2 text-center">
+                    <td className="py-2 text-center lg:px-4">
                       <div className="flex justify-center">
                         <FaEye
                           onClick={() =>

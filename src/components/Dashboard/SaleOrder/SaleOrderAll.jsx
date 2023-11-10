@@ -9,6 +9,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import { FiFilter } from "react-icons/fi";
+import { FaEye } from "react-icons/fa6";
 
 export default function SaleOrderAll() {
   const [saleorders, setSaleOrders] = useState([]);
@@ -185,6 +186,7 @@ export default function SaleOrderAll() {
             <th className="lg:px-4 py-2 text-center">Payment</th>
             <th className="lg:px-4 py-2 text-center">TaxTotal</th>
             <th className="lg:px-4 py-2 text-center">Total</th>
+            <th className="lg:px-4 py-2 text-center">Action</th>
           </tr>
 
           <tbody className="w-full space-y-10 bg-slate-300">
@@ -200,9 +202,6 @@ export default function SaleOrderAll() {
                 .map((sale) => (
                   <tr
                     key={sale.id}
-                    onClick={() =>
-                      navigate(`/admin/saleorders/detail/${sale.id}`)
-                    }
                     className="hover:bg-blue-100 odd:bg-white even:bg-slate-200 mt-3 w-full"
                   >
                     <td className="lg:px-4 py-2 text-center">
@@ -245,6 +244,14 @@ export default function SaleOrderAll() {
                       {sale.taxTotal}
                     </td>
                     <td className="lg:px-4 py-2 text-center">{sale.total}</td>
+                    <td className="py-3 flex ml-3 lg:px-4 justify-center">
+                      <FaEye
+                        onClick={() =>
+                          navigate(`/admin/purchase/detail/${sale.id}`)
+                        }
+                        className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
+                      />
+                    </td>
                   </tr>
                 ))
             ) : (

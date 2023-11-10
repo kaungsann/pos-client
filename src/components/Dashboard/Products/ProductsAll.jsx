@@ -367,7 +367,7 @@ export default function ProductsAll() {
                   <td className="lg:px-4 py-2 text-center">
                     <img
                       src={product.image ? product.image : img}
-                      className="w-10 h-10 rounded-md shadow-md text-center"
+                      className="w-10 h-10 rounded-md shadow-md mx-auto text-center"
                     />
                   </td>
                   <td className="lg:px-4 py-2 text-center">{product.name}</td>
@@ -386,8 +386,8 @@ export default function ProductsAll() {
                     {product.salePrice}
                   </td>
 
-                  <td className="lg:px-4 py-2 text-center">
-                    <div className="flex">
+                  <td className="py-2 lg:px-4 mx-auto">
+                    <div className="flex justify-center">
                       <FaEye
                         onClick={() =>
                           navigate(`/admin/products/detail/${product.id}`)
