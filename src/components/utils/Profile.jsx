@@ -347,7 +347,7 @@ export default function Profile() {
                 <div className="mt-4 flex flex-wrap justify-between">
                   <div className="flex w-full justify-between">
                     <div className="w-6/12">
-                      <label className="text-lg font-semibold text-slate-400">
+                      <label className="text-lg font-semibold text-slate-600">
                         Name
                       </label>
                       <input
@@ -358,7 +358,7 @@ export default function Profile() {
                       />
                     </div>
                     <div className="w-6/12 ml-2">
-                      <label className="text-lg font-semibold text-slate-400">
+                      <label className="text-lg font-semibold text-slate-600">
                         Phone Number
                       </label>
                       <input
@@ -371,7 +371,7 @@ export default function Profile() {
                   </div>
 
                   <div className="w-full mt-6">
-                    <label className="text-lg font-semibold text-slate-400">
+                    <label className="text-lg font-semibold text-slate-600">
                       Email
                     </label>
                     <input
@@ -384,7 +384,7 @@ export default function Profile() {
 
                   <div className="flex w-full justify-between mt-6">
                     <div className="w-6/12">
-                      <label className="text-lg font-semibold text-slate-400">
+                      <label className="text-lg font-semibold text-slate-600">
                         Gender
                       </label>
                       <select
@@ -401,7 +401,7 @@ export default function Profile() {
                     </div>
 
                     <div className="w-6/12 ml-2">
-                      <label className="text-lg font-semibold text-slate-400">
+                      <label className="text-lg font-semibold text-slate-600">
                         Date Of Birth
                       </label>
                       <input
@@ -415,7 +415,7 @@ export default function Profile() {
 
                   <div className="flex w-full justify-between mt-6">
                     <div className="w-6/12">
-                      <label className="text-lg font-semibold text-slate-400">
+                      <label className="text-lg font-semibold text-slate-600">
                         City
                       </label>
                       <input
@@ -426,7 +426,7 @@ export default function Profile() {
                       />
                     </div>
                     <div className="w-6/12 ml-2">
-                      <label className="text-lg font-semibold text-slate-400">
+                      <label className="text-lg font-semibold text-slate-600">
                         Address
                       </label>
                       <input

@@ -75,7 +75,7 @@ export default function BusinessRegister() {
           <form className="mt-8" onSubmit={handleChange}>
             <div className="flex">
               <div className="w-6/12">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-md font-medium text-slate-700">
+                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Company Name
                 </label>
                 <input
@@ -89,7 +89,7 @@ export default function BusinessRegister() {
                 />
               </div>
               <div className="w-6/12 ml-4">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-md font-medium text-slate-700">
+                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Company Email
                 </label>
                 <input
@@ -104,7 +104,7 @@ export default function BusinessRegister() {
               </div>
             </div>
             <div className="mt-8">
-              <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-md font-medium text-slate-700">
+              <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                 Company Logo
               </label>
               <input
@@ -117,7 +117,7 @@ export default function BusinessRegister() {
             </div>
             <div className="flex my-8">
               <div className="w-6/12">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-md font-medium text-slate-700">
+                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Company Phone
                 </label>
                 <input
@@ -130,7 +130,7 @@ export default function BusinessRegister() {
                 />
               </div>
               <div className="w-6/12 ml-4">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-md font-medium text-slate-700">
+                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Company Address
                 </label>
                 <input

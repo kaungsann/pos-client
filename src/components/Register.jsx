@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { jsonStringPostData, FormPostApi } from "./Api";
-import Message from "./utils/Message";
+import { FormPostApi } from "./Api";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
+import { useSelector } from "react-redux";
 
 export default function () {
   const [name, setname] = useState("");
@@ -17,12 +18,12 @@ export default function () {
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
-  const [isCheck, setIsCheck] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   const [password, setpassword] = useState("");
 
-  const navigate = useNavigate();
+  const token = useSelector((state) => state.IduniqueData);
 
   const fileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -30,34 +31,37 @@ export default function () {
   };
 
   const registerUser = async (e) => {
+    setLoading(true);
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("name", name);
+    formData.append("username", name);
     formData.append("phone", phone);
     formData.append("email", email);
     formData.append("gender", gender);
     formData.append("city", city);
     formData.append("password", password);
-    formData.append("dateOfBirth", birth);
-    formData.append("contactAddress", address);
+    formData.append("birthdate", birth);
+    formData.append("address", address);
     formData.append("image", file);
-    formData.append("isAdmin", isCheck);
 
-    const response = await fetch("http://18.143.238.45/user/signup", {
-      method: "POST",
-      body: formData,
-    });
+    let response = await FormPostApi("/user", formData, token.accessToken);
 
-    const resData = await response.json();
-
-    if (resData.con) {
+    if (response.success) {
+      setname("");
+      setphone("");
+      setemail("");
+      setAddress("");
+      setFile("");
+      setBirth("");
+      setGender("");
+      setCity("");
+      setpassword("");
       setLoading(false);
-      toast(resData.message);
-      navigate("/signin");
+      toast(response.message);
     } else {
       setLoading(false);
-      toast(resData.message);
+      toast(response.message);
     }
   };
 
@@ -90,7 +94,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="name"
-              className="block text-lg font-medium leading-6 text-slate-600"
+              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
             >
               Name
             </label>
@@ -109,7 +113,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="email"
-              className="block text-lg font-medium leading-6 text-slate-600"
+              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
             >
               Email address
             </label>
@@ -129,7 +133,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="city"
-              className="block text-lg font-medium leading-6 text-slate-600"
+              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
             >
               Contact Address
             </label>
@@ -148,7 +152,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="file-upload"
-              className="block text-lg font-medium leading-6 text-slate-600"
+              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
             >
               Image Upload
             </label>
@@ -167,7 +171,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="gender"
-              className="block text-lg font-medium leading-6 text-slate-600"
+              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
             >
               Date Of Birth
             </label>
@@ -187,7 +191,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="phone"
-              className="block text-lg font-medium leading-6 text-slate-600"
+              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
             >
               Phone Number
             </label>
@@ -206,7 +210,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="gender"
-              className="block text-lg font-medium leading-6 text-slate-600"
+              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
             >
               Gender
             </label>
@@ -231,7 +235,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="city"
-              className="block text-lg font-medium leading-6 text-slate-600"
+              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
             >
               City
             </label>
@@ -257,7 +261,7 @@ export default function () {
             <div className="flex items-center justify-between">
               <label
                 htmlFor="password"
-                className="block text-lg font-medium leading-6 text-slate-600"
+                className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
               >
                 Password
               </label>
@@ -275,20 +279,6 @@ export default function () {
             </div>
           </div>
 
-          <div className="w-72 my-3">
-            <label
-              htmlFor="city"
-              className="block text-lg font-medium leading-6 text-slate-600"
-            >
-              Admin Role
-            </label>
-            <input
-              type="checkbox"
-              id="myCheck"
-              checked={isCheck}
-              onChange={() => setIsCheck(!isCheck)}
-            />
-          </div>
           <button
             type="submit"
             className="w-72 my-3 mt-8 flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
