@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaEye } from "react-icons/fa6";
 import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
+import { format } from "date-fns";
 
 export default function PartnerAll() {
   const inputRef = useRef();
@@ -339,7 +340,7 @@ export default function PartnerAll() {
                     <td className="py-2 text-center">{partner.city}</td>
                     <td className="py-2 text-center">{partner.phone}</td>
                     <td className="py-2 text-center">
-                      {new Date(partner.created).toLocaleDateString()}
+                      {format(new Date(partner.createdAt), "yyyy-MM-dd")}
                     </td>
                     <td className="py-2 text-center">
                       {partner.isCustomer ? "Member" : "Guest"}

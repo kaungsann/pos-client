@@ -10,6 +10,7 @@ import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { format } from "date-fns";
 
 export default function PartnerAll() {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -253,7 +254,7 @@ export default function PartnerAll() {
                     <td className="py-2 text-center">{partner.city}</td>
                     <td className="py-2 text-center">{partner.phone}</td>
                     <td className="py-2 text-center">
-                      {new Date(partner.created).toLocaleDateString()}
+                      {format(new Date(partner.createdAt), "yyyy-MM-dd")}
                     </td>
                     <td className="py-2 text-center">
                       {partner.isCustomer ? "Yes" : "No"}

@@ -6,6 +6,7 @@ import { BiImport } from "react-icons/bi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
+import { format } from "date-fns";
 
 export default function Stock() {
   const inputRef = useRef();
@@ -143,7 +144,9 @@ export default function Stock() {
                       : "none"}
                   </td>
                   <td className="py-3">{stk.onHand}</td>
-                  <td className="py-3">{stk.createdAt}</td>
+                  <td className="py-3">
+                    {format(new Date(stk.createdAt), "yyyy-MM-dd")}
+                  </td>
                 </tr>
               ))
           ) : (

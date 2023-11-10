@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 import { FaEye } from "react-icons/fa6";
+import { format } from "date-fns";
 
 export default function CategoryAll() {
   const inputRef = useRef();
@@ -268,7 +269,9 @@ export default function CategoryAll() {
 
                   <td className="py-3 lg:px-4">{pd.name}</td>
 
-                  <td className="py-3 lg:px-4">{pd.createdAt}</td>
+                  <td className="py-3 lg:px-4">
+                    {format(new Date(pd.createdAt), "yyyy-MM-dd")}
+                  </td>
 
                   <td className="py-3 flex ml-3 lg:px-4 justify-center">
                     <FaEye
