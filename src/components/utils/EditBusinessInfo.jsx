@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FormPathApi } from "../Api";
+import { FormPathApi, getApi } from "../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
 
-export default function EditBusinessInfo() {
+export default function EditBusinessInfo({ reBack, updateInfo }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [id, setId] = useState("");
   const [fiie, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,18 +22,43 @@ export default function EditBusinessInfo() {
     setFile(selectImage);
   };
 
+  const getCompanyInfo = async () => {
+    const resData = await getApi("/company", token.accessToken);
+    if (resData.status) {
+      setName(resData.data[0].name);
+      setEmail(resData.data[0].email);
+      setPhone(resData.data[0].phone);
+      setAddress(resData.data[0].address);
+      setId(resData.data[0].id);
+    }
+  };
+  const handleDiscardClick = () => {
+    reBack();
+  };
+
   const handleChange = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("companyName", name);
-    formData.append("companyPhone", phone);
-    formData.append("companyEmail", email);
-    formData.append("image", fiie);
-    formData.append("contactAddress", address);
+
+    if (name) {
+      formData.append("name", name);
+    }
+    if (phone) {
+      formData.append("phone", phone);
+    }
+    if (email) {
+      formData.append("email", email);
+    }
+    if (address) {
+      formData.append("address", address);
+    }
+    if (fiie) {
+      formData.append("image", fiie);
+    }
 
     const response = await FormPathApi(
-      "/store-info",
+      `/company/${id}`,
       formData,
       token.accessToken
     );
@@ -40,18 +66,21 @@ export default function EditBusinessInfo() {
       dipatch(removeData(null));
     }
     if (response.status) {
+      handleDiscardClick();
       setLoading(false);
-      setName("");
-      setPhone("");
-      setAddress("");
-      setEmail("");
-      setFile(null);
+
       toast(response.message);
+
+      updateInfo(response.data[0]);
     } else {
       setLoading(false);
       toast(response.message);
     }
   };
+
+  useEffect(() => {
+    getCompanyInfo();
+  }, [id]);
   return (
     <>
       <ToastContainer
@@ -75,7 +104,7 @@ export default function EditBusinessInfo() {
           <form className="mt-8" onSubmit={handleChange}>
             <div className="flex">
               <div className="w-6/12">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-md font-medium text-slate-700">
+                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Company Name
                 </label>
                 <input
@@ -89,7 +118,7 @@ export default function EditBusinessInfo() {
                 />
               </div>
               <div className="w-6/12 ml-4">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-md font-medium text-slate-700">
+                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Company Email
                 </label>
                 <input
@@ -104,7 +133,7 @@ export default function EditBusinessInfo() {
               </div>
             </div>
             <div className="mt-8">
-              <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-md font-medium text-slate-700">
+              <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                 Company Logo
               </label>
               <input
@@ -117,7 +146,7 @@ export default function EditBusinessInfo() {
             </div>
             <div className="flex my-8">
               <div className="w-6/12">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-md font-medium text-slate-700">
+                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Company Phone
                 </label>
                 <input
@@ -130,7 +159,7 @@ export default function EditBusinessInfo() {
                 />
               </div>
               <div className="w-6/12 ml-4">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-md font-medium text-slate-700">
+                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Company Address
                 </label>
                 <input
@@ -143,23 +172,30 @@ export default function EditBusinessInfo() {
                 />
               </div>
             </div>
-
-            <button
-              type="submit"
-              className="w-6/12 mt-8 my-3 flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              {loading && (
-                <MoonLoader
-                  color={"#f0f7f6"}
-                  loading={loading}
-                  size={25}
-                  aria-label="Loading Spinner"
-                  data-testid="loader"
-                  className="mx-4"
-                />
-              )}
-              Edit Info
-            </button>
+            <div className="flex">
+              <button
+                type="submit"
+                className="w-6/12 mt-8 my-3 flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                {loading && (
+                  <MoonLoader
+                    color={"#f0f7f6"}
+                    loading={loading}
+                    size={25}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                    className="mx-4"
+                  />
+                )}
+                Edit Info
+              </button>
+              <div
+                onClick={handleDiscardClick}
+                className="w-6/12 mt-8 ml-2 my-3 flex justify-center rounded-md focus:outline-none hover:text-white hover:bg-[#4338ca] px-3 py-1.5 text-sm font-semibold leading-6 border-2 border-[#4338ca] text-[#4338ca] shadow-sm"
+              >
+                Discard
+              </div>
+            </div>
           </form>
         </div>
       </div>

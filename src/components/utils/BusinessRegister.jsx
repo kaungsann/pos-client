@@ -25,17 +25,13 @@ export default function BusinessRegister() {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("companyName", name);
-    formData.append("companyPhone", phone);
-    formData.append("companyEmail", email);
+    formData.append("name", name);
+    formData.append("phone", phone);
+    formData.append("email", email);
     formData.append("image", fiie);
-    formData.append("contactAddress", address);
+    formData.append("address", address);
 
-    const response = await FormPostApi(
-      "/store-info",
-      formData,
-      token.accessToken
-    );
+    const response = await FormPostApi("/company", formData, token.accessToken);
     if (response.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }

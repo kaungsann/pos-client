@@ -54,7 +54,7 @@ export default function Admin() {
         >
           <div className=" flex justify-items-start mt-4 cursor-pointer">
             <Icon
-              icon="material-symbols-light:inventory-2-rounded"
+              icon="material-symbols-light:inventory-2-outline"
               className="text-slate-700 text-3xl"
             />
             <div className="flex flex-col  w-full">
@@ -208,7 +208,7 @@ export default function Admin() {
           </div>
           <div className=" flex justify-items-start mt-3 cursor-pointer">
             <Icon
-              icon="fontisto:shopping-pos-machine"
+              icon="mdi:printer-point-of-sale-cog-outline"
               className="text-slate-700 text-3xl"
             />
 

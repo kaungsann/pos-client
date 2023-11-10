@@ -3,7 +3,9 @@ import { getApi } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import { ToastContainer, toast } from "react-toastify";
+import { BiSolidEdit } from "react-icons/bi";
 import "react-toastify/dist/ReactToastify.css";
+import { FaEye } from "react-icons/fa6";
 
 export default function Staff() {
   const [users, setUsers] = useState([]);
@@ -52,11 +54,7 @@ export default function Staff() {
             <th className="lg:px-4 py-2 text-center text-slate-800">Name</th>
             <th className="lg:px-4 py-2 text-center text-slate-800">Email</th>
             <th className="lg:px-4 py-2 text-center text-slate-800">Phone</th>
-            <th className="lg:px-4 py-2 text-center text-slate-800">
-              DateOfBirth
-            </th>
-            <th className="lg:px-4 py-2 text-center text-slate-800">Gender</th>
-            <th className="lg:px-4 py-2 text-center text-slate-800">Address</th>
+            <th className="lg:px-4 py-2 text-center text-slate-800">Action</th>
           </tr>
 
           <tbody>
@@ -71,14 +69,23 @@ export default function Staff() {
                   <td className="lg:px-4 py-2 text-center">
                     {usr.phone ? usr.phone : "none"}
                   </td>
+
                   <td className="lg:px-4 py-2 text-center">
-                    {usr.dateOfBirth ? usr.dateOfBirth : "none"}
-                  </td>
-                  <td className="lg:px-4 py-2 text-center">
-                    {usr.gender ? usr.gender : "none"}
-                  </td>
-                  <td className="lg:px-4 py-2 text-center">
-                    {usr.contactAddress ? usr.contactAddress : "none"}
+                    <div className="flex justify-center">
+                      <FaEye
+                        onClick={() =>
+                          navigate(`/admin/products/detail/${product.id}`)
+                        }
+                        className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
+                      />
+                      <BiSolidEdit
+                        className="text-2xl mx-2 text-[#5e54cd] BiSolidEdit hover:text-[#2c285f]"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          editRoute(product.id);
+                        }}
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}

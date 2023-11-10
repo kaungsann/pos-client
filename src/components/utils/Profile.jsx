@@ -19,6 +19,7 @@ import user from "../../assets/user.jpeg";
 import BusinessRegister from "./BusinessRegister";
 import EditBusinessInfo from "./EditBusinessInfo";
 import Staff from "./Staff";
+import CompanyInfo from "./CompanyInfo";
 
 export default function Profile() {
   const { id } = useParams();
@@ -295,18 +296,6 @@ export default function Profile() {
                 Personal Information
               </h3>
               <div className="mt-4">
-                <div className="flex">
-                  <h3
-                    className="text-blue-600 font-semibold text-lg mb-6 underline underline-offset-6 hover:font-bold"
-                    onClick={() => setActiveSection("EditInfo")}
-                  >
-                    click here
-                  </h3>
-                  <span className="text-lg font-semibold ml-1 text-slate-400">
-                    → ( Company Info )
-                  </span>
-                </div>
-
                 <div className="flex ">
                   <div className="flex">
                     <label
@@ -460,7 +449,8 @@ export default function Profile() {
 
           {activeSection === "company" && (
             <>
-              <BusinessRegister />
+              <CompanyInfo />
+              {/* <BusinessRegister /> */}
             </>
           )}
           {activeSection === "EditInfo" && (
