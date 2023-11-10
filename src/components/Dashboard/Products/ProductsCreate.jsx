@@ -17,6 +17,7 @@ export default function ProductsCreate() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [bar, setBar] = useState(0);
+  const [stockQuantity, setStockQuantity] = useState(0);
   const [file, setFile] = useState(null);
   const [avaliable, setAAvaliable] = useState(null);
   const navigate = useNavigate();
@@ -36,6 +37,8 @@ export default function ProductsCreate() {
   const [showDescriError, setShowDescriError] = useState(false);
   const [showPriceError, setShowPriceError] = useState(false);
   const [showBarCodeError, setShowBarCodeError] = useState(false);
+  const [showStockQuantity, setShowStockQuantity] = useState(false);
+  const [showTax, setShowTax] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [purchaseError, setPurchaseError] = useState(false);
   const [profitError, setProfitError] = useState(false);
@@ -94,6 +97,16 @@ export default function ProductsCreate() {
     } else {
       setProfitError(false);
     }
+    if (stockQuantity === 0) {
+      setShowStockQuantity(true);
+    } else {
+      setShowStockQuantity(false);
+    }
+    if (tax === 0) {
+      setShowTax(true);
+    } else {
+      setShowTax(false);
+    }
     if (name.trim() === "" || ref.trim() === "") {
       return;
     }
@@ -109,6 +122,7 @@ export default function ProductsCreate() {
     formData.append("expiredAt", expiredate);
     formData.append("marginProfit", profit);
     formData.append("purchasePrice", purchasePrice);
+    formData.append("minStockQty", stockQuantity);
     formData.append("tax", tax);
     try {
       let resData = await FormPostApi("/product", formData, token.accessToken);
@@ -349,13 +363,21 @@ export default function ProductsCreate() {
               />
             </div>
             <div className="w-60 mb-3 mx-8">
-              <label className={`text-md font-semibold `}>Tax*</label>
+              <label
+                className={`text-md font-semibold ${
+                  showTax ? "text-red-600" : "text-slate-600"
+                }`}
+              >
+                Tax*
+              </label>
               <input
                 required
                 value={tax}
                 type="number"
                 onChange={(e) => setTax(e.target.value)}
-                className={`w-full px-3 py-1 rounded-md border-b-2 bg-white border-slate-600 focus:outline-none my-2`}
+                className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
+                  showTax ? "border-red-600" : "border-slate-600"
+                }`}
                 placeholder="Enter product stock quantity"
               />
             </div>
@@ -397,7 +419,6 @@ export default function ProductsCreate() {
                 placeholder="Enter product stock quantity"
               />
             </div>
-
             <div className="w-60 mb-3 mx-8">
               <label
                 className={`text-md font-semibold ${
@@ -413,6 +434,25 @@ export default function ProductsCreate() {
                 onChange={(e) => setProfit(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                   profitError ? "border-red-600" : "border-slate-600"
+                }`}
+                placeholder="Enter product stock quantity"
+              />
+            </div>
+            <div className="w-60 mb-3 mx-8">
+              <label
+                className={`text-md font-semibold ${
+                  showStockQuantity ? "text-red-600" : "text-slate-600"
+                }`}
+              >
+                Stock Quantity*
+              </label>
+              <input
+                required
+                value={stockQuantity}
+                type="number"
+                onChange={(e) => setStockQuantity(e.target.value)}
+                className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
+                  showStockQuantity ? "border-red-600" : "border-slate-600"
                 }`}
                 placeholder="Enter product stock quantity"
               />

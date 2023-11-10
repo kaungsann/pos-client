@@ -130,6 +130,21 @@ export default function ProductsEdit() {
     }
   };
 
+  const handleCategoryChange = async (e) => {
+    const selectedCategoryId = e.target.value;
+
+    // Fetch default data for the selected category
+    const categoryData = await getApi(
+      `/category/${selectedCategoryId}/default`
+    );
+
+    // Update the state with the default data
+    setGategory(selectedCategoryId);
+    setCatName( "");
+    setRef(categoryData.ref || "");
+    // ... (update other state variables based on the default data)
+  };
+
   useEffect(() => {
     getCategory();
     SingleProductApi();
