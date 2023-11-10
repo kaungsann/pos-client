@@ -35,7 +35,7 @@ export default function PartnerAll() {
     setLoading(true);
     let resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCompany === true
+      (partner) => partner.isCustomer === false
     );
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
