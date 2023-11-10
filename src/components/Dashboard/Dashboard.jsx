@@ -7,6 +7,7 @@ import { GrCart } from "react-icons/gr";
 import img from "../../assets/posbox.jpeg";
 import userIcons from "../../assets/user.jpeg";
 import { useSelector } from "react-redux";
+import { Icon } from "@iconify/react";
 
 export default function Admin() {
   const location = useLocation();
@@ -52,7 +53,10 @@ export default function Admin() {
           className={`w-52 fixed top-10 mt-10 z-20 shadow-md  left-0 bottom-0 bg-white  p-4 flex flex-col transform transition-transform duration-500 ease-in-out`}
         >
           <div className=" flex justify-items-start mt-4 cursor-pointer">
-            <MdOutlineInventory2 className="text-3xl hover:text-blue-600" />
+            <Icon
+              icon="material-symbols-light:inventory-2-rounded"
+              className="text-slate-700 text-3xl"
+            />
             <div className="flex flex-col  w-full">
               <div className="flex flex-col">
                 <h3 className="text-md font-bold ml-6">Inventory</h3>
@@ -117,7 +121,7 @@ export default function Admin() {
             </div>
           </div>
           <div className=" flex justify-items-start mt-3 cursor-pointer">
-            <BiPurchaseTag className="text-3xl hover:text-blue-600" />
+            <Icon icon="carbon:purchase" className="text-slate-700 text-3xl" />
             <div className="flex flex-col justify-items-center w-full">
               <div className="flex flex-col">
                 <h3 className="text-md font-bold ml-6">Purchase</h3>
@@ -160,7 +164,7 @@ export default function Admin() {
             </div>
           </div>
           <div className=" flex justify-items-start mt-3 cursor-pointer">
-            <GrCart className="text-3xl text-slate-500 hover:text-blue-600" />
+            <Icon icon="bi:cart" className="text-slate-700 text-3xl" />
             <div className="flex flex-col justify-items-center w-full">
               <div className="flex flex-col">
                 <h3 className="text-md font-bold ml-6">Sale</h3>
@@ -203,7 +207,11 @@ export default function Admin() {
             </div>
           </div>
           <div className=" flex justify-items-start mt-3 cursor-pointer">
-            <img src={img} className="w-7 h-8  hover:text-blue-600" />
+            <Icon
+              icon="fontisto:shopping-pos-machine"
+              className="text-slate-700 text-3xl"
+            />
+
             <div className="flex flex-col justify-items-center w-full">
               <div className="flex flex-col w-full">
                 <h3 className="text-md font-bold ml-6">POS</h3>
