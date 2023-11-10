@@ -24,6 +24,8 @@ export default function ProductsEdit() {
   const [select, setSelect] = useState("");
   const token = useSelector((state) => state.IduniqueData);
 
+  console.log("cat name is ", catName);
+
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const [profit, setProfit] = useState(0);
@@ -130,21 +132,6 @@ export default function ProductsEdit() {
     }
   };
 
-  const handleCategoryChange = async (e) => {
-    const selectedCategoryId = e.target.value;
-
-    // Fetch default data for the selected category
-    const categoryData = await getApi(
-      `/category/${selectedCategoryId}/default`
-    );
-
-    // Update the state with the default data
-    setGategory(selectedCategoryId);
-    setCatName( "");
-    setRef(categoryData.ref || "");
-    // ... (update other state variables based on the default data)
-  };
-
   useEffect(() => {
     getCategory();
     SingleProductApi();
@@ -243,12 +230,11 @@ export default function ProductsEdit() {
               <select
                 required
                 id="catid"
-                value={catName}
                 onChange={(e) => setGategory(e.target.value)}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
               >
                 <option disabled value selected>
-                  Select an option
+                  {catName}
                 </option>
                 {cat.length > 0 &&
                   cat.map((ct) => (

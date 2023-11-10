@@ -60,7 +60,6 @@ export default function CompanyInfo() {
               <h3 className="text-center text-slate-500 text-md font-semibold mt-2">
                 {info.email}
               </h3>
-
               <h3 className="text-center text-slate-500 text-md font-semibold mt-2">
                 {info.phone}
               </h3>
