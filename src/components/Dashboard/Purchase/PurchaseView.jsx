@@ -14,10 +14,12 @@ import { getApi } from "../../Api";
 import { format } from "date-fns";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
+import { Icon } from "@iconify/react";
 
 export default function PurchaseView() {
   const [purchase, setPurchase] = useState([]);
   const [product, setProduct] = useState([]);
+  const [purchaseLines, setPurchaseLines] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
@@ -32,6 +34,21 @@ export default function PurchaseView() {
     if (resData.success) {
       setLoading(false);
       setPurchase(resData.data);
+    } else {
+      setLoading(true);
+    }
+  };
+
+  const getPurhaseLines = async () => {
+    setLoading(true);
+    let resData = await getApi("/purchaselines", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
+
+    if (resData.status) {
+      setLoading(false);
+      setPurchaseLines(resData.data);
     } else {
       setLoading(true);
     }
@@ -61,9 +78,24 @@ export default function PurchaseView() {
     return formattedOrderDate === todayDate;
   });
 
+  const getProductQuantity = () => {
+    // Calculate the total quantity of products purchased
+    const totalQuantity = filteredPurchase.reduce(
+      (total, purchaseLine) => total + purchaseLine.lines.length,
+      0
+    );
+    return totalQuantity;
+  };
+
+  const todayTotalPurchase = filteredPurchase.reduce(
+    (total, sale) => total + sale.total,
+    0
+  );
+
   useEffect(() => {
     getProduct();
     getPurchase();
+    getPurhaseLines();
   }, []);
 
   const formattedSaleData = purchase.map((item) => ({
@@ -76,37 +108,69 @@ export default function PurchaseView() {
       {purchase.length > 0 ? (
         <div className="px-8 w-full">
           <div className="w-full  flex justify-between">
-            <div className="p-4 w-64 bg-[#FFFFFF] rounded-md shadow-md">
-              <h3 className="font-bold text-slate-600 text-md">
-                Today Expense
-              </h3>
-              <h4 className="text-2xl font-semibold text-slate-600 my-2">
-                11500 mmk
-              </h4>
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon
+                icon="icon-park-solid:buy"
+                className="text-4xl text-cyan-700 font-semibold"
+              />
+
+              <div className="">
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Total Purchase
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {todayTotalPurchase} mmk
+                </h4>
+              </div>
             </div>
-            <div className="p-4 w-64 bg-white rounded-md shadow-md">
-              <h3 className="font-bold text-slate-600 text-lg">
-                Income Detail
-              </h3>
-              <h4 className="text-xl font-semibold text-slate-80 my-2">
-                1150 mmk
-              </h4>
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon
+                icon="icons8:buy"
+                className="text-5xl text-blue-700 font-semibold"
+              />
+
+              <div className="">
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Today Purchases
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {filteredPurchase.length}
+                </h4>
+              </div>
             </div>
-            <div className="p-4 w-64 bg-white rounded-md shadow-md">
-              <h3 className="font-bold text-slate-600 text-lg">
-                Task Complete
-              </h3>
-              <h4 className="text-xl font-semibold text-slate-800 my-2">
-                25000 mmk
-              </h4>
+
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon icon="fa:users" className="text-4xl text-[#8884d8]" />
+              <div>
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Total Customer
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {
+                    new Set(
+                      filteredPurchase.map(
+                        (sal) => sal.partner && sal.partner._id
+                      )
+                    ).size
+                  }
+                </h4>
+              </div>
             </div>
-            <div className="p-4 w-64 bg-white rounded-md shadow-md">
-              <h3 className="font-bold text-slate-600 text-lg">
-                Number of Sales
-              </h3>
-              <h4 className="text-xl font-semibold text-slate-800 my-2">
-                10000 mmk
-              </h4>
+
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon
+                icon="fluent-mdl2:product-variant"
+                className="text-4xl text-green-500"
+              />
+
+              <div>
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Product Purchased
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {getProductQuantity()}
+                </h4>
+              </div>
             </div>
           </div>
           <div className="mt-6">
@@ -153,7 +217,7 @@ export default function PurchaseView() {
               </div>
             </div>
             <div className="w-full flex">
-              <div className="w-3/4 bg-white p-2 rounded-md">
+              <div className="w-3/4 bg-white p-2 rounded-md shadow-md">
                 <h2 className="text-slate-600 font-semibold text-lg mb-3">
                   Recents Order
                 </h2>
@@ -200,7 +264,7 @@ export default function PurchaseView() {
                   </tbody>
                 </table>
               </div>
-              <div className="items-center w-1/4 bg-white p-2 ml-4 rounded-md h-fix">
+              <div className="items-center w-1/4 bg-white p-2 ml-4 rounded-md h-fix shadow-md">
                 <h1 className="text-slate-600 font-semibold text-lg mb-6">
                   Popular Products
                 </h1>
@@ -220,9 +284,9 @@ export default function PurchaseView() {
                           </h4>
                         </div>
 
-                        {item.listPrice && (
+                        {item.salePrice && (
                           <p className="text-slate-500 font-semibold">
-                            {item.listPrice} mmk
+                            {item.salePrice} mmk
                           </p>
                         )}
                       </div>

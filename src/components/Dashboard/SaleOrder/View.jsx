@@ -6,8 +6,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
-  Cell,
   ResponsiveContainer,
   Pie,
   PieChart,
@@ -16,11 +14,13 @@ import { getApi } from "../../Api";
 import { format } from "date-fns";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
+import { Icon } from "@iconify/react";
 
 export default function View() {
   const [sale, setSale] = useState([]);
   const [product, setProduct] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [saleLines, setSaleLines] = useState([]);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
@@ -33,6 +33,20 @@ export default function View() {
     if (resData.status) {
       setLoading(false);
       setSale(resData.data);
+    } else {
+      setLoading(true);
+    }
+  };
+
+  const getSaleLinesApi = async () => {
+    setLoading(true);
+    let resData = await getApi("/salelines", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
+    if (resData.status) {
+      setLoading(false);
+      setSaleLines(resData.data);
     } else {
       setLoading(true);
     }
@@ -59,6 +73,7 @@ export default function View() {
   useEffect(() => {
     getProduct();
     getSaleOrder();
+    getSaleLinesApi();
   }, []);
 
   const formattedSaleData = sale.map((item) => ({
@@ -74,58 +89,124 @@ export default function View() {
     return formattedOrderDate === todayDate;
   });
 
+  // Sum up the "total" values of the filtered sale data
+  const todayTotalSales = filteredSales.reduce(
+    (total, sale) => total + sale.total,
+    0
+  );
+
+  const calculateProductQuantity = () => {
+    const productQuantityMap = {};
+
+    // Iterate through the filtered sales data
+    filteredSales.forEach((sale) => {
+      // Iterate through the lines of each sale
+      sale.lines.forEach((line) => {
+        const productId = line.product && line.product._id;
+
+        // Update the quantity for the product
+        if (productId) {
+          productQuantityMap[productId] =
+            (productQuantityMap[productId] || 0) + line.qty;
+        }
+      });
+    });
+
+    return productQuantityMap;
+  };
+
+  const getTop5Products = () => {
+    const productQuantityMap = calculateProductQuantity();
+
+    // Convert the product quantity map to an array of objects
+    const productQuantityArray = Object.entries(productQuantityMap).map(
+      ([productId, quantity]) => ({
+        productId,
+        quantity,
+      })
+    );
+
+    // Sort the array in descending order based on quantity
+    const sortedProducts = productQuantityArray.sort(
+      (a, b) => b.quantity - a.quantity
+    );
+
+    // Take the top 5 products
+    const top5Products = sortedProducts.slice(0, 5);
+
+    return top5Products;
+  };
+
   return (
     <>
       {sale.length > 0 ? (
         <div className="px-8 w-full">
           <div className="w-full  flex justify-between">
-            <div className="p-4 w-64 bg-[#FFFFFF] rounded-md shadow-sm">
-              <h3 className="font-bold text-slate-600 text-md">
-                Today Expense
-              </h3>
-              <h4 className="text-2xl font-semibold text-slate-600 my-2">
-                11500 mmk
-              </h4>
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon icon="bi:cart-fill" className="text-4xl text-cyan-600" />
+              <div className="">
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Today Total Sales
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {todayTotalSales} mmk
+                </h4>
+              </div>
             </div>
-            <div className="p-4 w-64 bg-white rounded-md">
-              <h3 className="font-bold text-slate-600 text-lg">
-                Income Detail
-              </h3>
-              <h4 className="text-xl font-semibold text-slate-80 my-2">
-                1150 mmk
-              </h4>
+            <div className="px-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon icon="solar:cart-bold" className="text-4xl text-blue-600" />
+              <div>
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Today Orders
+                </h3>
+
+                <h4 className="text-lg font-bold text-slate-600">
+                  {filteredSales.length} orders
+                </h4>
+              </div>
             </div>
-            <div className="p-4 w-64 bg-white rounded-md">
-              <h3 className="font-bold text-slate-600 text-lg">
-                Task Complete
-              </h3>
-              <h4 className="text-xl font-semibold text-slate-800 my-2">
-                25000 mmk
-              </h4>
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon icon="fa:users" className="text-4xl text-[#8884d8]" />
+              <div>
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Total Customer
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {
+                    new Set(
+                      filteredSales.map((sal) => sal.partner && sal.partner._id)
+                    ).size
+                  }
+                </h4>
+              </div>
             </div>
-            <div className="p-4 w-64 bg-white rounded-md">
-              <h3 className="font-bold text-slate-600 text-lg">
-                Number of Sales
-              </h3>
-              <h4 className="text-xl font-semibold text-slate-800 my-2">
-                10000 mmk
-              </h4>
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon
+                icon="game-icons:profit"
+                className="text-5xl text-green-600"
+              />
+              <div>
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Today Profit
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">0 mmk</h4>
+              </div>
             </div>
           </div>
 
           <div className="mt-6">
             <div className="w-full flex my-4">
-              <div className="w-3/4 bg-white p-2 rounded-md">
+              <div className="w-3/5 bg-white p-2 rounded-md shadow-md">
                 <h3 className="text-slate-500 font-semibold text-lg mb-6">
-                  Sale Order Dashboard
+                  Purchase Order Dashboard
                 </h3>
                 <BarChart
-                  width={900}
+                  width={700}
                   height={400}
                   data={formattedSaleData}
                   margin={{
                     top: 5,
-                    right: 20,
+                    right: 30,
                     left: 20,
                     bottom: 60,
                   }}
@@ -141,7 +222,7 @@ export default function View() {
                   <Bar dataKey="total" barSize={20} fill="#8884d8" />
                 </BarChart>
               </div>
-              <div className="items-center w-1/4 ml-4 bg-white p-2 rounded-md">
+              <div className="items-center w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
                 <h1 className="text-slate-500 font-semibold text-lg mb-6">
                   Most of sale products
                 </h1>
@@ -157,7 +238,7 @@ export default function View() {
               </div>
             </div>
             <div className="w-full flex">
-              <div className="w-3/4 bg-white p-2 rounded-md shadow-md h-auto">
+              <div className="w-3/4 bg-white px-2 py-4 rounded-md shadow-md h-auto ">
                 <h2 className="text-slate-600 font-semibold text-lg mb-3">
                   Recents Order
                 </h2>
@@ -194,43 +275,57 @@ export default function View() {
                             {sal.total}
                           </td>
                           <td className="lg:px-4 py-2 text-center">
-                            {sal.location && sal.location.name}
+                            {sal.location
+                              ? sal.location.name
+                              : "store customer"}
                           </td>
-                          <td className="lg:px-4 py-2 text-center">
-                            {sal.state && sal.state}
+                          <td
+                            className={`lg:px-4 py-2 text-center font-semibold ${
+                              sal.state == "pending"
+                                ? "text-red-400"
+                                : sal.state == "deliver"
+                                ? "text-cyan-700"
+                                : sal.state == "arrived"
+                                ? "text-green-600"
+                                : ""
+                            }`}
+                          >
+                            {sal.state ? sal.state : "store customer"}
                           </td>
                         </tr>
                       ))}
                   </tbody>
                 </table>
               </div>
-              <div className="items-center w-1/4 bg-white p-2 ml-4 rounded-md h-auto shadow-md">
+              <div className="items-center w-1/4 bg-white px-2 py-4 ml-4 rounded-md h-auto shadow-md">
                 <h1 className="text-slate-600 font-semibold text-lg mb-6">
                   Popular Products
                 </h1>
                 <div className="px-2">
-                  {product.length > 0 &&
-                    product.slice(0, 3).map((item) => (
+                  {getTop5Products().map(({ id, qty }) => {
+                    const product = product.find((item) => item._id === id);
+
+                    return (
                       <div
-                        key={item._id}
+                        key={qty}
                         className="w-full flex justify-between mb-3 border-b-2 pb-3"
                       >
                         <div className="flex flex-col">
                           <h4 className="text-md text-slate-700 font-bold">
-                            {item.name}
+                            {product.name}
                           </h4>
                           <h4 className="font-bold text-green-700">
-                            Stock in 30
+                            Sold Quantity: {qty}
                           </h4>
                         </div>
-
-                        {item.listPrice && (
+                        {product.salePrice && (
                           <p className="text-slate-500 font-semibold">
-                            {item.listPrice} mmk
+                            {product.salePrice} mmk
                           </p>
                         )}
                       </div>
-                    ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>

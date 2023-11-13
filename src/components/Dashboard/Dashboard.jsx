@@ -1,7 +1,9 @@
 import React from "react";
 import Pos from "../../assets/logo.png";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { BiPurchaseTag } from "react-icons/bi";
+import { BiPurchaseTag, BiCategory } from "react-icons/bi";
+import { AiOutlineStock } from "react-icons/ai";
+import { HiOutlineAdjustments } from "react-icons/hi";
 import { MdOutlineInventory2 } from "react-icons/md";
 import { GrCart } from "react-icons/gr";
 import img from "../../assets/posbox.jpeg";
@@ -50,204 +52,244 @@ export default function Admin() {
       </div>
       <div className="w-full flex mt-20 relative">
         <div
-          className={`w-52 fixed top-10 mt-10 z-20 shadow-md  left-0 bottom-0 bg-white  p-4 flex flex-col transform transition-transform duration-500 ease-in-out`}
+          className={`w-52 fixed top-10 mt-8 z-20 shadow-md  left-0 bottom-0 bg-white  p-4 flex flex-col transform transition-transform duration-500 ease-in-out`}
         >
-          <div className=" flex justify-items-start mt-4 cursor-pointer">
-            <Icon
-              icon="material-symbols-light:inventory-2-outline"
-              className="text-slate-700 text-3xl"
-            />
+          <div className=" flex justify-items-start mt-2 cursor-pointer">
             <div className="flex flex-col  w-full">
               <div className="flex flex-col">
-                <h3 className="text-md font-bold ml-6">Inventory</h3>
+                <h3 className="text-md font-bold">Inventory</h3>
                 <ul className="text-center w-full">
                   <Link to="/admin/inventory/overview">
-                    <li
-                      className={`my-2 text-start pl-6 rounded-md ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/inventory/overview"
-                          ? "text-white bg-blue-600 "
+                          ? "text-white bg-slate-300 "
                           : ""
                       }}`}
                     >
-                      OverView
-                    </li>
+                      <Icon
+                        icon="fluent-mdl2:analytics-view"
+                        className="text-slate-800 text-2xl"
+                      />
+                      <li className={`my-1 ml-2 text-start  rounded-md`}>
+                        OverView
+                      </li>
+                    </div>
                   </Link>
                   <Link to="/admin/products/all">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/products/all"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      Products
-                    </li>
+                      <Icon
+                        icon="fluent-mdl2:product"
+                        className="text-slate-700 text-2xl"
+                      />
+                      <li className="my-1 text-start ml-2">Products</li>
+                    </div>
                   </Link>
                   <Link to="/admin/categorys/all">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/categorys/all"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      Category
-                    </li>
+                      <BiCategory className="text-slate-500 text-2xl" />
+                      <li className="my-1 text-start  ml-2">Category</li>
+                    </div>
                   </Link>
                   <Link to="/admin/stock/all">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/stock/all"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      Stock
-                    </li>
+                      <AiOutlineStock className="text-slate-500 text-2xl" />
+                      <li className="my-1 text-start ml-2">Stock</li>
+                    </div>
                   </Link>
                   <Link to="/admin/adjustment/view">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/adjustment/view"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      Adjustment
-                    </li>
+                      <HiOutlineAdjustments className="text-slate-500 text-2xl" />
+                      <li className="my-1 text-start ml-2">Adjustment</li>
+                    </div>
                   </Link>
                 </ul>
               </div>
             </div>
           </div>
-          <div className=" flex justify-items-start mt-3 cursor-pointer">
-            <Icon icon="carbon:purchase" className="text-slate-700 text-3xl" />
+          <div className=" flex justify-items-start mt-2 cursor-pointer">
             <div className="flex flex-col justify-items-center w-full">
               <div className="flex flex-col">
-                <h3 className="text-md font-bold ml-6">Purchase</h3>
+                <h3 className="text-md font-bold">Purchase</h3>
                 <ul className="text-center w-full">
                   <Link to="/admin/purchase/view">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/purchase/view"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      OverView
-                    </li>
+                      <Icon
+                        icon="uil:analytics"
+                        className="text-slate-700 text-2xl"
+                      />
+                      <li className="my-1 text-start ml-2">OverView</li>
+                    </div>
                   </Link>
                   <Link to="/admin/purchase/all">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/purchase/all"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      Purchase Order
-                    </li>
+                      <Icon
+                        icon="icons8:buy"
+                        className="text-slate-700 text-2xl"
+                      />
+                      <li className="my-1 text-start ml-2">Purchase Order</li>
+                    </div>
                   </Link>
                   <Link to="/admin/customers/vendors">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/customers/vendors"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      Vendors
-                    </li>
+                      <Icon
+                        icon="bx:user"
+                        className="text-slate-700 text-2xl"
+                      />
+                      <li className="my-1 text-start ml-2">Vendors</li>
+                    </div>
                   </Link>
                 </ul>
               </div>
             </div>
           </div>
-          <div className=" flex justify-items-start mt-3 cursor-pointer">
-            <Icon icon="bi:cart" className="text-slate-700 text-3xl" />
+          <div className=" flex justify-items-start mt-2 cursor-pointer">
             <div className="flex flex-col justify-items-center w-full">
               <div className="flex flex-col">
-                <h3 className="text-md font-bold ml-6">Sale</h3>
+                <h3 className="text-md font-bold">Sale</h3>
                 <ul className="text-start w-full">
                   <Link to="/admin/saleorders/view">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/saleorders/view"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      OverView
-                    </li>
+                      <Icon
+                        icon="uil:analytics"
+                        className="text-slate-700 text-2xl"
+                      />
+
+                      <li className="my-1 text-start ml-2">OverView</li>
+                    </div>
                   </Link>
                   <Link to="/admin/saleorders/all">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/saleorders/all"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      Sales Order
-                    </li>
+                      <Icon
+                        icon="icon-park-outline:buy"
+                        className="text-slate-700 text-2xl"
+                      />
+                      <li className="my-1 text-start ml-2">Sales Order</li>
+                    </div>
                   </Link>
                   <Link to="/admin/customers/all">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/customers/all"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      Customers
-                    </li>
+                      <Icon
+                        icon="bx:user"
+                        className="text-slate-700 text-2xl"
+                      />
+                      <li className="my-1 text-start ml-2">Customers</li>
+                    </div>
                   </Link>
                 </ul>
               </div>
             </div>
           </div>
-          <div className=" flex justify-items-start mt-3 cursor-pointer">
-            <Icon
-              icon="mdi:printer-point-of-sale-cog-outline"
-              className="text-slate-700 text-3xl"
-            />
-
+          <div className=" flex justify-items-start mt-2 cursor-pointer">
             <div className="flex flex-col justify-items-center w-full">
               <div className="flex flex-col w-full">
-                <h3 className="text-md font-bold ml-6">POS</h3>
+                <h3 className="text-md font-bold">POS</h3>
                 <ul className="text-start">
                   <Link to="/admin/pos/all">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/pos/all"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      OverView
-                    </li>
+                      <Icon
+                        icon="mdi:printer-point-of-sale-cog-outline"
+                        className="text-slate-600 text-2xl"
+                      />
+                      <li className="my-1 text-start ml-2">OverView</li>
+                    </div>
                   </Link>
                   <Link to="/admin/partners/all">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/partners/all"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      Partner
-                    </li>
+                      <Icon
+                        icon="mdi:partnership-outline"
+                        className="text-slate-600 text-2xl"
+                      />
+                      <li className="my-1 text-start ml-2">Partner</li>
+                    </div>
                   </Link>
                   <Link to="/admin/locations/all">
-                    <li
-                      className={`my-2 text-start pl-6 ${
+                    <div
+                      className={`my-1 text-start px-2 rounded-md flex items-center ${
                         location.pathname === "/admin/locations/all"
-                          ? "text-white bg-blue-600 rounded-md"
+                          ? "text-white bg-slate-300 "
                           : ""
-                      }`}
+                      }}`}
                     >
-                      Location
-                    </li>
+                      <Icon
+                        icon="ep:location"
+                        className="text-slate-600 text-2xl"
+                      />
+
+                      <li className="my-1 text-start ml-2">Location</li>
+                    </div>
                   </Link>
                 </ul>
               </div>

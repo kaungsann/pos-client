@@ -230,11 +230,11 @@ export default function SaleOrderAll() {
                     </td>
                     <td
                       className={`lg:px-4 py-2 text-center ${
-                        sale.state === "pending"
+                        sale.state == "pending"
                           ? "text-red-400"
-                          : sale.state === "deliver"
-                          ? "text-cyan-600"
-                          : sale.state === "arrived"
+                          : sale.state == "deliver"
+                          ? "text-cyan-700"
+                          : sale.state == "arrived"
                           ? "text-green-600"
                           : ""
                       }`}

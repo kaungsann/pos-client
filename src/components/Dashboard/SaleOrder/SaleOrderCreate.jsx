@@ -100,9 +100,13 @@ export default function SaleOrderCreate() {
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
+
+      console.log("salei is", resData);
       if (resData.status) {
         toast(resData.message);
         navigate("/admin/saleorders/all");
+      } else {
+        toast(resData.message);
       }
     } catch (error) {
       toast(resData.message);
