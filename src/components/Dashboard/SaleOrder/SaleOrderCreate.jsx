@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { getApi, jsonStringPostData } from "../../Api";
+import { getApi, sendJsonToApi } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -96,7 +96,7 @@ export default function SaleOrderCreate() {
     };
 
     try {
-      let resData = await jsonStringPostData("/sale", data, token.accessToken);
+      let resData = await sendJsonToApi("/sale", data, token.accessToken);
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import logo from "../assets/text.jpeg";
 import { Link, useNavigate } from "react-router-dom";
 import { addData, idAdd } from "../redux/actions";
@@ -7,12 +7,12 @@ import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
-import { jsonStringPostData } from "./Api";
+import { sendJsonToApi } from "./Api";
 
 export default function Login() {
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const [see, setSee] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPwd] = useState("");
+  const [hidden, setHidden] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -20,30 +20,32 @@ export default function Login() {
   const navigate = useNavigate();
 
   const loginApi = async () => {
-    let user = {
-      email: email,
-      password: password,
-    };
+    let user = { email, password };
 
-    const resData = await jsonStringPostData("/auth/signin", user);
+    const { success, message, data, tokens } = await sendJsonToApi(
+      "/auth/signin",
+      user
+    );
 
-    if (resData.success) {
+    if (success) {
       setLoading(false);
-      toast(resData.message);
-      dispatch(addData(resData.data));
-      dispatch(idAdd(resData.tokens));
+      toast(message);
+      dispatch(addData(data));
+      dispatch(idAdd(tokens));
       navigate("/admin/products/all");
     } else {
       setLoading(false);
-      toast(resData.message);
-      console.log("res data is", resData.message);
+      toast(message);
+      console.log("res data is", message);
     }
   };
+
   const loginUser = (e) => {
     e.preventDefault();
     setLoading(true);
     loginApi();
   };
+
   return (
     <>
       <div>
@@ -83,19 +85,14 @@ export default function Login() {
                 </label>
                 <div className="mt-2">
                   <input
-                    onChange={(e) => setemail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     id="email"
                     name="email"
                     type="email"
-                    autocomplete="email"
                     required
                     className="block px-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
                   />
                 </div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                ></label>
               </div>
               <div>
                 <div className="flex items-center justify-between">
@@ -117,23 +114,23 @@ export default function Login() {
                   </div>
                 </div>
                 <div className="mt-2 relative">
-                  {see ? (
+                  {hidden ? (
                     <AiOutlineEye
                       className="absolute right-4 top-2 text-lg cursor-pointer"
-                      onClick={() => setSee(false)}
+                      onClick={() => setHidden(false)}
                     />
                   ) : (
                     <AiOutlineEyeInvisible
                       className="absolute right-4 top-2 text-lg cursor-pointer"
-                      onClick={() => setSee(true)}
+                      onClick={() => setHidden(true)}
                     />
                   )}
 
                   <input
-                    onChange={(e) => setpassword(e.target.value)}
+                    onChange={(e) => setPwd(e.target.value)}
                     id="password"
                     name="password"
-                    type={see ? "text" : "password"}
+                    type={hidden ? "text" : "password"}
                     autoComplete="current-password"
                     required
                     className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

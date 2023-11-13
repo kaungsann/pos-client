@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { jsonStringPostData } from "../../Api";
+import { sendJsonToApi } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -53,7 +53,7 @@ export default function PartnerCreate() {
       isCompany: isCompany,
     };
     try {
-      let resData = await jsonStringPostData(
+      let resData = await sendJsonToApi(
         "/partner",
         data,
         token.accessToken
