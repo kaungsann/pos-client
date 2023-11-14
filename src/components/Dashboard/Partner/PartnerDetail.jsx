@@ -3,17 +3,18 @@ import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 import { TbEdit } from "react-icons/tb";
 import FadeLoader from "react-spinners/FadeLoader";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function PartnerDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const dipatch = useDispatch();
+  const token = useSelector((state) => state.IduniqueData);
 
   const singleProducts = async () => {
     setLoading(true);
-    let resData = await getApi(`/partner/${id}`);
+    let resData = await getApi(`/partner/${id}` , token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }

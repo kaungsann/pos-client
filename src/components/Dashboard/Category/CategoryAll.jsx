@@ -30,8 +30,6 @@ export default function CategoryAll() {
   const importRef = useRef(null);
   const token = useSelector((state) => state.IduniqueData);
 
-  console.log("token is", token);
-
   const getCategorysApi = async () => {
     setLoading(true);
     let resData = await getApi("/category", token.accessToken);

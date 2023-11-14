@@ -125,6 +125,7 @@ export default function PartnerCreate() {
             <input
               type="text"
               value={name}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setName(e.target.value)}
               className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                 showNameError ? "border-red-600" : "border-slate-400"
@@ -143,6 +144,7 @@ export default function PartnerCreate() {
             <input
               type="text"
               value={contactAddress}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setContactAddress(e.target.value)}
               className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                 showErrorAddress ? "border-red-600" : "border-slate-400"
@@ -161,6 +163,7 @@ export default function PartnerCreate() {
             <input
               type="text"
               value={city}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setCity(e.target.value)}
               className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                 showErrorCity ? "border-red-600" : "border-slate-400"
@@ -179,6 +182,7 @@ export default function PartnerCreate() {
             <input
               type="text"
               value={phone}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setPhone(e.target.value)}
               className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                 showErrorPhone ? "border-red-600" : "border-slate-400"
@@ -193,6 +197,7 @@ export default function PartnerCreate() {
               id="customer"
               className="w-6 h-6 text-xl my-5"
               checked={isCustomer}
+              style={{ backgroundColor: "transparent" }}
               onChange={() => setIsCustomer(!isCustomer)}
             />
           </div>
@@ -203,6 +208,7 @@ export default function PartnerCreate() {
               id="customer"
               className="w-6 h-6 text-xl my-5"
               checked={isCompany}
+              style={{ backgroundColor: "transparent" }}
               onChange={() => setIsCompany(!isCompany)}
             />
           </div>

@@ -93,6 +93,7 @@ export default function CategoryEdit() {
             <input
               type="text"
               value={name}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
               placeholder="Enter category name"

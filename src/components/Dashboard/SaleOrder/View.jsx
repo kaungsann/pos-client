@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   Pie,
+  Cell,
   PieChart,
 } from "recharts";
 import { getApi } from "../../Api";
@@ -18,7 +19,8 @@ import { Icon } from "@iconify/react";
 
 export default function View() {
   const [sale, setSale] = useState([]);
-  const [product, setProduct] = useState([]);
+  const [stock, setStock] = useState([]);
+  const [popularProductsData, setPopularProductsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [saleLines, setSaleLines] = useState([]);
   const token = useSelector((state) => state.IduniqueData);
@@ -52,29 +54,19 @@ export default function View() {
     }
   };
 
-  const data = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ];
-
-  const getProduct = async () => {
+  const getStockApi = async () => {
     setLoading(true);
-    let resData = await getApi("/product", token.accessToken);
+    let resData = await getApi("/stock", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
     if (resData.status) {
       setLoading(false);
-      setProduct(resData.data);
+      setStock(resData.data);
     } else {
       setLoading(true);
     }
   };
-
-  useEffect(() => {
-    getProduct();
-    getSaleOrder();
-    getSaleLinesApi();
-  }, []);
 
   const formattedSaleData = sale.map((item) => ({
     ...item,
@@ -88,6 +80,14 @@ export default function View() {
     const formattedOrderDate = format(new Date(sl.orderDate), "dd.MM.yyyy");
     return formattedOrderDate === todayDate;
   });
+  const todaySaleLines = saleLines.filter(
+    (saleLine) =>
+      format(new Date(saleLine.orderDate), "dd.MM.yyyy") === todayDate
+  );
+
+  const todayStock = stock.filter(
+    (stk) => format(new Date(stk.updatedAt), "dd.MM.yyyy") === todayDate
+  );
 
   // Sum up the "total" values of the filtered sale data
   const todayTotalSales = filteredSales.reduce(
@@ -95,47 +95,71 @@ export default function View() {
     0
   );
 
-  const calculateProductQuantity = () => {
-    const productQuantityMap = {};
-
-    // Iterate through the filtered sales data
-    filteredSales.forEach((sale) => {
-      // Iterate through the lines of each sale
-      sale.lines.forEach((line) => {
-        const productId = line.product && line.product._id;
-
-        // Update the quantity for the product
-        if (productId) {
-          productQuantityMap[productId] =
-            (productQuantityMap[productId] || 0) + line.qty;
-        }
-      });
-    });
-
-    return productQuantityMap;
+  const getStockQuantity = (productId) => {
+    const todayStockEntry = todayStock.find(
+      (stockItem) => stockItem.product._id === productId
+    );
+    return todayStockEntry ? todayStockEntry.onHand : 0;
   };
 
-  const getTop5Products = () => {
-    const productQuantityMap = calculateProductQuantity();
+  const totalProfit = todaySaleLines.reduce((sum, line) => {
+    // Check if purchasePrice is a valid number
+    if (
+      typeof line.product.purchasePrice === "number" &&
+      !isNaN(line.product.purchasePrice)
+    ) {
+      // Check if marginProfit is a valid number
+      if (
+        typeof line.product.marginProfit === "number" &&
+        !isNaN(line.product.marginProfit)
+      ) {
+        const profit =
+          line.product.purchasePrice +
+          (line.product.marginProfit / 100) * line.qty;
 
-    // Convert the product quantity map to an array of objects
-    const productQuantityArray = Object.entries(productQuantityMap).map(
-      ([productId, quantity]) => ({
-        productId,
-        quantity,
-      })
+        return sum + profit;
+      } else {
+        console.error("Invalid marginProfit:", line.product.marginProfit);
+      }
+    } else {
+      console.error("Invalid purchasePrice:", line.product.purchasePrice);
+    }
+
+    return sum; // Return the sum without adding anything if there's an issue
+  }, 0);
+
+  useEffect(() => {
+    getStockApi();
+    getSaleOrder();
+    getSaleLinesApi();
+  }, []);
+
+  useEffect(() => {
+    // Count the quantity sold for each product
+    const productCount = saleLines.reduce((acc, saleLine) => {
+      const productId = saleLine.product._id;
+      acc[productId] = (acc[productId] || 0) + saleLine.qty;
+      return acc;
+    }, {});
+
+    // Sort products by quantity sold in descending order
+    const sortedProducts = Object.keys(productCount).sort(
+      (a, b) => productCount[b] - productCount[a]
     );
 
-    // Sort the array in descending order based on quantity
-    const sortedProducts = productQuantityArray.sort(
-      (a, b) => b.quantity - a.quantity
-    );
+    // Take the top 4 products
+    const topProducts = sortedProducts.slice(0, 5);
 
-    // Take the top 5 products
-    const top5Products = sortedProducts.slice(0, 5);
+    // Create data for the pie chart
+    const pieChartData = topProducts.map((productId, index) => ({
+      name:
+        saleLines.find((saleLine) => saleLine.product._id === productId)
+          ?.product.name || `Product ${index + 1}`,
+      value: productCount[productId],
+    }));
 
-    return top5Products;
-  };
+    setPopularProductsData(pieChartData);
+  }, [saleLines]);
 
   return (
     <>
@@ -189,7 +213,9 @@ export default function View() {
                 <h3 className="font-bold text-slate-600 text-xl">
                   Today Profit
                 </h3>
-                <h4 className="text-lg font-bold text-slate-600">0 mmk</h4>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {totalProfit} mmk
+                </h4>
               </div>
             </div>
           </div>
@@ -222,17 +248,31 @@ export default function View() {
                   <Bar dataKey="total" barSize={20} fill="#8884d8" />
                 </BarChart>
               </div>
-              <div className="items-center w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
+              <div className="items-center w-full ml-4 bg-white p-2 rounded-md shadow-md">
                 <h1 className="text-slate-500 font-semibold text-lg mb-6">
                   Most of sale products
                 </h1>
                 <ResponsiveContainer
-                  width={300}
+                  width={500}
                   height={300}
                   className="mx-auto"
                 >
                   <PieChart>
-                    <Pie dataKey="value" data={data} fill="#8884d8" label />
+                    <Pie
+                      dataKey="value"
+                      data={popularProductsData}
+                      fill="#8884d8"
+                      label={(entry) => entry.name}
+                    >
+                      {popularProductsData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={`#${Math.floor(
+                            Math.random() * 16777215
+                          ).toString(16)}`}
+                        />
+                      ))}
+                    </Pie>
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -299,33 +339,27 @@ export default function View() {
               </div>
               <div className="items-center w-1/4 bg-white px-2 py-4 ml-4 rounded-md h-auto shadow-md">
                 <h1 className="text-slate-600 font-semibold text-lg mb-6">
-                  Popular Products
+                  Today Sale Products
                 </h1>
-                <div className="px-2">
-                  {getTop5Products().map(({ id, qty }) => {
-                    const product = product.find((item) => item._id === id);
-
-                    return (
-                      <div
-                        key={qty}
-                        className="w-full flex justify-between mb-3 border-b-2 pb-3"
-                      >
-                        <div className="flex flex-col">
-                          <h4 className="text-md text-slate-700 font-bold">
-                            {product.name}
-                          </h4>
-                          <h4 className="font-bold text-green-700">
-                            Sold Quantity: {qty}
-                          </h4>
-                        </div>
-                        {product.salePrice && (
-                          <p className="text-slate-500 font-semibold">
-                            {product.salePrice} mmk
-                          </p>
-                        )}
+                <div className="px-2 max-h-80 overflow-y-scroll custom-scrollbar">
+                  {todaySaleLines.map((saleLine) => (
+                    <div
+                      key={saleLine._id}
+                      className="w-full flex justify-between mb-3 border-b-2 pb-3"
+                    >
+                      <div className="flex flex-col">
+                        <h4 className="text-md text-slate-700 font-bold">
+                          {saleLine.product.name}
+                        </h4>
+                        <h4 className="font-bold text-green-700">
+                          Stock in {getStockQuantity(saleLine.product._id)}
+                        </h4>
                       </div>
-                    );
-                  })}
+                      <p className="text-slate-500 font-semibold">
+                        {saleLine.product.salePrice} mmk
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

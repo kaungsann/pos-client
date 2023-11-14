@@ -1,6 +1,6 @@
 import React from "react";
 import Pos from "../../assets/logo.png";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import { BiPurchaseTag, BiCategory } from "react-icons/bi";
 import { AiOutlineStock } from "react-icons/ai";
 import { HiOutlineAdjustments } from "react-icons/hi";
@@ -13,6 +13,8 @@ import { Icon } from "@iconify/react";
 
 export default function Admin() {
   const location = useLocation();
+  const { id } = useParams();
+
   const user = useSelector((state) => state.loginData);
 
   return (
@@ -79,7 +81,10 @@ export default function Admin() {
                   <Link to="/admin/products/all">
                     <div
                       className={`my-1 text-start px-2 rounded-md flex items-center ${
-                        location.pathname === "/admin/products/all"
+                        location.pathname === "/admin/products/all" ||
+                        location.pathname === "/admin/products/create" ||
+                        location.pathname === `/admin/products/edit/${id}` ||
+                        location.pathname === `/admin/products/detail/${id}`
                           ? "text-white bg-slate-300 "
                           : ""
                       }}`}
@@ -94,7 +99,10 @@ export default function Admin() {
                   <Link to="/admin/categorys/all">
                     <div
                       className={`my-1 text-start px-2 rounded-md flex items-center ${
-                        location.pathname === "/admin/categorys/all"
+                        location.pathname === "/admin/categorys/all" ||
+                        location.pathname === "/admin/categorys/create" ||
+                        location.pathname === `/admin/categorys/edit/${id}` ||
+                        location.pathname === `/admin/categorys/detail/${id}`
                           ? "text-white bg-slate-300 "
                           : ""
                       }}`}
@@ -154,7 +162,9 @@ export default function Admin() {
                   <Link to="/admin/purchase/all">
                     <div
                       className={`my-1 text-start px-2 rounded-md flex items-center ${
-                        location.pathname === "/admin/purchase/all"
+                        location.pathname === "/admin/purchase/all" ||
+                        location.pathname === "/admin/purchase/create" ||
+                        location.pathname === `/admin/purchase/detail/${id}`
                           ? "text-white bg-slate-300 "
                           : ""
                       }}`}
@@ -169,7 +179,8 @@ export default function Admin() {
                   <Link to="/admin/customers/vendors">
                     <div
                       className={`my-1 text-start px-2 rounded-md flex items-center ${
-                        location.pathname === "/admin/customers/vendors"
+                        location.pathname === "/admin/customers/vendors" ||
+                        location.pathname === `/admin/customers/detail/${id}`
                           ? "text-white bg-slate-300 "
                           : ""
                       }}`}
@@ -209,7 +220,9 @@ export default function Admin() {
                   <Link to="/admin/saleorders/all">
                     <div
                       className={`my-1 text-start px-2 rounded-md flex items-center ${
-                        location.pathname === "/admin/saleorders/all"
+                        location.pathname === "/admin/saleorders/all" ||
+                        location.pathname === "/admin/saleorders/create" ||
+                        location.pathname === `/admin/saleorders/detail/${id}`
                           ? "text-white bg-slate-300 "
                           : ""
                       }}`}
@@ -263,7 +276,10 @@ export default function Admin() {
                   <Link to="/admin/partners/all">
                     <div
                       className={`my-1 text-start px-2 rounded-md flex items-center ${
-                        location.pathname === "/admin/partners/all"
+                        location.pathname === "/admin/partners/all" ||
+                        location.pathname === "/admin/partners/create" ||
+                        location.pathname === `/admin/partners/edit/${id}` ||
+                        location.pathname === `/admin/partners/detail/${id}`
                           ? "text-white bg-slate-300 "
                           : ""
                       }}`}
@@ -278,7 +294,10 @@ export default function Admin() {
                   <Link to="/admin/locations/all">
                     <div
                       className={`my-1 text-start px-2 rounded-md flex items-center ${
-                        location.pathname === "/admin/locations/all"
+                        location.pathname === "/admin/locations/all" ||
+                        location.pathname === "/admin/locations/create" ||
+                        location.pathname === `/admin/locations/edit/${id}` ||
+                        location.pathname === `/admin/locations/detail/${id}`
                           ? "text-white bg-slate-300 "
                           : ""
                       }}`}

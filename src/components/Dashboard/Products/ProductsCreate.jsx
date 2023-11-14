@@ -248,6 +248,7 @@ export default function ProductsCreate() {
                 required
                 type="text"
                 value={name}
+                style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setName(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                   showNameError ? "border-red-600" : "border-slate-400"
@@ -266,6 +267,7 @@ export default function ProductsCreate() {
               <input
                 required
                 type="text"
+                style={{ backgroundColor: "transparent" }}
                 value={ref}
                 onChange={(e) => setRef(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
@@ -285,6 +287,7 @@ export default function ProductsCreate() {
               <select
                 required
                 id="catid"
+                style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setGategory(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                   showCatError ? "border-red-600" : "border-slate-600"
@@ -315,6 +318,7 @@ export default function ProductsCreate() {
               </label>
               <input
                 required
+                style={{ backgroundColor: "transparent" }}
                 type="date"
                 value={expiredate}
                 onChange={(e) => setExpiredate(e.target.value)}
@@ -335,6 +339,7 @@ export default function ProductsCreate() {
               <input
                 required
                 type="text"
+                style={{ backgroundColor: "transparent" }}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
@@ -354,6 +359,7 @@ export default function ProductsCreate() {
               <input
                 required
                 value={bar}
+                style={{ backgroundColor: "transparent" }}
                 type="text"
                 onChange={(e) => setBar(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
@@ -373,6 +379,7 @@ export default function ProductsCreate() {
               <input
                 required
                 value={tax}
+                style={{ backgroundColor: "transparent" }}
                 type="number"
                 onChange={(e) => setTax(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
@@ -393,6 +400,7 @@ export default function ProductsCreate() {
                 required
                 value={price}
                 type="number"
+                style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setPrice(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                   showPriceError ? "border-red-600" : "border-slate-600"
@@ -411,6 +419,7 @@ export default function ProductsCreate() {
               <input
                 required
                 value={purchasePrice}
+                style={{ backgroundColor: "transparent" }}
                 type="number"
                 onChange={(e) => setPurchasePrice(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
@@ -430,6 +439,7 @@ export default function ProductsCreate() {
               <input
                 required
                 value={profit}
+                style={{ backgroundColor: "transparent" }}
                 type="number"
                 onChange={(e) => setProfit(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
@@ -450,6 +460,7 @@ export default function ProductsCreate() {
                 required
                 value={stockQuantity}
                 type="number"
+                style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setStockQuantity(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                   showStockQuantity ? "border-red-600" : "border-slate-600"
@@ -462,6 +473,7 @@ export default function ProductsCreate() {
               <select
                 id="payment"
                 required
+                style={{ backgroundColor: "transparent" }}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
                 value={avaliable}
                 onChange={(e) => setAAvaliable(e.target.value)}
