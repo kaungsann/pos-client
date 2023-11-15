@@ -94,6 +94,7 @@ export default function CategoryCreate() {
             <input
               type="text"
               value={name}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setName(e.target.value)}
               className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                 showNameError ? "border-red-600" : "border-slate-400"

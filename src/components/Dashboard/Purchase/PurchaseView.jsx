@@ -8,16 +8,22 @@ import {
   Tooltip,
   ResponsiveContainer,
   Pie,
+  Cell,
   PieChart,
 } from "recharts";
+
 import { getApi } from "../../Api";
 import { format } from "date-fns";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
+import { Icon } from "@iconify/react";
 
 export default function PurchaseView() {
   const [purchase, setPurchase] = useState([]);
   const [product, setProduct] = useState([]);
+  const [purchaseLines, setPurchaseLines] = useState([]);
+  const [popularProductsData, setPopularProductsData] = useState([]);
+  const [stock, setStock] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
@@ -37,12 +43,35 @@ export default function PurchaseView() {
     }
   };
 
-  const data = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ];
+  const getStockApi = async () => {
+    setLoading(true);
+    let resData = await getApi("/stock", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
+    if (resData.status) {
+      setLoading(false);
+      setStock(resData.data);
+    } else {
+      setLoading(true);
+    }
+  };
+
+  const getPurhaseLines = async () => {
+    setLoading(true);
+    let resData = await getApi("/purchaselines", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
+
+    if (resData.status) {
+      setLoading(false);
+      setPurchaseLines(resData.data);
+    } else {
+      setLoading(true);
+    }
+  };
+
   const getProduct = async () => {
     setLoading(true);
     let resData = await getApi("/product", token.accessToken);
@@ -61,9 +90,30 @@ export default function PurchaseView() {
     return formattedOrderDate === todayDate;
   });
 
+  const todayPurchaseLine = purchaseLines.filter(
+    (purchase) =>
+      format(new Date(purchase.orderDate), "dd.MM.yyyy") === todayDate
+  );
+
+  const getProductQuantity = () => {
+    // Calculate the total quantity of products purchased
+    const totalQuantity = filteredPurchase.reduce(
+      (total, purchaseLine) => total + purchaseLine.lines.length,
+      0
+    );
+    return totalQuantity;
+  };
+
+  const todayTotalPurchase = filteredPurchase.reduce(
+    (total, sale) => total + sale.total,
+    0
+  );
+
   useEffect(() => {
+    getStockApi();
     getProduct();
     getPurchase();
+    getPurhaseLines();
   }, []);
 
   const formattedSaleData = purchase.map((item) => ({
@@ -71,42 +121,112 @@ export default function PurchaseView() {
     created: format(new Date(item.createdAt), "yyyy-MM-dd"),
   }));
 
+  const todayStock = stock.filter(
+    (stk) => format(new Date(stk.updatedAt), "dd.MM.yyyy") === todayDate
+  );
+
+  useEffect(() => {
+    // Count the quantity sold for each product
+    const productCount = purchaseLines.reduce((acc, purchaseLine) => {
+      const productId = purchaseLine.product._id;
+      acc[productId] = (acc[productId] || 0) + purchaseLine.qty;
+      return acc;
+    }, {});
+
+    // Sort products by quantity sold in descending order
+    const sortedProducts = Object.keys(productCount).sort(
+      (a, b) => productCount[b] - productCount[a]
+    );
+
+    // Take the top 4 products
+    const topProducts = sortedProducts.slice(0, 5);
+
+    // Create data for the pie chart
+    const pieChartData = topProducts.map((productId, index) => ({
+      name:
+        purchaseLines.find((purchase) => purchase.product._id === productId)
+          ?.product.name || `Product ${index + 1}`,
+      value: productCount[productId],
+    }));
+
+    setPopularProductsData(pieChartData);
+  }, [purchaseLines]);
+
+  const getStockQuantity = (productId) => {
+    const todayStockEntry = todayStock.find(
+      (stockItem) => stockItem.product._id === productId
+    );
+    return todayStockEntry ? todayStockEntry.onHand : 0;
+  };
+
   return (
     <>
       {purchase.length > 0 ? (
         <div className="px-8 w-full">
           <div className="w-full  flex justify-between">
-            <div className="p-4 w-64 bg-[#FFFFFF] rounded-md shadow-md">
-              <h3 className="font-bold text-slate-600 text-md">
-                Today Expense
-              </h3>
-              <h4 className="text-2xl font-semibold text-slate-600 my-2">
-                11500 mmk
-              </h4>
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon
+                icon="icon-park-solid:buy"
+                className="text-4xl text-cyan-700 font-semibold"
+              />
+
+              <div className="">
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Total Purchase
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {todayTotalPurchase} mmk
+                </h4>
+              </div>
             </div>
-            <div className="p-4 w-64 bg-white rounded-md shadow-md">
-              <h3 className="font-bold text-slate-600 text-lg">
-                Income Detail
-              </h3>
-              <h4 className="text-xl font-semibold text-slate-80 my-2">
-                1150 mmk
-              </h4>
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon
+                icon="icons8:buy"
+                className="text-5xl text-blue-700 font-semibold"
+              />
+
+              <div className="">
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Today Purchases
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {filteredPurchase.length}
+                </h4>
+              </div>
             </div>
-            <div className="p-4 w-64 bg-white rounded-md shadow-md">
-              <h3 className="font-bold text-slate-600 text-lg">
-                Task Complete
-              </h3>
-              <h4 className="text-xl font-semibold text-slate-800 my-2">
-                25000 mmk
-              </h4>
+
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon icon="fa:users" className="text-4xl text-[#8884d8]" />
+              <div>
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Total Customer
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {
+                    new Set(
+                      filteredPurchase.map(
+                        (sal) => sal.partner && sal.partner._id
+                      )
+                    ).size
+                  }
+                </h4>
+              </div>
             </div>
-            <div className="p-4 w-64 bg-white rounded-md shadow-md">
-              <h3 className="font-bold text-slate-600 text-lg">
-                Number of Sales
-              </h3>
-              <h4 className="text-xl font-semibold text-slate-800 my-2">
-                10000 mmk
-              </h4>
+
+            <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+              <Icon
+                icon="fluent-mdl2:product-variant"
+                className="text-4xl text-green-500"
+              />
+
+              <div>
+                <h3 className="font-bold text-slate-600 text-xl">
+                  Product Purchased
+                </h3>
+                <h4 className="text-lg font-bold text-slate-600">
+                  {getProductQuantity()}
+                </h4>
+              </div>
             </div>
           </div>
           <div className="mt-6">
@@ -142,18 +262,32 @@ export default function PurchaseView() {
                   Most of sale products
                 </h1>
                 <ResponsiveContainer
-                  width={300}
+                  width={500}
                   height={300}
                   className="mx-auto"
                 >
                   <PieChart>
-                    <Pie dataKey="value" data={data} fill="#8884d8" label />
+                    <Pie
+                      dataKey="value"
+                      data={popularProductsData}
+                      fill="#8884d8"
+                      label={(entry) => entry.name}
+                    >
+                      {popularProductsData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={`#${Math.floor(
+                            Math.random() * 16777215
+                          ).toString(16)}`}
+                        />
+                      ))}
+                    </Pie>
                   </PieChart>
                 </ResponsiveContainer>
               </div>
             </div>
             <div className="w-full flex">
-              <div className="w-3/4 bg-white p-2 rounded-md">
+              <div className="w-3/4 bg-white p-2 rounded-md shadow-md">
                 <h2 className="text-slate-600 font-semibold text-lg mb-3">
                   Recents Order
                 </h2>
@@ -192,7 +326,17 @@ export default function PurchaseView() {
                           <td className="lg:px-4 py-2 text-center">
                             {sal.location && sal.location.name}
                           </td>
-                          <td className="lg:px-4 py-2 text-center">
+                          <td
+                            className={`lg:px-4 py-2 text-center font-semibold ${
+                              sal.state == "pending"
+                                ? "text-red-400"
+                                : sal.state == "deliver"
+                                ? "text-cyan-700"
+                                : sal.state == "arrived"
+                                ? "text-green-600"
+                                : ""
+                            }`}
+                          >
                             {sal.state && sal.state}
                           </td>
                         </tr>
@@ -200,33 +344,29 @@ export default function PurchaseView() {
                   </tbody>
                 </table>
               </div>
-              <div className="items-center w-1/4 bg-white p-2 ml-4 rounded-md h-fix">
+              <div className="items-center w-1/4 bg-white p-2 ml-4 rounded-md h-fix shadow-md">
                 <h1 className="text-slate-600 font-semibold text-lg mb-6">
-                  Popular Products
+                  Purchase Products
                 </h1>
-                <div className="px-2">
-                  {[product].length > 0 &&
-                    product.slice(0, 3).map((item) => (
-                      <div
-                        key={item._id}
-                        className="w-full flex justify-between mb-3 border-b-2 pb-3"
-                      >
-                        <div className="flex flex-col">
-                          <h4 className="text-md text-slate-700 font-bold">
-                            {item.name}
-                          </h4>
-                          <h4 className="font-bold text-green-700">
-                            Stock in 30
-                          </h4>
-                        </div>
-
-                        {item.listPrice && (
-                          <p className="text-slate-500 font-semibold">
-                            {item.listPrice} mmk
-                          </p>
-                        )}
+                <div className="px-2 max-h-80 overflow-y-scroll custom-scrollbar">
+                  {todayPurchaseLine.map((purchaseLines) => (
+                    <div
+                      key={purchaseLines._id}
+                      className="w-full flex justify-between mb-3 border-b-2 pb-3"
+                    >
+                      <div className="flex flex-col">
+                        <h4 className="text-md text-slate-700 font-bold">
+                          {purchaseLines.product.name}
+                        </h4>
+                        <h4 className="font-bold text-green-700">
+                          Stock in {getStockQuantity(purchaseLines.product._id)}
+                        </h4>
                       </div>
-                    ))}
+                      <p className="text-slate-500 font-semibold">
+                        {purchaseLines.product.salePrice} mmk
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

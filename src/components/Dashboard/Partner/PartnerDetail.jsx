@@ -14,7 +14,7 @@ export default function PartnerDetail() {
 
   const singleProducts = async () => {
     setLoading(true);
-    let resData = await getApi(`/partner/${id}`,token.accessToken);
+    let resData = await getApi(`/partner/${id}` , token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }

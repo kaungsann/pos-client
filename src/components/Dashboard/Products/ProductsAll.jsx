@@ -42,10 +42,12 @@ export default function ProductsAll() {
 
   const productApi = async () => {
     setLoading(true);
-    let resData = await getApi("/product");
+    let resData = await getApi("/product", token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
+
+    console.log("res data is", resData);
     if (resData.status) {
       setLoading(false);
       setProducts(resData.data);

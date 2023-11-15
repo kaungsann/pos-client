@@ -6,7 +6,7 @@ import img from "../../../assets/user.jpeg";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -16,13 +16,15 @@ export default function ProductDetails() {
   const componentRef = useRef();
   const dipatch = useDispatch();
 
+  const token = useSelector((state) => state.IduniqueData);
+
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
   const singleProducts = async () => {
     setLoading(true);
-    const response = await getApi(`/product/${id}`);
+    const response = await getApi(`/product/${id}`, token.accessToken);
     if (response.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
@@ -64,7 +66,6 @@ export default function ProductDetails() {
           <h2 className="py-1.5 text-lg font-bold mt-2 bg-blue-600 text-white pl-4">
             Product Information
           </h2>
-
           <div className="flex items-center">
             <img
               src={detail[0].image ? detail[0].image : img}
@@ -110,6 +111,14 @@ export default function ProductDetails() {
                   {detail[0].avaliableInPos ? "Have Product" : "No have in pos"}
                 </h3>
               </div>
+              <div className="flex justify-between my-3">
+                <h4 className="font-bold text-lg text-slate-500">
+                  Stock Quantity
+                </h4>
+                <h3 className="font-bold text-lg text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
+                  {detail[0].minStockQty}
+                </h3>
+              </div>
             </div>
             <div className="w-2/4 justify-between">
               <div className="flex justify-between my-3">
@@ -143,7 +152,7 @@ export default function ProductDetails() {
                 <h4 className="font-bold text-lg text-slate-500">
                   Description
                 </h4>
-                <h3 className="font-bold text-lg text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
+                <h3 className="font-bold text-lg text-center text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                   {detail[0].description}
                 </h3>
               </div>

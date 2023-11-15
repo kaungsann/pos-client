@@ -281,13 +281,13 @@ export default function () {
 
           <button
             type="submit"
-            className="w-72 my-3 mt-8 flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="w-72 my-3 mt-8 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             {loading && (
               <MoonLoader
                 color={"#f0f7f6"}
                 loading={loading}
-                size={25}
+                size={15}
                 aria-label="Loading Spinner"
                 data-testid="loader"
                 className="mx-4"

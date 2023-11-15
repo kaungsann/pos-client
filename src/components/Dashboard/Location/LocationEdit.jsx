@@ -89,6 +89,7 @@ export default function LocationEdit() {
             <label className="text-md font-semibold">Name*</label>
             <input
               type="text"
+              style={{ backgroundColor: "transparent" }}
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"

@@ -96,6 +96,7 @@ export default function PartnerEdit() {
             <input
               type="text"
               value={name}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
               placeholder="Enter product name"
@@ -106,6 +107,7 @@ export default function PartnerEdit() {
             <input
               type="text"
               value={contactAddress}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setcontentAddress(e.target.value)}
               className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
               placeholder="Enter product description"
@@ -116,6 +118,7 @@ export default function PartnerEdit() {
             <input
               type="text"
               value={city}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setCity(e.target.value)}
               className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
               placeholder="Enter product description"
@@ -126,6 +129,7 @@ export default function PartnerEdit() {
             <input
               type="text"
               value={phone}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setPhone(e.target.value)}
               className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
               placeholder="Enter product description"
@@ -138,6 +142,7 @@ export default function PartnerEdit() {
               id="customer"
               className="w-6 h-6 text-xl my-5"
               checked={isCustomer}
+              style={{ backgroundColor: "transparent" }}
               onChange={() => setIsCustomer(!isCustomer)}
             />
           </div>
@@ -146,6 +151,7 @@ export default function PartnerEdit() {
             <input
               type="checkbox"
               id="customer"
+              style={{ backgroundColor: "transparent" }}
               className="w-6 h-6 text-xl my-5"
               checked={isCompany}
               onChange={() => setIsCompany(!isCompany)}

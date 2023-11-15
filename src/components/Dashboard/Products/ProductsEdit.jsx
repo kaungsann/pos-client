@@ -24,8 +24,6 @@ export default function ProductsEdit() {
   const [select, setSelect] = useState("");
   const token = useSelector((state) => state.IduniqueData);
 
-  console.log("cat name is ", catName);
-
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const [profit, setProfit] = useState(0);
@@ -35,7 +33,7 @@ export default function ProductsEdit() {
   const dipatch = useDispatch();
 
   const SingleProductApi = async () => {
-    let resData = await getApi(`/product/${id}`);
+    let resData = await getApi(`/product/${id}`, token.accessToken);
 
     setRef(resData.data[0].ref);
     setName(resData.data[0].name);
@@ -210,6 +208,7 @@ export default function ProductsEdit() {
               <input
                 type="text"
                 value={name}
+                style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
                 placeholder="Enter product name"
@@ -220,6 +219,7 @@ export default function ProductsEdit() {
               <input
                 type="text"
                 value={ref}
+                style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setRef(e.target.value)}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
                 placeholder="Enter product Ref"
@@ -231,6 +231,7 @@ export default function ProductsEdit() {
                 required
                 id="catid"
                 onChange={(e) => setGategory(e.target.value)}
+                style={{ backgroundColor: "transparent" }}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
               >
                 <option disabled value selected>
@@ -253,6 +254,7 @@ export default function ProductsEdit() {
               <input
                 type="text"
                 value={bar}
+                style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setBar(e.target.value)}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
                 placeholder="Enter product Ref"
@@ -263,6 +265,7 @@ export default function ProductsEdit() {
               <input
                 type="date"
                 value={expiredate}
+                style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setExpiredate(e.target.value)}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
                 placeholder="Enter product stock quantity"
@@ -273,6 +276,7 @@ export default function ProductsEdit() {
               <input
                 type="text"
                 value={description}
+                style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
                 placeholder="Enter product description"
@@ -282,10 +286,11 @@ export default function ProductsEdit() {
               <label className="text-md font-semibold">Price*</label>
               <input
                 required
+                style={{ backgroundColor: "transparent" }}
                 value={price}
                 type="number"
                 onChange={(e) => setPrice(e.target.value)}
-                className="w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2"
+                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
                 placeholder="Enter product stock quantity"
               />
             </div>
@@ -296,8 +301,9 @@ export default function ProductsEdit() {
                 required
                 value={purchasePrice}
                 type="number"
+                style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setPurchasePrice(e.target.value)}
-                className="w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2"
+                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
                 placeholder="Enter product stock quantity"
               />
             </div>
@@ -307,9 +313,10 @@ export default function ProductsEdit() {
               <input
                 required
                 value={profit}
+                style={{ backgroundColor: "transparent" }}
                 type="number"
                 onChange={(e) => setProfit(e.target.value)}
-                className="w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2"
+                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
                 placeholder="Enter product stock quantity"
               />
             </div>
@@ -318,6 +325,7 @@ export default function ProductsEdit() {
 
               <select
                 id="payment"
+                style={{ backgroundColor: "transparent" }}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
                 value={avaliable}
                 onChange={(e) => setAAvaliable(e.target.value)}

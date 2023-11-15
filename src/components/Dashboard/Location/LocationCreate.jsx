@@ -92,6 +92,7 @@ export default function LocationCreate() {
             </label>
             <input
               type="text"
+              style={{ backgroundColor: "transparent" }}
               value={name}
               onChange={(e) => setName(e.target.value)}
               className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${

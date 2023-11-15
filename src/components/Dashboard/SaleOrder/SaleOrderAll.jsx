@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getApi } from "../../Api";
-import { BiExport } from "react-icons/bi";
+import { BiExport , BiCategory } from "react-icons/bi";
 import { MdClear } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -247,7 +247,7 @@ export default function SaleOrderAll() {
                     <td className="py-3 flex ml-3 lg:px-4 justify-center">
                       <FaEye
                         onClick={() =>
-                          navigate(`/admin/purchase/detail/${sale.id}`)
+                          navigate(`/admin/saleorders/detail/${sale.id}`)
                         }
                         className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
                       />

@@ -41,7 +41,7 @@ export default function PosItems() {
 
   const getProducts = async () => {
     setLoading(true);
-    let resData = await getApi("/product");
+    let resData = await getApi("/product", token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }

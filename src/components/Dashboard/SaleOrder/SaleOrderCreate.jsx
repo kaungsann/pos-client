@@ -100,9 +100,13 @@ export default function SaleOrderCreate() {
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
+
+      console.log("salei is", resData);
       if (resData.status) {
         toast(resData.message);
         navigate("/admin/saleorders/all");
+      } else {
+        toast(resData.message);
       }
     } catch (error) {
       toast(resData.message);
@@ -217,7 +221,10 @@ export default function SaleOrderCreate() {
             Create Sale Order
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-wrap">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-wrap justify-between"
+        >
           <div className="flex mt-8">
             <label
               className={`text-md font-semibold ${
@@ -228,6 +235,7 @@ export default function SaleOrderCreate() {
             </label>
             <select
               id="payment"
+              style={{ backgroundColor: "transparent" }}
               className={`border-b ml-3 outline-none w-36 ${
                 showErrorPayment ? "border-red-600" : "border-slate-400"
               }`}
@@ -255,6 +263,7 @@ export default function SaleOrderCreate() {
             <input
               type="date"
               value={date}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setDate(e.target.value)}
               className={`border-b ml-3 outline-none w-36 ${
                 showErrorDate ? "border-red-600" : "border-slate-400"
@@ -274,6 +283,7 @@ export default function SaleOrderCreate() {
             <select
               required
               id="ptid"
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setPartner(e.target.value)}
               className={`border-b ml-3 outline-none w-36 ${
                 showErrorPartner ? "border-red-600" : "border-slate-400"
@@ -304,6 +314,7 @@ export default function SaleOrderCreate() {
             <select
               required
               id="locid"
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setLoca(e.target.value)}
               className={`border-b ml-3 outline-none w-36 ${
                 showErrorLocation ? "border-red-600" : "border-slate-400"
@@ -332,6 +343,7 @@ export default function SaleOrderCreate() {
               State:
             </label>
             <select
+              style={{ backgroundColor: "transparent" }}
               id="payment"
               className={`border-b ml-3 outline-none w-36 ${
                 showErrorState ? "border-red-600" : "border-slate-400"
@@ -363,6 +375,7 @@ export default function SaleOrderCreate() {
             <input
               type="text"
               value={note}
+              style={{ backgroundColor: "transparent" }}
               onChange={(e) => setNote(e.target.value)}
               className={`border-b ml-3 outline-none w-36 ${
                 showErrorNote ? "border-red-600" : "border-slate-400"
@@ -371,21 +384,25 @@ export default function SaleOrderCreate() {
             />
           </div>
 
-          <div className="flex mt-8">
-            <label className="text-md font-semibold">TaxTotal :</label>
-            <input
-              value={totalTax}
-              type="number"
-              className="border-b ml-3 border-slate-400 outline-none w-36"
-            />
-          </div>
-          <div className="flex mt-8">
-            <label className="text-md font-semibold">Total :</label>
-            <input
-              value={totalCost}
-              type="number"
-              className="border-b  ml-3 border-slate-400 outline-none w-36"
-            />
+          <div className="flex">
+            <div className="flex mt-8">
+              <label className="text-md font-semibold">TaxTotal :</label>
+              <input
+                style={{ backgroundColor: "transparent" }}
+                value={totalTax}
+                type="number"
+                className="border-b ml-3 border-slate-400 outline-none w-36"
+              />
+            </div>
+            <div className="flex mt-8">
+              <label className="text-md font-semibold">Total :</label>
+              <input
+                style={{ backgroundColor: "transparent" }}
+                value={totalCost}
+                type="number"
+                className="border-b  ml-3 border-slate-400 outline-none w-36"
+              />
+            </div>
           </div>
         </form>
       </div>
@@ -401,7 +418,7 @@ export default function SaleOrderCreate() {
           </button>
         </div>
 
-        <form onSubmit={handleAddProduct} className="flex mt-8">
+        <form onSubmit={handleAddProduct} className="flex mt-8 justify-between">
           <div>
             <label
               className={`text-md font-semibold ${
@@ -413,6 +430,7 @@ export default function SaleOrderCreate() {
             <select
               required
               id="pdId"
+              style={{ backgroundColor: "transparent" }}
               value={pd}
               onChange={(e) => {
                 setPd(e.target.value);
@@ -452,6 +470,7 @@ export default function SaleOrderCreate() {
               Quantity:
             </label>
             <input
+              style={{ backgroundColor: "transparent" }}
               type="number"
               value={quantity}
               className={`border-b ml-3 outline-none w-36 ${
@@ -465,6 +484,7 @@ export default function SaleOrderCreate() {
           <div>
             <label className="text-md font-semibold">Tax:</label>
             <input
+              style={{ backgroundColor: "transparent" }}
               type="number"
               value={Tax * quantity}
               className="border-b border-slate-400 outline-none w-36"
@@ -474,6 +494,7 @@ export default function SaleOrderCreate() {
             <label className="text-md font-semibold">Unit Price:</label>
             <input
               type="number"
+              style={{ backgroundColor: "transparent" }}
               value={unitPrice}
               className="border-b border-slate-400 outline-none w-36"
               onChange={(e) => setUnitPrice(e.target.value)}
@@ -482,6 +503,7 @@ export default function SaleOrderCreate() {
           <div>
             <label className="text-md font-semibold">subTotal Price:</label>
             <input
+              style={{ backgroundColor: "transparent" }}
               type="number"
               value={subTotal * quantity}
               className="border-b border-slate-400 outline-none w-36"
@@ -496,6 +518,7 @@ export default function SaleOrderCreate() {
             <th className="lg:px-4 py-2 text-center">Photo</th>
             <th className="lg:px-4 py-2 text-center">Product</th>
             <th className="lg:px-4 py-2 text-center">Tax</th>
+            <th className="lg:px-4 py-2 text-center">Quantity</th>
             <th className="lg:px-4 py-2 text-center">Unit Price</th>
             <th className="lg:px-4 py-2 text-center">SubTotal</th>
             <th className="lg:px-4 py-2 text-center">Remove</th>
@@ -521,6 +544,7 @@ export default function SaleOrderCreate() {
               </td>
               <td className="lg:px-4 py-2 text-center">{line.product.name}</td>
               <td className="lg:px-4 py-2 text-center">{line.tax}</td>
+              <td className="lg:px-4 py-2 text-center">{line.qty}</td>
               <td className="lg:px-4 py-2 text-center">{line.unitPrice}</td>
               <td className="lg:px-4 py-2 text-center">{line.subTotal}</td>
               <td className="lg:px-4 py-2 text-center">Delete</td>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { BiMinus } from "react-icons/bi";
 import { useSelector } from "react-redux";
@@ -19,6 +19,7 @@ import ChoosePay from "./ChoosePay";
 
 export default function PayBox({ onContinueToPay }) {
   const [payment, setPayment] = useState(false);
+
   const dispatch = useDispatch();
 
   const product = useSelector((state) => state.orderData);
@@ -123,6 +124,20 @@ export default function PayBox({ onContinueToPay }) {
                         <span className="text-slate-700 text-lg">
                           {sel.quantity}
                         </span>
+
+                        {/* <input
+                          className="w-8"
+                          type="text" // Change the type to text
+                          inputMode="numeric" // Specify the input mode
+                          pattern="[0-9]*" // Allow only numeric input
+                          // value={sel.quantity}
+                          value={dynamicInputValue}
+                          onChange={(e) => {
+                            const newQuantity = parseInt(e.target.value, 10);
+                            setDynamicInputValue(e.target.value);
+                            dispatch(updateItemQuantity(sel.id, newQuantity));
+                          }}
+                        /> */}
                         <BiMinus
                           className="text-md rounded-sm shadow-md bg-blue-600 ml-3 text-white"
                           onClick={() => handleDecrement(sel.id, sel)}
