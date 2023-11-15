@@ -9,6 +9,7 @@ export default function PartnerDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
+  const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
   const token = useSelector((state) => state.IduniqueData);
 

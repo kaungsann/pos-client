@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PaySlip from "./PaySlip";
 import { useDispatch, useSelector } from "react-redux";
 import { add } from "../../redux/actions";
-import { getApi, jsonStringPostData } from "../Api";
+import { getApi, sendJsonToApi } from "../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -62,7 +62,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
       };
 
       try {
-        let resData = await jsonStringPostData(
+        let resData = await sendJsonToApi(
           "/sale",
           data,
           token.accessToken

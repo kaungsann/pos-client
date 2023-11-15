@@ -44,11 +44,11 @@ export const FormPathApi = async (route, data, token) => {
       authorization: `Bearer ${token}`,
     },
   });
-  let resData = await response.json();
-  return resData;
+  let result = await response.json();
+  return result;
 };
 
-export const jsonStringPostData = async (route, data, token) => {
+export const sendJsonToApi = async (route, data, token) => {
   const response = await fetch(`${BASE_URL}${route}`, {
     method: "POST",
     body: JSON.stringify(data),
