@@ -22,6 +22,7 @@ export default function ProductsEdit() {
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [select, setSelect] = useState("");
+  const [updatePrice, setUpdatePrice] = useState(null);
   const token = useSelector((state) => state.IduniqueData);
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -34,7 +35,7 @@ export default function ProductsEdit() {
 
   const SingleProductApi = async () => {
     let resData = await getApi(`/product/${id}`, token.accessToken);
-
+    console.log("edit is", resData);
     setRef(resData.data[0].ref);
     setName(resData.data[0].name);
     setDescription(resData.data[0].description);
@@ -43,6 +44,8 @@ export default function ProductsEdit() {
     setBar(resData.data[0].barcode);
     setCatName(resData.data[0].category.name);
     setSelect(resData.data[0].image);
+    // setPurchasePrice(resData.data[0].purchasePrice);
+    // setProfit(resData.data[0].marginProfit);
   };
 
   const createProductApi = async () => {
@@ -70,7 +73,7 @@ export default function ProductsEdit() {
       formData.append("category", category);
     }
     if (price) {
-      formData.append("salePrice", price);
+      formData.append("salePrice", updatePrice);
     }
     if (file) {
       formData.append("image", file);
@@ -80,6 +83,10 @@ export default function ProductsEdit() {
     }
     if (profit) {
       formData.append("marginProfit", profit);
+    }
+
+    if (profit == 0 || purchasePrice == 0) {
+      return;
     }
     let resData = await FormPathApi(
       `/product/${id}`,
@@ -133,7 +140,12 @@ export default function ProductsEdit() {
   useEffect(() => {
     getCategory();
     SingleProductApi();
-  }, []);
+
+    const calculatedSalePrice =
+      parseFloat(purchasePrice) +
+      parseFloat(purchasePrice) * (parseFloat(profit) / 100);
+    setUpdatePrice(calculatedSalePrice);
+  }, [purchasePrice, profit]);
   return (
     <>
       <ToastContainer
@@ -282,44 +294,6 @@ export default function ProductsEdit() {
                 placeholder="Enter product description"
               />
             </div>
-            <div className="w-60 mb-3 mx-8">
-              <label className="text-md font-semibold">Price*</label>
-              <input
-                required
-                style={{ backgroundColor: "transparent" }}
-                value={price}
-                type="number"
-                onChange={(e) => setPrice(e.target.value)}
-                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-                placeholder="Enter product stock quantity"
-              />
-            </div>
-            <div className="w-60 mb-3 mx-8">
-              <label className="text-md font-semibold">PurchasePrice*</label>
-
-              <input
-                required
-                value={purchasePrice}
-                type="number"
-                style={{ backgroundColor: "transparent" }}
-                onChange={(e) => setPurchasePrice(e.target.value)}
-                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-                placeholder="Enter product stock quantity"
-              />
-            </div>
-
-            <div className="w-60 mb-3 mx-8">
-              <label className="text-md font-semibold">Margin Profit*</label>
-              <input
-                required
-                value={profit}
-                style={{ backgroundColor: "transparent" }}
-                type="number"
-                onChange={(e) => setProfit(e.target.value)}
-                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-                placeholder="Enter product stock quantity"
-              />
-            </div>
             <div className="w-60 mx-8 mb-3">
               <label className="text-md font-semibold">AvaliableInPos*</label>
 
@@ -337,6 +311,42 @@ export default function ProductsEdit() {
                   false
                 </option>
               </select>
+            </div>
+            <div className="w-60 mb-3 mx-8">
+              <label className="text-md font-semibold">PurchasePrice*</label>
+
+              <input
+                required
+                value={purchasePrice}
+                type="number"
+                style={{ backgroundColor: "transparent" }}
+                onChange={(e) => setPurchasePrice(e.target.value)}
+                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
+                placeholder="Enter product stock quantity"
+              />
+            </div>
+            <div className="w-60 mb-3 mx-8">
+              <label className="text-md font-semibold">Margin Profit*</label>
+              <input
+                required
+                value={profit}
+                style={{ backgroundColor: "transparent" }}
+                type="number"
+                onChange={(e) => setProfit(e.target.value)}
+                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
+                placeholder="Enter product stock quantity"
+              />
+            </div>
+            <div className="w-60 mb-3 mx-8">
+              <label className="text-md font-semibold">Sale Price*</label>
+              <input
+                required
+                value={updatePrice ? updatePrice : price}
+                type="number"
+                style={{ backgroundColor: "transparent" }}
+                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
+                placeholder="Enter product stock quantity"
+              />
             </div>
           </div>
         </form>

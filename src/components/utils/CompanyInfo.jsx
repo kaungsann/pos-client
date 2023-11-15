@@ -16,7 +16,7 @@ export default function CompanyInfo() {
 
   const getInfo = async () => {
     const response = await getApi("/company", token.accessToken);
-
+    console.log("company data is", response);
     if (response.status) {
       setInfo(response.data[0]);
     }

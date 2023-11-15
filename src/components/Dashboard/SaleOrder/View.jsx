@@ -161,6 +161,8 @@ export default function View() {
     setPopularProductsData(pieChartData);
   }, [saleLines]);
 
+  console.log("today sale line si ", todaySaleLines);
+
   return (
     <>
       {sale.length > 0 ? (
@@ -243,7 +245,7 @@ export default function View() {
                     angle={-60} // Rotate the text by -90 degrees
                     textAnchor="end" // Anchor the text at the end (right)
                   />
-                  <YAxis dataKey="total" />
+                  <YAxis dataKey="total" angle={-40} />
                   <Tooltip />
                   <Bar dataKey="total" barSize={20} fill="#8884d8" />
                 </BarChart>
@@ -301,8 +303,8 @@ export default function View() {
                     </th>
                   </tr>
 
-                  <tbody className="w-full space-y-10">
-                    {filteredSales.length > 0 &&
+                  <tbody className="w-full space-y-10 relative">
+                    {filteredSales.length > 0 ? (
                       filteredSales.map((sal) => (
                         <tr key={sal.id}>
                           <td className="lg:px-4 py-2 text-center">
@@ -333,33 +335,46 @@ export default function View() {
                             {sal.state ? sal.state : "store customer"}
                           </td>
                         </tr>
-                      ))}
+                      ))
+                    ) : (
+                      <h2 className="text-center text-xl text-slate-600 font-semibold  h-32 w-full absolute mt-20">
+                        No Currently sales
+                      </h2>
+                    )}
                   </tbody>
                 </table>
               </div>
+
+              
               <div className="items-center w-1/4 bg-white px-2 py-4 ml-4 rounded-md h-auto shadow-md">
                 <h1 className="text-slate-600 font-semibold text-lg mb-6">
                   Today Sale Products
                 </h1>
                 <div className="px-2 max-h-80 overflow-y-scroll custom-scrollbar">
-                  {todaySaleLines.map((saleLine) => (
-                    <div
-                      key={saleLine._id}
-                      className="w-full flex justify-between mb-3 border-b-2 pb-3"
-                    >
-                      <div className="flex flex-col">
-                        <h4 className="text-md text-slate-700 font-bold">
-                          {saleLine.product.name}
-                        </h4>
-                        <h4 className="font-bold text-green-700">
-                          Stock in {getStockQuantity(saleLine.product._id)}
-                        </h4>
+                  {todaySaleLines.length > 0 ? (
+                    todaySaleLines.map((saleLine) => (
+                      <div
+                        key={saleLine._id}
+                        className="w-full flex justify-between mb-3 border-b-2 pb-3"
+                      >
+                        <div className="flex flex-col">
+                          <h4 className="text-md text-slate-700 font-bold">
+                            {saleLine.product.name}
+                          </h4>
+                          <h4 className="font-bold text-green-700">
+                            Stock in {getStockQuantity(saleLine.product._id)}
+                          </h4>
+                        </div>
+                        <p className="text-slate-500 font-semibold">
+                          {saleLine.product.salePrice} mmk
+                        </p>
                       </div>
-                      <p className="text-slate-500 font-semibold">
-                        {saleLine.product.salePrice} mmk
-                      </p>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <h2 className="text-center text-md text-slate-600 font-semibold h-32 mt-20">
+                      No Currently sale product
+                    </h2>
+                  )}
                 </div>
               </div>
             </div>

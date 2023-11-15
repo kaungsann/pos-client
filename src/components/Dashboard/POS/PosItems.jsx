@@ -21,6 +21,8 @@ export default function PosItems() {
 
   const itemsPerPage = 5;
 
+  const user = useSelector((state) => state.loginData);
+
   const token = useSelector((state) => state.IduniqueData);
   const selectProduct = useSelector((state) => state.orderData);
   const dipatch = useDispatch();
@@ -106,7 +108,11 @@ export default function PosItems() {
   }, [search]);
   return (
     <>
-      <div className="flex w-full">
+      <div
+        className={`flex w-full ${
+          user.role && user.role.name == "user" && "mt-20"
+        }`}
+      >
         <div className="lg:w-2/3 md:w-2/4 bg-white shadow-sm p-3">
           <div>
             <div className="flex justify-between items-center">
@@ -165,7 +171,7 @@ export default function PosItems() {
               )}
             </ul>
           </div>
-          <div className="flex flex-wrap w-full h-screen overflow-y-scroll my-3 custom-scrollbar">
+          <div className="flex flex-wrap w-full overflow-y-scroll my-3 custom-scrollbar">
             {products.length > 0 ? (
               products
                 .filter((item) =>

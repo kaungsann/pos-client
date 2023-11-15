@@ -19,7 +19,7 @@ import ChoosePay from "./ChoosePay";
 
 export default function PayBox({ onContinueToPay }) {
   const [payment, setPayment] = useState(false);
-
+  const [dynamicInputValue, setDynamicInputValue] = useState(0);
   const dispatch = useDispatch();
 
   const product = useSelector((state) => state.orderData);
@@ -130,12 +130,15 @@ export default function PayBox({ onContinueToPay }) {
                           type="text" // Change the type to text
                           inputMode="numeric" // Specify the input mode
                           pattern="[0-9]*" // Allow only numeric input
-                          // value={sel.quantity}
-                          value={dynamicInputValue}
+                          value={sel.quantity + dynamicInputValue}
+                          // value={dynamicInputValue}
                           onChange={(e) => {
-                            const newQuantity = parseInt(e.target.value, 10);
-                            setDynamicInputValue(e.target.value);
-                            dispatch(updateItemQuantity(sel.id, newQuantity));
+                            dispatch(
+                              updateItemQuantity(
+                                sel.id,
+                                sel.quantity + e.target.value
+                              )
+                            );
                           }}
                         /> */}
                         <BiMinus

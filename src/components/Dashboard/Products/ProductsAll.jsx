@@ -47,7 +47,6 @@ export default function ProductsAll() {
       dipatch(removeData(null));
     }
 
-    console.log("res data is", resData);
     if (resData.status) {
       setLoading(false);
       setProducts(resData.data);

@@ -5,6 +5,7 @@ import { getApi, jsonStringPostData } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
+import { BsTrash } from "react-icons/bs";
 
 export default function SaleOrderCreate() {
   const [product, setProduct] = useState([]);
@@ -163,9 +164,18 @@ export default function SaleOrderCreate() {
 
     setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
 
-    setPd(null);
     setQuantity(0);
     setUnitPrice(0);
+  };
+
+  const removeProduct = (id) => {
+    console.log("slae line is", id);
+
+    // Filter out the product with the specified id
+    const updatedSaleOrderLines = saleOrderLines.filter(
+      (line) => line.product.id !== id
+    );
+    setSaleOrderLines(updatedSaleOrderLines);
   };
 
   useEffect(() => {
@@ -183,6 +193,8 @@ export default function SaleOrderCreate() {
     getPartner();
     getProduct();
   }, [saleOrderLines]);
+
+  console.log("slae line is", saleOrderLines);
 
   return (
     <>
@@ -528,7 +540,7 @@ export default function SaleOrderCreate() {
         <tbody className="w-full space-y-10 bg-slate-300">
           {saleOrderLines.map((line) => (
             <tr
-              key={line.id}
+              key={line._d}
               className="odd:bg-white even:bg-slate-200 space-y-10  mb-8 w-full items-center cursor-pointer hover:text-white hover:bg-[#60a5fa] "
             >
               <td className="lg:px-4 py-2 text-center">
@@ -547,7 +559,14 @@ export default function SaleOrderCreate() {
               <td className="lg:px-4 py-2 text-center">{line.qty}</td>
               <td className="lg:px-4 py-2 text-center">{line.unitPrice}</td>
               <td className="lg:px-4 py-2 text-center">{line.subTotal}</td>
-              <td className="lg:px-4 py-2 text-center">Delete</td>
+              <td className="lg:px-4 py-2">
+                <div className="text-center flex justify-center">
+                  <BsTrash
+                    className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
+                    onClick={() => removeProduct(line.product.id)}
+                  />
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -174,7 +174,7 @@ export default function SaleOrderCreate() {
   const removeProduct = (id) => {
     // Filter out the product with the specified id
     const updatedSaleOrderLines = saleOrderLines.filter(
-      (line) => line.id !== id
+      (line) => line.product.id !== id
     );
     setSaleOrderLines(updatedSaleOrderLines);
   };
@@ -566,7 +566,7 @@ export default function SaleOrderCreate() {
                 <div className="text-center flex justify-center">
                   <BsTrash
                     className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
-                    onClick={() => removeProduct(line.id)}
+                    onClick={() => removeProduct(line.product.id)}
                   />
                 </div>
               </td>

@@ -38,6 +38,8 @@ export default function Profile() {
   const dipatch = useDispatch();
   const [activeSection, setActiveSection] = useState("personal");
 
+  const userInfo = useSelector((state) => state.loginData);
+
   const token = useSelector((state) => state.IduniqueData);
 
   const navigate = useNavigate();
@@ -132,8 +134,12 @@ export default function Profile() {
         pauseOnHover
         theme="light"
       />
-      <div className="flex mb-8 cursor-pointer">
-        <div className="w-72 flex flex-col justify-items-center items-center">
+      <div
+        className={`flex mb-8 cursor-pointer ${
+          userInfo.role && userInfo.role.name == "user" ? "mt-20 " : ""
+        }`}
+      >
+        <div className="w-72 flex flex-col justify-items-center items-center p-4 bg-white shadow-md">
           <div className="relative">
             <img
               loading="eager | lazy"
@@ -184,79 +190,87 @@ export default function Profile() {
                 Personal Information
               </h3>
             </div>
-            <div
-              className={`flex py-2  mt-4 w-full items-center justify-start rounded-2xl ${
-                activeSection === "company"
-                  ? "bg-blue-100 font-bold"
-                  : "text-slate-400"
-              }`}
-              onClick={handleCompanyRegister}
-            >
-              <TiBusinessCard
-                className={`text-2xl font-bold  mx-4 ${
-                  activeSection === "company"
-                    ? "text-blue-500"
-                    : "text-slate-500"
-                }`}
-              />
-              <h3
-                className={`text-lg ${
-                  activeSection === "company"
-                    ? "text-slate-800 font-bold"
-                    : "text-slate-500"
-                }`}
-              >
-                Company Information
-              </h3>
-            </div>
-            <div
-              className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
-                activeSection === "staff"
-                  ? "bg-blue-100 font-bold"
-                  : "text-slate-400"
-              }`}
-              onClick={() => setActiveSection("staff")}
-            >
-              <AiOutlineUsergroupDelete
-                className={`text-2xl font-bold mx-4 ${
-                  activeSection === "staff" ? "text-blue-500" : "text-slate-600"
-                }`}
-              />
-              <h3
-                className={`text-lg ${
-                  activeSection === "staff"
-                    ? "text-slate-800 font-bold"
-                    : "text-slate-500"
-                }`}
-              >
-                Staff Information
-              </h3>
-            </div>
-            <div
-              className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
-                activeSection === "addUser"
-                  ? "bg-blue-100 font-bold"
-                  : "text-slate-400"
-              }`}
-              onClick={handleAddUserSectionClick}
-            >
-              <AiOutlineUsergroupAdd
-                className={`text-2xl font-bold mx-4 ${
-                  activeSection === "addUser"
-                    ? "text-blue-500"
-                    : "text-slate-600"
-                }`}
-              />
-              <h3
-                className={`text-lg ${
-                  activeSection === "addUser"
-                    ? "text-slate-800 font-bold"
-                    : "text-slate-500"
-                }`}
-              >
-                Staff Register
-              </h3>
-            </div>
+
+            {userInfo.role && userInfo.role.name == "admin" && (
+              <>
+                <div
+                  className={`flex py-2  mt-4 w-full items-center justify-start rounded-2xl ${
+                    activeSection === "company"
+                      ? "bg-blue-100 font-bold"
+                      : "text-slate-400"
+                  }`}
+                  onClick={handleCompanyRegister}
+                >
+                  <TiBusinessCard
+                    className={`text-2xl font-bold  mx-4 ${
+                      activeSection === "company"
+                        ? "text-blue-500"
+                        : "text-slate-500"
+                    }`}
+                  />
+                  <h3
+                    className={`text-lg ${
+                      activeSection === "company"
+                        ? "text-slate-800 font-bold"
+                        : "text-slate-500"
+                    }`}
+                  >
+                    Company Information
+                  </h3>
+                </div>
+                <div
+                  className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
+                    activeSection === "staff"
+                      ? "bg-blue-100 font-bold"
+                      : "text-slate-400"
+                  }`}
+                  onClick={() => setActiveSection("staff")}
+                >
+                  <AiOutlineUsergroupDelete
+                    className={`text-2xl font-bold mx-4 ${
+                      activeSection === "staff"
+                        ? "text-blue-500"
+                        : "text-slate-600"
+                    }`}
+                  />
+                  <h3
+                    className={`text-lg ${
+                      activeSection === "staff"
+                        ? "text-slate-800 font-bold"
+                        : "text-slate-500"
+                    }`}
+                  >
+                    Staff Information
+                  </h3>
+                </div>
+                <div
+                  className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
+                    activeSection === "addUser"
+                      ? "bg-blue-100 font-bold"
+                      : "text-slate-400"
+                  }`}
+                  onClick={handleAddUserSectionClick}
+                >
+                  <AiOutlineUsergroupAdd
+                    className={`text-2xl font-bold mx-4 ${
+                      activeSection === "addUser"
+                        ? "text-blue-500"
+                        : "text-slate-600"
+                    }`}
+                  />
+                  <h3
+                    className={`text-lg ${
+                      activeSection === "addUser"
+                        ? "text-slate-800 font-bold"
+                        : "text-slate-500"
+                    }`}
+                  >
+                    Staff Register
+                  </h3>
+                </div>
+              </>
+            )}
+
             <div
               className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
                 logout ? "bg-blue-100 font-bold" : "text-slate-400"
@@ -292,9 +306,19 @@ export default function Profile() {
 
           {activeSection === "personal" && (
             <div>
-              <h3 className="text-2xl font-bold text-slate-700 pb-6 border-b-2 border-b-slate-300">
-                Personal Information
-              </h3>
+              <div className="flex justify-between w-full  text-slate-700 pb-6 border-b-2 border-b-slate-300">
+                <h3 className="text-2xl font-bold">Personal Information</h3>
+
+                {userInfo.role.name == "user" && (
+                  <button
+                    onClick={() => navigate("/admin/pos/all")}
+                    className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
+                  >
+                    Back
+                  </button>
+                )}
+              </div>
+
               <div className="mt-4">
                 <div className="flex ">
                   <div className="flex">
@@ -428,21 +452,22 @@ export default function Profile() {
                   </div>
                 </div>
 
-                <div className="flex">
-                  <button
-                    onClick={() => navigate("/admin/pos/all")}
-                    className="w-6/12 rounded-md mt-4 border-2 hover:bg-cyan-600 hover:text-white text-blue-500 border-blue-400  py-2 text-center font-bold"
-                  >
-                    Discard Change
-                  </button>
-
-                  <button
-                    onClick={handleSubmit}
-                    className="w-6/12 ml-2 hover:opacity-80 rounded-md mt-4 bg-blue-600 py-2 text-center text-white font-bold"
-                  >
-                    Edit Save
-                  </button>
-                </div>
+                {userInfo.role && userInfo.role.name == "admin" && (
+                  <div className="flex">
+                    <button
+                      onClick={() => navigate("/admin/pos/all")}
+                      className="w-6/12 rounded-md mt-4 border-2 hover:bg-cyan-600 hover:text-white text-blue-500 border-blue-400  py-2 text-center font-bold"
+                    >
+                      Discard Change
+                    </button>
+                    <button
+                      onClick={handleSubmit}
+                      className="w-6/12 ml-2 hover:opacity-80 rounded-md mt-4 bg-blue-600 py-2 text-center text-white font-bold"
+                    >
+                      Edit Save
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}

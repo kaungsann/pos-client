@@ -72,11 +72,11 @@ export default function ProductsCreate() {
     } else {
       setShowDescriError(false);
     }
-    if (price == 0) {
-      setShowPriceError(true);
-    } else {
-      setShowPriceError(false);
-    }
+    // if (price == 0) {
+    //   setShowPriceError(true);
+    // } else {
+    //   setShowPriceError(false);
+    // }
     if (bar == 0) {
       setShowBarCodeError(true);
     } else {
@@ -107,7 +107,12 @@ export default function ProductsCreate() {
     } else {
       setShowTax(false);
     }
-    if (name.trim() === "" || ref.trim() === "") {
+    if (
+      name.trim() === "" ||
+      ref.trim() === "" ||
+      profit == 0 ||
+      purchasePrice == 0
+    ) {
       return;
     }
 
@@ -164,9 +169,27 @@ export default function ProductsCreate() {
     }
   };
 
+  const generateRandomNumber = (digits) => {
+    const min = 10 ** (digits - 1);
+    const max = 10 ** digits - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  const generateBarCode = (e) => {
+    e.preventDefault();
+    const newBarCode = generateRandomNumber(13);
+    setBar(newBarCode);
+  };
+
   useEffect(() => {
     getCategory();
-  }, []);
+
+    const calculatedSalePrice =
+      parseFloat(purchasePrice) +
+      parseFloat(purchasePrice) * (parseFloat(profit) / 100);
+
+    setPrice(calculatedSalePrice);
+  }, [purchasePrice, profit]);
   return (
     <>
       <ToastContainer
@@ -356,17 +379,24 @@ export default function ProductsCreate() {
               >
                 BarCode*
               </label>
-              <input
-                required
-                value={bar}
-                style={{ backgroundColor: "transparent" }}
-                type="text"
-                onChange={(e) => setBar(e.target.value)}
-                className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
-                  showBarCodeError ? "border-red-600" : "border-slate-600"
-                }`}
-                placeholder="Enter product stock quantity"
-              />
+              <div className="w-full relative">
+                <input
+                  required
+                  value={bar}
+                  style={{ backgroundColor: "transparent" }}
+                  type="text"
+                  className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
+                    showBarCodeError ? "border-red-600" : "border-slate-600"
+                  }`}
+                  placeholder="Enter product stock quantity"
+                />
+                <button
+                  onClick={generateBarCode}
+                  className="text-sm absolute right-0 bottom-4 bg-zinc-600 text-white shadow-mdtext-white hover:bg-zinc-800 p-1"
+                >
+                  generate
+                </button>
+              </div>
             </div>
             <div className="w-60 mb-3 mx-8">
               <label
@@ -388,26 +418,48 @@ export default function ProductsCreate() {
                 placeholder="Enter product stock quantity"
               />
             </div>
+
             <div className="w-60 mb-3 mx-8">
               <label
                 className={`text-md font-semibold ${
-                  showPriceError ? "text-red-600" : "text-slate-600"
+                  showStockQuantity ? "text-red-600" : "text-slate-600"
                 }`}
               >
-                Price*
+                Stock Quantity*
               </label>
               <input
                 required
-                value={price}
+                value={stockQuantity}
                 type="number"
                 style={{ backgroundColor: "transparent" }}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) => setStockQuantity(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
-                  showPriceError ? "border-red-600" : "border-slate-600"
+                  showStockQuantity ? "border-red-600" : "border-slate-600"
                 }`}
                 placeholder="Enter product stock quantity"
               />
             </div>
+            <div className="w-60 mb-3 mx-8 ">
+              <label className="text-md font-semibold text-slate-600">
+                AvaliableInPos*
+              </label>
+              <select
+                id="payment"
+                required
+                style={{ backgroundColor: "transparent" }}
+                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
+                value={avaliable}
+                onChange={(e) => setAAvaliable(e.target.value)}
+              >
+                <option value="true" className="py-2">
+                  true
+                </option>
+                <option value="false" className="py-2">
+                  false
+                </option>
+              </select>
+            </div>
+
             <div className="w-60 mb-3 mx-8">
               <label
                 className={`text-md font-semibold ${
@@ -451,40 +503,21 @@ export default function ProductsCreate() {
             <div className="w-60 mb-3 mx-8">
               <label
                 className={`text-md font-semibold ${
-                  showStockQuantity ? "text-red-600" : "text-slate-600"
+                  showPriceError ? "text-red-600" : "text-slate-600"
                 }`}
               >
-                Stock Quantity*
+                Sale Price*
               </label>
               <input
                 required
-                value={stockQuantity}
+                value={price}
                 type="number"
                 style={{ backgroundColor: "transparent" }}
-                onChange={(e) => setStockQuantity(e.target.value)}
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
-                  showStockQuantity ? "border-red-600" : "border-slate-600"
+                  showPriceError ? "border-red-600" : "border-slate-600"
                 }`}
                 placeholder="Enter product stock quantity"
               />
-            </div>
-            <div className="w-60 mb-3 mx-8 ">
-              <label className="text-md font-semibold">AvaliableInPos*</label>
-              <select
-                id="payment"
-                required
-                style={{ backgroundColor: "transparent" }}
-                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-                value={avaliable}
-                onChange={(e) => setAAvaliable(e.target.value)}
-              >
-                <option value="true" className="py-2">
-                  true
-                </option>
-                <option value="false" className="py-2">
-                  false
-                </option>
-              </select>
             </div>
           </div>
         </form>

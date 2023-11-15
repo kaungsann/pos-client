@@ -252,7 +252,7 @@ export default function PurchaseView() {
                     angle={-60} // Rotate the text by -90 degrees
                     textAnchor="end" // Anchor the text at the end (right)
                   />
-                  <YAxis dataKey="total" />
+                  <YAxis dataKey="total" angle={-40} />
                   <Tooltip />
                   <Bar dataKey="total" barSize={20} fill="#8884d8" />
                 </BarChart>
@@ -291,7 +291,7 @@ export default function PurchaseView() {
                 <h2 className="text-slate-600 font-semibold text-lg mb-3">
                   Recents Order
                 </h2>
-                <table className="w-full">
+                <table className="w-full mb-6">
                   <tr className="bg-[#e2e8f0]">
                     <th className="lg:px-4 py-2 text-center text-slate-800">
                       Customer Name
@@ -310,8 +310,8 @@ export default function PurchaseView() {
                     </th>
                   </tr>
 
-                  <tbody className="w-full space-y-10">
-                    {filteredPurchase.length > 0 &&
+                  <tbody className="w-full space-y-10 relative">
+                    {filteredPurchase.length > 0 ? (
                       filteredPurchase.map((sal) => (
                         <tr key={sal.id}>
                           <td className="lg:px-4 py-2 text-center">
@@ -340,7 +340,12 @@ export default function PurchaseView() {
                             {sal.state && sal.state}
                           </td>
                         </tr>
-                      ))}
+                      ))
+                    ) : (
+                      <h2 className="text-center text-xl text-slate-600 font-semibold  h-32 w-full absolute mt-20">
+                        No Currently Purchase
+                      </h2>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -348,25 +353,32 @@ export default function PurchaseView() {
                 <h1 className="text-slate-600 font-semibold text-lg mb-6">
                   Purchase Products
                 </h1>
-                <div className="px-2 max-h-80 overflow-y-scroll custom-scrollbar">
-                  {todayPurchaseLine.map((purchaseLines) => (
-                    <div
-                      key={purchaseLines._id}
-                      className="w-full flex justify-between mb-3 border-b-2 pb-3"
-                    >
-                      <div className="flex flex-col">
-                        <h4 className="text-md text-slate-700 font-bold">
-                          {purchaseLines.product.name}
-                        </h4>
-                        <h4 className="font-bold text-green-700">
-                          Stock in {getStockQuantity(purchaseLines.product._id)}
-                        </h4>
+                <div className="px-2 max-h-80 overflow-y-scroll custom-scrollbar mb-6">
+                  {todayPurchaseLine.length > 0 ? (
+                    todayPurchaseLine.map((purchaseLines) => (
+                      <div
+                        key={purchaseLines._id}
+                        className="w-full flex justify-between mb-3 border-b-2 pb-3"
+                      >
+                        <div className="flex flex-col">
+                          <h4 className="text-md text-slate-700 font-bold">
+                            {purchaseLines.product.name}
+                          </h4>
+                          <h4 className="font-bold text-green-700">
+                            Stock in{" "}
+                            {getStockQuantity(purchaseLines.product._id)}
+                          </h4>
+                        </div>
+                        <p className="text-slate-500 font-semibold">
+                          {purchaseLines.product.salePrice} mmk
+                        </p>
                       </div>
-                      <p className="text-slate-500 font-semibold">
-                        {purchaseLines.product.salePrice} mmk
-                      </p>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <h2 className="text-center text-md text-slate-600 font-semibold h-32  mt-20">
+                      No Currently Purchase product
+                    </h2>
+                  )}
                 </div>
               </div>
             </div>
