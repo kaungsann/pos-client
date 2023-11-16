@@ -17,7 +17,7 @@ export default function Staff() {
   const getUsersApi = async () => {
     setLoading(true);
     const response = await getApi("/user", token.accessToken);
-    console.log("user staff is", response);
+
     if (response.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }

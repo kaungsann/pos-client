@@ -106,140 +106,135 @@ export default function OverView() {
 
   return (
     <>
-      {sale.length > 0 ? (
-        <div className="flex">
-          <div className="z-40 flex flex-col">
-            <div className="p-4 bg-white shadow-md mr-4">
-              <h3 className="text-slate-500 font-semibold text-lg mb-6">
-                Monthly Sale
-              </h3>
-              <BarChart
-                width={800}
-                height={400}
-                data={sale}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 60,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="createdAt"
-                  tickFormatter={(value) =>
-                    format(new Date(value), "dd.MM.yyyy")
-                  }
-                  angle={-60}
-                  textAnchor="end"
-                />
-                <YAxis dataKey="total" />
-                <Tooltip />
+      <div className="flex">
+        <div className="z-40 flex flex-col">
+          <div className="p-4 bg-white shadow-md mr-4">
+            <h3 className="text-slate-500 font-semibold text-lg mb-6">
+              Monthly Sale
+            </h3>
+            <BarChart
+              width={800}
+              height={400}
+              data={sale}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 60,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="createdAt"
+                tickFormatter={(value) => format(new Date(value), "dd.MM.yyyy")}
+                angle={-60}
+                textAnchor="end"
+              />
+              <YAxis dataKey="total" />
+              <Tooltip />
 
-                <Bar dataKey="total" fill="#8884d8" />
-              </BarChart>
+              <Bar dataKey="total" fill="#8884d8" />
+            </BarChart>
+          </div>
+
+          <div className="p-4 bg-white shadow-md mr-4">
+            <h3 className="text-slate-500 font-semibold text-lg mb-6">
+              Monthly Sale
+            </h3>
+            <BarChart
+              width={800}
+              height={400}
+              data={sale}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 60,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="createdAt"
+                tickFormatter={(value) => format(new Date(value), "dd.MM.yyyy")}
+                angle={-60}
+                textAnchor="end"
+              />
+              <YAxis dataKey="total" />
+              <Tooltip />
+
+              <Bar dataKey="total" fill="#8884d8" />
+            </BarChart>
+          </div>
+        </div>
+        <div className="w-full bg-white p-4 shadow-md">
+          <div className="flex w-full justify-between h-24">
+            <div className="bg-[#8884d8] w-1/2 flex flex-col justify-center rounded-md">
+              <h3 className="text-3xl text-white font-bold text-center">7</h3>
+              <h4 className="text-center text-white text-md font-bold">
+                Out Of Stock Products
+              </h4>
             </div>
-
-            <div className="p-4 bg-white shadow-md mr-4">
-              <h3 className="text-slate-500 font-semibold text-lg mb-6">
-                Monthly Sale
-              </h3>
-              <BarChart
-                width={800}
-                height={400}
-                data={sale}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 60,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="createdAt"
-                  tickFormatter={(value) =>
-                    format(new Date(value), "dd.MM.yyyy")
-                  }
-                  angle={-60}
-                  textAnchor="end"
-                />
-                <YAxis dataKey="total" />
-                <Tooltip />
-
-                <Bar dataKey="total" fill="#8884d8" />
-              </BarChart>
+            <div className="bg-[#8884d8] w-1/2 ml-4 flex flex-col justify-center rounded-md">
+              <h3 className="text-3xl text-white font-bold text-center">8</h3>
+              <h4 className="text-center text-white text-md font-bold">
+                No Of Customers
+              </h4>
             </div>
           </div>
-          <div className="w-full bg-white p-4 shadow-md">
-            <div className="flex w-full justify-between h-24">
-              <div className="bg-[#8884d8] w-1/2 flex flex-col justify-center rounded-md">
-                <h3 className="text-3xl text-white font-bold text-center">7</h3>
-                <h4 className="text-center text-white text-md font-bold">
-                  Out Of Stock Products
-                </h4>
-              </div>
-              <div className="bg-[#8884d8] w-1/2 ml-4 flex flex-col justify-center rounded-md">
-                <h3 className="text-3xl text-white font-bold text-center">8</h3>
-                <h4 className="text-center text-white text-md font-bold">
-                  No Of Customers
-                </h4>
-              </div>
-            </div>
-            <div className="bg-blue-50 py-3 rounded-md mt-3 shadow-sm">
-              <h2 className="text-3xl text-green-600 font-bold text-center">
-                {monthlyTotal ? monthlyTotal.toFixed(2) : "0"}
-              </h2>
-              <h5 className="mt-1.5 text-center text-sm font-semibold text-slate-500">
-                This Month Sale
-              </h5>
-            </div>
-            <div className="bg-blue-50 py-3 rounded-md mt-3 shadow-sm">
-              <h2 className="text-3xl text-orange-500 font-bold text-center">
-                {weeklyTotal ? weeklyTotal.toFixed(2) : "0"}
-              </h2>
-              <h5 className="mt-1.5 text-center text-sm font-semibold text-slate-500">
-                This Weekend Sale
-              </h5>
-            </div>
-            <div className="bg-blue-50 py-3 rounded-md mt-3 shadow-sm">
-              <h2 className="text-3xl text-[#3b82f6] font-bold text-center">
-                {todaySaleTotal.toFixed(2)}
-              </h2>
-              <h5 className="mt-1.5 text-center text-sm font-semibold text-slate-500">
-                Today Sale
-              </h5>
-            </div>
-            <div className="mt-20 flex flex-col justify-center ">
-              <h3 className="mt-4 font-bold text-center text-xl">
-                Most Of Sales Products
-              </h3>
-              <div className="flex justify-center w-2/4relative">
-                <PieChart width={250} height={400}>
-                  <Pie
-                    data={data}
-                    cx={120}
-                    cy={200}
-                    innerRadius={60}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {data.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </div>
+          <div className="bg-blue-50 py-3 rounded-md mt-3 shadow-sm">
+            <h2 className="text-3xl text-green-600 font-bold text-center">
+              {monthlyTotal ? monthlyTotal.toFixed(2) : "0"}
+            </h2>
+            <h5 className="mt-1.5 text-center text-sm font-semibold text-slate-500">
+              This Month Sale
+            </h5>
+          </div>
+          <div className="bg-blue-50 py-3 rounded-md mt-3 shadow-sm">
+            <h2 className="text-3xl text-orange-500 font-bold text-center">
+              {weeklyTotal ? weeklyTotal.toFixed(2) : "0"}
+            </h2>
+            <h5 className="mt-1.5 text-center text-sm font-semibold text-slate-500">
+              This Weekend Sale
+            </h5>
+          </div>
+          <div className="bg-blue-50 py-3 rounded-md mt-3 shadow-sm">
+            <h2 className="text-3xl text-[#3b82f6] font-bold text-center">
+              {todaySaleTotal.toFixed(2)}
+            </h2>
+            <h5 className="mt-1.5 text-center text-sm font-semibold text-slate-500">
+              Today Sale
+            </h5>
+          </div>
+          <div className="mt-20 flex flex-col justify-center ">
+            <h3 className="mt-4 font-bold text-center text-xl">
+              Most Of Sales Products
+            </h3>
+            <div className="flex justify-center w-2/4relative">
+              <PieChart width={250} height={400}>
+                <Pie
+                  data={data}
+                  cx={120}
+                  cy={200}
+                  innerRadius={60}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {data.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+              </PieChart>
             </div>
           </div>
         </div>
-      ) : (
-        <div className="flex justify-center items-center mt-64">
+      </div>
+      {sale.length > 0 && (
+        <div className="absolute inset-0 flex justify-center items-center">
           {loading && (
             <FadeLoader
               color={"#0284c7"}

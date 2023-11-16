@@ -125,7 +125,7 @@ export default function Stock() {
             <th className="lg:px-4 py-2 text-center">Date</th>
             <th></th>
           </tr>
-          {stock.length > 0 ? (
+          {stock.length > 0 &&
             stock
               .filter((item) =>
                 searchItems.toLowerCase === ""
@@ -148,21 +148,22 @@ export default function Stock() {
                     {format(new Date(stk.createdAt), "yyyy-MM-dd")}
                   </td>
                 </tr>
-              ))
-          ) : (
-            <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
-              {loading && (
-                <FadeLoader
-                  color={"#0284c7"}
-                  loading={loading}
-                  size={15}
-                  aria-label="Loading Spinner"
-                  data-testid="loader"
-                />
-              )}
-            </div>
-          )}
+              ))}
         </table>
+
+        {loading && (
+          <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+            {loading && (
+              <FadeLoader
+                color={"#0284c7"}
+                loading={loading}
+                size={15}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            )}
+          </div>
+        )}
       </div>
     </>
   );

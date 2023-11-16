@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function SaleOrderDetail() {
   const { id } = useParams();
+  const [lines, setLines] = useState([]);
+
   const [detail, setDetails] = useState(null);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
@@ -19,7 +21,18 @@ export default function SaleOrderDetail() {
     setDetails(resData.data);
   };
 
+  const saleLinesApi = async () => {
+    let resData = await getApi("/salelines", token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
+    if (resData.status) {
+      let name = resData.data.filter((pid) => pid.orderId._id == id);
+      setLines(name);
+    }
+  };
   useEffect(() => {
+    saleLinesApi();
     singleSaleOrder();
   }, []);
 
@@ -105,27 +118,28 @@ export default function SaleOrderDetail() {
                   </tr>
                 </thead>
                 <tbody className="w-full space-y-10">
-                  {detail[0].lines && detail[0].lines.length > 0 ? (
-                    detail[0].lines.map((item) => (
+                  {lines && lines.length > 0 ? (
+                    lines.map((item) => (
                       <tr
-                        key={item.id}
+                        key={item.orderId._id}
                         className="odd:bg-white even:bg-slate-200 space-y-10  mb-8 w-full items-center cursor-pointer"
                       >
-                        <td className="lg:px-4 py-2 text-center items-center">
-                          {item.product && item.product.image ? (
+                        <td className="lg:px-4 py-2 text-center flex justify-center items-center">
+                          {item.product.image ? (
                             <img
-                              src={item.product.image}
-                              alt={item.product.name}
+                              src="http://3.0.102.114/product/65546e0db0e6e4580d5136e9.jfif"
                               className="w-10 h-10 rounded-md shadow-md mx-auto"
                             />
                           ) : (
-                            <div>No Image</div>
+                            <Icon
+                              icon="material-symbols:hide-image-outline-sharp"
+                              className="text-2xl"
+                            />
                           )}
                         </td>
                         <td className="text-center">
-                          {item.product ? item.product.name : ""}
+                          {item.product ? item.product.name : "no have name"}
                         </td>
-
                         <td className="text-center">{item.tax}</td>
                         <td className="text-center">{item.qty}</td>
                         <td className="text-center">{item.unitPrice}</td>

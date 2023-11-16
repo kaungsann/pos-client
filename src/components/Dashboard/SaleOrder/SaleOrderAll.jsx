@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getApi } from "../../Api";
-import { BiExport , BiCategory } from "react-icons/bi";
+import { BiExport } from "react-icons/bi";
 import { MdClear } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -183,7 +183,7 @@ export default function SaleOrderAll() {
             <th className="lg:px-4 py-2 text-center">Location</th>
             <th className="lg:px-4 py-2 text-center">State</th>
             <th className="lg:px-4 py-2 text-center">Total Product</th>
-            <th className="lg:px-4 py-2 text-center">Payment</th>
+            <th className="lg:px-4 py-2 text-center">Active</th>
             <th className="lg:px-4 py-2 text-center">TaxTotal</th>
             <th className="lg:px-4 py-2 text-center">Total</th>
             <th className="lg:px-4 py-2 text-center">Action</th>
@@ -234,12 +234,18 @@ export default function SaleOrderAll() {
                           : ""
                       }`}
                     >
-                      {sale.state}
+                      {sale.state ? sale.state : "no state"}
                     </td>
                     <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
                       {sale.lines.length}
                     </td>
-                    <td className="lg:px-4 py-2 text-center">{sale.state}</td>
+                    <td
+                      className={`lg:px-4 py-2 text-center ${
+                        sale.active ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {sale.active ? "Yes" : "No"}
+                    </td>
                     <td className="lg:px-4 py-2 text-center">
                       {sale.taxTotal}
                     </td>
