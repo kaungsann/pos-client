@@ -11,11 +11,10 @@ export default function PartnerDetail() {
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
-  const token = useSelector((state) => state.IduniqueData);
 
   const singleProducts = async () => {
     setLoading(true);
-    let resData = await getApi(`/partner/${id}` , token.accessToken);
+    let resData = await getApi(`/partner/${id}`, token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }

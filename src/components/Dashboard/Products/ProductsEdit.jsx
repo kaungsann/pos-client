@@ -27,8 +27,8 @@ export default function ProductsEdit() {
 
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
-  const [profit, setProfit] = useState(0);
-  const [purchasePrice, setPurchasePrice] = useState(0);
+  const [profit, setProfit] = useState(null);
+  const [purchasePrice, setPurchasePrice] = useState(null);
 
   const { id } = useParams();
   const dipatch = useDispatch();
@@ -44,8 +44,8 @@ export default function ProductsEdit() {
     setBar(resData.data[0].barcode);
     setCatName(resData.data[0].category.name);
     setSelect(resData.data[0].image);
-    // setPurchasePrice(resData.data[0].purchasePrice);
-    // setProfit(resData.data[0].marginProfit);
+    setPurchasePrice(resData.data[0].purchasePrice);
+    setProfit(resData.data[0].marginProfit);
   };
 
   const createProductApi = async () => {
@@ -85,9 +85,10 @@ export default function ProductsEdit() {
       formData.append("marginProfit", profit);
     }
 
-    if (profit == 0 || purchasePrice == 0) {
-      return;
-    }
+    // if (profit == 0 || purchasePrice == 0) {
+    //   return;
+    // }
+
     let resData = await FormPathApi(
       `/product/${id}`,
       formData,
@@ -140,10 +141,13 @@ export default function ProductsEdit() {
   useEffect(() => {
     getCategory();
     SingleProductApi();
+  }, []);
 
+  useEffect(() => {
     const calculatedSalePrice =
       parseFloat(purchasePrice) +
       parseFloat(purchasePrice) * (parseFloat(profit) / 100);
+    setUpdatePrice(calculatedSalePrice);
     setUpdatePrice(calculatedSalePrice);
   }, [purchasePrice, profit]);
   return (
@@ -341,7 +345,7 @@ export default function ProductsEdit() {
               <label className="text-md font-semibold">Sale Price*</label>
               <input
                 required
-                value={updatePrice ? updatePrice : price}
+                value={updatePrice || price}
                 type="number"
                 style={{ backgroundColor: "transparent" }}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"

@@ -32,7 +32,7 @@ export default function Login() {
       toast(message);
       dispatch(addData(data));
       dispatch(idAdd(tokens));
-      navigate("/admin/products/all");
+      navigate("/admin/pos/all");
     } else {
       setLoading(false);
       toast(message);
