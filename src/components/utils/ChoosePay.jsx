@@ -62,12 +62,11 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
       };
 
       try {
-        let resData = await sendJsonToApi(
-          "/sale",
-          data,
-          token.accessToken
-        );
-        console.log("data is", resData);
+        let resData = await sendJsonToApi("/sale", data, token.accessToken);
+        if (!resData.success) {
+          toast(resData.message);
+        }
+
         if (resData.status) {
           setOrder(resData.data);
           toast(resData.message);

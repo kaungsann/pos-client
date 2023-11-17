@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
+import { removeData } from "../../../redux/actions";
 
 export default function SaleOrderCreate() {
   const [product, setProduct] = useState([]);
@@ -97,11 +98,7 @@ export default function SaleOrderCreate() {
     };
 
     try {
-      let resData = await sendJsonToApi(
-        "/purchase",
-        data,
-        token.accessToken
-      );
+      let resData = await sendJsonToApi("/purchase", data, token.accessToken);
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }

@@ -11,6 +11,7 @@ import { FaEye } from "react-icons/fa6";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { format } from "date-fns";
+import { removeData } from "../../../redux/actions";
 
 export default function PartnerAll() {
   const inputRef = useRef();

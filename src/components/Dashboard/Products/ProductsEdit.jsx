@@ -7,6 +7,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { removeData } from "../../../redux/actions";
 
 export default function ProductsEdit() {
   const [cat, setCat] = useState([]);
@@ -35,7 +36,6 @@ export default function ProductsEdit() {
 
   const SingleProductApi = async () => {
     let resData = await getApi(`/product/${id}`, token.accessToken);
-    console.log("edit is", resData);
     setRef(resData.data[0].ref);
     setName(resData.data[0].name);
     setDescription(resData.data[0].description);

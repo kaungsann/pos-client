@@ -11,6 +11,7 @@ import { FaEye } from "react-icons/fa6";
 import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
 import { format } from "date-fns";
+import { removeData } from "../../../redux/actions";
 
 export default function PartnerAll() {
   const inputRef = useRef();
@@ -250,6 +251,11 @@ export default function PartnerAll() {
               <h4>Import Excel </h4>
               <BiExport className="text-xl mx-2" />
             </div>
+            <Link to="/admin/employee/all">
+              <div className="font-bold mx-3 rounded-sm shadow-sm flex items-cente text-slate-700 border-slate-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-slate-700 px-6 py-2">
+                Add Employee
+              </div>
+            </Link>
           </div>
 
           <div className="w-96 md:w-72 relative">

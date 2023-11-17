@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getApi, PathData } from "../../Api";
 import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 
 export default function PartnerEdit() {
   const { id } = useParams();

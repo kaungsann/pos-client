@@ -14,12 +14,13 @@ import {
 } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Register from "../Register";
+import Register from "../Dashboard/Staff/Register";
 import user from "../../assets/user.jpeg";
 import BusinessRegister from "./BusinessRegister";
 import EditBusinessInfo from "./EditBusinessInfo";
-import Staff from "./Staff";
+import Staff from "../Dashboard/Staff/Staff";
 import CompanyInfo from "./CompanyInfo";
+import StaffDetail from "../Dashboard/Staff/StaffDetail";
 
 export default function Profile() {
   const { id } = useParams();
@@ -139,7 +140,7 @@ export default function Profile() {
           userInfo.role && userInfo.role.name == "user" ? "mt-20 " : ""
         }`}
       >
-        <div className="w-72 flex flex-col justify-items-center items-center p-4 bg-white shadow-md">
+        <div className="w-1/4 flex flex-col justify-items-center items-center p-4 bg-white shadow-md">
           <div className="relative">
             <img
               loading="eager | lazy"
@@ -218,56 +219,6 @@ export default function Profile() {
                     Company Information
                   </h3>
                 </div>
-                <div
-                  className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
-                    activeSection === "staff"
-                      ? "bg-blue-100 font-bold"
-                      : "text-slate-400"
-                  }`}
-                  onClick={() => setActiveSection("staff")}
-                >
-                  <AiOutlineUsergroupDelete
-                    className={`text-2xl font-bold mx-4 ${
-                      activeSection === "staff"
-                        ? "text-blue-500"
-                        : "text-slate-600"
-                    }`}
-                  />
-                  <h3
-                    className={`text-lg ${
-                      activeSection === "staff"
-                        ? "text-slate-800 font-bold"
-                        : "text-slate-500"
-                    }`}
-                  >
-                    Staff Information
-                  </h3>
-                </div>
-                <div
-                  className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
-                    activeSection === "addUser"
-                      ? "bg-blue-100 font-bold"
-                      : "text-slate-400"
-                  }`}
-                  onClick={handleAddUserSectionClick}
-                >
-                  <AiOutlineUsergroupAdd
-                    className={`text-2xl font-bold mx-4 ${
-                      activeSection === "addUser"
-                        ? "text-blue-500"
-                        : "text-slate-600"
-                    }`}
-                  />
-                  <h3
-                    className={`text-lg ${
-                      activeSection === "addUser"
-                        ? "text-slate-800 font-bold"
-                        : "text-slate-500"
-                    }`}
-                  >
-                    Staff Register
-                  </h3>
-                </div>
               </>
             )}
 
@@ -295,15 +246,7 @@ export default function Profile() {
           </div>
         </div>
 
-        <div
-          className={`ml-6 ${activeSection === "staff" ? "w-full" : "w-3/5"}`}
-        >
-          {activeSection === "addUser" && (
-            <>
-              <Register />
-            </>
-          )}
-
+        <div className="ml-6 w-3/4">
           {activeSection === "personal" && (
             <div>
               <div className="flex justify-between w-full  text-slate-700 pb-6 border-b-2 border-b-slate-300">
@@ -471,21 +414,16 @@ export default function Profile() {
               </div>
             </div>
           )}
-
           {activeSection === "company" && (
             <>
               <CompanyInfo />
               {/* <BusinessRegister /> */}
             </>
           )}
+
           {activeSection === "EditInfo" && (
             <>
               <EditBusinessInfo />
-            </>
-          )}
-          {activeSection === "staff" && (
-            <>
-              <Staff />
             </>
           )}
         </div>

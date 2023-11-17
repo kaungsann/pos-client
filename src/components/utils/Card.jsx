@@ -27,7 +27,7 @@ export default function Card({ product }) {
   return (
     <>
       <div
-        className="w-36 mx-2 p-1.5 max-h-52 bg-white rounded-lg border-4 hover:border-blue-500 shadow-lg mt-2 cursor-pointer"
+        className="w-36 mx-2 p-1.5 max-h-52 my-3 bg-white rounded-lg hover:border-blue-500 shadow-sm border-4 mt-2 cursor-pointer"
         onClick={() => addCard(product)}
       >
         <img

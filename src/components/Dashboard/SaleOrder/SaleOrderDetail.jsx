@@ -4,6 +4,7 @@ import { getApi } from "../../Api";
 
 import { MdAddShoppingCart } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 
 export default function SaleOrderDetail() {
   const { id } = useParams();

@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 import { format } from "date-fns";
 import { FiFilter } from "react-icons/fi";
 import { FaEye } from "react-icons/fa6";

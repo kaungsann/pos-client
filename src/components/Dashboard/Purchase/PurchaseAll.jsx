@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import { FiFilter } from "react-icons/fi";
 import { FaEye } from "react-icons/fa6";
+import { removeData } from "../../../redux/actions";
 
 export default function SaleOrderAll() {
   const [saleorders, setSaleOrders] = useState([]);

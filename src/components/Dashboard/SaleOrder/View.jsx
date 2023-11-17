@@ -10,12 +10,14 @@ import {
   Pie,
   Cell,
   PieChart,
+  ReferenceLine,
 } from "recharts";
 import { getApi } from "../../Api";
 import { format } from "date-fns";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
+import { removeData } from "../../../redux/actions";
 
 export default function View() {
   const [sale, setSale] = useState([]);
@@ -114,9 +116,14 @@ export default function View() {
         typeof line.product.marginProfit === "number" &&
         !isNaN(line.product.marginProfit)
       ) {
+        // const profit =
+        //   line.product.purchasePrice +
+        //   (line.product.marginProfit / 100) * line.qty;
+
         const profit =
-          line.product.purchasePrice +
-          (line.product.marginProfit / 100) * line.qty;
+          parseFloat(line.product.purchasePrice) *
+          (parseFloat(line.product.marginProfit) / 100) *
+          line.qty;
 
         return sum + profit;
       } else {
@@ -134,6 +141,9 @@ export default function View() {
     getSaleOrder();
     getSaleLinesApi();
   }, []);
+
+  console.log("date is", formattedSaleData);
+  console.log("today  dte  is", todayDate);
 
   useEffect(() => {
     // Count the quantity sold for each product
@@ -225,7 +235,7 @@ export default function View() {
               <BarChart
                 width={700}
                 height={400}
-                data={formattedSaleData}
+                data={filteredSales} // Filter data for today's date
                 margin={{
                   top: 5,
                   right: 30,
@@ -235,13 +245,20 @@ export default function View() {
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
-                  dataKey="created"
-                  angle={-60} // Rotate the text by -90 degrees
+                  dataKey="createdAt"
+                  angle={-60} // Rotate the text by -60 degrees
                   textAnchor="end" // Anchor the text at the end (right)
                 />
                 <YAxis dataKey="total" angle={-40} />
                 <Tooltip />
                 <Bar dataKey="total" barSize={20} fill="#8884d8" />
+
+                {/* Add the following ReferenceLine component */}
+                <ReferenceLine
+                  y={1} // Set the y-value where you want the line to appear
+                  stroke="#8884d8" // Set the color of the line
+                  strokeDasharray="3 3" // Optional: Add a dashed pattern to the line
+                />
               </BarChart>
             </div>
             <div className="items-center w-full ml-4 bg-white p-2 rounded-md shadow-md">

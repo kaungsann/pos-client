@@ -1,72 +1,85 @@
-import React, { useState } from "react";
-
-import { useNavigate } from "react-router-dom";
-
-import { FormPostApi } from "./Api";
-
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { FormPathApi, getApi } from "../../Api";
+import { removeData } from "../../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import MoonLoader from "react-spinners/MoonLoader";
-import { useSelector } from "react-redux";
 
-export default function () {
-  const [name, setname] = useState("");
-  const [phone, setphone] = useState("");
-  const [email, setemail] = useState("");
+export default function StaffEdit() {
+  const { id } = useParams();
+  const [staff, setStaff] = useState([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [file, setFile] = useState("");
+  const [city, setCity] = useState("");
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
-  const [city, setCity] = useState("");
-
-  const [loading, setLoading] = useState(false);
-
-  const [password, setpassword] = useState("");
 
   const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
-  const fileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-  };
-
-  const registerUser = async (e) => {
-    setLoading(true);
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("username", name);
-    formData.append("phone", phone);
-    formData.append("email", email);
-    formData.append("gender", gender);
-    formData.append("city", city);
-    formData.append("password", password);
-    formData.append("birthdate", birth);
-    formData.append("address", address);
-    formData.append("image", file);
-
-    let response = await FormPostApi("/user", formData, token.accessToken);
-
-    if (response.success) {
-      setname("");
-      setphone("");
-      setemail("");
-      setAddress("");
-      setFile("");
-      setBirth("");
-      setGender("");
-      setCity("");
-      setpassword("");
-      setLoading(false);
-      toast(response.message);
-    } else {
-      setLoading(false);
-      toast(response.message);
+  const getSingleStaff = async () => {
+    const response = await getApi(`/user/${id}`, token.accessToken);
+    if (response.status) {
+      setName(response.data[0].username);
+      setEmail(response.data[0].email);
+      setAddress(response.data[0].address ? response.data[0].address : null);
+      setPhone(response.data[0].phone ? response.data[0].phone : null);
+      setBirth(response.data[0].birthdate ? response.data[0].birthdate : null);
+      setCity(response.data[0].city ? response.data[0].city : null);
+      setGender(response.data[0].gender ? response.data[0].gender : null);
     }
   };
 
+  const EditStaffInfoApi = async () => {
+    const formData = new FormData();
+
+    if (name) {
+      formData.append("username", name);
+    }
+    if (email) {
+      formData.append("email", email);
+    }
+    if (phone) {
+      formData.append("phone", phone);
+    }
+    if (address) {
+      formData.append("address", address);
+    }
+    if (birth) {
+      formData.append("birthdate", birth);
+    }
+    if (city) {
+      formData.append("city", city);
+    }
+    if (gender) {
+      formData.append("gender", gender);
+    }
+
+    let resData = await FormPathApi(`/user/${id}`, formData, token.accessToken);
+    if (resData.message == "Token Expire , Please Login Again") {
+      dipatch(removeData(null));
+    }
+
+    if (resData.status) {
+      navigate("/admin/staff/all");
+    } else {
+      toast(resData.message);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    EditStaffInfoApi();
+  };
+
+  useEffect(() => {
+    getSingleStaff();
+  }, []);
   return (
-    <div>
+    <>
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -78,15 +91,20 @@ export default function () {
         draggable
         pauseOnHover
         theme="light"
+        style={{ width: "450px" }}
       />
       <div className="flex min-h-full w-full flex-col">
-        <div className="mb-3">
-          <h2 className="text-2xl font-bold text-slate-700 pb-6 border-b-2 border-b-slate-300">
-            Create Account
+        <div className="mb-3 pb-6 border-b-2 border-b-slate-300 flex justify-between">
+          <h2 className="text-2xl font-bold text-slate-700 ">
+            Edit Staff Information
           </h2>
+          <Link to="/admin/staff/all">
+            <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
+              Back
+            </div>
+          </Link>
         </div>
         <form
-          onSubmit={registerUser}
           className=" w-full flex flex-wrap items-center justify-between"
           action="#"
           method="POST"
@@ -100,7 +118,8 @@ export default function () {
             </label>
             <div className="mt-2">
               <input
-                onChange={(e) => setname(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 id="name"
                 name="name"
                 type="text"
@@ -119,7 +138,8 @@ export default function () {
             </label>
             <div className="mt-2">
               <input
-                onChange={(e) => setemail(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 id="email"
                 name="email"
                 type="email"
@@ -139,6 +159,7 @@ export default function () {
             </label>
             <div className="mt-2">
               <input
+                value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 id="address"
                 name="address"
@@ -162,7 +183,6 @@ export default function () {
                 name="file-upload"
                 type="file"
                 required
-                onChange={fileChange}
                 className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
               />
             </div>
@@ -177,6 +197,7 @@ export default function () {
             </label>
             <div className="mt-2">
               <input
+                value={birth}
                 onChange={(e) => setBirth(e.target.value)}
                 id="birth"
                 name="birth"
@@ -197,7 +218,8 @@ export default function () {
             </label>
             <div className="mt-2">
               <input
-                onChange={(e) => setphone(e.target.value)}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 id="phone"
                 name="phone"
                 type="phone"
@@ -216,13 +238,14 @@ export default function () {
             </label>
             <div className="mt-2">
               <select
+                value={gender}
                 onChange={(e) => setGender(e.target.value)}
                 id="gender"
                 required
                 name="gender"
                 className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
               >
-                <option disabled value selected>
+                <option disabled value>
                   Select an option
                 </option>
                 <option value="male">Male</option>
@@ -241,12 +264,13 @@ export default function () {
             </label>
             <div className="mt-2">
               <select
+                value={city}
                 id="city"
                 onChange={(e) => setCity(e.target.value)}
                 name="city"
                 className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
               >
-                <option disabled value selected>
+                <option disabled value>
                   Select an option
                 </option>
                 <option value="Yagon">Yagon</option>
@@ -256,47 +280,14 @@ export default function () {
               </select>
             </div>
           </div>
-
-          <div className="w-72 my-3">
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-              >
-                Password
-              </label>
-            </div>
-            <div className="mt-2">
-              <input
-                onChange={(e) => setpassword(e.target.value)}
-                id="password"
-                name="password"
-                type="password"
-                autocomplete="current-password"
-                required
-                className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="w-72 my-3 mt-8 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            {loading && (
-              <MoonLoader
-                color={"#f0f7f6"}
-                loading={loading}
-                size={15}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-                className="mx-4"
-              />
-            )}
-            Create User
-          </button>
         </form>
+        <button
+          onClick={handleSubmit}
+          className="w-72 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Submit
+        </button>
       </div>
-    </div>
+    </>
   );
 }

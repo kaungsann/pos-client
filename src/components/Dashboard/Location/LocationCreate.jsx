@@ -5,6 +5,7 @@ import { sendJsonToApi } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 
 export default function LocationCreate() {
   let [name, setName] = useState("");
@@ -24,11 +25,7 @@ export default function LocationCreate() {
     };
 
     try {
-      let resData = await sendJsonToApi(
-        "/location",
-        data,
-        token.accessToken
-      );
+      let resData = await sendJsonToApi("/location", data, token.accessToken);
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }

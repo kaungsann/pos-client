@@ -7,6 +7,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
 import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 
 export default function ProductDetails() {
   const { id } = useParams();

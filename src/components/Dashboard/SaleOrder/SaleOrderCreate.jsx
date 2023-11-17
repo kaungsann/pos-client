@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
+import { removeData } from "../../../redux/actions";
 
 export default function SaleOrderCreate() {
   const [product, setProduct] = useState([]);

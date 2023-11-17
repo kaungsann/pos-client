@@ -9,6 +9,9 @@ import {
   PieChart,
   Pie,
   Cell,
+  LineChart,
+  Line,
+  Legend,
 } from "recharts";
 import { format } from "date-fns";
 
@@ -112,7 +115,7 @@ export default function OverView() {
             <h3 className="text-slate-500 font-semibold text-lg mb-6">
               Monthly Sale
             </h3>
-            <BarChart
+            {/* <BarChart
               width={800}
               height={400}
               data={sale}
@@ -134,7 +137,26 @@ export default function OverView() {
               <Tooltip />
 
               <Bar dataKey="total" fill="#8884d8" />
-            </BarChart>
+            </BarChart> */}
+
+            <LineChart
+              width={800}
+              height={400}
+              data={formattedSaleData}
+              margin={{
+                top: 20,
+                right: 30,
+                left: 20,
+                bottom: 10,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="created" height={60} />
+              <YAxis dataKey="total" />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="total" stroke="#8884d8" />
+            </LineChart>
           </div>
 
           <div className="p-4 bg-white shadow-md mr-4">

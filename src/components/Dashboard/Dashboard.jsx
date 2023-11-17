@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import { BiCategory } from "react-icons/bi";
 import { AiOutlineStock } from "react-icons/ai";
 import { HiOutlineAdjustments } from "react-icons/hi";
+import { PiUsersThree } from "react-icons/pi";
 
 import userIcons from "../../assets/user.jpeg";
 import { useSelector } from "react-redux";
@@ -14,8 +15,6 @@ export default function Admin() {
   const { id } = useParams();
 
   const user = useSelector((state) => state.loginData);
-
-  console.log("user image is", user);
 
   return (
     <>
@@ -37,23 +36,65 @@ export default function Admin() {
             />
           )}
 
-          <div className="flex lg:w-96justify-end lg:mr-[30px] md:mr-[80px]">
-            <div className="flex items-center">
+          <div className="flex w-2/5 justify-end lg:mr-[30px] md:mr-[80px] items-center px-3">
+            {user.role && user.role.name === "admin" && (
+              <>
+                <Link to="/admin/pos/all">
+                  <Icon
+                    icon="arcticons:jiopos-lite"
+                    className={`text-4xl rounded-full p-1 text-slate-500 shadow-md ${
+                      location.pathname === "/admin/pos/all"
+                        ? "text-white bg-blue-500 font-extrabold"
+                        : ""
+                    }}`}
+                  />
+                </Link>
+
+                <Link to="/admin/staff/all">
+                  <PiUsersThree
+                    className={`text-4xl rounded-full p-1 mx-3 text-slate-500 shadow-md ${
+                      location.pathname === "/admin/staff/all" ||
+                      location.pathname === "/admin/staff/create" ||
+                      location.pathname === `/admin/staff/detail/${id}` ||
+                      location.pathname === `/admin/staff/edit/${id}`
+                        ? "text-white bg-blue-500 font-extrabold"
+                        : ""
+                    }}`}
+                  />
+                </Link>
+
+                <Icon
+                  icon="maki:warehouse"
+                  className="text-4xl bg-white rounded-full p-1 shadow-md text-slate-400 font-bold"
+                />
+              </>
+            )}
+            <Link to={`/admin/user/info/${user._id}`}>
+              <Icon
+                icon="ant-design:setting-outlined"
+                className={`text-4xl ml-3 rounded-full text-slate-400 p-1 shadow-md ${
+                  location.pathname === `/admin/user/info/${id}`
+                    ? "text-white bg-blue-500 font-extrabold"
+                    : ""
+                }}`}
+              />
+            </Link>
+
+            <div className="flex items-center mx-3">
               {user && (
                 <>
-                  <h3 className="font-semibold text-slate-500 text-xl mr-4">
+                  <img
+                    src={user.image ? user.image : userIcons}
+                    alt="User Icon"
+                    className="w-16 h-14 rounded-full shadow-sm hover:opacity-75"
+                    onError={(e) => {
+                      e.target.src = userIcons;
+                    }}
+                  />
+
+                  <h3 className="font-semibold text-slate-500 text-xl ml-4">
                     {user.username}
                   </h3>
-                  <Link to={`/admin/user/info/${user._id}`}>
-                    <img
-                      src={user.image ? user.image : userIcons}
-                      alt="User Icon"
-                      className="w-16 h-14 rounded-full shadow-sm hover:opacity-75"
-                      onError={(e) => {
-                        e.target.src = userIcons;
-                      }}
-                    />
-                  </Link>
                 </>
               )}
             </div>
@@ -64,7 +105,7 @@ export default function Admin() {
       {user.role && user.role.name == "admin" && (
         <div className="w-full flex mt-20 relative">
           <div
-            className={`w-52 fixed top-10 mt-8 z-20 shadow-md  left-0 bottom-0 bg-white  p-4 flex flex-col transform transition-transform duration-500 ease-in-out`}
+            className={`w-52 fixed top-10 mt-8 z-20 shadow-md  left-0 bottom-0 bg-white p-4 flex flex-col transform transition-transform duration-500 ease-in-out`}
           >
             <div className=" flex justify-items-start mt-2 cursor-pointer">
               <div className="flex flex-col  w-full">
@@ -285,23 +326,8 @@ export default function Admin() {
             <div className=" flex justify-items-start mt-2 cursor-pointer">
               <div className="flex flex-col justify-items-center w-full">
                 <div className="flex flex-col w-full">
-                  <h3 className="text-md font-bold">POS</h3>
+                  <h3 className="text-md font-bold">Client</h3>
                   <ul className="text-start">
-                    <Link to="/admin/pos/all">
-                      <div
-                        className={`my-1 text-start px-2 rounded-md flex items-center ${
-                          location.pathname === "/admin/pos/all"
-                            ? "text-white bg-slate-300 "
-                            : ""
-                        }}`}
-                      >
-                        <Icon
-                          icon="mdi:printer-point-of-sale-cog-outline"
-                          className="text-slate-600 text-2xl"
-                        />
-                        <li className="my-1 text-start ml-2">OverView</li>
-                      </div>
-                    </Link>
                     <Link to="/admin/partners/all">
                       <div
                         className={`my-1 text-start px-2 rounded-md flex items-center ${
@@ -318,6 +344,25 @@ export default function Admin() {
                           className="text-slate-600 text-2xl"
                         />
                         <li className="my-1 text-start ml-2">Partner</li>
+                      </div>
+                    </Link>
+                    <Link to="/admin/employee/all">
+                      <div
+                        className={`my-1 text-start px-2 rounded-md flex items-center ${
+                          location.pathname === "/admin/employee/all" ||
+                          location.pathname === "/admin/employee/create" ||
+                          location.pathname === `/admin/employee/edit/${id}` ||
+                          location.pathname === `/admin/employee/detail/${id}`
+                            ? "text-white bg-slate-300 "
+                            : ""
+                        }}`}
+                      >
+                        <Icon
+                          icon="clarity:employee-line"
+                          className="text-slate-600 text-2xl"
+                        />
+
+                        <li className="my-1 text-start ml-2">Employee</li>
                       </div>
                     </Link>
                   </ul>

@@ -22,7 +22,7 @@ import SaleOrderAll from "./components/Dashboard/SaleOrder/SaleOrderAll";
 import SaleOrderCreate from "./components/Dashboard/SaleOrder/SaleOrderCreate";
 import SaleOrderDetail from "./components/Dashboard/SaleOrder/SaleOrderDetail";
 import PosItems from "./components/Dashboard/POS/PosItems";
-import Register from "./components/Register";
+import Register from "./components/Dashboard/Staff/Register";
 import GuardRouter from "./components/GuardRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Profile from "./components/utils/Profile";
@@ -36,6 +36,11 @@ import PurchaseDetail from "./components/Dashboard/Purchase/PurchaseDetail";
 import PurchaseView from "./components/Dashboard/Purchase/PurchaseView";
 import Stock from "./components/Dashboard/Stock/Stock";
 import AdjustmentView from "./components/Dashboard/Ajustment/AjusmentView";
+import EmployeeAll from "./components/Dashboard/Employee/EmployeeAll";
+import EmployeeCreate from "./components/Dashboard/Employee/EmployeeCreate";
+import Staff from "./components/Dashboard/Staff/Staff";
+import StaffDetail from "./components/Dashboard/Staff/StaffDetail";
+import StaffEdit from "./components/Dashboard/Staff/StaffEdit";
 
 function App() {
   return (
@@ -52,11 +57,20 @@ function App() {
             }
           >
             <Route path="inventory/overview" element={<OverView />} />
+            <Route path="staff">
+              <Route path="all" element={<Staff />} />
+              <Route path="create" element={<Register />} />
+              <Route path="edit/:id" element={<StaffEdit />} />
+              <Route path="detail/:id" element={<StaffDetail />} />
+            </Route>
             <Route path="adjustment">
               <Route path="view" element={<AdjustmentView />} />
             </Route>
+            <Route path="employee">
+              <Route path="all" element={<EmployeeAll />} />
+              <Route path="create" element={<EmployeeCreate />} />
+            </Route>
             <Route path="user">
-              <Route path="register" element={<Register />} />
               <Route path="info/:id" element={<Profile />} />
             </Route>
             <Route path="stock">

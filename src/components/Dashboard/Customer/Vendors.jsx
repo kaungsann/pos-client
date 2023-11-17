@@ -11,6 +11,7 @@ import { MdClear } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { format } from "date-fns";
+import { removeData } from "../../../redux/actions";
 
 export default function PartnerAll() {
   const [selectedItems, setSelectedItems] = useState([]);

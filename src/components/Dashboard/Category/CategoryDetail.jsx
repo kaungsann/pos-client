@@ -49,7 +49,7 @@ export default function CategoryDetail() {
         <div className="text-center">
           {detail && detail.length > 0 ? (
             <div className="w-full">
-              <h2 className="py-1.5 text-lg font-bold mt-2 bg-blue-600 text-white pl-4">
+              <h2 className="py-1.5 text-lg text-start font-bold mt-2 bg-blue-600 text-white pl-4">
                 Category Information
               </h2>
               <div className="flex justify-between">

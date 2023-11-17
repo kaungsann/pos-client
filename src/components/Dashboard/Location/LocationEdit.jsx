@@ -5,6 +5,7 @@ import { getApi, PathData } from "../../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { removeData } from "../../../redux/actions";
 
 export default function LocationEdit() {
   let [name, setName] = useState("");

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { getApi, deleteMultiple } from "../../Api";
-
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
@@ -9,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { FaEye } from "react-icons/fa6";
+import { removeData } from "../../../redux/actions";
 
 export default function LocationAll() {
   const inputRef = useRef();

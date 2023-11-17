@@ -7,6 +7,7 @@ import { getApi } from "../../Api";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { itemsAdd, updateItemQuantity } from "../../../redux/actions";
+import { removeData } from "../../../redux/actions";
 
 export default function PosItems() {
   const [search, setSearch] = useState("");
@@ -113,7 +114,7 @@ export default function PosItems() {
           user.role && user.role.name == "user" && "mt-20"
         }`}
       >
-        <div className="lg:w-2/3 md:w-2/4 bg-white shadow-sm p-3">
+        <div className="lg:w-2/3 md:w-2/4 shadow-sm bg-white">
           <div>
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold ml-2">Avaliable Items</h3>

@@ -32,6 +32,7 @@ export default function EditBusinessInfo({ reBack, updateInfo }) {
       setId(resData.data[0].id);
     }
   };
+  
   const handleDiscardClick = () => {
     reBack();
   };

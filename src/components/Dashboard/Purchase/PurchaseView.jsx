@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
+import { removeData } from "../../../redux/actions";
 
 export default function PurchaseView() {
   const [purchase, setPurchase] = useState([]);

@@ -5,6 +5,7 @@ import { sendJsonToApi } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 
 export default function PartnerCreate() {
   const [city, setCity] = useState("");
@@ -53,11 +54,7 @@ export default function PartnerCreate() {
       isCompany: isCompany,
     };
     try {
-      let resData = await sendJsonToApi(
-        "/partner",
-        data,
-        token.accessToken
-      );
+      let resData = await sendJsonToApi("/partner", data, token.accessToken);
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }

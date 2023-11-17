@@ -11,6 +11,7 @@ import img from "../../../assets/tablet.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 
 export default function ProductsAll() {
   const navigate = useNavigate();

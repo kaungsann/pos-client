@@ -4,6 +4,7 @@ import { getApi } from "../../Api";
 import { TbEdit } from "react-icons/tb";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 
 export default function LocationDetail() {
   const { id } = useParams();

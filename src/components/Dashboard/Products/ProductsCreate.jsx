@@ -7,6 +7,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 
 export default function ProductsCreate() {
   const [cat, setCat] = useState([]);
