@@ -57,7 +57,7 @@ function App() {
             }
           >
             <Route path="inventory/overview" element={<OverView />} />
-            <Route path="staff">
+            <Route path="user">
               <Route path="all" element={<Staff />} />
               <Route path="create" element={<Register />} />
               <Route path="edit/:id" element={<StaffEdit />} />

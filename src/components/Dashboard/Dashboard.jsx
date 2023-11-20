@@ -50,13 +50,13 @@ export default function Admin() {
                   />
                 </Link>
 
-                <Link to="/admin/staff/all">
+                <Link to="/admin/user/all">
                   <PiUsersThree
                     className={`text-4xl rounded-full p-1 mx-3 text-slate-500 shadow-md ${
-                      location.pathname === "/admin/staff/all" ||
-                      location.pathname === "/admin/staff/create" ||
-                      location.pathname === `/admin/staff/detail/${id}` ||
-                      location.pathname === `/admin/staff/edit/${id}`
+                      location.pathname === "/admin/user/all" ||
+                      location.pathname === "/admin/user/create" ||
+                      location.pathname === `/admin/user/detail/${id}` ||
+                      location.pathname === `/admin/user/edit/${id}`
                         ? "text-white bg-blue-500 font-extrabold"
                         : ""
                     }}`}

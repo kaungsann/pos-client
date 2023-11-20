@@ -33,18 +33,18 @@ export default function StaffDetail() {
   return (
     <>
       <div className="flex justify-between items-center cursor-pointer">
-        <Link to="/admin/staff/all">
+        <Link to="/admin/user/all">
           <button className="hover:opacity-75 lg:px-8 md:px-4 py-2 text-white bg-blue-600 rounded-sm shadow-md border-2 border-blue-600 hover:opacity-75text-white">
             Back
           </button>
         </Link>
-        <Link to={`/admin/staff/edit/${id}`}>
+        <Link to={`/admin/user/edit/${id}`}>
           <TbEdit className="text-4xl font-bold text-blue-700 hover:text-slate-700" />
         </Link>
       </div>
 
       <h2 className="py-1.5 text-lg text-start font-bold mt-2 bg-blue-600 text-white pl-4">
-        Staff Information
+        User Information
       </h2>
 
       {detail.length > 0 && (

@@ -99,11 +99,11 @@ export default function Staff() {
       />
       <div className=" pb-6 border-b-2 border-b-slate-300 flex justify-between">
         <h1 className="text-2xl text-slate-700 font-bold">
-          Staffs Information
+          Users Information
         </h1>
-        <Link to="/admin/staff/create">
+        <Link to="/admin/user/create">
           <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
-            Add Staff
+            Add User
           </div>
         </Link>
       </div>
@@ -171,7 +171,7 @@ export default function Staff() {
                     <div className="flex justify-center">
                       <FaEye
                         onClick={() =>
-                          navigate(`/admin/staff/detail/${usr._id}`)
+                          navigate(`/admin/user/detail/${usr._id}`)
                         }
                         className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
                       />
@@ -179,7 +179,7 @@ export default function Staff() {
                         className="text-2xl mx-2 text-[#5e54cd] BiSolidEdit hover:text-[#2c285f]"
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigate(`/admin/staff/edit/${usr._id}`);
+                          navigate(`/admin/user/edit/${usr._id}`);
                         }}
                       />
                     </div>
