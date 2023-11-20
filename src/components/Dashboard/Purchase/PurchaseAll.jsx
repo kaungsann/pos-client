@@ -91,6 +91,8 @@ export default function SaleOrderAll() {
     return true;
   });
 
+  
+
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
     setFilterDate("");

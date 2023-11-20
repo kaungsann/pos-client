@@ -80,8 +80,17 @@ export default function View() {
   //Filter the sale data based on the order date matching the current date
   const filteredSales = sale.filter((sl) => {
     const formattedOrderDate = format(new Date(sl.orderDate), "dd.MM.yyyy");
+
     return formattedOrderDate === todayDate;
   });
+
+  //To show barchart for only today date
+  const todaySaleDate  = filteredSales.map((item) => ({
+    ...item,
+    created: format(new Date(item.createdAt), "yyyy-MM-dd"),
+  }));
+
+  console.log("sale date is" , filteredSales)
 
   const todaySaleLines = saleLines.filter(
     (saleLine) =>
@@ -232,24 +241,27 @@ export default function View() {
               <h3 className="text-slate-500 font-semibold text-lg mb-6">
                 Purchase Order Dashboard
               </h3>
+     
+             <ResponsiveContainer height={400} className="mx-auto">
               <BarChart
-                width={700}
-                height={400}
-                data={filteredSales} // Filter data for today's date
+                width="100%"
+                height={300}
+                data={todaySaleDate}
+                // Filter data for today's date
                 margin={{
                   top: 5,
                   right: 30,
                   left: 20,
-                  bottom: 60,
+                  bottom: 60
                 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
-                  dataKey="createdAt"
+                  dataKey="created"
                   angle={-60} // Rotate the text by -60 degrees
                   textAnchor="end" // Anchor the text at the end (right)
                 />
-                <YAxis dataKey="total" angle={-40} />
+                <YAxis dataKey="total" />
                 <Tooltip />
                 <Bar dataKey="total" barSize={20} fill="#8884d8" />
 
@@ -260,12 +272,14 @@ export default function View() {
                   strokeDasharray="3 3" // Optional: Add a dashed pattern to the line
                 />
               </BarChart>
+            </ResponsiveContainer>
+
             </div>
-            <div className="items-center w-full ml-4 bg-white p-2 rounded-md shadow-md">
-              <h1 className="text-slate-500 font-semibold text-lg mb-6">
+            <div className="items-center w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
+              <h1 className="text-slate-500 font-semibold text-lg mb-2">
                 Most of sale products
               </h1>
-              <ResponsiveContainer width={500} height={300} className="mx-auto">
+              <ResponsiveContainer height={400} className="mx-auto ">
                 <PieChart>
                   <Pie
                     dataKey="value"

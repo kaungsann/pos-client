@@ -91,6 +91,12 @@ export default function PurchaseView() {
     return formattedOrderDate === todayDate;
   });
 
+    //To show barchart for only today date
+    const todayPurchaseDate  = filteredPurchase.map((item) => ({
+      ...item,
+      created: format(new Date(item.createdAt), "yyyy-MM-dd"),
+    }));
+
   const todayPurchaseLine = purchaseLines.filter(
     (purchase) =>
       format(new Date(purchase.orderDate), "dd.MM.yyyy") === todayDate
@@ -235,10 +241,11 @@ export default function PurchaseView() {
               <h3 className="text-slate-500 font-semibold text-lg mb-6">
                 Purchase Order Dashboard
               </h3>
-              <BarChart
+              <ResponsiveContainer height={400} className="mx-auto">
+               <BarChart
                 width={700}
                 height={400}
-                data={formattedSaleData}
+                data={todayPurchaseDate}
                 margin={{
                   top: 5,
                   right: 30,
@@ -252,16 +259,17 @@ export default function PurchaseView() {
                   angle={-60} // Rotate the text by -90 degrees
                   textAnchor="end" // Anchor the text at the end (right)
                 />
-                <YAxis dataKey="total" angle={-40} />
+                <YAxis dataKey="total" />
                 <Tooltip />
                 <Bar dataKey="total" barSize={20} fill="#8884d8" />
               </BarChart>
+              </ResponsiveContainer>
             </div>
             <div className="items-center w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
               <h1 className="text-slate-500 font-semibold text-lg mb-6">
                 Most of sale products
               </h1>
-              <ResponsiveContainer width={500} height={300} className="mx-auto">
+              <ResponsiveContainer  height={400} className="mx-auto">
                 <PieChart>
                   <Pie
                     dataKey="value"
