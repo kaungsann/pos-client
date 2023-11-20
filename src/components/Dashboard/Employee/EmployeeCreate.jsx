@@ -48,8 +48,6 @@ export default function EmployeeCreate() {
 
     let response = await sendJsonToApi("/employee", data, token.accessToken);
 
-    console.log("message is", response);
-
     if (response.status) {
       navigate("/admin/employee/all");
     } else {

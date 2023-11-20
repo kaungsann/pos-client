@@ -41,6 +41,8 @@ import EmployeeCreate from "./components/Dashboard/Employee/EmployeeCreate";
 import Staff from "./components/Dashboard/Staff/Staff";
 import StaffDetail from "./components/Dashboard/Staff/StaffDetail";
 import StaffEdit from "./components/Dashboard/Staff/StaffEdit";
+import EmployeeDetail from "./components/Dashboard/Employee/EmployeeDetail";
+import EmployeeEdit from "./components/Dashboard/Employee/EmployeeEdit";
 
 function App() {
   return (
@@ -69,6 +71,8 @@ function App() {
             <Route path="employee">
               <Route path="all" element={<EmployeeAll />} />
               <Route path="create" element={<EmployeeCreate />} />
+              <Route path="edit/:id" element={<EmployeeEdit />} />
+              <Route path="detail/:id" element={<EmployeeDetail />} />
             </Route>
             <Route path="user">
               <Route path="info/:id" element={<Profile />} />

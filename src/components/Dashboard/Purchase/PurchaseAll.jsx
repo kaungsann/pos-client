@@ -304,7 +304,7 @@ export default function SaleOrderAll() {
             </div>
             <div className="my-3 flex flex-col">
               <label className="text-lg my-2 text-slate-600 font-semibold">
-                Staff
+                User
               </label>
               <input
                 type="text"
