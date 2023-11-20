@@ -242,7 +242,7 @@ export default function View() {
                 Purchase Order Dashboard
               </h3>
      
-             <ResponsiveContainer height={400} className="mx-auto">
+             <ResponsiveContainer height={300} className="mx-auto">
               <BarChart
                 width="100%"
                 height={300}
@@ -279,7 +279,7 @@ export default function View() {
               <h1 className="text-slate-500 font-semibold text-lg mb-2">
                 Most of sale products
               </h1>
-              <ResponsiveContainer height={400} className="mx-auto ">
+              <ResponsiveContainer height={300} className="mx-auto ">
                 <PieChart>
                   <Pie
                     dataKey="value"

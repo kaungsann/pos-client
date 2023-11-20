@@ -241,7 +241,7 @@ export default function PurchaseView() {
               <h3 className="text-slate-500 font-semibold text-lg mb-6">
                 Purchase Order Dashboard
               </h3>
-              <ResponsiveContainer height={400} className="mx-auto">
+              <ResponsiveContainer height={300} className="mx-auto">
                <BarChart
                 width={700}
                 height={400}
@@ -269,7 +269,7 @@ export default function PurchaseView() {
               <h1 className="text-slate-500 font-semibold text-lg mb-6">
                 Most of sale products
               </h1>
-              <ResponsiveContainer  height={400} className="mx-auto">
+              <ResponsiveContainer  height={300} className="mx-auto">
                 <PieChart>
                   <Pie
                     dataKey="value"
