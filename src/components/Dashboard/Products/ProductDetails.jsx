@@ -80,7 +80,7 @@ export default function ProductDetails() {
 
           <div className="flex justify-between">
             <div className="w-2/4">
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">
                   Product Name
                 </h4>
@@ -88,7 +88,7 @@ export default function ProductDetails() {
                   {detail[0].name ? detail[0].name.toUpperCase() : ""}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">
                   Category Name
                 </h4>
@@ -96,7 +96,7 @@ export default function ProductDetails() {
                   {detail[0].category ? detail[0].category.name : "none"}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">
                   Expiration Date
                 </h4>
@@ -104,7 +104,7 @@ export default function ProductDetails() {
                   {new Date(detail[0].expiredAt).toLocaleDateString()}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">
                   avaliableInPos
                 </h4>
@@ -112,7 +112,7 @@ export default function ProductDetails() {
                   {detail[0].avaliableInPos ? "Have Product" : "No have in pos"}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">
                   Stock Quantity
                 </h4>
@@ -122,20 +122,20 @@ export default function ProductDetails() {
               </div>
             </div>
             <div className="w-2/4 justify-between">
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">Price</h4>
                 <h3 className="font-bold text-lg text-center text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                   {detail[0].salePrice}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">Tax</h4>
                 <h3 className="font-bold text-lg text-center text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                   {detail[0].tax}
                 </h3>
               </div>
 
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">
                   Product Ref
                 </h4>
@@ -143,13 +143,13 @@ export default function ProductDetails() {
                   {detail[0].ref}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">BarCode</h4>
                 <h3 className="font-bold text-lg text-center text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                   {detail[0].barcode}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">
                   Description
                 </h4>
