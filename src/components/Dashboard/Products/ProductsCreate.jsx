@@ -17,10 +17,11 @@ export default function ProductsCreate() {
   const [expiredate, setExpiredate] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
-  const [bar, setBar] = useState(0);
+  const [bar, setBar] = useState(null);
   const [stockQuantity, setStockQuantity] = useState(0);
   const [file, setFile] = useState(null);
   const [avaliable, setAAvaliable] = useState(null);
+  const [isManualGenerate, setIsManualGenerate] = useState(false);
   const navigate = useNavigate();
 
   const [purchasePrice, setPurchasePrice] = useState(0);
@@ -176,11 +177,13 @@ export default function ProductsCreate() {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-  const generateBarCode = (e) => {
-    e.preventDefault();
+const generateBarCode = () => {
+  // Check if the barcode is already set and wasn't manually generated
+  if (!bar && !isManualGenerate) {
     const newBarCode = generateRandomNumber(13);
     setBar(newBarCode);
-  };
+  }
+};
 
   useEffect(() => {
     getCategory();
@@ -191,6 +194,7 @@ export default function ProductsCreate() {
 
     setPrice(calculatedSalePrice);
   }, [purchasePrice, profit]);
+
   return (
     <>
       <ToastContainer
@@ -349,7 +353,7 @@ export default function ProductsCreate() {
                 className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                   showDateError ? "border-red-600" : "border-slate-600"
                 }`}
-                placeholder="Enter product stock quantity"
+                placeholder="Enter expire-date"
               />
             </div>
             <div className="w-60 mb-3 mx-8">
@@ -384,15 +388,23 @@ export default function ProductsCreate() {
                 <input
                   required
                   value={bar}
+                  autoFocus={true}
+                  onChange={(e) => {
+                    setBar(e.target.value);
+                    setIsManualGenerate(false);
+                  }}
                   style={{ backgroundColor: "transparent" }}
                   type="text"
                   className={`w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                     showBarCodeError ? "border-red-600" : "border-slate-600"
                   }`}
-                  placeholder="Enter product stock quantity"
                 />
                 <button
-                  onClick={generateBarCode}
+                       onClick={(e) => {
+                        e.preventDefault()
+                        setIsManualGenerate(true);
+                        generateBarCode();
+                      }}
                   className="text-sm absolute right-0 bottom-4 bg-zinc-600 text-white shadow-mdtext-white hover:bg-zinc-800 p-1"
                 >
                   generate
@@ -426,7 +438,7 @@ export default function ProductsCreate() {
                   showStockQuantity ? "text-red-600" : "text-slate-600"
                 }`}
               >
-                Stock Quantity*
+              Minium  Stock Quantity*
               </label>
               <input
                 required

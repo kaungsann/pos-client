@@ -266,7 +266,6 @@ export default function CategoryAll() {
                   </td>
 
                   <td className="py-3 lg:px-4">{pd.name}</td>
-
                   <td className="py-3 lg:px-4">
                     {format(new Date(pd.createdAt), "yyyy-MM-dd")}
                   </td>

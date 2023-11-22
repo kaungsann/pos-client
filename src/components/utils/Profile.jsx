@@ -154,10 +154,13 @@ export default function Profile() {
               ref={fileInputRef}
               onChange={handleFileInputChange}
             />
-            <AiTwotoneEdit
-              onClick={handleFileInputClick}
-              className="z-30 w-10 h-8 absolute bottom-3 right-4 text-white hover:bg-slate-400 text-lg bg-blue-500 rounded-full font-bold"
-            />
+            {
+               userInfo.role && userInfo.role.name == "admin"  && 
+               <AiTwotoneEdit onClick={handleFileInputClick}
+               className="z-30 w-10 h-8 absolute bottom-3 right-4 text-white hover:bg-slate-400 text-lg bg-blue-500 rounded-full font-bold"
+             />
+            }
+
           </div>
           <div className="text-center">
             <h3 className="font-bold text-2xl mt-2">{usr.name}</h3>

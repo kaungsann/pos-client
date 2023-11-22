@@ -3,7 +3,6 @@ import { getApi, deleteMultiple } from "../../Api";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
-import FadeLoader from "react-spinners/FadeLoader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +11,7 @@ import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
 import { format } from "date-fns";
 import { removeData } from "../../../redux/actions";
+import ClipLoader from "react-spinners/ClipLoader";
 
 
 export default function EmployeeAll() {
@@ -19,6 +19,7 @@ export default function EmployeeAll() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [searchItems, setSearchItems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const [email , setEmail] = useState("")
   const [phone , setPhone] = useState(null)
@@ -42,17 +43,17 @@ export default function EmployeeAll() {
   const dipatch = useDispatch();
 
 
-
-console.log("res is" , filterName)
-
   const allEmployeeApi = async () => {
+    setLoading(true)
     const resData = await getApi("/employee", token.accessToken);
   if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
     if (resData.status) {
+      setLoading(false)
       setEmployee(resData.data);
     } else {
+      setLoading(false)
       toast(resData.message);
     }
   };
@@ -87,7 +88,6 @@ console.log("res is" , filterName)
     return true;
   });
 
-
   const toggleSelectItem = (employeeId) => {
     setSelectAll(true);
     const isSelected = selectedItems.includes(employeeId);
@@ -108,10 +108,6 @@ console.log("res is" , filterName)
     }
     setSelectAll(!selectAll);
   };
-
-
-
-
 
   const deleteEmployees = async () => {
     if (selectedItems.length === 0) {
@@ -215,81 +211,91 @@ console.log("res is" , filterName)
           </button>
         </div>
       )}
+   <table className="w-full">
+        <thead>
+          <tr className="bg-blue-600 text-white">
+            <th className="lg:px-4 py-2 text-center">
+            <input
+              type="checkbox"
+              onChange={toggleSelectAll}
+              checked={selectAll && selectedItems.length > 0}
+            />
+            </th>
+            <th className=" py-2 text-center">Name</th>
+            <th className=" py-2 text-center">Email</th>
+            <th className=" py-2 text-center">Phone</th>
+            <th className=" py-2 text-center">Address</th>
+            <th className=" py-2 text-center">DateOfBirth</th>
+            <th className=" py-2 text-center">Gender</th>
+            <th className=" py-2 text-center">EmployeeId</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody className="w-full space-y-10">
+          {filteredEmployee.length > 0 ?    
+                filteredEmployee.map((employ) => (
+              <tr
+              key={employ.id}
+              onClick={() => toggleSelectItem(employ.id)}
+              className={`${
+                selectedItems.includes(employ.id)
+                  ? "bg-[#60a5fa] text-white"
+                  : "odd:bg-white even:bg-slate-200"
+              }  mb-8 w-full items-center cursor-pointer hover:text-white hover:bg-[#60a5fa]`}
+              >
+                <td className="lg:px-4 py-2 text-center">
+                  <input
+                    type="checkbox"
+                    onChange={() => toggleSelectItem(employ.id)}
+                    checked={selectedItems.includes(employ.id)}
+                  />
+                </td>
 
-        <table className="w-full">
-          <thead>
-            <tr className="bg-blue-600 text-white">
-              <th className="lg:px-4 py-2 text-center">
-              <input
-                type="checkbox"
-                onChange={toggleSelectAll}
-                checked={selectAll && selectedItems.length > 0}
-              />
-              </th>
-              <th className=" py-2 text-center">Name</th>
-              <th className=" py-2 text-center">Email</th>
-              <th className=" py-2 text-center">Phone</th>
-              <th className=" py-2 text-center">Address</th>
-              <th className=" py-2 text-center">DateOfBirth</th>
-              <th className=" py-2 text-center">Gender</th>
-              <th className=" py-2 text-center">EmployeeId</th>
+                <td className="lg:px-4 py-2 text-center">{employ.name}</td>
+                <td className="lg:px-4 py-2 text-center">{employ.email}</td>
+                <td className="lg:px-4 py-2 text-center">{employ.phone}</td>
+                <td className="lg:px-4 py-2 text-center">{employ.address}</td>
+                <td className="lg:px-4 py-2 text-center">
+                  {format(new Date(employ.birthdate), "yyyy-MM-dd")}
+                </td>
+                <td className="lg:px-4 py-2 text-center">{employ.gender}</td>
+                <td className="lg:px-4 py-2 text-center">
+                  {employ.employeeId}
+                </td>
 
-              <th></th>
-            </tr>
-          </thead>
-          <tbody className="w-full space-y-10">
-            {filteredEmployee.length > 0 &&       
-                  filteredEmployee.map((employ) => (
-                <tr
-                key={employ.id}
-                onClick={() => toggleSelectItem(employ.id)}
-                className={`${
-                  selectedItems.includes(employ.id)
-                    ? "bg-[#60a5fa] text-white"
-                    : "odd:bg-white even:bg-slate-200"
-                }  mb-8 w-full items-center cursor-pointer hover:text-white hover:bg-[#60a5fa]`}
-                >
-                  <td className="lg:px-4 py-2 text-center">
-                    <input
-                      type="checkbox"
-                      onChange={() => toggleSelectItem(employ.id)}
-                      checked={selectedItems.includes(employ.id)}
+                <td className="lg:px-4 py-2 text-center">
+                  <div className="flex justify-center">
+                    <FaEye
+                      onClick={() =>
+                        navigate(`/admin/employee/detail/${employ.id}`)
+                      }
+                      className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
                     />
-                  </td>
-
-                  <td className="lg:px-4 py-2 text-center">{employ.name}</td>
-                  <td className="lg:px-4 py-2 text-center">{employ.email}</td>
-                  <td className="lg:px-4 py-2 text-center">{employ.phone}</td>
-                  <td className="lg:px-4 py-2 text-center">{employ.address}</td>
-                  <td className="lg:px-4 py-2 text-center">
-                    {format(new Date(employ.birthdate), "yyyy-MM-dd")}
-                  </td>
-                  <td className="lg:px-4 py-2 text-center">{employ.gender}</td>
-                  <td className="lg:px-4 py-2 text-center">
-                    {employ.employeeId}
-                  </td>
-
-                  <td className="lg:px-4 py-2 text-center">
-                    <div className="flex justify-center">
-                      <FaEye
-                        onClick={() =>
-                          navigate(`/admin/employee/detail/${employ.id}`)
-                        }
-                        className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
-                      />
-                      <BiSolidEdit
-                        className="text-2xl mx-2 text-[#5e54cd] BiSolidEdit hover:text-[#2c285f]"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/admin/employee/edit/${employ.id}`);
-                        }}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+                    <BiSolidEdit
+                      className="text-2xl mx-2 text-[#5e54cd] BiSolidEdit hover:text-[#2c285f]"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/admin/employee/edit/${employ.id}`);
+                      }}
+                    />
+                  </div>
+                </td>
+              </tr>
+            )): 
+            <div className="w-10/12 mx-auto absolute mt-40 flex justify-center">
+            {loading && (
+              <ClipLoader
+                color={"#0284c7"}
+                loading={loading}
+                size={20}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            )}
+          </div>
+            }
+        </tbody>
+      </table> 
       </div>
             {/* Filter Box */}
             {showFilter ? (

@@ -12,8 +12,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
+import ReactPaginate from 'react-paginate';
+
 
 export default function ProductsAll() {
+  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 5; // Choose the number of items per page
   const navigate = useNavigate();
 
   const [selectedItems, setSelectedItems] = useState([]);
@@ -237,8 +242,21 @@ export default function ProductsAll() {
     }
   }, [filterBarcode, filterCategory, filterPrice]);
 
+
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+  const pageCount = Math.ceil(filteredProducts.length / itemsPerPage);
+
+
+
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -348,8 +366,8 @@ export default function ProductsAll() {
             </tr>
           </thead>
           <tbody className="w-full space-y-10">
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
+            {currentProducts.length > 0 ? (
+              currentProducts.map((product) => (
                 <tr
                   key={product.id}
                   onClick={() => toggleSelectItem(product.id)}
@@ -408,8 +426,8 @@ export default function ProductsAll() {
                 </tr>
               ))
             ) : (
-              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
-                {loading && (
+              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
+              {loading && (
                   <FadeLoader
                     color={"#0284c7"}
                     loading={loading}
@@ -518,6 +536,27 @@ export default function ProductsAll() {
       ) : (
         ""
       )}
-    </>
+
+      <div className="fixed bottom-20 right-0">
+      <ReactPaginate
+        containerClassName="pagination-container"
+        pageLinkClassName="page-link text-center" 
+        pageClassName="page-item mx-2" 
+        className="flex bg-white justify-around p-3 rounded-md shadow-md text-center"
+        activeClassName="bg-blue-500 text-white rounded-full w-6 text-center"
+        previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
+        nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700" 
+        breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={5}
+        pageCount={pageCount}
+        nextLabel="next"
+        previousLabel="previous"
+        forcePage={currentPage}
+        renderOnZeroPageCount={null}
+       />
+      </div>
+
+    </div>
   );
 }

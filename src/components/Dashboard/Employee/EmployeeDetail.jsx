@@ -87,7 +87,7 @@ export default function EmployeeDetail() {
               </div>
             </div>
             <div className="w-2/4 justify-between">
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">Birthday</h4>
                 <h3
                   className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
@@ -99,7 +99,7 @@ export default function EmployeeDetail() {
                     : "This user need to add birthday"}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">Address</h4>
                 <h3
                   className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
@@ -111,7 +111,7 @@ export default function EmployeeDetail() {
                     : "This user need to add address"}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">City</h4>
                 <h3
                   className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
@@ -123,7 +123,7 @@ export default function EmployeeDetail() {
                     : "This user need to add city"}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">Gender</h4>
                 <h3
                   className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${

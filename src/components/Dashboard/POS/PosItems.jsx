@@ -116,7 +116,7 @@ export default function PosItems() {
       >
         <div className="lg:w-2/3 md:w-2/4 shadow-sm bg-white">
           <div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mt-4">
               <h3 className="text-lg font-semibold ml-2">Avaliable Items</h3>
               <input
                 ref={searchInputRef}

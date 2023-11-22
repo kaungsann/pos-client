@@ -8,13 +8,18 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaEye } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
+import { Icon } from '@iconify/react';
+import ChangePassword from "../../utils/ChangePassword";
+
 
 export default function Staff() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [userId, setUserId] = useState(null);
   const [alert, setAlert] = useState(false);
+  const [show, setShow] = useState(false)
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
@@ -37,6 +42,10 @@ export default function Staff() {
   };
 
   const toggleSelectItem = (cateogryID) => {
+    if(show) {
+      setSelectedItems(null)
+      return
+    }
     setSelectAll(true);
     const isSelected = selectedItems.includes(cateogryID);
     if (isSelected) {
@@ -48,6 +57,10 @@ export default function Staff() {
 
   // Handle select all items
   const toggleSelectAll = () => {
+    if(show) {
+      setSelectedItems([])
+      return
+    }
     if (selectAll) {
       setSelectedItems([]);
     } else {
@@ -79,6 +92,10 @@ export default function Staff() {
       toast("Failed to delete selected staff.");
     }
   };
+
+  const closeShowBox = (text) => {
+     setShow(text)
+  }
 
   useEffect(() => {
     getUsersApi();
@@ -122,7 +139,7 @@ export default function Staff() {
         </div>
       )}
 
-      {users.length > 0 ? (
+
         <table class="table-fixed w-full mt-8 ">
           <tr className="bg-blue-600 text-white">
             <th className="lg:px-4 py-2 text-center">
@@ -140,11 +157,11 @@ export default function Staff() {
           </tr>
 
           <tbody>
-            {users.length > 0 &&
+            {users.length > 0 ?
               users.map((usr) => (
                 <tr
                   key={usr._id}
-                  onClick={() => toggleSelectItem(usr._id)}
+                  onClick={() =>  toggleSelectItem(usr._id)}
                   className={`${
                     selectedItems.includes(usr._id)
                       ? "bg-[#60a5fa] text-white"
@@ -182,26 +199,29 @@ export default function Staff() {
                           navigate(`/admin/user/edit/${usr._id}`);
                         }}
                       />
+                      <Icon  onClick={() => {
+                                setShow(true);
+                                setUserId(usr._id);
+                              }} icon="mynaui:lock-open-password" className="text-2xl text-[#eb4a54] BiSolidEdit hover:text-[#2c285f]"
+                         />
                     </div>
                   </td>
                 </tr>
-              ))}
+              )):
+              <div className="w-10/12 mx-auto absolute mt-40 flex justify-center">
+              {loading && (
+                <ClipLoader
+                  color={"#0284c7"}
+                  loading={loading}
+                  size={20}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              )}
+            </div>
+              }
           </tbody>
         </table>
-      ) : (
-        <div className="flex justify-center mt-24">
-          {loading && (
-            <ClipLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
-        </div>
-      )}
-
       {alert && (
         <DeleteAlert
           cancel={() => {
@@ -214,6 +234,11 @@ export default function Staff() {
           }}
         />
       )}
+
+      <div className={`absolute top-32 left-0 right-0 z-50 transition-transform transform flex justify-center ${show ? "translate-y-0" : "-translate-y-full"}`}>
+        {show && <ChangePassword id={userId} close={closeShowBox} />}
+      </div>
+
     </>
   );
 }

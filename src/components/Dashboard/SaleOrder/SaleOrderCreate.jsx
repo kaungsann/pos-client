@@ -291,7 +291,7 @@ export default function SaleOrderCreate() {
                 showErrorPartner ? "text-red-600" : ""
               }`}
             >
-              partner :
+              Partner :
             </label>
             <select
               required

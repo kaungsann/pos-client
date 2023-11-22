@@ -189,7 +189,6 @@ export default function SaleOrderAll() {
             <th className="lg:px-4 py-2 text-center">Total</th>
             <th className="lg:px-4 py-2 text-center">Action</th>
           </tr>
-
           <tbody className="w-full space-y-10 bg-slate-300">
             {filterSaleOrder.length > 0 ? (
               filterSaleOrder
@@ -227,11 +226,11 @@ export default function SaleOrderAll() {
                     <td
                       className={`lg:px-4 py-2 text-center ${
                         sale.state === "pending"
-                          ? "text-red-400"
+                          ? "text-red-700 bg-red-300"
                           : sale.state === "deliver"
-                          ? "text-cyan-600"
+                          ? "bg-cyan-300 text-cyan-900"
                           : sale.state === "arrived"
-                          ? "text-green-600"
+                          ?  "bg-green-300 text-green-900"
                           : ""
                       }`}
                     >

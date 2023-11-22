@@ -185,7 +185,7 @@ export default function SaleOrderAll() {
             <th className="lg:px-4 py-2 text-center">User</th>
             <th className="lg:px-4 py-2 text-center">Partner</th>
             <th className="lg:px-4 py-2 text-center">Location</th>
-            <th className="lg:px-4 py-2 text-center">Payment</th>
+            <th className="lg:px-4 py-2 text-center">Note</th>
             <th className="lg:px-4 py-2 text-center">Total Product</th>
             <th className="lg:px-4 py-2 text-center">Status</th>
             <th className="lg:px-4 py-2 text-center">TaxTotal</th>
@@ -227,18 +227,18 @@ export default function SaleOrderAll() {
                         ? sale.location.name
                         : "no have"}
                     </td>
-                    <td className="lg:px-4 py-2 text-center">{sale.state}</td>
+                    <td className="lg:px-4 py-2 text-center">{sale.note}</td>
                     <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
                       {sale.lines.length}
                     </td>
                     <td
                       className={`lg:px-4 py-2 text-center ${
                         sale.state == "pending"
-                          ? "text-red-400"
+                          ? "text-red-700 bg-red-300"
                           : sale.state == "deliver"
-                          ? "text-cyan-700"
+                          ? "bg-cyan-300 text-cyan-900"
                           : sale.state == "arrived"
-                          ? "text-green-600"
+                          ? "bg-green-300 text-green-900"
                           : ""
                       }`}
                     >
