@@ -16,7 +16,7 @@ export default function ProductsEdit() {
   const [ref, setRef] = useState("");
   const [expiredate, setExpiredate] = useState("");
   const [description, setDescription] = useState("");
-  const [bar,setBar  ] = useState(0);
+  const [bar, setBar] = useState(0);
   const [price, setPrice] = useState(0);
   const [tax, setTax] = useState(null);
   const [stockQuantity, setStockQuantity] = useState(null);
@@ -36,8 +36,6 @@ export default function ProductsEdit() {
   const { id } = useParams();
   const dipatch = useDispatch();
 
-
-
   const SingleProductApi = async () => {
     let resData = await getApi(`/product/${id}`, token.accessToken);
     setRef(resData.data[0].ref);
@@ -46,15 +44,15 @@ export default function ProductsEdit() {
     setExpiredate(new Date(resData.data[0].expiredAt).toLocaleDateString());
     setPrice(resData.data[0].salePrice);
     setBar(resData.data[0].barcode);
-    setGategory(resData.data[0].category.name);
+    setCatName(resData.data[0].category.name);
     setSelect(resData.data[0].image);
     setPurchasePrice(resData.data[0].purchasePrice);
     setProfit(resData.data[0].marginProfit);
-    setTax(resData.data[0].tax)
-    setStockQuantity(resData.data[0].minStockQty)
+    setTax(resData.data[0].tax);
+    setStockQuantity(resData.data[0].minStockQty);
   };
 
-  console.log("tax is a" , category)
+  console.log("tax is a", category);
 
   const createProductApi = async () => {
     const formData = new FormData();
@@ -92,7 +90,6 @@ export default function ProductsEdit() {
     if (profit) {
       formData.append("marginProfit", profit);
     }
-
     if (tax) {
       formData.append("tax", tax);
     }
@@ -105,10 +102,11 @@ export default function ProductsEdit() {
       formData,
       token.accessToken
     );
+
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-   console.log("res data is" , resData)
+
     if (resData.status) {
       navigate("/admin/products/all");
     } else {
@@ -154,6 +152,8 @@ export default function ProductsEdit() {
     SingleProductApi();
   }, []);
 
+  console.log("category nmae is", category);
+
   useEffect(() => {
     const calculatedSalePrice =
       parseFloat(purchasePrice) +
@@ -161,7 +161,6 @@ export default function ProductsEdit() {
     setUpdatePrice(calculatedSalePrice);
     setUpdatePrice(calculatedSalePrice);
   }, [purchasePrice, profit]);
-
 
   return (
     <>
@@ -258,16 +257,19 @@ export default function ProductsEdit() {
               <label className="text-md font-semibold">Category Name*</label>
               <select
                 id="catid"
-                value={category} 
+                value={category ? category : catName}
                 onChange={(e) => setGategory(e.target.value)}
                 style={{ backgroundColor: "transparent" }}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
               >
+                <option selected disabled className="invisible">
+                  {catName}
+                </option>
                 {cat.length > 0 &&
                   cat.map((ct) => (
                     <option
                       key={ct.id}
-                      value={ct.name}
+                      value={ct.id}
                       className="hover:bg-cyan-300 hover:font-bold"
                     >
                       {ct.name}
@@ -310,11 +312,7 @@ export default function ProductsEdit() {
             </div>
 
             <div className="w-60 mb-3 mx-8">
-              <label
-               className="text-md font-semibold"
-              >
-                Tax*
-              </label>
+              <label className="text-md font-semibold">Tax*</label>
               <input
                 required
                 value={tax}
@@ -327,10 +325,8 @@ export default function ProductsEdit() {
             </div>
 
             <div className="w-60 mb-3 mx-8">
-              <label
-                className="text-md font-semibold"
-              >
-              Minium Stock Quantity*
+              <label className="text-md font-semibold">
+                Minium Stock Quantity*
               </label>
               <input
                 required
@@ -342,7 +338,6 @@ export default function ProductsEdit() {
                 placeholder="Enter product stock quantity"
               />
             </div>
-
 
             <div className="w-60 mx-8 mb-3">
               <label className="text-md font-semibold">AvaliableInPos*</label>

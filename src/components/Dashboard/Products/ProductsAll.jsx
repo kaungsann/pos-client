@@ -12,8 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import ReactPaginate from 'react-paginate';
-
+import ReactPaginate from "react-paginate";
 
 export default function ProductsAll() {
   const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
@@ -46,16 +45,19 @@ export default function ProductsAll() {
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
+  let count = 1;
+
   const productApi = async () => {
     setLoading(true);
     let resData = await getApi("/product", token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-
+    const filteredProduct = resData.data.filter((pd) => pd.active === true);
+    console.log("data is a", resData);
     if (resData.status) {
       setLoading(false);
-      setProducts(resData.data);
+      setProducts(filteredProduct);
     } else {
       setLoading(true);
     }
@@ -91,7 +93,6 @@ export default function ProductsAll() {
       const downloadUrl = "http://3.0.102.114/product/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
-      console.log("res download is", response);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -242,7 +243,6 @@ export default function ProductsAll() {
     }
   }, [filterBarcode, filterCategory, filterPrice]);
 
-
   const handlePageClick = (selectedPage) => {
     setCurrentPage(selectedPage.selected);
   };
@@ -252,8 +252,6 @@ export default function ProductsAll() {
   const currentProducts = filteredProducts.slice(startIndex, endIndex);
 
   const pageCount = Math.ceil(filteredProducts.length / itemsPerPage);
-
-
 
   return (
     <div className="relative">
@@ -427,7 +425,7 @@ export default function ProductsAll() {
               ))
             ) : (
               <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
-              {loading && (
+                {loading && (
                   <FadeLoader
                     color={"#0284c7"}
                     loading={loading}
@@ -538,25 +536,24 @@ export default function ProductsAll() {
       )}
 
       <div className="fixed bottom-20 right-0">
-      <ReactPaginate
-        containerClassName="pagination-container"
-        pageLinkClassName="page-link text-center" 
-        pageClassName="page-item mx-2" 
-        className="flex bg-white justify-around p-3 rounded-md shadow-md text-center"
-        activeClassName="bg-blue-500 text-white rounded-full w-6 text-center"
-        previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
-        nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700" 
-        breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={5}
-        pageCount={pageCount}
-        nextLabel="next"
-        previousLabel="previous"
-        forcePage={currentPage}
-        renderOnZeroPageCount={null}
-       />
+        <ReactPaginate
+          containerClassName="pagination-container"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item mx-2"
+          className="flex bg-white justify-around p-3 rounded-md shadow-md text-center"
+          activeClassName="bg-blue-500 text-white rounded-full w-6 text-center"
+          previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
+          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          nextLabel="next"
+          previousLabel="previous"
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
       </div>
-
     </div>
   );
 }
