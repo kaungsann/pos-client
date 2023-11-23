@@ -19,11 +19,12 @@ export default function EmployeeCreate() {
 
   const navigate = useNavigate();
 
-  const token = useSelector((state) => state.IduniqueData);
+  const token = useSelector((state) => state.IduniqueData)
 
-  const handleEmployee = async (e) => {
-    e.preventDefault();
 
+
+
+  const handleEmployee = async () => {
     let data = {
       name,
       email,
@@ -55,6 +56,11 @@ export default function EmployeeCreate() {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleEmployee();
+  };
+
   return (
     <>
       <ToastContainer
@@ -71,7 +77,7 @@ export default function EmployeeCreate() {
       />
       <div className="flex">
         <button
-          onClick={handleEmployee}
+          onClick={handleSubmit}
           className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
         >
           Save
@@ -100,7 +106,7 @@ export default function EmployeeCreate() {
                   required
                   onChange={(e) => setName(e.target.value)}
                   className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Your Company Name"
+                  placeholder="Enter Employee name"
                   name="name"
                 />
               </div>
@@ -113,7 +119,7 @@ export default function EmployeeCreate() {
                   required
                   onChange={(e) => setEmail(e.target.value)}
                   className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Your Company Email"
+                  placeholder="Enter Employee email"
                   name="name"
                 />
               </div>
@@ -130,43 +136,43 @@ export default function EmployeeCreate() {
                 />
               </div> */}
               <div className="w-80 my-2">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
+                <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
                   Phone
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   onChange={(e) => setPhone(e.target.value)}
                   className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Your Company Email"
+                  placeholder="Enter Employee phone number"
                   name="addresss"
                 />
               </div>
               <div className="w-80 my-2">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
+                <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
                   Address
                 </label>
                 <input
                   type="text"
                   onChange={(e) => setAddress(e.target.value)}
                   className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Your Company Name"
+                  placeholder="Enter Employee address"
                   name="phone"
                 />
               </div>
               <div className="w-80 my-2">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
+                <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
                   Date Of Birth
                 </label>
                 <input
                   type="date"
                   onChange={(e) => setBirthDate(e.target.value)}
                   className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Your Company Email"
+                  placeholder="Enter Employee date of birth"
                   name="addresss"
                 />
               </div>
               <div className="w-80 my-2">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
+                <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
                   City
                 </label>
                 <input
@@ -179,7 +185,7 @@ export default function EmployeeCreate() {
               </div>
 
               <div className="w-80 my-2">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
+                <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
                   Gender
                 </label>
                 <select

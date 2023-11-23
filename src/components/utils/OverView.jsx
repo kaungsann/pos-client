@@ -9,6 +9,7 @@ import {
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
+  Bar
 } from "recharts";
 import { format } from "date-fns";
 
@@ -16,6 +17,8 @@ import FadeLoader from "react-spinners/FadeLoader";
 import { getApi } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
+import { Icon } from '@iconify/react';
+
 
 export default function OverView() {
   const [sale, setSale] = useState([]);
@@ -185,136 +188,153 @@ export default function OverView() {
     <>
       <div>
         <div className="flex">
-          <div className="w-1/3	bg-white p-4 border-2 rounded-lg shadow-md">
+
+          {/* Sale Order  */}
+          <div className="w-2/5	bg-white p-4 border-2 rounded-lg shadow-md">
             <div className="flex justify-between">
               <h3 className="text-lg font-semibold text-slate-700">
                 Sales Overview
               </h3>
               <div>
-                <span>X</span>
-                <span>X</span>
+                 <Icon icon="icon-park-outline:filter" className="text-[#8b5cf6] font-extrabold text-xl"/>
               </div>
             </div>
-            <div className="flex my-3 px-4 justify-between">
-              <div className="flex items-center">
-                <span className="w-16 h-20 bg-blue-200 p-4 rounded-md">X</span>
-                <div className="px-3">
+            {/* Annula Sales */}
+            <div className=" my-3 px-4 flex">
+              <div className="flex items-center w-2/4	">
+                <div className="p-4 bg-blue-200 rounded-md">
+                   <Icon icon="solar:cart-4-outline" className="text-4xl text-cyan-600 font-extrabold"/>
+                </div>
+                <div className="mx-3 w-2/4">
                   <h2 className="text-slate-400 text-md font-semibold">
                     Annual Sales
                   </h2>
-                  <h2 className="text-slate-800 text-2xl font-extrabold">
+                  <h2 className="text-slate-800 text-xl font-extrabold">
                     $ 124,56
                   </h2>
                 </div>
               </div>
-              <div className="flex items-center">
-                <span className="w-16 h-20 bg-yellow-200 p-4 rounded-md">
-                  X
-                </span>
+              <div className="flex items-center w-2/4	">
+                 <div className="p-4 bg-yellow-100 rounded-md">
+                   <Icon icon="uil:file-graph" className="text-4xl text-yellow-600 font-extrabold"/>
+                 </div>
                 <div className="px-3">
                   <h2 className="text-slate-400 text-md font-semibold">
                     Annual Profits
                   </h2>
-                  <h2 className="text-slate-800 text-2xl font-extrabold">
+                  <h2 className="text-slate-800 text-xl font-extrabold">
                     $ 124,56
                   </h2>
                 </div>
               </div>
             </div>
-            <div className="flex px-4 justify-between">
-              <div className="flex items-center">
-                <span className="w-16 h-20 bg-blue-200 p-4 rounded-md">X</span>
-                <div className="px-3">
+            {/* Monthly Sales */}
+            <div className=" my-3 px-4 flex">
+              <div className="flex items-center w-2/4	">
+                <div className="p-4 bg-orange-200 rounded-md">
+                   <Icon icon="solar:cart-4-outline" className="text-4xl text-orange-600 font-extrabold"/>
+                </div>
+                <div className="mx-3 w-2/4">
                   <h2 className="text-slate-400 text-md font-semibold">
-                    Annual Sales
+                  Monthly Sales
                   </h2>
-                  <h2 className="text-slate-800 text-2xl font-extrabold">
+                  <h2 className="text-slate-800 text-xl font-extrabold">
                     $ 124,56
                   </h2>
                 </div>
               </div>
-              <div className="flex items-center">
-                <span className="w-16 h-20 bg-yellow-200 p-4 rounded-md">
-                  X
-                </span>
+              <div className="flex items-center w-2/4	">
+                 <div className="p-4 bg-green-100 rounded-md">
+                   <Icon icon="uil:file-graph" className="text-4xl text-green-600 font-extrabold"/>
+                 </div>
                 <div className="px-3">
                   <h2 className="text-slate-400 text-md font-semibold">
-                    Annual Profits
+                  Monthly Profits
                   </h2>
-                  <h2 className="text-slate-800 text-2xl font-extrabold">
+                  <h2 className="text-slate-800 text-xl font-extrabold">
                     $ 124,56
                   </h2>
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-1/3	bg-white p-4 border-2 rounded-lg shadow-md mx-4">
+
+          {/* Purchase Order */}
+          <div className="w-2/5	bg-white p-4 border-2 rounded-lg mx-3 shadow-md">
             <div className="flex justify-between">
               <h3 className="text-lg font-semibold text-slate-700">
-                Purchase Overview
+                Purchases Overview
               </h3>
               <div>
-                <span>X</span>
-                <span>X</span>
+                 <Icon icon="icon-park-outline:filter" className="text-[#8b5cf6] font-extrabold text-xl"/>
               </div>
             </div>
-            <div className="flex my-3 px-4 justify-between">
-              <div className="flex items-center">
-                <span className="w-16 h-20 bg-blue-200 p-4 rounded-md">X</span>
-                <div className="px-3">
+            {/* Annula Purchase */}
+            <div className=" my-3 px-4 flex">
+              <div className="flex items-center w-2/4">
+                <div className="p-4 bg-violet-300 rounded-md">
+                <Icon icon="la:cart-plus"  className="text-4xl text-violet-600 font-extrabold"/>
+                </div>
+                <div className="mx-3">
                   <h2 className="text-slate-400 text-md font-semibold">
-                    Annual Purchase
+                   No Of Purchase
                   </h2>
-                  <h2 className="text-slate-800 text-2xl font-extrabold">
+                  <h2 className="text-slate-800 text-xl font-extrabold">
                     $ 124,56
                   </h2>
                 </div>
               </div>
-              <div className="flex items-center">
-                <span className="w-16 h-20 bg-yellow-200 p-4 rounded-md">
-                  X
-                </span>
+              <div className="flex items-center w-2/4">
+                 <div className="p-4 bg-pink-100 rounded-md">
+                 <Icon icon="pepicons-pencil:cart-off" className="text-4xl text-pink-600 font-extrabold" />
+                 </div>
                 <div className="px-3">
                   <h2 className="text-slate-400 text-md font-semibold">
-                    Annual Profits
+                    Cancle Order
                   </h2>
-                  <h2 className="text-slate-800 text-2xl font-extrabold">
+                  <h2 className="text-slate-800 text-xl font-extrabold">
                     $ 124,56
                   </h2>
                 </div>
               </div>
             </div>
-            <div className="flex px-4 justify-between">
-              <div className="flex items-center">
-                <span className="w-16 h-20 bg-blue-200 p-4 rounded-md">X</span>
-                <div className="px-3">
+            {/* Monthly Sales */}
+            <div className=" my-3 px-4 flex">
+              <div className="flex items-center w-2/4	">
+                <div className="p-4 bg-orange-200 rounded-md">
+                   <Icon icon="carbon:purchase" className="text-4xl text-orange-600 font-extrabold" />
+
+                </div>
+                <div className="mx-3">
                   <h2 className="text-slate-400 text-md font-semibold">
-                    Annual Sales
+                    Purchase Amount
                   </h2>
-                  <h2 className="text-slate-800 text-2xl font-extrabold">
+                  <h2 className="text-slate-800 text-xl font-extrabold">
                     $ 124,56
                   </h2>
                 </div>
               </div>
-              <div className="flex items-center">
-                <span className="w-16 h-20 bg-yellow-200 p-4 rounded-md">
-                  X
-                </span>
+              <div className="flex items-center w-2/4	">
+                 <div className="p-4 bg-rose-100 rounded-md">
+                    <Icon icon="la:cart-arrow-down" className="text-4xl text-rose-600 font-extrabold"/>
+                 </div>
                 <div className="px-3">
                   <h2 className="text-slate-400 text-md font-semibold">
-                    Annual Profits
+                    Returns
                   </h2>
-                  <h2 className="text-slate-800 text-2xl font-extrabold">
+                  <h2 className="text-slate-800 text-xl font-extrabold">
                     $ 124,56
                   </h2>
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-80 bg-white rounded-lg shadow-md p-4">
+
+
+          <div className="w-1/5 bg-white rounded-lg mx-auto shadow-md p-4 relative">
             <div className="flex justify-between">
               <h3 className="text-lg font-semibold text-slate-700">
-                Sales Overview
+                Stock
               </h3>
               <div>
                 <span>X</span>
@@ -322,8 +342,8 @@ export default function OverView() {
               </div>
             </div>
             <div>
-              <div className="w-1/4">
-                <PieChart width={300} height={200}>
+              <div className="w-4/5 flex justify-center">
+                <PieChart  width={260} height={200}>
                   <Pie
                     dataKey="value"
                     startAngle={180}
@@ -341,6 +361,8 @@ export default function OverView() {
                     ))}
                   </Pie>
                   {needle(value, data, cx, cy, iR, oR, "#d0d000")}
+                  <Bar dataKey="name" fill="#8884d8" />
+                  <Bar dataKey="value" fill="#82ca9d" />
                 </PieChart>
               </div>
             </div>
@@ -366,7 +388,7 @@ export default function OverView() {
               </LineChart>
             </ResponsiveContainer>
           </div>
-          <div className="w-1/3 bg-white rounded-lg shadow-md p-4 mx-3">
+          <div className="w-2/5 bg-white rounded-lg shadow-md p-4 mx-3">
             <h2 className="text-slate-600 text-lg font-semibold my-3">
               Top Selling Items
             </h2>

@@ -35,7 +35,7 @@ export default function Card({ product }) {
           className="w-full h-28 rounded-md shadow-sm "
         />
         <h3 className="font-semibold text-slate-500 text-md mt-3">
-          {product.name.substring(0, 18)}
+          {product.name.substring(0, 12)}
         </h3>
         <h2 className="font-bold text-blue-700 text-md">
           {product.salePrice} MMK

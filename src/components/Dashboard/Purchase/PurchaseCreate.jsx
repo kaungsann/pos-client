@@ -99,6 +99,7 @@ export default function SaleOrderCreate() {
 
     try {
       let resData = await sendJsonToApi("/purchase", data, token.accessToken);
+      console.log("data is" ,resData )
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }

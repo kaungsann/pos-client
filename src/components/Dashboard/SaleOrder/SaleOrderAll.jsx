@@ -224,17 +224,18 @@ export default function SaleOrderAll() {
                         : "no have"}
                     </td>
                     <td
-                      className={`lg:px-4 py-2 text-center ${
-                        sale.state === "pending"
-                          ? "text-red-700 bg-red-300"
-                          : sale.state === "deliver"
-                          ? "bg-cyan-300 text-cyan-900"
-                          : sale.state === "arrived"
-                          ?  "bg-green-300 text-green-900"
-                          : ""
-                      }`}
+                      className="lg:px-4 py-2 text-center"
                     >
-                      {sale.state ? sale.state : "no state"}
+                     <span className={`px-6 rounded-2xl border-2 py-1.5 font-bold ${
+                        sale.state == "pending"
+                          ?  "text-orange-800 bg-orange-300 border-orange-500"
+                          : sale.state == "deliver"
+                          ? "bg-cyan-300 text-cyan-900 border-cyan-500"
+                          : sale.state == "arrived"
+                          ? "bg-green-300 text-green-900 border-green-500"
+                          : ""
+                      }`}>{sale.state ? sale.state : "no state"}</span>
+                   
                     </td>
                     <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
                       {sale.lines.length}
