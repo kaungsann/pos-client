@@ -140,7 +140,7 @@ export default function Profile() {
           userInfo.role && userInfo.role.name == "user" ? "mt-20 " : ""
         }`}
       >
-        <div className="w-1/4 flex flex-col justify-items-center items-center p-4 bg-white shadow-md">
+        <div className="w-1/4 flex flex-col justify-items-center items-center p-4 bg-white shadow-md h-screen">
           <div className="relative">
             <img
               loading="eager | lazy"

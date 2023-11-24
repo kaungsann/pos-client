@@ -59,7 +59,7 @@ export default function SaleOrderAll() {
     setimportFile(selectedFile);
     const formData = new FormData();
     formData.append("excel", importFile);
-    const sendExcelApi = await FormPostApi("/product/import-excel", formData);
+    const sendExcelApi = await FormPostApi("/purcahse/import-excel", formData);
     setLoading(true);
     toast(sendExcelApi.message);
     if (sendExcelApi.status) {
@@ -157,7 +157,7 @@ export default function SaleOrderAll() {
       />
       <div className="flex cursor-pointer relative">
         <div className="flex w-full justify-between items-center">
-          <div className="flex md:mr-8 justify-around">
+          <div className="flex md:mr-8 justify-around0">
             <Link to="/admin/purchase/create">
               <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
                 Add Purchase
@@ -165,7 +165,7 @@ export default function SaleOrderAll() {
             </Link>
             <div
               onClick={toggleFilterBox}
-              className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
+              className="rounded-sm ml-3 transition shadow-sm flex items-center z-50 text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
             >
               <FiFilter className="text-xl mx-2" />
               <h4>Filter</h4>
@@ -174,7 +174,7 @@ export default function SaleOrderAll() {
               onClick={handleFileImportClick}
               className="rounded-sm mx-3 shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"
             >
-              <input
+            <input
                 type="file"
                 style={{ display: "none" }}
                 ref={importRef}
@@ -184,7 +184,6 @@ export default function SaleOrderAll() {
               <BiExport className="text-xl mx-2" />
             </div>
           </div>
-
           <div className="w-96 md:w-72 relative">
             <input
               ref={inputRef}
@@ -313,7 +312,7 @@ export default function SaleOrderAll() {
               </div>
             )}
           </tbody>
-          <div className=" w-96 z-50 fixed top-0 bottom-0 left-0 right-0  mx-auto">
+          <div className=" w-96 z-50 fixed top-40 bottom-0 left-0 right-0 mx-auto">
               {
                confrimShowBox  && <ConfrimBox close={closeBox} comfirmHandle={changeConfirmOrder}/>
               }
@@ -371,13 +370,13 @@ export default function SaleOrderAll() {
               />
             </div>
             <div className="flex justify-end w-full my-4">
-              <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
+              {/* <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
                 <FiFilter className="mx-1" />
                 Filter
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowFilter(!showFilter)}
-                className="px-4 hover:opacity-70 py-2 mx-3 bg-red-500 rounded-md text-white w-2/4"
+                className="px-4 hover:opacity-70 py-2  bg-red-500 rounded-md text-white w-full"
               >
                 Cancel
               </button>

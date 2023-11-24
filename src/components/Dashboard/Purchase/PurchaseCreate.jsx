@@ -122,16 +122,18 @@ export default function SaleOrderCreate() {
   };
   const getLocation = async () => {
     const resData = await getApi("/location", token.accessToken);
-    setLocation(resData.data);
+    const filteredLocation = resData.data.filter((la) => la.active === true);
+    setLocation(filteredLocation);
   };
   const getProduct = async () => {
     const resData = await getApi("/product", token.accessToken);
-    setProduct(resData.data);
+    const filteredProduct = resData.data.filter((pt) => pt.active === true);
+    setProduct(filteredProduct);
   };
   const getPartner = async () => {
     const resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCustomer === false
+      (partner) => partner.isCustomer === false && partner.active === true
     );
     setPart(filteredPartners);
   };

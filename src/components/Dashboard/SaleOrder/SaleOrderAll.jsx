@@ -317,7 +317,7 @@ export default function SaleOrderAll() {
               </div>
             )}
           </tbody>
-          <div className=" w-96 z-50 fixed top-0 bottom-0 left-0 right-0  mx-auto">
+          <div className=" w-96 z-50 fixed top-40 bottom-0 left-0 right-0  mx-auto">
               {
                confrimShowBox  && <ConfrimBox close={closeBox} comfirmHandle={changeConfirmOrder}/>
               }
@@ -375,13 +375,13 @@ export default function SaleOrderAll() {
               />
             </div>
             <div className="flex justify-end w-full my-4">
-              <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
+              {/* <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
                 <FiFilter className="mx-1" />
                 Filter
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowFilter(!showFilter)}
-                className="px-4 hover:opacity-70 py-2 mx-3 bg-red-500 rounded-md text-white w-2/4"
+                className="px-4 hover:opacity-70 py-2 bg-red-500 rounded-md text-white w-full"
               >
                 Cancel
               </button>

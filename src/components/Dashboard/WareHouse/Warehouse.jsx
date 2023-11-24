@@ -23,7 +23,7 @@ export default function Warehouse() {
     const getWareHouuseApi = async() => {
       setLoading(true);
        const resData = await getApi("/orders" , token.accessToken)
-  
+       console.log("warehosue is" , resData)
        if(resData.status) {
         setLoading(false);
         const filteredPending = resData.data.filter((ct) => ct.state === "pending");
@@ -33,8 +33,6 @@ export default function Warehouse() {
         toast(resData.message)
       }
     }
-
-    console.log("warehosue is" , warehouse)
 
     useEffect(() => {
       getWareHouuseApi()
@@ -77,7 +75,7 @@ export default function Warehouse() {
             <th className="lg:px-4 py-2 text-center">Payment</th>
             <th className="lg:px-4 py-2 text-center">TaxTotal</th>
             <th className="lg:px-4 py-2 text-center">Total</th>
-            <th className="lg:px-4 py-2 text-center">Action</th>
+            {/* <th className="lg:px-4 py-2 text-center">Action</th> */}
           </tr>
           <tbody className="w-full space-y-10 bg-slate-300">
             {warehouse.length > 0 ? (
@@ -140,10 +138,10 @@ export default function Warehouse() {
                       {wh.taxTotal}
                     </td>
                     <td className="lg:px-4 py-2 text-center">{wh.total}</td>
-                    <td className="py-3 flex ml-3 lg:px-4 justify-center">
+                    {/* <td className="py-3 flex ml-3 lg:px-4 justify-center">
                     <Icon onClick={() => setStatus(true)} icon="fluent:status-16-regular" className="text-2xl text-sky-700 font-bold hover:text-blue-900"
                       />
-                    </td>
+                    </td> */}
                   </tr>
                 ))
             ) : (
@@ -200,7 +198,7 @@ export default function Warehouse() {
                 >
                     <div className="flex justify-between my-6">
                     <h2 className="text-xl font-bold text-slate-700">
-                        Filter Products
+                        Filter warehouse
                     </h2>
                     <MdClear
                         onClick={() => setShowFilter(!showFilter)}
@@ -210,7 +208,7 @@ export default function Warehouse() {
                     <div>
                     <div className="my-3 flex flex-col">
                         <label className="text-lg my-2 text-slate-600 font-semibold">
-                        BarCode
+                          Payment
                         </label>
                         <input
                         type="text"
@@ -221,7 +219,7 @@ export default function Warehouse() {
                     </div>
                     <div className="my-3 flex flex-col">
                         <label className="text-lg my-2 text-slate-600 font-semibold">
-                        Price
+                        State
                         </label>
                         <input
                         type="text"
