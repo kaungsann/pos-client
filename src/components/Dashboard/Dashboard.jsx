@@ -403,7 +403,7 @@ export default function Admin() {
          ) : null}
       <div
         className={`mt-4 mx-auto p-4 ${
-          user.role && user.role.name == "admin" || "root" ? "ml-52" : ""
+          user.role && user.role.name == "admin" || user.role.name == "root" ? "ml-52" : ""
         }`}
       >
         <Outlet />

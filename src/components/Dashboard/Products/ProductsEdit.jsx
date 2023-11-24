@@ -17,7 +17,7 @@ export default function ProductsEdit() {
   const [expiredate, setExpiredate] = useState("");
   const [description, setDescription] = useState("");
   const [bar, setBar] = useState(0);
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(null);
   const [tax, setTax] = useState(null);
   const [stockQuantity, setStockQuantity] = useState(null);
   const [catName, setCatName] = useState("");
@@ -38,6 +38,8 @@ export default function ProductsEdit() {
 
   const SingleProductApi = async () => {
     let resData = await getApi(`/product/${id}`, token.accessToken);
+    
+  console.log("type of" ,  resData)
     setRef(resData.data[0].ref);
     setName(resData.data[0].name);
     setDescription(resData.data[0].description);
@@ -50,9 +52,11 @@ export default function ProductsEdit() {
     setProfit(resData.data[0].marginProfit);
     setTax(resData.data[0].tax);
     setStockQuantity(resData.data[0].minStockQty);
+
+
   };
 
-  console.log("tax is a", category);
+  console.log("type of" , typeof price)
 
   const createProductApi = async () => {
     const formData = new FormData();
@@ -79,7 +83,7 @@ export default function ProductsEdit() {
       formData.append("category", category);
     }
     if (price) {
-      formData.append("salePrice", updatePrice);
+      formData.append("salePrice", price);
     }
     if (file) {
       formData.append("image", file);
@@ -96,6 +100,7 @@ export default function ProductsEdit() {
     if (stockQuantity) {
       formData.append("minStockQty", stockQuantity);
     }
+
 
     let resData = await FormPathApi(
       `/product/${id}`,
@@ -386,7 +391,7 @@ export default function ProductsEdit() {
               <label className="text-md font-semibold">Sale Price*</label>
               <input
                 required
-                value={updatePrice || price}
+                value={price}
                 type="number"
                 style={{ backgroundColor: "transparent" }}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
