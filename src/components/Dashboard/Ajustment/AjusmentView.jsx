@@ -1,13 +1,19 @@
-import React, { useRef, useState } from "react";
-
+import React, { useEffect, useRef, useState } from "react";
+import {getApi} from "../../Api"
 import { BiImport, BiExport } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { removeData } from "../../../redux/actions";
 
 export default function AjusmentView() {
   const [loading, setLoading] = useState(false);
-
+  const [adjustment , setAdjustment] = useState([])
   const [importFile, setimportFile] = useState("");
 
   const importRef = useRef(null);
+  const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const receiveExcel = async () => {
     try {
@@ -54,9 +60,38 @@ export default function AjusmentView() {
       getCategorysApi();
     }
   };
+
+  const getInventoryAdjustmentApi = async() => {
+      const resData =  await getApi("/inventory-adjustment" , token.accessToken);
+      if (resData.message == "Token Expire , Please Login Again") {
+        dipatch(removeData(null));
+      }
+      if (resData.status) {
+        setLoading(false);
+        setAdjustment(resData.data)
+      } else {
+        setLoading(true);
+      }
+  }
+
+  useEffect(() => {
+    getInventoryAdjustmentApi()
+  }, [])
   
   return (
     <>
+        <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="flex">
         <div
           onClick={receiveExcel}
@@ -102,6 +137,13 @@ export default function AjusmentView() {
           </div>
         </table>
       </div>
+           {
+              adjustment.length > 0 ? (
+                <h3></h3>
+              ) : (
+                <h3 className="text-center w-full mx-auto text-slate-600 font-semibold text-2xl">No have Adjustment Data</h3>
+              )
+            }
     </>
   );
 }

@@ -39,7 +39,7 @@ export default function PartnerAll() {
     setLoading(true);
     let resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCustomer === true
+      (partner) => partner.isCustomer === true && partner.active === true
     );
 
     if (resData.message == "Token Expire , Please Login Again") {
@@ -114,7 +114,7 @@ export default function PartnerAll() {
     }
 
     const response = await deleteMultiple(
-      "/partner/multiple-delete",
+      "/partner",
       {
         partnerIds: selectedItems,
       },

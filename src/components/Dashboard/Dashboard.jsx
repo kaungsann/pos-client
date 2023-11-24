@@ -85,11 +85,15 @@ export default function Admin() {
                       }}`}
                     />
                   </Link>
-  
+
+                  <Link to="/admin/warehouse">
                   <Icon
                     icon="maki:warehouse"
-                    className="text-4xl bg-white rounded-full p-1 shadow-md text-slate-400 font-bold"
+                    className={`text-4xl rounded-full p-1 shadow-md text-slate-400 font-bold ${location.pathname === "/admin/warehouse"
+                    && "bg-blue-500 text-white"
+                     }`}
                   />
+                  </Link>
                 </>
             ) : null}
 
@@ -395,7 +399,7 @@ export default function Admin() {
                </div>
              </div>
            </div>
-         </div>
+            </div>
          ) : null}
       <div
         className={`mt-4 mx-auto p-4 ${

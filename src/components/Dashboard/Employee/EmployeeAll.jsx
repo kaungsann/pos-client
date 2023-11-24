@@ -51,7 +51,8 @@ export default function EmployeeAll() {
     }
     if (resData.status) {
       setLoading(false)
-      setEmployee(resData.data);
+      const filteredCategory = resData.data.filter((em) => em.active === true);
+      setEmployee(filteredCategory);
     } else {
       setLoading(false)
       toast(resData.message);
@@ -116,7 +117,7 @@ export default function EmployeeAll() {
     }
 
     const response = await deleteMultiple(
-      "/employee/multiple-delete",
+      "/employee",
       {
         employeeIds: selectedItems,
       },

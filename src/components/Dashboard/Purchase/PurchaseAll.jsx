@@ -236,11 +236,11 @@ export default function SaleOrderAll() {
                     >
                        <span className={`px-6 rounded-2xl border-2 py-1.5 font-bold ${
                         sale.state == "pending"
-                          ? "text-orange-800 bg-orange-300 border-orange-500"
+                          ? "text-orange-500 bg-orange-100 border-orange-400"
                           : sale.state == "deliver"
-                          ? "bg-cyan-300 text-cyan-900 border-cyan-500"
+                          ? "bg-cyan-100 text-cyan-500 border-cyan-400"
                           : sale.state == "arrived"
-                          ? "bg-green-300 text-green-900 border-green-500"
+                          ? "bg-green-100 text-green-500 border-green-400"
                           : ""
                       }`}>{sale.state}</span>
                     
@@ -278,7 +278,7 @@ export default function SaleOrderAll() {
       {/* Filter Box */}
       {showFilter && (
         <div
-          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-40 transform transition-all ease-in-out duration-700 ${
+          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-50 transform transition-all ease-in-out duration-700 ${
             showFilter ? "right-0" : "right-[-384px]"
           }`}
         >

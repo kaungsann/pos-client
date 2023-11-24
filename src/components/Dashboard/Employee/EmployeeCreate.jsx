@@ -21,9 +21,6 @@ export default function EmployeeCreate() {
 
   const token = useSelector((state) => state.IduniqueData)
 
-
-
-
   const handleEmployee = async () => {
     let data = {
       name,

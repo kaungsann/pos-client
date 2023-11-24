@@ -39,7 +39,8 @@ export default function CategoryAll() {
     }
     if (resData.status) {
       setLoading(false);
-      setCategory(resData.data);
+      const filteredCategory = resData.data.filter((ct) => ct.active === true);
+      setCategory(filteredCategory);
     } else {
       setLoading(true);
     }
@@ -135,7 +136,7 @@ export default function CategoryAll() {
     }
 
     const response = await deleteMultiple(
-      "/category/multiple-delete",
+      "/category",
       {
         categoryIds: selectedItems,
       },

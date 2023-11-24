@@ -114,7 +114,7 @@ export default function PosItems() {
           user.role && user.role.name == "user" && "mt-20"
         }`}
       >
-        <div className="lg:w-2/3 md:w-2/4 shadow-sm bg-white">
+        <div className="lg:w-2/3 md:w-2/4 shadow-sm bg-white overflow-y-scroll my-3 custom-scrollbar h-screen">
           <div>
             <div className="flex justify-between items-center mt-4">
               <h3 className="text-lg font-semibold ml-2">Avaliable Items</h3>
@@ -172,7 +172,7 @@ export default function PosItems() {
               )}
             </ul>
           </div>
-          <div className="flex flex-wrap w-full overflow-y-scroll my-3 custom-scrollbar">
+          <div className="flex flex-wrap w-full">
             {products.length > 0 ? (
               products
                 .filter((item) =>

@@ -15,7 +15,6 @@ import { removeData } from "../../../redux/actions";
 import ReactPaginate from "react-paginate";
 
 export default function ProductsAll() {
-  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 5; // Choose the number of items per page
   const navigate = useNavigate();
@@ -44,8 +43,6 @@ export default function ProductsAll() {
   const userData = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
-
-  let count = 1;
 
   const productApi = async () => {
     setLoading(true);
@@ -168,41 +165,45 @@ export default function ProductsAll() {
 
   // ...
 
-  const filteredProducts = products.filter((product) => {
-    //Filter by name
-    if (
-      filterName &&
-      !product.name.toLowerCase().includes(filterName.toLowerCase())
-    ) {
-      return false;
-    }
-    // Filter by barcode
-    if (filterBarcode && !product.barcode.includes(filterBarcode)) {
-      return false;
-    }
-
-    // Filter by category
-    if (filterCategory) {
-      if (product.category) {
-        if (product.category._id !== filterCategory) {
-          return false;
-        }
-      } else {
-        // If the product doesn't have a category, you may choose to handle this case differently
+  const filterProducts = () => {
+    const filteredProducts = products.filter((product) => {
+      // Filter by name
+      if (
+        filterName &&
+        !product.name.toLowerCase().includes(filterName.toLowerCase())
+      ) {
         return false;
       }
-    }
-
-    // Filter by price
-    if (
-      filterPrice &&
-      parseFloat(product.listPrice) !== parseFloat(filterPrice)
-    ) {
-      return false;
-    }
-
-    return true;
-  });
+  
+      // Filter by barcode
+      if (filterBarcode && !product.barcode.includes(filterBarcode)) {
+        return false;
+      }
+  
+      // Filter by category
+      if (filterCategory) {
+        if (product.category) {
+          if (product.category._id !== filterCategory) {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+  
+      // Filter by price
+      if (
+        filterPrice &&
+        parseFloat(product.listPrice) !== parseFloat(filterPrice)
+      ) {
+        return false;
+      }
+  
+      return true;
+    });
+  
+    return filteredProducts;
+  };
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -218,9 +219,10 @@ export default function ProductsAll() {
       return;
     }
 
-    const response = await deleteMultiple("/product/multiple-delete", {
+    const response = await deleteMultiple("/product", {
       productIds: selectedItems,
-    });
+    }, token.accessToken);
+    console.log("response data delete  is " ,response )
 
     if (response.status) {
       toast("Selected products deleted successfully.");
@@ -232,16 +234,13 @@ export default function ProductsAll() {
     }
   };
 
-  useEffect(() => {
-    productApi();
-    categoryApi();
-
-    if (filterBarcode || filterCategory || filterPrice) {
-      setIsFilterActive(true);
-    } else {
-      setIsFilterActive(false);
-    }
-  }, [filterBarcode, filterCategory, filterPrice]);
+  const handleFilterButtonClick = () => {
+    const filteredProducts = filterProducts();
+    setProducts(filteredProducts);
+    // Update other state variables as needed
+    setIsFilterActive(true);
+    setCurrentPage(0); // Reset the current page to 0 after filtering
+  };
 
   const handlePageClick = (selectedPage) => {
     setCurrentPage(selectedPage.selected);
@@ -249,9 +248,21 @@ export default function ProductsAll() {
 
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+
+  const filteredProducts = filterProducts(); // Add this line to get the filtered products
+  const pageCount = Math.ceil(filteredProducts.length / itemsPerPage);
   const currentProducts = filteredProducts.slice(startIndex, endIndex);
 
-  const pageCount = Math.ceil(filteredProducts.length / itemsPerPage);
+  useEffect(() => {
+    productApi();
+    categoryApi();
+  
+    if (filterBarcode || filterCategory || filterPrice) {
+      setIsFilterActive(true);
+    } else {
+      setIsFilterActive(false);
+    }
+  }, [filterBarcode, filterCategory, filterPrice]);
 
   return (
     <div className="relative">
@@ -389,19 +400,19 @@ export default function ProductsAll() {
                     />
                   </td>
                   <td className="lg:px-4 py-2 text-center">{product.name}</td>
-                  <td className="lg:px-4 py-2 text-center">{product.ref}</td>
+                  <td className="lg:px-4 py-2 text-center">{product.ref ? product.ref : "none"}</td>
                   <td className="lg:px-4 py-2 text-center">
-                    {product.expiredAt}
+                    {product.expiredAt ? product.expiredAt : "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
-                    {product.description &&
-                      product.description.substring(0, 30)}
+                    {product.description ?
+                      product.description.substring(0, 30): "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center ">
-                    {product.barcode}
+                    {product.barcode ? product.barcode : "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center">
-                    {product.salePrice}
+                    {product.salePrice ? product.salePrice : "none"}
                   </td>
 
                   <td className="py-2 lg:px-4 mx-auto">
@@ -455,7 +466,7 @@ export default function ProductsAll() {
       {/* Filter Box */}
       {showFilter ? (
         <div
-          className={`w-96 bg-slate-50 h-screen fixed top-0 right-0 p-4 z-30 transition-transform transform ${
+          className={`w-96 bg-slate-50 h-screen fixed top-0 right-0 p-4 z-50 transition-transform transform ${
             showFilter ? "translate-x-0" : "-translate-x-full"
           }ease-in-out duration-700`}
         >
@@ -518,7 +529,7 @@ export default function ProductsAll() {
               />
             </div>
             <div className="flex justify-between w-full my-4">
-              <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
+              <button  onClick={handleFilterButtonClick} className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
                 <FiFilter className="mx-1" />
                 Filter
               </button>
