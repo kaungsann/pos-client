@@ -13,7 +13,7 @@ import { FaEye } from "react-icons/fa6";
 import { removeData } from "../../../redux/actions";
 import ConfrimBox from "../../utils/ConfrimBox";
 
-export default function SaleOrderAll() {
+export default function PurchaseAll() {
   const [saleorders, setSaleOrders] = useState([]);
   const [searchItems, setSearchItems] = useState("");
   const [loading, setLoading] = useState(false);
@@ -94,8 +94,6 @@ export default function SaleOrderAll() {
     }
     return true;
   });
-
-
 
   const handleConfirm = (id) => {
     setconfrimShowBox(true);
@@ -199,14 +197,14 @@ export default function SaleOrderAll() {
       <div className="mx-auto">
         <div className="flex justify-between items-center">
           <h2 className="lg:text-2xl font-bold my-4">Purchase</h2>
-          {isFilterActive && (
-            <button
-              className="bg-red-500 px-4 h-8 rounded-md text-white hover:opacity-70"
-              onClick={filterRemove}
-            >
-              Remove Filter
-            </button>
-          )}
+            {isFilterActive && (
+              <button
+                className="bg-red-500 px-4 h-8 rounded-md text-white hover:opacity-70"
+                onClick={filterRemove}
+              >
+                Remove Filter
+              </button>
+            )}
         </div>
         <table className="w-full text-center relative">
           <tr className="bg-blue-600 text-white">

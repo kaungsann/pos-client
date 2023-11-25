@@ -18,6 +18,10 @@ export default function Warehouse() {
     const [loading, setLoading] = useState(false);
     const [status , setStatus ] = useState(false)
 
+    const [payment ,setpayment]  = useState("")
+    const [location ,setlocation]  = useState("")
+    const [isFilterActive, setIsFilterActive] = useState(false);
+
     const token = useSelector((state) => state.IduniqueData);
 
     const getWareHouuseApi = async() => {
@@ -34,9 +38,36 @@ export default function Warehouse() {
       }
     }
 
+    const filterWarehouse = warehouse.filter((ware) => {
+      //Filter by location
+      if (
+        location &&
+        !ware.location.name.toLowerCase().includes(location.toLowerCase())
+      ) {
+        return false;
+      }
+      // Filter by payment
+      if (payment && !ware.paymentStatus.includes(payment)) {
+        return false;
+      }
+      return true;
+    });
+
+    const filterRemove = () => {
+      setlocation("");
+      setpayment("");
+      setIsFilterActive(false);
+    };
+  
+
     useEffect(() => {
       getWareHouuseApi()
-    } , [])
+      if (location || payment) {
+        setIsFilterActive(true);
+      } else {
+        setIsFilterActive(false);
+      }
+    } , [location , payment])
 
 
   return (
@@ -63,7 +94,18 @@ export default function Warehouse() {
                 <h4>Filter</h4>
             </div>
         </div>
+        
+          {isFilterActive && (
+            <div className='w-full py-3 flex justify-end'>
+              <button
+                className="bg-red-500 px-4 h-9 py-1.5 rounded-md text-white hover:opacity-70"
+                onClick={filterRemove}
+              >
+                Remove Filter
+              </button>
+            </div>
 
+          )}
         <table className="w-full text-center">
           <tr className="bg-blue-600 text-white">
             <th className="text-center">schedule Date</th>
@@ -79,7 +121,7 @@ export default function Warehouse() {
           </tr>
           <tbody className="w-full space-y-10 bg-slate-300">
             {warehouse.length > 0 ? (
-              warehouse
+              filterWarehouse
                 .map((wh) => (
                   <tr
                     key={wh.id}
@@ -212,30 +254,33 @@ export default function Warehouse() {
                         </label>
                         <input
                         type="text"
-                        onChange={(e) => setFilterBarcode(e.target.value)}
+                        onChange={(e) => setpayment(e.target.value)}
                         className="w-full rounded-md py-2 px-3 border-2 border-blue-300"
                         placeholder="Search By barcode"
                         />
                     </div>
                     <div className="my-3 flex flex-col">
                         <label className="text-lg my-2 text-slate-600 font-semibold">
-                        State
+                        Location
                         </label>
                         <input
                         type="text"
-                        onChange={(e) => setFilterPrice(e.target.value)}
+                        onChange={(e) => setlocation(e.target.value)}
                         className="w-full rounded-md py-2 px-3 border-2 border-blue-300"
                         placeholder="Search By Price"
                         />
                     </div>
                     <div className="flex justify-between w-full my-4">
-                        <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
+                        {/* <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
                         <FiFilter className="mx-1" />
                         Filter
-                        </button>
+                        </button> */}
                         <button
-                        onClick={() => setShowFilter(!showFilter)}
-                        className="px-4 hover:opacity-70 py-2 ml-3 bg-red-500 rounded-md text-white w-2/4"
+                        onClick={() => {
+                          setShowFilter(!showFilter);
+                          filterRemove(); 
+                        }}
+                        className="px-4 hover:opacity-70 py-2 bg-red-500 rounded-md text-white w-full"
                         >
                         Cancel
                         </button>

@@ -50,7 +50,8 @@ export default function PosItems() {
     }
     if (resData.status) {
       setLoading(false);
-      setProducts(resData.data);
+      const filteredProduct = resData.data.filter((pd) => pd.active === true);
+      setProducts(filteredProduct);
     } else {
       setLoading(true);
     }
@@ -61,7 +62,8 @@ export default function PosItems() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    setCategory(resData.data);
+    const filteredCategory = resData.data.filter((pd) => pd.active === true);
+    setCategory(filteredCategory);
   };
 
   const productByCat = async (id) => {
