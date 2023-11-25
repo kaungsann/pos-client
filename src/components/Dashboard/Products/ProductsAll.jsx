@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 export default function ProductsAll() {
   const [currentPage, setCurrentPage] = useState(0);
@@ -546,21 +547,33 @@ export default function ProductsAll() {
         ""
       )}
 
-      <div className="fixed bottom-20 right-0">
+      <div className="fixed bottom-20 right-3 w-96 items-center">
         <ReactPaginate
-          containerClassName="pagination-container"
+          containerClassName="pagination-container flex justify-center items-center"
           pageLinkClassName="page-link text-center"
           pageClassName="page-item mx-2"
-          className="flex bg-white justify-around p-3 rounded-md shadow-md text-center"
-          activeClassName="bg-blue-500 text-white rounded-full w-6 text-center"
+          className="flex justify-around text-center items-center"
+          activeClassName="bg-blue-500 text-white text-center"
           previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
           nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
           breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
           pageCount={pageCount}
-          nextLabel="next"
-          previousLabel="previous"
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
           forcePage={currentPage}
           renderOnZeroPageCount={null}
         />
