@@ -262,7 +262,7 @@ export default function PurchaseAll() {
                     <td
                       className="lg:px-4 py-2 text-center"
                     >
-                       <span className={`px-6 rounded-2xl border-2 py-1.5 font-bold ${
+                       <span className={`px-4 rounded-2xl border-2 py-1 font-bold ${
                         sale.state == "pending"
                           ? "text-orange-500 bg-orange-100 border-orange-400"
                           : sale.state == "deliver"
@@ -270,7 +270,7 @@ export default function PurchaseAll() {
                           : sale.state == "arrived"
                           ? "bg-blue-100 text-blue-500 border-blue-400"
                           : sale.state == "confirmed"
-                          ? "bg-green-100 text-green-500 border-green-400"
+                          ? "bg-green-100 text-green-500 border-green-300"
                           : ""
                       }`}>{sale.state}</span>
                     

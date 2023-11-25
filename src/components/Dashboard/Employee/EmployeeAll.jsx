@@ -185,7 +185,6 @@ export default function EmployeeAll() {
             </Link>
             <div onClick={toggleFilterBox}  className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2">
               <FiFilter className="text-xl mx-2" />
-
               <h4>Filter</h4>
             </div>
             
