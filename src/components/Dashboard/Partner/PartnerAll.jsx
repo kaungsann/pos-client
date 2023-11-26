@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getApi, deleteMultiple } from "../../Api";
+import { getApi, deleteMultiple, FormPostApi } from "../../Api";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
@@ -73,7 +73,7 @@ export default function PartnerAll() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "http://3.0.102.114/partner/export-excel";
+      const downloadUrl = "http://localhost:8000/partner/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
       console.log("res download is", response);
@@ -107,9 +107,8 @@ export default function PartnerAll() {
     const selectedFile = event.target.files[0];
     setimportFile(selectedFile);
     const formData = new FormData();
-    formData.append("excel", importFile);
-    const sendExcelApi = await FormPostApi("/product/import-excel", formData);
-    s;
+    formData.append("excel", selectedFile);
+    const sendExcelApi = await FormPostApi("/partner/import-excel", formData, token.accessToken);
     setLoading(true);
     toast(sendExcelApi.message);
     if (sendExcelApi.status) {
