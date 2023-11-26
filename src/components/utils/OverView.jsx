@@ -41,66 +41,54 @@ export default function OverView() {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  const token = useSelector((state) => state.IduniqueData);
-  const dipatch = useDispatch();
-
   const data = [
     { name: "A", value: 80, color: "#ff0000" },
     { name: "B", value: 45, color: "#00ff00" },
     { name: "C", value: 25, color: "#0000ff" },
   ];
-  const cx = 150;
-  const cy = 200;
-  const iR = 50;
-  const oR = 100;
-  const value = 50;
-
-  const needle = (value, data, cx, cy, iR, oR, color) => {
-    let total = 0;
-    data.forEach((v) => {
-      total += v.value;
-    });
-  };
+  
+  const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
 
   const data1 = [
     {
-      name: "Page A",
+      name: "Mon",
       uv: 4000,
       pv: 2400,
       amt: 2400,
     },
     {
-      name: "Page B",
+      name: "Tue",
       uv: 3000,
       pv: 1398,
       amt: 2210,
     },
     {
-      name: "Page C",
+      name: "Wed",
       uv: 2000,
       pv: 9800,
       amt: 2290,
     },
     {
-      name: "Page D",
+      name: "Thu",
       uv: 2780,
       pv: 3908,
       amt: 2000,
     },
     {
-      name: "Page E",
+      name: "Fri",
       uv: 1890,
       pv: 4800,
       amt: 2181,
     },
     {
-      name: "Page F",
+      name: "Sat",
       uv: 2390,
       pv: 3800,
       amt: 2500,
     },
     {
-      name: "Page G",
+      name: "Sun",
       uv: 3490,
       pv: 4300,
       amt: 2100,
@@ -113,7 +101,7 @@ export default function OverView() {
         <div className="flex">
 
           {/* Sale Order  */}
-          <div className="w-2/5	bg-white p-4 border-2 rounded-lg shadow-md">
+          <div className="w-3/5	bg-white p-4 border-2 rounded-lg shadow-md">
             <div className="flex justify-between">
               <h3 className="text-lg font-semibold text-slate-700">
                 Sales Overview
@@ -183,7 +171,7 @@ export default function OverView() {
           </div>
 
           {/* Purchase Order */}
-          <div className="w-2/5	bg-white p-4 border-2 rounded-lg mx-3 shadow-md">
+          <div className="w-3/5	bg-white p-4 border-2 rounded-lg mx-3 shadow-md">
             <div className="flex justify-between">
               <h3 className="text-lg font-semibold text-slate-700">
                 Purchases Overview
@@ -249,44 +237,6 @@ export default function OverView() {
                     $ 124,56
                   </h2>
                 </div>
-              </div>
-            </div>
-          </div>
-
-
-          <div className="w-1/5 bg-white rounded-lg mx-auto shadow-md p-4 relative">
-            <div className="flex justify-between">
-              <h3 className="text-lg font-semibold text-slate-700">
-                Stock
-              </h3>
-              <div>
-                <span>X</span>
-                <span>X</span>
-              </div>
-            </div>
-            <div>
-              <div className="w-4/5 flex justify-center">
-                <PieChart  width={260} height={200}>
-                  <Pie
-                    dataKey="value"
-                    startAngle={180}
-                    endAngle={0}
-                    data={data}
-                    cx={cx}
-                    cy={cy}
-                    innerRadius={iR}
-                    outerRadius={oR}
-                    fill="#8884d8"
-                    stroke="none"
-                  >
-                    {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  {needle(value, data, cx, cy, iR, oR, "#d0d000")}
-                  <Bar dataKey="name" fill="#8884d8" />
-                  <Bar dataKey="value" fill="#82ca9d" />
-                </PieChart>
               </div>
             </div>
           </div>

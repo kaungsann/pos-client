@@ -49,7 +49,7 @@ export default function Stock() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "http://3.0.102.114/stock/export-excel";
+      const downloadUrl = "http://localhost:8000/stock/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
       console.log("res download is", response);
@@ -150,7 +150,7 @@ export default function Stock() {
                     {format(new Date(stk.createdAt), "yyyy-MM-dd")}
                   </td>
                   <td className="py-3">
-                    {stk.location ? stk.location : "no have location"}
+                    {stk.location ? stk.location.name : "no have location"}
                   </td>
                 </tr>
               ))}

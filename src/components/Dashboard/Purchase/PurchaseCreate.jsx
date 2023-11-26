@@ -526,7 +526,7 @@ export default function SaleOrderCreate() {
               className="odd:bg-white even:bg-slate-200 space-y-10  mb-8 w-full items-center cursor-pointer"
             >
               <td className="lg:px-4 py-2 text-center">{line.product.name}</td>
-              <td className="lg:px-4 py-2 text-center">{line.tax}</td>
+              <td className="lg:px-4 py-2 text-center">{line.tax.toFixed(2)}</td>
               <td className="lg:px-4 py-2 text-center">{line.qty}</td>
               <td className="lg:px-4 py-2 text-center">{line.unitPrice}</td>
               <td className="lg:px-4 py-2 text-center">{line.subTotal}</td>
@@ -545,12 +545,12 @@ export default function SaleOrderCreate() {
       <div className="flex flex-col">
         <div className="flex mt-8 justify-self-end">
           <h1 className="text-lg font-semibold">
-            TaxTotal : <span>{totalTax ?? 0}</span>
+            TaxTotal : <span>{totalTax.toFixed(2) ?? 0}</span>
           </h1>
         </div>
         <div className="flex mt-4 justify-self-end">
           <h1 className="text-lg font-semibold">
-            Total : <span>{totalCost ?? 0}</span>
+            Total : <span>{totalCost.toFixed(2) ?? 0}</span>
           </h1>
         </div>
       </div>
