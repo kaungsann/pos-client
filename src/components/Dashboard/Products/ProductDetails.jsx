@@ -104,14 +104,14 @@ export default function ProductDetails() {
                   {new Date(detail[0].expiredAt).toLocaleDateString()}
                 </h3>
               </div>
-              <div className="flex justify-between my-3 items-center">
+              {/* <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">
                   avaliableInPos
                 </h4>
                 <h3 className="font-bold text-lg text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                   {detail[0].avaliableInPos ? "Have Product" : "No have in pos"}
                 </h3>
-              </div>
+              </div> */}
               <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">
                   Stock Quantity

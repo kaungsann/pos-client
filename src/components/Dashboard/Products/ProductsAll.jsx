@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 import ReactPaginate from "react-paginate";
-import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
+import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function ProductsAll() {
   const [currentPage, setCurrentPage] = useState(0);
@@ -37,7 +37,7 @@ export default function ProductsAll() {
   const [loading, setLoading] = useState(false);
   const [categorys, setCategorys] = useState([]);
 
-  const [importFile, setimportFile] = useState("");
+  const [importFile, setimportFile] = useState(null);
 
   const importRef = useRef(null);
 
@@ -88,7 +88,7 @@ export default function ProductsAll() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "http://3.0.102.114/product/export-excel";
+      const downloadUrl = "http://localhost:8000/product/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
 
@@ -123,8 +123,12 @@ export default function ProductsAll() {
     const selectedFile = event.target.files[0];
     setimportFile(selectedFile);
     const formData = new FormData();
-    formData.append("excel", importFile);
-    const sendExcelApi = await FormPostApi("/product/import-excel", formData);
+    formData.append("excel", selectedFile);
+    const sendExcelApi = await FormPostApi(
+      "/product/import-excel",
+      formData,
+      token.accessToken
+    );
     setLoading(true);
     toast(sendExcelApi.message);
     if (sendExcelApi.status) {
@@ -175,12 +179,12 @@ export default function ProductsAll() {
       ) {
         return false;
       }
-  
+
       // Filter by barcode
       if (filterBarcode && !product.barcode.includes(filterBarcode)) {
         return false;
       }
-  
+
       // Filter by category
       if (filterCategory) {
         if (product.category) {
@@ -191,18 +195,18 @@ export default function ProductsAll() {
           return false;
         }
       }
-  
+
       // Filter by price
       if (
         filterPrice &&
-        parseFloat(product.listPrice) !== parseFloat(filterPrice)
+        parseFloat(product?.salePrice) !== parseFloat(filterPrice)
       ) {
         return false;
       }
-  
+
       return true;
     });
-  
+
     return filteredProducts;
   };
 
@@ -220,10 +224,14 @@ export default function ProductsAll() {
       return;
     }
 
-    const response = await deleteMultiple("/product", {
-      productIds: selectedItems,
-    }, token.accessToken);
-    console.log("response data delete  is " ,response )
+    const response = await deleteMultiple(
+      "/product",
+      {
+        productIds: selectedItems,
+      },
+      token.accessToken
+    );
+    console.log("response data delete  is ", response);
 
     if (response.status) {
       toast("Selected products deleted successfully.");
@@ -257,7 +265,7 @@ export default function ProductsAll() {
   useEffect(() => {
     productApi();
     categoryApi();
-  
+
     if (filterBarcode || filterCategory || filterPrice) {
       setIsFilterActive(true);
     } else {
@@ -303,17 +311,16 @@ export default function ProductsAll() {
               <BiImport className="text-xl mx-2" />
               <h4> Export Excel</h4>
             </div>
-            <div
-              onClick={handleFileImportClick}
-              className="rounded-sm shadow-sm flex items-center text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"
-            >
+            <div className="rounded-sm shadow-sm flex items-center text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2">
               <input
                 type="file"
-                style={{ display: "none" }}
                 ref={importRef}
+                style={{ display: "none" }}
                 onChange={handleFileImportChange}
               />
-              <h4>Import Excel </h4>
+              <button onClick={handleFileImportClick}>
+                Import Excel
+              </button>
               <BiExport className="text-xl mx-2" />
             </div>
           </div>
@@ -401,13 +408,16 @@ export default function ProductsAll() {
                     />
                   </td>
                   <td className="lg:px-4 py-2 text-center">{product.name}</td>
-                  <td className="lg:px-4 py-2 text-center">{product.ref ? product.ref : "none"}</td>
+                  <td className="lg:px-4 py-2 text-center">
+                    {product.ref ? product.ref : "none"}
+                  </td>
                   <td className="lg:px-4 py-2 text-center">
                     {product.expiredAt ? product.expiredAt : "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
-                    {product.description ?
-                      product.description.substring(0, 30): "none"}
+                    {product.description
+                      ? product.description.substring(0, 30)
+                      : "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center ">
                     {product.barcode ? product.barcode : "none"}
@@ -562,16 +572,12 @@ export default function ProductsAll() {
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
-              <IoMdArrowRoundBack className="mr-2"/>
-              {' '}
-              Previous
+              <IoMdArrowRoundBack className="mr-2" /> Previous
             </div>
-          } 
+          }
           nextLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
-              Next
-              {' '}
-              <IoMdArrowRoundForward className="ml-2"/>
+              Next <IoMdArrowRoundForward className="ml-2" />
             </div>
           }
           forcePage={currentPage}

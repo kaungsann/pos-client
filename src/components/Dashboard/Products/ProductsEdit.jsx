@@ -21,14 +21,12 @@ export default function ProductsEdit() {
   const [tax, setTax] = useState(null);
   const [stockQuantity, setStockQuantity] = useState(null);
   const [catName, setCatName] = useState("");
-  const [avaliable, setAAvaliable] = useState(null);
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
-  const [select, setSelect] = useState("");
+  const [image, setImage] = useState(null);
   const [updatePrice, setUpdatePrice] = useState(null);
   const token = useSelector((state) => state.IduniqueData);
 
-  const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const [profit, setProfit] = useState(null);
   const [purchasePrice, setPurchasePrice] = useState(null);
@@ -38,27 +36,25 @@ export default function ProductsEdit() {
 
   const SingleProductApi = async () => {
     let resData = await getApi(`/product/${id}`, token.accessToken);
-    
-  console.log("single roduct is a" ,  resData)
+
+    console.log("single roduct is a", resData);
     setRef(resData.data[0].ref);
     setName(resData.data[0].name);
     setDescription(resData.data[0].description);
-    if(resData.data[0].expiredAt){
-      setExpiredate(new Date(resData.data[0].expiredAt).toLocaleDateString());
+    if (resData.data[0].expiredAt) {
+      setExpiredate(resData.data[0].expiredAt);
     }
     setPurchasePrice(resData.data[0].purchasePrice);
     setProfit(resData.data[0].marginProfit);
     setPrice(resData.data[0].salePrice);
     setBar(resData.data[0].barcode);
-    setCatName(resData.data[0].category.name);
-    setSelect(resData.data[0].image);
-    setTax(resData.data[0].tax);
+    setCatName(resData.data[0].category?.name);
+    setImage(resData.data[0]?.image);
+    setTax(resData.data[0]?.tax);
     setStockQuantity(resData.data[0].minStockQty);
-
-
   };
 
-  console.log("ur chase rice is of" , purchasePrice)
+  console.log("ur chase rice is of", purchasePrice);
 
   const createProductApi = async () => {
     const formData = new FormData();
@@ -68,9 +64,6 @@ export default function ProductsEdit() {
     }
     if (ref) {
       formData.append("ref", ref);
-    }
-    if (avaliable) {
-      formData.append("avaliable", avaliable);
     }
     if (expiredate) {
       formData.append("expiredAt", expiredate);
@@ -103,7 +96,6 @@ export default function ProductsEdit() {
       formData.append("minStockQty", stockQuantity);
     }
 
-
     let resData = await FormPathApi(
       `/product/${id}`,
       formData,
@@ -113,7 +105,7 @@ export default function ProductsEdit() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-     console.log(" data is res roduct" , resData)
+    console.log(" data is res roduct", resData);
     if (resData.status) {
       navigate("/admin/products/all");
     } else {
@@ -155,16 +147,19 @@ export default function ProductsEdit() {
   };
 
   useEffect(() => {
-    getCategory();
-    SingleProductApi();
+    const fetchData = async () => {
+      await getCategory();
+      await SingleProductApi();
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
     const calculatedSalePrice =
       parseFloat(purchasePrice) +
       parseFloat(purchasePrice) * (parseFloat(profit) / 100);
-      setUpdatePrice(calculatedSalePrice);
-      setUpdatePrice(calculatedSalePrice);
+    setUpdatePrice(calculatedSalePrice);
   }, [purchasePrice, profit]);
 
   return (
@@ -208,18 +203,11 @@ export default function ProductsEdit() {
             <label className="text-md font-semibold">Product Image</label>
             <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
               <RiImageAddFill className=" text-slate-400 text-6xl" />
-              {file ? (
-                <img
-                  src={selectedImage}
-                  className="absolute object-cover w-full h-full"
-                />
-              ) : (
-                <img
-                  loading="eager | lazy"
-                  src={select}
-                  className="absolute object-cover w-full h-full"
-                />
-              )}
+              <img
+                loading="eager | lazy"
+                src={image}
+                className="absolute object-cover w-full h-full"
+              />
             </div>
             <div
               onClick={handleFileInputClick}
@@ -293,15 +281,15 @@ export default function ProductsEdit() {
                 placeholder="Enter product Ref"
               />
             </div>
-            <div className="w-60 mx-8 mb-3">
-              <label className="text-md font-semibold">Expire-Date*</label>
+            <div className="w-60 mb-3 mx-8">
+              <label className="text-md font-semibold">Expire-Date</label>
               <input
-                type="text"
-                value={expiredate}
                 style={{ backgroundColor: "transparent" }}
+                type="date"
+                value={expiredate}
                 onChange={(e) => setExpiredate(e.target.value)}
-                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-                placeholder="Enter product stock quantity"
+                className="w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-600"
+                placeholder="Enter expire-date"
               />
             </div>
             <div className="w-60 mx-8 mb-3">
@@ -344,7 +332,7 @@ export default function ProductsEdit() {
               />
             </div>
 
-            <div className="w-60 mx-8 mb-3">
+            {/* <div className="w-60 mx-8 mb-3">
               <label className="text-md font-semibold">AvaliableInPos*</label>
 
               <select
@@ -361,7 +349,7 @@ export default function ProductsEdit() {
                   false
                 </option>
               </select>
-            </div>
+            </div> */}
             <div className="w-60 mb-3 mx-8">
               <label className="text-md font-semibold">PurchasePrice*</label>
               <input
