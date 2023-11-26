@@ -24,7 +24,7 @@ export default function ProductsEdit() {
   const [avaliable, setAAvaliable] = useState(null);
   const navigate = useNavigate();
   const [file, setFile] = useState(null);
-  const [select, setSelect] = useState("");
+  const [select, setSelect] = useState(null);
   const [updatePrice, setUpdatePrice] = useState(null);
   const token = useSelector((state) => state.IduniqueData);
 
@@ -40,22 +40,20 @@ export default function ProductsEdit() {
     let resData = await getApi(`/product/${id}`, token.accessToken);
     
   console.log("single roduct is a" ,  resData)
-    setRef(resData.data[0].ref);
-    setName(resData.data[0].name);
-    setDescription(resData.data[0].description);
-    if(resData.data[0].expiredAt){
-      setExpiredate(new Date(resData.data[0].expiredAt).toLocaleDateString());
-    }
-    setPurchasePrice(resData.data[0].purchasePrice);
-    setProfit(resData.data[0].marginProfit);
-    setPrice(resData.data[0].salePrice);
-    setBar(resData.data[0].barcode);
-    setCatName(resData.data[0].category.name);
     setSelect(resData.data[0].image);
     setTax(resData.data[0].tax);
     setStockQuantity(resData.data[0].minStockQty);
-
-
+    setName(resData.data[0].name);
+    setDescription(resData.data[0].description);
+    setPurchasePrice(resData.data[0].purchasePrice);
+    setProfit(resData.data[0].marginProfit);
+    setPrice(resData.data[0].salePrice);
+    setRef(resData.data[0].ref);
+    setBar(resData.data[0].barcode);
+    setCatName(resData.data[0].category.name);
+    if(resData.data[0].expiredAt){
+      setExpiredate(new Date(resData.data[0].expiredAt).toLocaleDateString());
+    }
   };
 
   console.log("ur chase rice is of" , purchasePrice)
@@ -139,7 +137,7 @@ export default function ProductsEdit() {
   const handleFileInputClick = () => {
     fileInputRef.current.click();
   };
-
+  console.log(file)
   const handleFileInputChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
@@ -165,7 +163,9 @@ export default function ProductsEdit() {
       parseFloat(purchasePrice) * (parseFloat(profit) / 100);
       setUpdatePrice(calculatedSalePrice);
       setUpdatePrice(calculatedSalePrice);
-  }, [purchasePrice, profit]);
+
+      setSelectedImage(select);
+  }, [purchasePrice, profit ,select]);
 
   return (
     <>
