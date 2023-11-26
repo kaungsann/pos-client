@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { PathData, getApi } from "../../Api";
+import { PathData, getApi, orderConfirmApi } from "../../Api";
 import { BiExport } from "react-icons/bi";
 import { MdClear } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
@@ -20,9 +20,8 @@ export default function PurchaseAll() {
 
   const [showFilter, setShowFilter] = useState(false);
   const [isFilterActive, setIsFilterActive] = useState(false); // Track if any filter is active
-  const [confrimShowBox , setconfrimShowBox] = useState(false)
-  const [ConfirmOrderId  , setConfirmOrderId] = useState(null)
-  
+  const [confrimShowBox, setconfrimShowBox] = useState(false);
+  const [ConfirmOrderId, setConfirmOrderId] = useState(null);
 
   const [filterDate, setFilterDate] = useState("");
   const [filterStaff, setFilterStaff] = useState("");
@@ -51,22 +50,22 @@ export default function PurchaseAll() {
     }
   };
 
-  const handleFileImportClick = () => {
-    importRef.current.click();
-  };
-  const handleFileImportChange = async (event) => {
-    const selectedFile = event.target.files[0];
-    setimportFile(selectedFile);
-    const formData = new FormData();
-    formData.append("excel", importFile);
-    const sendExcelApi = await FormPostApi("/purcahse/import-excel", formData);
-    setLoading(true);
-    toast(sendExcelApi.message);
-    if (sendExcelApi.status) {
-      setLoading(false);
-      PurchaseOrderApi();
-    }
-  };
+  // const handleFileImportClick = () => {
+  //   importRef.current.click();
+  // };
+  // const handleFileImportChange = async (event) => {
+  //   const selectedFile = event.target.files[0];
+  //   setimportFile(selectedFile);
+  //   const formData = new FormData();
+  //   formData.append("excel", importFile);
+  //   const sendExcelApi = await FormPostApi("/purcahse/import-excel", formData);
+  //   setLoading(true);
+  //   toast(sendExcelApi.message);
+  //   if (sendExcelApi.status) {
+  //     setLoading(false);
+  //     PurchaseOrderApi();
+  //   }
+  // };
 
   const toggleFilterBox = () => {
     setShowFilter(!showFilter);
@@ -97,29 +96,23 @@ export default function PurchaseAll() {
 
   const handleConfirm = (id) => {
     setconfrimShowBox(true);
-    setConfirmOrderId(id)
-  }
+    setConfirmOrderId(id);
+  };
 
-  const changeConfirmOrder = async() => {
-       const response = await fetch(`https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/purchase/${ConfirmOrderId}?state=confirmed`,
-       {
-        method: "PATCH",
-        headers: {
-          authorization: `Bearer ${token.accessToken}`,
-        },
-       }
-    )
-    let resData = await response.json();
-      console.log("res data confirm is" ,response )
-        toast(resData.message)
-        PurchaseOrderApi()
-        setconfrimShowBox(false);
-  }
+  const changeConfirmOrder = async () => {
+    const response = await orderConfirmApi(
+      `/purchase/${ConfirmOrderId}?state=confirmed`,
+      token.accessToken
+    );
+    console.log(response);
+    toast(response.message);
+    PurchaseOrderApi();
+    closeBox();
+  };
 
   const closeBox = () => {
     setconfrimShowBox(false);
-  }
-
+  };
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -168,19 +161,6 @@ export default function PurchaseAll() {
               <FiFilter className="text-xl mx-2" />
               <h4>Filter</h4>
             </div>
-            <div
-              onClick={handleFileImportClick}
-              className="rounded-sm mx-3 shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"
-            >
-            <input
-                type="file"
-                style={{ display: "none" }}
-                ref={importRef}
-                onChange={handleFileImportChange}
-              />
-              <h4>Import Excel</h4>
-              <BiExport className="text-xl mx-2" />
-            </div>
           </div>
           <div className="w-96 md:w-72 relative">
             <input
@@ -197,14 +177,14 @@ export default function PurchaseAll() {
       <div className="mx-auto">
         <div className="flex justify-between items-center">
           <h2 className="lg:text-2xl font-bold my-4">Purchase</h2>
-            {isFilterActive && (
-              <button
-                className="bg-red-500 px-4 h-8 rounded-md text-white hover:opacity-70"
-                onClick={filterRemove}
-              >
-                Remove Filter
-              </button>
-            )}
+          {isFilterActive && (
+            <button
+              className="bg-red-500 px-4 h-8 rounded-md text-white hover:opacity-70"
+              onClick={filterRemove}
+            >
+              Remove Filter
+            </button>
+          )}
         </div>
         <table className="w-full text-center relative">
           <tr className="bg-blue-600 text-white">
@@ -237,7 +217,7 @@ export default function PurchaseAll() {
                     className="hover:bg-blue-100 odd:bg-white even:bg-slate-200 mt-3 w-full"
                   >
                     <td className="lg:px-4 py-2 text-center">
-                      {format(new Date(sale.createdAt), "yyyy-MM-dd")}
+                      {format(new Date(sale.orderDate), "yyyy-MM-dd")}
                     </td>
 
                     <td className="lg:px-4 py-2 text-center">
@@ -259,21 +239,22 @@ export default function PurchaseAll() {
                     <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
                       {sale.lines.length}
                     </td>
-                    <td
-                      className="lg:px-4 py-2 text-center"
-                    >
-                       <span className={`px-4 rounded-2xl border-2 py-1 font-bold ${
-                        sale.state == "pending"
-                          ? "text-orange-500 bg-orange-100 border-orange-400"
-                          : sale.state == "deliver"
-                          ? "bg-cyan-100 text-cyan-500 border-cyan-400"
-                          : sale.state == "arrived"
-                          ? "bg-blue-100 text-blue-500 border-blue-400"
-                          : sale.state == "confirmed"
-                          ? "bg-green-100 text-green-500 border-green-300"
-                          : ""
-                      }`}>{sale.state}</span>
-                    
+                    <td className="lg:px-4 py-2 text-center">
+                      <span
+                        className={`px-4 rounded-2xl border-2 py-1 font-bold ${
+                          sale.state == "pending"
+                            ? "text-orange-500 bg-orange-100 border-orange-400"
+                            : sale.state == "deliver"
+                            ? "bg-cyan-100 text-cyan-500 border-cyan-400"
+                            : sale.state == "arrived"
+                            ? "bg-blue-100 text-blue-500 border-blue-400"
+                            : sale.state == "confirmed"
+                            ? "bg-green-100 text-green-500 border-green-300"
+                            : ""
+                        }`}
+                      >
+                        {sale.state}
+                      </span>
                     </td>
                     <td className="lg:px-4 py-2 text-center ">
                       {sale.taxTotal}
@@ -285,14 +266,20 @@ export default function PurchaseAll() {
                           navigate(`/admin/purchase/detail/${sale.id}`)
                         }
                         className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
-                      />                       
+                      />
                     </td>
-                    <td className="lg:px-4 py-2 text-center"
+                    <td
+                      className="lg:px-4 py-2 text-center"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleConfirm(sale.id);
-                      }}>
-                       {sale.state === "pending" &&  <button className="px-2 py-1 ml-2 bg-green-500 text-white rounded-lg hover:opacity-75">confirm</button> }
+                      }}
+                    >
+                      {sale.state === "pending" && (
+                        <button className="px-2 py-1 ml-2 bg-green-500 text-white rounded-lg hover:opacity-75">
+                          confirm
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -311,9 +298,9 @@ export default function PurchaseAll() {
             )}
           </tbody>
           <div className=" w-96 z-50 fixed top-40 bottom-0 left-0 right-0 mx-auto">
-              {
-               confrimShowBox  && <ConfrimBox close={closeBox} comfirmHandle={changeConfirmOrder}/>
-              }
+            {confrimShowBox && (
+              <ConfrimBox close={closeBox} comfirmHandle={changeConfirmOrder} />
+            )}
           </div>
         </table>
       </div>

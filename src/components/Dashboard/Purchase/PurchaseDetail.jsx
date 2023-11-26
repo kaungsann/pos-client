@@ -106,18 +106,17 @@ export default function SaleOrderDetail() {
               </div>
             </div>
             <h2 className="py-1.5 text-lg font-bold mt-4 bg-blue-600 text-white pl-4">
-              Customer Order Products
+              Ordered Products
             </h2>
             <div className="w-full mb-6">
               <table className="w-full">
                 <thead className="w-full">
                   <tr className="">
-                    <th className="text-center">Photo</th>
                     <th className="text-center">Name</th>
                     <th className="py-2 text-center">Tax</th>
                     <th className="py-2 text-center">Quantity</th>
-                    <th className="py-2 text-center">unitPrice</th>
-                    <th className="py-2">subTotal</th>
+                    <th className="py-2 text-center">UnitPrice</th>
+                    <th className="py-2">SubTotal</th>
                   </tr>
                 </thead>
                 <tbody className="w-full space-y-10">
@@ -127,16 +126,6 @@ export default function SaleOrderDetail() {
                         key={item.orderId._id}
                         className="odd:bg-white even:bg-slate-200 space-y-10  mb-8 w-full items-center cursor-pointer"
                       >
-                        <td className="lg:px-4 py-2 text-center flex justify-center items-center">
-                          {item.product.image ? (
-                            <img
-                              src="http://3.0.102.114/product/65546e0db0e6e4580d5136e9.jfif"
-                              className="w-10 h-10 rounded-md shadow-md mx-auto"
-                            />
-                          ) : (
-                            <Icon icon="la:image-solid" className="text-2xl"/>
-                          )}
-                        </td>
                         <td className="text-center">
                           {item.product ? item.product.name : "no have name"}
                         </td>

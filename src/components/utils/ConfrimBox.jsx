@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 export default function ConfrimBox({comfirmHandle , close}) {
   const handleConfirm = () => {
     // Trigger confirmHandle when the Confirm button is clicked
@@ -25,7 +26,7 @@ export default function ConfrimBox({comfirmHandle , close}) {
            <div className="p-4 my-2 flex flex-col">
   
               <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
-                This Order will be change from pending to confirm
+                Do you want to confirm this order?
               </label>
 
             <div className='flex flex-end w-full justify-end'>

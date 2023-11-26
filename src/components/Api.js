@@ -100,3 +100,16 @@ export const deleteMultiple = async (route, ids, token) => {
   let resData = await response.json();
   return resData;
 };
+
+export const orderConfirmApi = async (route, token) => {
+  const response = await fetch(`${BASE_URL}${route}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+
+  const resData = await response.json();
+  return resData;
+};

@@ -20,7 +20,7 @@ export default function SaleOrderCreate() {
   const [payment, setPayment] = useState(null);
   const [item, setItem] = useState(null);
 
-  const [pd, setPd] = useState(null);
+  const [pd, setPd] = useState("default");
   const [quantity, setQuantity] = useState(0);
   const [Tax, setTax] = useState(0);
   const [unitPrice, setUnitPrice] = useState(0);
@@ -47,9 +47,9 @@ export default function SaleOrderCreate() {
   const dipatch = useDispatch();
 
   const createProductApi = async () => {
-    if(saleOrderLines.length == 0 ){
-      toast("you need to selecte the product")
-      return
+    if (saleOrderLines.length == 0) {
+      toast("you need to selecte the product");
+      return;
     }
     if (date === "") {
       setShowErrorDate(true);
@@ -103,7 +103,7 @@ export default function SaleOrderCreate() {
 
     try {
       let resData = await sendJsonToApi("/purchase", data, token.accessToken);
-      console.log("data is" ,resData )
+      console.log("data is", resData);
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
@@ -153,25 +153,23 @@ export default function SaleOrderCreate() {
     if (pd === null || quantity === 0) {
       return;
     }
+
     const subTotal = unitPrice * quantity;
     const selectedProduct = product.find((pt) => pt.id === pd);
-    if (selectedProduct) {
-      const calculatedTax = selectedProduct.tax * quantity;
-      setTax(calculatedTax);
-    }
 
     const newSaleOrderLine = {
       product: item,
       qty: quantity,
-      tax: Tax * quantity,
+      tax: (selectedProduct.tax / 100) * quantity * unitPrice,
       unitPrice: unitPrice,
       subTotal: subTotal,
     };
 
     setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
 
-    setPd(null);
+    setPd("default");
     setQuantity(0);
+    setTax(0);
     setUnitPrice(0);
   };
 
@@ -188,7 +186,7 @@ export default function SaleOrderCreate() {
     let calculatedSubTotal = 0;
 
     saleOrderLines.forEach((sel) => {
-      calculatedTotalTax += ((sel.tax * sel.qty) / 100) * sel.unitPrice;
+      calculatedTotalTax += sel.tax;
       calculatedSubTotal += sel.unitPrice * sel.qty;
     });
 
@@ -403,33 +401,11 @@ export default function SaleOrderCreate() {
               placeholder="Enter note"
             />
           </div>
-
-          <div className="flex">
-            <div className="flex mt-8">
-              <label className="text-md font-semibold">TaxTotal :</label>
-              <input
-                value={totalTax}
-                style={{ backgroundColor: "transparent" }}
-                type="number"
-                className="border-b ml-3 border-slate-400 outline-none w-36"
-              />
-            </div>
-            <div className="flex mt-8">
-              <label className="text-md font-semibold">Total :</label>
-              <input
-                value={totalCost}
-                type="number"
-                style={{ backgroundColor: "transparent" }}
-                className="border-b  ml-3 border-slate-400 outline-none w-36"
-              />
-            </div>
-          </div>
         </form>
       </div>
-
-      <div className="mt-6">
+      <div className="mt-10">
         <div className="flex justify-between">
-          <h2 className="lg:text-2xl font-semibold">New Purchase Order Line</h2>
+          <h2 className="lg:text-2xl font-semibold">Add Items</h2>
           <button
             onClick={handleAddProduct}
             className="px-8 py-2 text-white font-bold rounded-md shadow-md ml-6 border-2 border-blue-500 bg-blue-600 hover:opacity-75"
@@ -459,7 +435,7 @@ export default function SaleOrderCreate() {
                 );
                 if (selectedProduct) {
                   setUnitPrice(selectedProduct.purchasePrice);
-                  setTotalPrice(selectedProduct.purchasePrice);
+                  setQuantity(1);
                   setTax(selectedProduct.tax);
                   setItem(selectedProduct);
                 }
@@ -502,12 +478,12 @@ export default function SaleOrderCreate() {
             />
           </div>
           <div>
-            <label className="text-md font-semibold">Tax:</label>
+            <label className="text-md font-semibold">Tax %: </label>
             <input
               type="number"
-              value={Tax * quantity}
+              value={(Tax * quantity) / 100}
               style={{ backgroundColor: "transparent" }}
-              className="border-b border-slate-400 outline-none w-36"
+              className="ms-2 border-b border-slate-400 outline-none w-36"
             />
           </div>
           <div>
@@ -516,16 +492,16 @@ export default function SaleOrderCreate() {
               type="number"
               value={unitPrice}
               style={{ backgroundColor: "transparent" }}
-              className="border-b border-slate-400 outline-none w-36"
+              className="ms-2 border-b border-slate-400 outline-none w-36"
             />
           </div>
           <div>
-            <label className="text-md font-semibold">subTotal Price:</label>
+            <label className="text-md font-semibold">SubTotal: </label>
             <input
               type="number"
               style={{ backgroundColor: "transparent" }}
-              value={subTotal * quantity}
-              className="border-b border-slate-400 outline-none w-36"
+              value={unitPrice * quantity}
+              className="ms-2 border-b border-slate-400 outline-none w-36"
             />
           </div>
         </form>
@@ -535,8 +511,7 @@ export default function SaleOrderCreate() {
         <thead>
           <tr className="bg-blue-600 text-white">
             <th className="lg:px-4 py-2 text-center">Photo</th>
-            <th className="lg:px-4 py-2 text-center">Product</th>
-            <th className="lg:px-4 py-2 text-center">Tax</th>
+            <th className="lg:px-4 py-2 text-center">Tax %</th>
             <th className="lg:px-4 py-2 text-center">Quantity</th>
             <th className="lg:px-4 py-2 text-center">Unit Price</th>
             <th className="lg:px-4 py-2 text-center">SubTotal</th>
@@ -550,17 +525,6 @@ export default function SaleOrderCreate() {
               key={line.id}
               className="odd:bg-white even:bg-slate-200 space-y-10  mb-8 w-full items-center cursor-pointer"
             >
-              <td className="lg:px-4 py-2 text-center">
-                {line.product && line.product.image ? (
-                  <img
-                    src={line.product.image}
-                    alt={line.product.name}
-                    className="w-10 h-10 rounded-md shadow-md mx-auto"
-                  />
-                ) : (
-                  <div>No Image</div>
-                )}
-              </td>
               <td className="lg:px-4 py-2 text-center">{line.product.name}</td>
               <td className="lg:px-4 py-2 text-center">{line.tax}</td>
               <td className="lg:px-4 py-2 text-center">{line.qty}</td>
@@ -578,6 +542,18 @@ export default function SaleOrderCreate() {
           ))}
         </tbody>
       </table>
+      <div className="flex flex-col">
+        <div className="flex mt-8 justify-self-end">
+          <h1 className="text-lg font-semibold">
+            TaxTotal : <span>{totalTax ?? 0}</span>
+          </h1>
+        </div>
+        <div className="flex mt-4 justify-self-end">
+          <h1 className="text-lg font-semibold">
+            Total : <span>{totalCost ?? 0}</span>
+          </h1>
+        </div>
+      </div>
     </>
   );
 }
