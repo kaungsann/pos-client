@@ -12,6 +12,8 @@ import { MdClear } from "react-icons/md";
 import { format } from "date-fns";
 import { removeData } from "../../../redux/actions";
 import ClipLoader from "react-spinners/ClipLoader";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 
 export default function EmployeeAll() {
@@ -19,6 +21,9 @@ export default function EmployeeAll() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const itemsPerPage = 10; 
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [email , setEmail] = useState("")
   const [phone , setPhone] = useState(null)
@@ -56,34 +61,37 @@ export default function EmployeeAll() {
       toast(resData.message);
     }
   };
+  const filteredmployee = () => {
+    const filteredEmployee = employee.filter((employe) => {
+      //Filter by name
+      if (
+        filterName &&
+        !employe.name.toLowerCase().includes(filterName)
+      ) {
+        return false;
+      }
+      // Filter by email
+      if (email && !employe.email.includes(email)) {
+        return false;
+      }
+  
+      if (dateOfBirth && !employe.birthdate.includes(dateOfBirth)) {
+        return false;
+      }
+      if (Gender && !employe.gender.includes(Gender)) {
+        return false;
+      }
+      if (phone && !employe.phone.includes(phone)) {
+        return false;
+      }
+      if (emplyeeId && !employe.employeeId.includes(emplyeeId)) {
+        return false;
+      }
+      return true;
+    });
+    return filteredEmployee
+  }
 
-  const filteredEmployee = employee.filter((employe) => {
-    //Filter by name
-    if (
-      filterName &&
-      !employe.name.toLowerCase().includes(filterName)
-    ) {
-      return false;
-    }
-    // Filter by email
-    if (email && !employe.email.includes(email)) {
-      return false;
-    }
-
-    if (dateOfBirth && !employe.birthdate.includes(dateOfBirth)) {
-      return false;
-    }
-    if (Gender && !employe.gender.includes(Gender)) {
-      return false;
-    }
-    if (phone && !employe.phone.includes(phone)) {
-      return false;
-    }
-    if (emplyeeId && !employe.employeeId.includes(emplyeeId)) {
-      return false;
-    }
-    return true;
-  });
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -150,6 +158,17 @@ export default function EmployeeAll() {
   const toggleFilterBox = () => {
     setShowFilter(!showFilter);
   };
+
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const filteredemployee = filteredmployee(); // Add this line to get the filtered products
+  const pageCount = Math.ceil(filteredemployee.length / itemsPerPage);
+  const currentEmployee = filteredemployee.slice(startIndex, endIndex);
 
   useEffect(() => {
     allEmployeeApi();
@@ -248,8 +267,8 @@ export default function EmployeeAll() {
                 </tr>
               </thead>
               <tbody className="w-full space-y-10">
-                {filteredEmployee.length > 0 ?  
-                    filteredEmployee.map((employ) => (
+                {currentEmployee.length > 0 ?  
+                    currentEmployee.map((employ) => (
                     <tr
                     key={employ.id}
                     onClick={() => toggleSelectItem(employ.id)}
@@ -303,7 +322,7 @@ export default function EmployeeAll() {
                     <ClipLoader
                       color={"#0284c7"}
                       loading={loading}
-                      size={20}
+                      size={40}
                       aria-label="Loading Spinner"
                       data-testid="loader"
                     />
@@ -414,6 +433,37 @@ export default function EmployeeAll() {
           }}
         />
       )}
+      <div className="fixed bottom-12 right-3 w-96 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item mx-2"
+          className="flex justify-around text-center items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
+          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
     </>
   );
 }

@@ -12,11 +12,16 @@ import { FiFilter } from "react-icons/fi";
 import { FaEye } from "react-icons/fa6";
 import { removeData } from "../../../redux/actions";
 import ConfrimBox from "../../utils/ConfrimBox";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io"
 
 export default function PurchaseAll() {
   const [saleorders, setSaleOrders] = useState([]);
   const [searchItems, setSearchItems] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const itemsPerPage = 10; 
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [showFilter, setShowFilter] = useState(false);
   const [isFilterActive, setIsFilterActive] = useState(false); // Track if any filter is active
@@ -72,28 +77,33 @@ export default function PurchaseAll() {
     setShowFilter(!showFilter);
   };
 
-  const filterPurchase = saleorders.filter((sale) => {
-    //Filter by date
-    if (filterDate && !sale.orderDate.includes(filterDate)) {
-      return false;
-    }
-    // Filter by staff
-    if (
-      filterStaff &&
-      !sale.user.username.toLowerCase().includes(filterStaff.toLowerCase())
-    ) {
-      return false;
-    }
+  const filteredPurchase = () => {
+    const filterPurchase = saleorders.filter((sale) => {
+      //Filter by date
+      if (filterDate && !sale.orderDate.includes(filterDate)) {
+        return false;
+      }
+      // Filter by staff
+      if (
+        filterStaff &&
+        !sale.user.username.toLowerCase().includes(filterStaff.toLowerCase())
+      ) {
+        return false;
+      }
+  
+      // Filter by location
+      if (
+        filterLocation &&
+        !sale.location.name.toLowerCase().includes(filterLocation.toLowerCase())
+      ) {
+        return false;
+      }
+      return true;
+    });
+    return filterPurchase
+  }
 
-    // Filter by location
-    if (
-      filterLocation &&
-      !sale.location.name.toLowerCase().includes(filterLocation.toLowerCase())
-    ) {
-      return false;
-    }
-    return true;
-  });
+
 
   const handleConfirm = (id) => {
     setconfrimShowBox(true);
@@ -120,6 +130,18 @@ export default function PurchaseAll() {
     setconfrimShowBox(false);
   }
 
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const filteredPurchased = filteredPurchase();
+
+  const pageCount = Math.ceil(filteredPurchased.length / itemsPerPage);
+  const currentPurchased = filteredPurchased.slice(startIndex, endIndex);
+
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -139,7 +161,7 @@ export default function PurchaseAll() {
   }, [filterDate, filterStaff, filterLocation]);
 
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -163,7 +185,7 @@ export default function PurchaseAll() {
             </Link>
             <div
               onClick={toggleFilterBox}
-              className="rounded-sm ml-3 transition shadow-sm flex items-center z-50 text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
+              className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
             >
               <FiFilter className="text-xl mx-2" />
               <h4>Filter</h4>
@@ -206,7 +228,7 @@ export default function PurchaseAll() {
               </button>
             )}
         </div>
-        <table className="w-full text-center relative">
+        <table className="w-full text-center relative  mb-20">
           <tr className="bg-blue-600 text-white">
             <th className="text-center">Order Date</th>
             <th className="lg:px-4 py-2 text-center">User</th>
@@ -222,8 +244,8 @@ export default function PurchaseAll() {
           </tr>
 
           <tbody className="w-full space-y-10 bg-slate-300">
-            {filterPurchase.length > 0 ? (
-              filterPurchase
+            {currentPurchased.length > 0 ? (
+              currentPurchased
                 .filter(
                   (item) =>
                     searchItems.toLowerCase() === "" ||
@@ -297,7 +319,7 @@ export default function PurchaseAll() {
                   </tr>
                 ))
             ) : (
-              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
@@ -382,6 +404,37 @@ export default function PurchaseAll() {
           </div>
         </div>
       )}
-    </>
+      <div className="fixed bottom-12 right-3 w-96 items-center bg-gray-50">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item mx-2"
+          className="flex justify-around text-center items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
+          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
+    </div>
   );
 }

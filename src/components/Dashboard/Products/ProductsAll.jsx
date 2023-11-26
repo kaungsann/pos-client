@@ -375,7 +375,7 @@ export default function ProductsAll() {
               <th className="lg:px-4 py-2">Action</th>
             </tr>
           </thead>
-          <tbody className="w-full space-y-10">
+          <tbody className="w-full space-y-10 mb-20">
             {currentProducts.length > 0 ? (
               currentProducts.map((product) => (
                 <tr
@@ -546,8 +546,7 @@ export default function ProductsAll() {
       ) : (
         ""
       )}
-
-      <div className="fixed bottom-20 right-3 w-96 items-center">
+      <div className="fixed bottom-12 right-3 w-96 items-center">
         <ReactPaginate
           containerClassName="pagination-container flex justify-center items-center"
           pageLinkClassName="page-link text-center"
@@ -556,7 +555,7 @@ export default function ProductsAll() {
           activeClassName="bg-blue-500 text-white text-center"
           previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
           nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
-          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          breakLabel={<div className="break-label">...</div>} // Custom break element with margin
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
           pageCount={pageCount}

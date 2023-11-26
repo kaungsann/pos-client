@@ -12,12 +12,17 @@ import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
 import { format } from "date-fns";
 import { removeData } from "../../../redux/actions";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 export default function PartnerAll() {
   const inputRef = useRef();
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+
+  const itemsPerPage = 10; 
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [showFilter, setShowFilter] = useState(false);
   const [isFilterActive, setIsFilterActive] = useState(false);
@@ -122,27 +127,32 @@ export default function PartnerAll() {
     setShowFilter(!showFilter);
   };
 
-  const filterPartner = partners.filter((pt) => {
-    //Filter by address
-    if (
-      filterAddress &&
-      !pt.address.toLowerCase().includes(filterAddress.toLowerCase())
-    ) {
-      return false;
-    }
-    // Filter by phone
-    if (filterPhone && !pt.phone.includes(filterPhone)) {
-      return false;
-    }
-    if (
-      filterCompay &&
-      !pt.isComapany.toLowerCase().includes(filterCompay.toLowerCase())
-    ) {
-      // Filter by company name
-      return false;
-    }
-    return true;
-  });
+  const filteredPartner = () =>  {
+    const filterPartner = partners.filter((pt) => {
+      //Filter by address
+      if (
+        filterAddress &&
+        !pt.address.toLowerCase().includes(filterAddress.toLowerCase())
+      ) {
+        return false;
+      }
+      // Filter by phone
+      if (filterPhone && !pt.phone.includes(filterPhone)) {
+        return false;
+      }
+      if (
+        filterCompay &&
+        !pt.isComapany.toLowerCase().includes(filterCompay.toLowerCase())
+      ) {
+        // Filter by company name
+        return false;
+      }
+      return true;
+    });
+    return filterPartner
+  }
+
+
 
   const toggleSelectItem = (partnerID) => {
     setSelectAll(true);
@@ -192,6 +202,16 @@ export default function PartnerAll() {
       getPartnersApi();
     
   };
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const filteredCus = filteredPartner(); 
+  const pageCount = Math.ceil(filteredCus.length / itemsPerPage);
+  const currentCustomers = filteredCus.slice(startIndex, endIndex);
 
   useEffect(() => {
     getPartnersApi();
@@ -202,7 +222,7 @@ export default function PartnerAll() {
     }
   }, [filterAddress, filterPhone, filterCompay]);
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -264,7 +284,7 @@ export default function PartnerAll() {
               type="text"
               className="px-3 py-2 w-full rounded-md border-2 border-blue-500 shadow-md bg-white focus:outline-none"
               id="products"
-              placeholder="search products"
+              placeholder="search partner"
               onChange={(e) => setSearchItems(e.target.value.toLowerCase())}
             />
           </div>
@@ -317,8 +337,8 @@ export default function PartnerAll() {
             </tr>
           </thead>
           <tbody className="w-full space-y-10">
-            {filterPartner.length > 0 ? (
-              filterPartner
+            {currentCustomers.length > 0 ? (
+              currentCustomers
                 .filter((item) =>
                   searchItems.toLowerCase === ""
                     ? item
@@ -375,7 +395,7 @@ export default function PartnerAll() {
                   </tr>
                 ))
             ) : (
-              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
@@ -467,6 +487,38 @@ export default function PartnerAll() {
           </div>
         </div>
       )}
-    </>
+       <div className="fixed bottom-12 right-3 w-96 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item mx-2"
+          className="flex justify-around text-center items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
+          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
+    </div>
+    
   );
 }

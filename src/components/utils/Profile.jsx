@@ -7,6 +7,7 @@ import { BiSolidUser } from "react-icons/bi";
 import { IoLogOutSharp } from "react-icons/io5";
 import { TiBusinessCard } from "react-icons/ti";
 import DeleteAlert from "./DeleteAlert";
+import { format } from "date-fns";
 import {
   AiTwotoneEdit,
   AiOutlineUsergroupAdd,
@@ -49,10 +50,17 @@ export default function Profile() {
     if (response.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    setUsr(response.data);
+    setUsr(response.data[0]);
     setName(response.data[0].username);
     setEmail(response.data[0].email);
+    setPhone(response.data[0].phone)
+    setDate(format(new Date(response.data[0].birthdate), "yyyy-MM-dd"))
+    setAddress(response.data[0].address)
+    setGender(response.data[0].gender)
+    setCity(response.data[0].city)
   };
+
+  console.log("single useris " , usr)
 
   const EditUserApi = async () => {
     const formData = new FormData();

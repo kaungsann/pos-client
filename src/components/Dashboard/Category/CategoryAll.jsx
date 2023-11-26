@@ -10,12 +10,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 import { FaEye } from "react-icons/fa6";
 import { format } from "date-fns";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 export default function CategoryAll() {
   const inputRef = useRef();
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+
+  const itemsPerPage = 5; 
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [alert, setAlert] = useState(false);
   const [searchItems, setSearchItems] = useState([]);
@@ -152,12 +157,22 @@ export default function CategoryAll() {
     }
   };
 
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const pageCount = Math.ceil(categorys.length / itemsPerPage);
+  const currentCategory = categorys.slice(startIndex, endIndex);
+
   useEffect(() => {
     getCategorysApi();
   }, []);
 
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -240,8 +255,8 @@ export default function CategoryAll() {
             <th className="lg:px-4 py-2 text-center">Action</th>
             <th></th>
           </tr>
-          {categorys.length > 0 ? (
-            categorys
+          {currentCategory.length > 0 ? (
+            currentCategory
               .filter((item) =>
                 searchItems.toLowerCase === ""
                   ? item
@@ -288,8 +303,8 @@ export default function CategoryAll() {
                 </tr>
               ))
           ) : (
-            <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
-              {loading && (
+            <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
+             {loading && (
                 <FadeLoader
                   color={"#0284c7"}
                   loading={loading}
@@ -314,6 +329,37 @@ export default function CategoryAll() {
           }}
         />
       )}
-    </>
+       <div className="fixed bottom-20 right-3 w-96 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item mx-2"
+          className="flex justify-around text-center items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
+          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
+    </div>
   );
 }

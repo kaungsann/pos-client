@@ -10,6 +10,8 @@ import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
 import { Icon } from '@iconify/react';
 import ChangePassword from "../../utils/ChangePassword";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 
 export default function Staff() {
@@ -20,6 +22,9 @@ export default function Staff() {
   const [userId, setUserId] = useState(null);
   const [alert, setAlert] = useState(false);
   const [show, setShow] = useState(false)
+
+  const itemsPerPage = 10; 
+  const [currentPage, setCurrentPage] = useState(0);
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
@@ -97,11 +102,22 @@ export default function Staff() {
      setShow(text)
   }
 
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+
+  const pageCount = Math.ceil(users.length / itemsPerPage);
+  const currentUsers = users.slice(startIndex, endIndex);
+
   useEffect(() => {
     getUsersApi();
   }, []);
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -157,8 +173,8 @@ export default function Staff() {
           </tr>
 
           <tbody>
-            {users.length > 0 ?
-              users.map((usr) => (
+            {currentUsers.length > 0 ?
+              currentUsers.map((usr) => (
                 <tr
                   key={usr._id}
                   onClick={() =>  toggleSelectItem(usr._id)}
@@ -208,12 +224,12 @@ export default function Staff() {
                   </td>
                 </tr>
               )):
-              <div className="w-10/12 mx-auto absolute mt-40 flex justify-center">
+              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
               {loading && (
                 <ClipLoader
                   color={"#0284c7"}
                   loading={loading}
-                  size={20}
+                  size={35}
                   aria-label="Loading Spinner"
                   data-testid="loader"
                 />
@@ -238,7 +254,37 @@ export default function Staff() {
       <div className={`absolute top-32 left-0 right-0 z-50 transition-transform transform flex justify-center ${show ? "translate-y-0" : "-translate-y-full"}`}>
         {show && <ChangePassword id={userId} close={closeShowBox} />}
       </div>
-
-    </>
+      <div className="fixed bottom-12 right-3 w-96 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item mx-2"
+          className="flex justify-around text-center items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
+          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
+    </div>
   );
 }

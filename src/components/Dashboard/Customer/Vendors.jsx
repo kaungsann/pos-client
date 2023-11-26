@@ -12,10 +12,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { format } from "date-fns";
 import { removeData } from "../../../redux/actions";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 export default function PartnerAll() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const itemsPerPage = 5; 
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [showFilter, setShowFilter] = useState(false);
   const [isFilterActive, setIsFilterActive] = useState(false);
@@ -74,27 +78,30 @@ export default function PartnerAll() {
     setShowFilter(!showFilter);
   };
 
-  const filteredProducts = partners.filter((pt) => {
-    //Filter by address
-    if (
-      filterAddress &&
-      !pt.address.toLowerCase().includes(filterAddress.toLowerCase())
-    ) {
-      return false;
-    }
-    // Filter by phone
-    if (filterPhone && !pt.phone.includes(filterPhone)) {
-      return false;
-    }
-    if (
-      filterCompay &&
-      !pt.isComapany.toLowerCase().includes(filterCompay.toLowerCase())
-    ) {
-      // Filter by company name
-      return false;
-    }
-    return true;
-  });
+  const filterCustomers = () => {
+    const filterdCustomer = partners.filter((pt) => {
+      //Filter by address
+      if (
+        filterAddress &&
+        !pt.address.toLowerCase().includes(filterAddress.toLowerCase())
+      ) {
+        return false;
+      }
+      // Filter by phone
+      if (filterPhone && !pt.phone.includes(filterPhone)) {
+        return false;
+      }
+      if (
+        filterCompay &&
+        !pt.isComapany.toLowerCase().includes(filterCompay.toLowerCase())
+      ) {
+        // Filter by company name
+        return false;
+      }
+      return true;
+    });
+    return filterdCustomer;
+  }
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -127,6 +134,17 @@ export default function PartnerAll() {
       toast("Failed to delete selected vendor.");
     }
   };
+  
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const filteredCus = filterCustomers(); // Add this line to get the filtered products
+  const pageCount = Math.ceil(filteredCus.length / itemsPerPage);
+  const currentCustomers = filteredCus.slice(startIndex, endIndex);
 
   useEffect(() => {
     getPartnersApi();
@@ -138,7 +156,7 @@ export default function PartnerAll() {
   }, [filterAddress, filterPhone, filterCompay]);
 
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -225,8 +243,8 @@ export default function PartnerAll() {
             </tr>
           </thead>
           <tbody className="w-full space-y-10">
-            {filteredProducts.length > 0 ? (
-              filteredProducts
+            {currentCustomers.length > 0 ? (
+              currentCustomers
                 .filter((item) =>
                   searchItems.toLowerCase === ""
                     ? item
@@ -284,7 +302,7 @@ export default function PartnerAll() {
                   </tr>
                 ))
             ) : (
-              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
@@ -375,6 +393,37 @@ export default function PartnerAll() {
           </div>
         </div>
       )}
-    </>
+       <div className="fixed bottom-12 right-3 w-96 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item mx-2"
+          className="flex justify-around text-center items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
+          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
+    </div>
   );
 }

@@ -26,11 +26,14 @@ export default function SaleOrderDetail() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
+    console.log("sale lines  single" , resData.data)
     if (resData.status) {
-      let name = resData.data.filter((pid) => pid.orderId._id == id);
+      let name = resData.data.filter((pid) => pid.orderId && pid.orderId._id === id);
       setLines(name);
     }
   };
+
+  console.log("sale lines iss single" , lines)
 
   useEffect(() => {
     singlePurchaseOrder();
