@@ -64,7 +64,7 @@ export default function CategoryDetail() {
                   </div>
                   <div className="flex justify-between my-3">
                     <h4 className="font-bold text-lg text-slate-500">
-                      Create Date
+                      Created Date
                     </h4>
                     <h3 className="font-bold text-lg text-blue-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                       {new Date(detail[0].createdAt).toLocaleDateString(
@@ -77,7 +77,7 @@ export default function CategoryDetail() {
                 <div className="w-2/4 justify-between">
                   <div className="flex justify-between my-3">
                     <h4 className="font-bold text-lg text-slate-500">
-                      Updat Date
+                      Updated Date
                     </h4>
                     <h3 className="font-bold text-lg text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                       {new Date(detail[0].updatedAt).toLocaleDateString(

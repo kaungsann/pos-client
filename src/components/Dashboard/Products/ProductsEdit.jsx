@@ -27,6 +27,7 @@ export default function ProductsEdit() {
   const [updatePrice, setUpdatePrice] = useState(null);
   const token = useSelector((state) => state.IduniqueData);
 
+  const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const [profit, setProfit] = useState(null);
   const [purchasePrice, setPurchasePrice] = useState(null);
@@ -203,11 +204,18 @@ export default function ProductsEdit() {
             <label className="text-md font-semibold">Product Image</label>
             <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
               <RiImageAddFill className=" text-slate-400 text-6xl" />
-              <img
-                loading="eager | lazy"
-                src={image}
-                className="absolute object-cover w-full h-full"
-              />
+              {file ? (
+                <img
+                  src={selectedImage}
+                  className="absolute object-cover w-full h-full"
+                />
+              ) : (
+                <img
+                  loading="eager | lazy"
+                  src={image}
+                  className="absolute object-cover w-full h-full"
+                />
+              )}
             </div>
             <div
               onClick={handleFileInputClick}

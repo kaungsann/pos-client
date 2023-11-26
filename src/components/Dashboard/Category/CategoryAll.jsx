@@ -96,9 +96,8 @@ export default function CategoryAll() {
     const selectedFile = event.target.files[0];
     setimportFile(selectedFile);
     const formData = new FormData();
-    formData.append("excel", importFile);
-    const sendExcelApi = await FormPostApi("/product/import-excel", formData);
-    s;
+    formData.append("excel", selectedFile);
+    const sendExcelApi = await FormPostApi("/category/import-excel", formData, token.accessToken);
     setLoading(true);
     toast(sendExcelApi.message);
     if (sendExcelApi.status) {
@@ -185,17 +184,14 @@ export default function CategoryAll() {
               <BiImport className="text-xl mx-2" />
               <h4>Export Excel</h4>
             </div>
-            <div
-              onClick={handleFileImportClick}
-              className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"
-            >
+            <div className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2">
               <input
                 type="file"
-                style={{ display: "none" }}
                 ref={importRef}
+                style={{ display: "none" }}
                 onChange={handleFileImportChange}
               />
-              <h4>Import Excel </h4>
+              <button onClick={handleFileImportClick}>Import Excel</button>
               <BiExport className="text-xl mx-2" />
             </div>
           </div>
