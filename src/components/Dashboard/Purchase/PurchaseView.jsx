@@ -359,7 +359,7 @@ export default function PurchaseView() {
               </h1>
               <div className="px-2 max-h-80 overflow-y-scroll custom-scrollbar mb-6">
                 {todayPurchaseLine.length > 0 ? (
-                  todayPurchaseLine.map((purchaseLines) => (
+                  todayPurchaseLine.slice(0,3).map((purchaseLines) => (
                     <div
                       key={purchaseLines._id}
                       className="w-full flex justify-between mb-3 border-b-2 pb-3"

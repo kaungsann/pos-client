@@ -5,6 +5,7 @@ import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
 import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
 import { FaEye } from "react-icons/fa6";
+import { format } from "date-fns";
 import DeleteAlert from "../../utils/DeleteAlert";
 import FadeLoader from "react-spinners/FadeLoader";
 import img from "../../../assets/tablet.png";
@@ -412,7 +413,7 @@ export default function ProductsAll() {
                     {product.ref ? product.ref : "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center">
-                    {product.expiredAt ? product.expiredAt : "none"}
+                    {product.expiredAt ? format(new Date(product.expiredAt), "yyyy-MM-dd") : "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
                     {product.description
