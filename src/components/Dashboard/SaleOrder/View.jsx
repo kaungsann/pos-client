@@ -303,7 +303,7 @@ export default function View() {
           <div className="w-full flex">
             <div className="w-3/4 bg-white px-2 py-4 rounded-md shadow-md h-auto ">
               <h2 className="text-slate-600 font-semibold text-lg mb-3">
-                Recents Order
+                Recents Sale Order
               </h2>
               <table className="w-full">
                 <tr className="bg-[#e2e8f0]">

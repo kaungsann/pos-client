@@ -24,6 +24,7 @@ export default function Stock() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
+    console.log("stock is a" ,resData )
     if (resData.status) {
       setLoading(false);
       setStock(resData.data);
@@ -124,7 +125,7 @@ export default function Stock() {
             <th className="lg:px-4 py-2 text-center">Name</th>
             <th className="lg:px-4 py-2 text-center">Quantity</th>
             <th className="lg:px-4 py-2 text-center">Date</th>
-            <th></th>
+            <th className="lg:px-4 py-2 text-center">Location</th>
           </tr>
           {stock.length > 0 &&
             stock
@@ -147,6 +148,9 @@ export default function Stock() {
                   <td className="py-3">{stk.onHand}</td>
                   <td className="py-3">
                     {format(new Date(stk.createdAt), "yyyy-MM-dd")}
+                  </td>
+                  <td className="py-3">
+                    {stk.location ? stk.location : "no have location"}
                   </td>
                 </tr>
               ))}

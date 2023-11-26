@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getApi } from "../../Api";
+import { PathData, getApi } from "../../Api";
 import { BiExport } from "react-icons/bi";
 import { MdClear } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,14 +11,18 @@ import { format } from "date-fns";
 import { FiFilter } from "react-icons/fi";
 import { FaEye } from "react-icons/fa6";
 import { removeData } from "../../../redux/actions";
+import ConfrimBox from "../../utils/ConfrimBox";
 
-export default function SaleOrderAll() {
+export default function PurchaseAll() {
   const [saleorders, setSaleOrders] = useState([]);
   const [searchItems, setSearchItems] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [showFilter, setShowFilter] = useState(false);
   const [isFilterActive, setIsFilterActive] = useState(false); // Track if any filter is active
+  const [confrimShowBox , setconfrimShowBox] = useState(false)
+  const [ConfirmOrderId  , setConfirmOrderId] = useState(null)
+  
 
   const [filterDate, setFilterDate] = useState("");
   const [filterStaff, setFilterStaff] = useState("");
@@ -55,7 +59,7 @@ export default function SaleOrderAll() {
     setimportFile(selectedFile);
     const formData = new FormData();
     formData.append("excel", importFile);
-    const sendExcelApi = await FormPostApi("/product/import-excel", formData);
+    const sendExcelApi = await FormPostApi("/purcahse/import-excel", formData);
     setLoading(true);
     toast(sendExcelApi.message);
     if (sendExcelApi.status) {
@@ -91,7 +95,31 @@ export default function SaleOrderAll() {
     return true;
   });
 
-  
+  const handleConfirm = (id) => {
+    setconfrimShowBox(true);
+    setConfirmOrderId(id)
+  }
+
+  const changeConfirmOrder = async() => {
+       const response = await fetch(`https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/purchase/${ConfirmOrderId}?state=confirmed`,
+       {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${token.accessToken}`,
+        },
+       }
+    )
+    let resData = await response.json();
+      console.log("res data confirm is" ,response )
+        toast(resData.message)
+        PurchaseOrderApi()
+        setconfrimShowBox(false);
+  }
+
+  const closeBox = () => {
+    setconfrimShowBox(false);
+  }
+
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -125,9 +153,9 @@ export default function SaleOrderAll() {
         theme="light"
         style={{ width: "450px" }}
       />
-      <div className="flex cursor-pointer">
+      <div className="flex cursor-pointer relative">
         <div className="flex w-full justify-between items-center">
-          <div className="flex md:mr-8 justify-around">
+          <div className="flex md:mr-8 justify-around0">
             <Link to="/admin/purchase/create">
               <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
                 Add Purchase
@@ -135,7 +163,7 @@ export default function SaleOrderAll() {
             </Link>
             <div
               onClick={toggleFilterBox}
-              className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
+              className="rounded-sm ml-3 transition shadow-sm flex items-center z-50 text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
             >
               <FiFilter className="text-xl mx-2" />
               <h4>Filter</h4>
@@ -144,7 +172,7 @@ export default function SaleOrderAll() {
               onClick={handleFileImportClick}
               className="rounded-sm mx-3 shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"
             >
-              <input
+            <input
                 type="file"
                 style={{ display: "none" }}
                 ref={importRef}
@@ -154,7 +182,6 @@ export default function SaleOrderAll() {
               <BiExport className="text-xl mx-2" />
             </div>
           </div>
-
           <div className="w-96 md:w-72 relative">
             <input
               ref={inputRef}
@@ -170,27 +197,28 @@ export default function SaleOrderAll() {
       <div className="mx-auto">
         <div className="flex justify-between items-center">
           <h2 className="lg:text-2xl font-bold my-4">Purchase</h2>
-          {isFilterActive && (
-            <button
-              className="bg-red-500 px-4 h-8 rounded-md text-white hover:opacity-70"
-              onClick={filterRemove}
-            >
-              Remove Filter
-            </button>
-          )}
+            {isFilterActive && (
+              <button
+                className="bg-red-500 px-4 h-8 rounded-md text-white hover:opacity-70"
+                onClick={filterRemove}
+              >
+                Remove Filter
+              </button>
+            )}
         </div>
-        <table className="w-full text-center">
+        <table className="w-full text-center relative">
           <tr className="bg-blue-600 text-white">
             <th className="text-center">Order Date</th>
             <th className="lg:px-4 py-2 text-center">User</th>
             <th className="lg:px-4 py-2 text-center">Partner</th>
             <th className="lg:px-4 py-2 text-center">Location</th>
-            <th className="lg:px-4 py-2 text-center">Payment</th>
+            <th className="lg:px-4 py-2 text-center">Note</th>
             <th className="lg:px-4 py-2 text-center">Total Product</th>
             <th className="lg:px-4 py-2 text-center">Status</th>
             <th className="lg:px-4 py-2 text-center">TaxTotal</th>
             <th className="lg:px-4 py-2 text-center">Total</th>
             <th className="lg:px-4 py-2 text-center">Action</th>
+            <th className="lg:px-4 py-2 text-center"></th>
           </tr>
 
           <tbody className="w-full space-y-10 bg-slate-300">
@@ -227,34 +255,44 @@ export default function SaleOrderAll() {
                         ? sale.location.name
                         : "no have"}
                     </td>
-                    <td className="lg:px-4 py-2 text-center">{sale.state}</td>
+                    <td className="lg:px-4 py-2 text-center">{sale.note}</td>
                     <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
                       {sale.lines.length}
                     </td>
                     <td
-                      className={`lg:px-4 py-2 text-center ${
-                        sale.state == "pending"
-                          ? "text-red-400"
-                          : sale.state == "deliver"
-                          ? "text-cyan-700"
-                          : sale.state == "arrived"
-                          ? "text-green-600"
-                          : ""
-                      }`}
+                      className="lg:px-4 py-2 text-center"
                     >
-                      {sale.state}
+                       <span className={`px-4 rounded-2xl border-2 py-1 font-bold ${
+                        sale.state == "pending"
+                          ? "text-orange-500 bg-orange-100 border-orange-400"
+                          : sale.state == "deliver"
+                          ? "bg-cyan-100 text-cyan-500 border-cyan-400"
+                          : sale.state == "arrived"
+                          ? "bg-blue-100 text-blue-500 border-blue-400"
+                          : sale.state == "confirmed"
+                          ? "bg-green-100 text-green-500 border-green-300"
+                          : ""
+                      }`}>{sale.state}</span>
+                    
                     </td>
-                    <td className="lg:px-4 py-2 text-center">
+                    <td className="lg:px-4 py-2 text-center ">
                       {sale.taxTotal}
                     </td>
                     <td className="lg:px-4 py-2 text-center">{sale.total}</td>
-                    <td className="py-3 flex ml-3 lg:px-4 justify-center">
+                    <td className="py-3 flex ml-3 lg:px-4 justify-center items-center">
                       <FaEye
                         onClick={() =>
                           navigate(`/admin/purchase/detail/${sale.id}`)
                         }
                         className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
-                      />
+                      />                       
+                    </td>
+                    <td className="lg:px-4 py-2 text-center"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleConfirm(sale.id);
+                      }}>
+                       {sale.state === "pending" &&  <button className="px-2 py-1 ml-2 bg-green-500 text-white rounded-lg hover:opacity-75">confirm</button> }
                     </td>
                   </tr>
                 ))
@@ -272,12 +310,17 @@ export default function SaleOrderAll() {
               </div>
             )}
           </tbody>
+          <div className=" w-96 z-50 fixed top-40 bottom-0 left-0 right-0 mx-auto">
+              {
+               confrimShowBox  && <ConfrimBox close={closeBox} comfirmHandle={changeConfirmOrder}/>
+              }
+          </div>
         </table>
       </div>
       {/* Filter Box */}
       {showFilter && (
         <div
-          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-40 transform transition-all ease-in-out duration-700 ${
+          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-50 transform transition-all ease-in-out duration-700 ${
             showFilter ? "right-0" : "right-[-384px]"
           }`}
         >
@@ -325,13 +368,13 @@ export default function SaleOrderAll() {
               />
             </div>
             <div className="flex justify-end w-full my-4">
-              <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
+              {/* <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
                 <FiFilter className="mx-1" />
                 Filter
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowFilter(!showFilter)}
-                className="px-4 hover:opacity-70 py-2 mx-3 bg-red-500 rounded-md text-white w-2/4"
+                className="px-4 hover:opacity-70 py-2  bg-red-500 rounded-md text-white w-full"
               >
                 Cancel
               </button>

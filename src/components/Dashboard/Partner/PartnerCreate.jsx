@@ -73,6 +73,7 @@ export default function PartnerCreate() {
     e.preventDefault();
     createPartnerApi();
   };
+
   return (
     <>
       <ToastContainer
@@ -136,7 +137,7 @@ export default function PartnerCreate() {
                 showErrorAddress ? "text-red-600" : ""
               }`}
             >
-              Content Address*
+              Content Address
             </label>
             <input
               type="text"
@@ -155,7 +156,7 @@ export default function PartnerCreate() {
                 showErrorCity ? "text-red-600" : ""
               }`}
             >
-              City*
+              City
             </label>
             <input
               type="text"
@@ -174,10 +175,10 @@ export default function PartnerCreate() {
                 showErrorPhone ? "text-red-600" : ""
               }`}
             >
-              Phone*
+              Phone
             </label>
             <input
-              type="text"
+              type="number"
               value={phone}
               style={{ backgroundColor: "transparent" }}
               onChange={(e) => setPhone(e.target.value)}
@@ -188,7 +189,7 @@ export default function PartnerCreate() {
             />
           </div>
           <div className="flex flex-col items-center">
-            <label className="text-md font-semibold">Customer*</label>
+            <label className="text-md font-semibold">Customer</label>
             <input
               type="checkbox"
               id="customer"
@@ -199,7 +200,7 @@ export default function PartnerCreate() {
             />
           </div>
           <div className="ml-3 flex flex-col items-center">
-            <label className="text-md font-semibold">Company*</label>
+            <label className="text-md font-semibold">Company</label>
             <input
               type="checkbox"
               id="customer"

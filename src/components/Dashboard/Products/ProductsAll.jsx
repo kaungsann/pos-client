@@ -12,8 +12,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 export default function ProductsAll() {
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 5; // Choose the number of items per page
   const navigate = useNavigate();
 
   const [selectedItems, setSelectedItems] = useState([]);
@@ -47,10 +51,11 @@ export default function ProductsAll() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-
+    const filteredProduct = resData.data.filter((pd) => pd.active === true);
+    console.log("data is a", resData);
     if (resData.status) {
       setLoading(false);
-      setProducts(resData.data);
+      setProducts(filteredProduct);
     } else {
       setLoading(true);
     }
@@ -86,7 +91,6 @@ export default function ProductsAll() {
       const downloadUrl = "http://3.0.102.114/product/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
-      console.log("res download is", response);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -162,41 +166,45 @@ export default function ProductsAll() {
 
   // ...
 
-  const filteredProducts = products.filter((product) => {
-    //Filter by name
-    if (
-      filterName &&
-      !product.name.toLowerCase().includes(filterName.toLowerCase())
-    ) {
-      return false;
-    }
-    // Filter by barcode
-    if (filterBarcode && !product.barcode.includes(filterBarcode)) {
-      return false;
-    }
-
-    // Filter by category
-    if (filterCategory) {
-      if (product.category) {
-        if (product.category._id !== filterCategory) {
-          return false;
-        }
-      } else {
-        // If the product doesn't have a category, you may choose to handle this case differently
+  const filterProducts = () => {
+    const filteredProducts = products.filter((product) => {
+      // Filter by name
+      if (
+        filterName &&
+        !product.name.toLowerCase().includes(filterName.toLowerCase())
+      ) {
         return false;
       }
-    }
-
-    // Filter by price
-    if (
-      filterPrice &&
-      parseFloat(product.listPrice) !== parseFloat(filterPrice)
-    ) {
-      return false;
-    }
-
-    return true;
-  });
+  
+      // Filter by barcode
+      if (filterBarcode && !product.barcode.includes(filterBarcode)) {
+        return false;
+      }
+  
+      // Filter by category
+      if (filterCategory) {
+        if (product.category) {
+          if (product.category._id !== filterCategory) {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+  
+      // Filter by price
+      if (
+        filterPrice &&
+        parseFloat(product.listPrice) !== parseFloat(filterPrice)
+      ) {
+        return false;
+      }
+  
+      return true;
+    });
+  
+    return filteredProducts;
+  };
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -212,9 +220,10 @@ export default function ProductsAll() {
       return;
     }
 
-    const response = await deleteMultiple("/product/multiple-delete", {
+    const response = await deleteMultiple("/product", {
       productIds: selectedItems,
-    });
+    }, token.accessToken);
+    console.log("response data delete  is " ,response )
 
     if (response.status) {
       toast("Selected products deleted successfully.");
@@ -226,10 +235,29 @@ export default function ProductsAll() {
     }
   };
 
+  const handleFilterButtonClick = () => {
+    const filteredProducts = filterProducts();
+    setProducts(filteredProducts);
+    // Update other state variables as needed
+    setIsFilterActive(true);
+    setCurrentPage(0); // Reset the current page to 0 after filtering
+  };
+
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const filteredProducts = filterProducts(); // Add this line to get the filtered products
+  const pageCount = Math.ceil(filteredProducts.length / itemsPerPage);
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
   useEffect(() => {
     productApi();
     categoryApi();
-
+  
     if (filterBarcode || filterCategory || filterPrice) {
       setIsFilterActive(true);
     } else {
@@ -238,7 +266,7 @@ export default function ProductsAll() {
   }, [filterBarcode, filterCategory, filterPrice]);
 
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -348,8 +376,8 @@ export default function ProductsAll() {
             </tr>
           </thead>
           <tbody className="w-full space-y-10">
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
+            {currentProducts.length > 0 ? (
+              currentProducts.map((product) => (
                 <tr
                   key={product.id}
                   onClick={() => toggleSelectItem(product.id)}
@@ -373,19 +401,19 @@ export default function ProductsAll() {
                     />
                   </td>
                   <td className="lg:px-4 py-2 text-center">{product.name}</td>
-                  <td className="lg:px-4 py-2 text-center">{product.ref}</td>
+                  <td className="lg:px-4 py-2 text-center">{product.ref ? product.ref : "none"}</td>
                   <td className="lg:px-4 py-2 text-center">
-                    {product.expiredAt}
+                    {product.expiredAt ? product.expiredAt : "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
-                    {product.description &&
-                      product.description.substring(0, 30)}
+                    {product.description ?
+                      product.description.substring(0, 30): "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center ">
-                    {product.barcode}
+                    {product.barcode ? product.barcode : "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center">
-                    {product.salePrice}
+                    {product.salePrice ? product.salePrice : "none"}
                   </td>
 
                   <td className="py-2 lg:px-4 mx-auto">
@@ -408,7 +436,7 @@ export default function ProductsAll() {
                 </tr>
               ))
             ) : (
-              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
@@ -439,7 +467,7 @@ export default function ProductsAll() {
       {/* Filter Box */}
       {showFilter ? (
         <div
-          className={`w-96 bg-slate-50 h-screen fixed top-0 right-0 p-4 z-30 transition-transform transform ${
+          className={`w-96 bg-slate-50 h-screen fixed top-0 right-0 p-4 z-50 transition-transform transform ${
             showFilter ? "translate-x-0" : "-translate-x-full"
           }ease-in-out duration-700`}
         >
@@ -502,13 +530,13 @@ export default function ProductsAll() {
               />
             </div>
             <div className="flex justify-between w-full my-4">
-              <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
+              {/* <button  onClick={handleFilterButtonClick} className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
                 <FiFilter className="mx-1" />
                 Filter
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowFilter(!showFilter)}
-                className="px-4 hover:opacity-70 py-2 ml-3 bg-red-500 rounded-md text-white w-2/4"
+                className="w-full hover:opacity-70 py-2 bg-red-500 rounded-md text-white"
               >
                 Cancel
               </button>
@@ -518,6 +546,38 @@ export default function ProductsAll() {
       ) : (
         ""
       )}
-    </>
+
+      <div className="fixed bottom-20 right-3 w-96 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item mx-2"
+          className="flex justify-around text-center items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
+          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
+    </div>
   );
 }

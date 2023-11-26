@@ -43,6 +43,7 @@ import StaffDetail from "./components/Dashboard/Staff/StaffDetail";
 import StaffEdit from "./components/Dashboard/Staff/StaffEdit";
 import EmployeeDetail from "./components/Dashboard/Employee/EmployeeDetail";
 import EmployeeEdit from "./components/Dashboard/Employee/EmployeeEdit";
+import Warehouse from "./components/Dashboard/WareHouse/Warehouse";
 
 function App() {
   return (
@@ -58,6 +59,9 @@ function App() {
               </GuardRouter>
             }
           >
+       
+              <Route path="warehouse" element={<Warehouse />} />
+        
             <Route path="inventory/overview" element={<OverView />} />
             <Route path="user">
               <Route path="all" element={<Staff />} />

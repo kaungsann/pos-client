@@ -16,6 +16,8 @@ export default function EmployeeEdit() {
   const [city, setCity] = useState("");
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
+  const [password , setPassword] = useState("")
+  const [showBox , setShowBox] = useState(false)
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
@@ -35,7 +37,7 @@ export default function EmployeeEdit() {
 
   const EditStaffInfoApi = async () => {
     const formData = new FormData();
-
+    formData.append("password", password);
     if (name) {
       formData.append("username", name);
     }
@@ -129,7 +131,7 @@ export default function EmployeeEdit() {
             </div>
           </div>
 
-         <div className="w-80 my-2 mr-1">
+          <div className="w-80 my-2 mr-1">
             <label
               htmlFor="email"
               className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
@@ -163,7 +165,7 @@ export default function EmployeeEdit() {
                 onChange={(e) => setAddress(e.target.value)}
                 id="address"
                 name="address"
-                type="address"
+                type="text"
                 required
                 className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
               />
@@ -204,7 +206,7 @@ export default function EmployeeEdit() {
                 onChange={(e) => setPhone(e.target.value)}
                 id="phone"
                 name="phone"
-                type="phone"
+                type="number"
                 required
                 className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
               />
@@ -237,7 +239,7 @@ export default function EmployeeEdit() {
             </div>
           </div>
 
-         <div className="w-80 my-2 mr-1">
+          <div className="w-80 my-2 mr-1">
             <label
               htmlFor="city"
               className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
@@ -262,13 +264,53 @@ export default function EmployeeEdit() {
               </select>
             </div>
           </div>
+
+
         </form>
         <button
-          onClick={handleSubmit}
+          onClick={() => setShowBox(true)}
           className="w-80 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Submit
         </button>
+      </div>
+
+      
+      <div className="w-96 absolute top-32 left-0 right-0 z-50 mx-auto bg-white rounded-md shadow-md flex justify-center">
+        {showBox && (
+          <div className="w-72 my-3">
+            <div className="mt-2">
+              <div className="w-80 my-2 mr-1">
+                  <div className="flex justify-between">
+                    <label
+                      htmlFor="phone"
+                      className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
+                    >
+                      Password*
+                    </label>
+                    <h3 onClick={() => setShowBox(false)} className="text-slate-600 font-semibold cursor-pointer text-xl hover:text-slate-400">X</h3>
+                  </div>
+                <div className="mt-2">
+                  <input
+                    onChange={(e) => setPassword(e.target.value)}
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    placeholder="enter admin password"
+                    className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
+                  />
+                </div>
+              </div>
+              <button
+                onClick={handleSubmit}
+                className="w-72 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                Submit
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

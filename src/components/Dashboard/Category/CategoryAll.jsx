@@ -39,7 +39,8 @@ export default function CategoryAll() {
     }
     if (resData.status) {
       setLoading(false);
-      setCategory(resData.data);
+      const filteredCategory = resData.data.filter((ct) => ct.active === true);
+      setCategory(filteredCategory);
     } else {
       setLoading(true);
     }
@@ -60,10 +61,9 @@ export default function CategoryAll() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "http://3.0.102.114/cateogry/export-excel";
+      const downloadUrl = "http://3.0.102.114/category/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
-      console.log("res download is", response);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -135,7 +135,7 @@ export default function CategoryAll() {
     }
 
     const response = await deleteMultiple(
-      "/category/multiple-delete",
+      "/category",
       {
         categoryIds: selectedItems,
       },
@@ -266,7 +266,6 @@ export default function CategoryAll() {
                   </td>
 
                   <td className="py-3 lg:px-4">{pd.name}</td>
-
                   <td className="py-3 lg:px-4">
                     {format(new Date(pd.createdAt), "yyyy-MM-dd")}
                   </td>

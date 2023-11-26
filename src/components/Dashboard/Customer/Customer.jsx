@@ -39,7 +39,7 @@ export default function PartnerAll() {
     setLoading(true);
     let resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCustomer === true
+      (partner) => partner.isCustomer === true && partner.active === true
     );
 
     if (resData.message == "Token Expire , Please Login Again") {
@@ -114,7 +114,7 @@ export default function PartnerAll() {
     }
 
     const response = await deleteMultiple(
-      "/partner/multiple-delete",
+      "/partner",
       {
         partnerIds: selectedItems,
       },
@@ -365,13 +365,13 @@ export default function PartnerAll() {
               />
             </div>
             <div className="flex justify-between w-full my-4">
-              <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
+              {/* <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
                 <FiFilter className="mx-1" />
                 Filter
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowFilter(!showFilter)}
-                className="px-4 hover:opacity-70 py-2 ml-3 bg-red-500 rounded-md text-white w-2/4"
+                className="px-4 hover:opacity-70 py-2 bg-red-500 rounded-md text-white w-full"
               >
                 Cancel
               </button>

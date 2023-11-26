@@ -293,7 +293,7 @@ export default function PurchaseView() {
           <div className="w-full flex">
             <div className="w-3/4 bg-white p-2 rounded-md shadow-md">
               <h2 className="text-slate-600 font-semibold text-lg mb-3">
-                Recents Order
+                Recents Purchase Order
               </h2>
               <table className="w-full mb-6">
                 <tr className="bg-[#e2e8f0]">

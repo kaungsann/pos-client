@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 import { MdAddShoppingCart } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { Icon } from "@iconify/react";
+import { Icon } from '@iconify/react';
 import { removeData } from "../../../redux/actions";
 
 export default function SaleOrderDetail() {
@@ -134,10 +134,7 @@ export default function SaleOrderDetail() {
                               className="w-10 h-10 rounded-md shadow-md mx-auto"
                             />
                           ) : (
-                            <Icon
-                              icon="material-symbols:hide-image-outline-sharp"
-                              className="text-2xl"
-                            />
+                            <Icon icon="la:image-solid" className="text-2xl"/>
                           )}
                         </td>
                         <td className="text-center">

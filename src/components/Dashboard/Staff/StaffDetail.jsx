@@ -5,6 +5,7 @@ import { removeData } from "../../../redux/actions";
 import { TbEdit } from "react-icons/tb";
 import { getApi } from "../../Api";
 import { Icon } from "@iconify/react";
+import { format } from "date-fns";
 
 export default function StaffDetail() {
   const { id } = useParams();
@@ -18,6 +19,9 @@ export default function StaffDetail() {
   const singleUserApi = async () => {
     setLoading(true);
     let resData = await getApi(`/user/${id}`, token.accessToken);
+
+    console.log("res data is " , resData)
+
 
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
@@ -95,19 +99,20 @@ export default function StaffDetail() {
               </div>
             </div>
             <div className="w-2/4 justify-between">
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">Birthday</h4>
-                <h3
-                  className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
-                    detail[0].birthdate ? "text-slate-600" : "text-red-400"
-                  }`}
-                >
-                  {detail[0].birthdate
-                    ? detail[0].birthdate
-                    : "This user need to add birthday"}
-                </h3>
+                 {detail[0].birthdate ? (
+                      <h3 className="font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md text-slate-600">
+                        {format(new Date(detail[0].birthdate), "yyyy-MM-dd")}
+                      </h3>
+                    ) : (
+                      <h3 className="font-bold text-lg w-3/5 mr-20 pl-3 rounded-md bg-slate-100 text-red-400">
+                        This user needs to add a birthday
+                      </h3>
+                    )}
+      
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">Address</h4>
                 <h3
                   className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
@@ -119,7 +124,7 @@ export default function StaffDetail() {
                     : "This user need to add address"}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">City</h4>
                 <h3
                   className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
@@ -131,7 +136,7 @@ export default function StaffDetail() {
                     : "This user need to add city"}
                 </h3>
               </div>
-              <div className="flex justify-between my-3">
+              <div className="flex justify-between my-3 items-center">
                 <h4 className="font-bold text-lg text-slate-500">Gender</h4>
                 <h3
                   className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${

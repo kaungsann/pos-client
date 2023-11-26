@@ -11,6 +11,8 @@ import { removeData } from "../../../redux/actions";
 import { format } from "date-fns";
 import { FiFilter } from "react-icons/fi";
 import { FaEye } from "react-icons/fa6";
+import ConfrimBox from "../../utils/ConfrimBox"
+
 
 export default function SaleOrderAll() {
   const [saleorders, setSaleOrders] = useState([]);
@@ -23,6 +25,10 @@ export default function SaleOrderAll() {
   const [filterDate, setFilterDate] = useState("");
   const [filterStaff, setFilterStaff] = useState("");
   const [filterLocation, setFilterLocation] = useState("");
+
+  const [confrimShowBox , setconfrimShowBox] = useState(false)
+  const [ConfirmOrderId  , setConfirmOrderId] = useState(null)
+
 
   const navigate = useNavigate();
   const inputRef = useRef();
@@ -98,6 +104,33 @@ export default function SaleOrderAll() {
     setFilterLocation("");
     setIsFilterActive(false);
   };
+
+  const handleConfirm = (id) => {
+    console.log("handle confim is" , id)
+    setconfrimShowBox(true);
+    setConfirmOrderId(id)
+  }
+
+
+  const changeConfirmOrder = async() => {
+       const response = await fetch(`https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/sale/${ConfirmOrderId}?state=confirmed`,
+       {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${token.accessToken}`,
+        },
+       }
+    )
+    let resData = await response.json();
+      console.log("res data confirm is" ,response )
+        toast(resData.message)
+        saleOrderApi()
+        setconfrimShowBox(false);
+  }
+
+  const closeBox = () => {
+    setconfrimShowBox(false);
+  }
 
   useEffect(() => {
     saleOrderApi();
@@ -176,7 +209,7 @@ export default function SaleOrderAll() {
             </button>
           )}
         </div>
-        <table className="w-full text-center">
+        <table className="w-full text-center relative">
           <tr className="bg-blue-600 text-white">
             <th className="text-center">Order Date</th>
             <th className="lg:px-4 py-2 text-center">User</th>
@@ -188,8 +221,8 @@ export default function SaleOrderAll() {
             <th className="lg:px-4 py-2 text-center">TaxTotal</th>
             <th className="lg:px-4 py-2 text-center">Total</th>
             <th className="lg:px-4 py-2 text-center">Action</th>
+            <th className="lg:px-4 py-2 text-center"></th>
           </tr>
-
           <tbody className="w-full space-y-10 bg-slate-300">
             {filterSaleOrder.length > 0 ? (
               filterSaleOrder
@@ -225,17 +258,20 @@ export default function SaleOrderAll() {
                         : "no have"}
                     </td>
                     <td
-                      className={`lg:px-4 py-2 text-center ${
-                        sale.state === "pending"
-                          ? "text-red-400"
-                          : sale.state === "deliver"
-                          ? "text-cyan-600"
-                          : sale.state === "arrived"
-                          ? "text-green-600"
-                          : ""
-                      }`}
+                      className="lg:px-4 py-2 text-center"
                     >
-                      {sale.state ? sale.state : "no state"}
+                     <span className={`px-4 rounded-2xl border-2 py-1 font-bold ${
+                        sale.state == "pending"
+                        ? "text-orange-500 bg-orange-100 border-orange-400"
+                        : sale.state == "deliver"
+                        ? "bg-cyan-100 text-cyan-500 border-cyan-400"
+                        : sale.state == "arrived"
+                        ? "bg-blue-100 text-blue-500 border-blue-400"
+                        : sale.state == "confirmed"
+                        ? "bg-green-100 text-green-500 border-green-400"
+                        : ""
+                      }`}>{sale.state ? sale.state : "no state"}</span>
+                   
                     </td>
                     <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
                       {sale.lines.length}
@@ -259,6 +295,12 @@ export default function SaleOrderAll() {
                         className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
                       />
                     </td>
+                    <td className="lg:px-4 py-2 text-center"
+                      onClick={() => {
+                        handleConfirm(sale.id);
+                      }}>
+                       {sale.state === "pending" &&  <button className="px-2 py-1 ml-2 bg-green-500 text-white rounded-lg hover:opacity-75">confirm</button> }
+                    </td>
                   </tr>
                 ))
             ) : (
@@ -275,12 +317,17 @@ export default function SaleOrderAll() {
               </div>
             )}
           </tbody>
+          <div className=" w-96 z-50 fixed top-40 bottom-0 left-0 right-0  mx-auto">
+              {
+               confrimShowBox  && <ConfrimBox close={closeBox} comfirmHandle={changeConfirmOrder}/>
+              }
+          </div>
         </table>
       </div>
       {/* Filter Box */}
       {showFilter && (
         <div
-          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-40 transform transition-all ease-in-out duration-700 ${
+          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-50 transform transition-all ease-in-out duration-700 ${
             showFilter ? "right-0" : "right-[-384px]"
           }`}
         >
@@ -328,13 +375,13 @@ export default function SaleOrderAll() {
               />
             </div>
             <div className="flex justify-end w-full my-4">
-              <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
+              {/* <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
                 <FiFilter className="mx-1" />
                 Filter
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowFilter(!showFilter)}
-                className="px-4 hover:opacity-70 py-2 mx-3 bg-red-500 rounded-md text-white w-2/4"
+                className="px-4 hover:opacity-70 py-2 bg-red-500 rounded-md text-white w-full"
               >
                 Cancel
               </button>

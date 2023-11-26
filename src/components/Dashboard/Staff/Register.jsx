@@ -35,17 +35,31 @@ export default function () {
   const registerUser = async (e) => {
     setLoading(true);
     e.preventDefault();
-
     const formData = new FormData();
+
+    if(phone){
+      formData.append("phone", phone);
+    }
+    if(gender){
+      formData.append("gender", gender);
+    }
+    if(city){
+      formData.append("city", city);
+    }
+    if(birth){
+      formData.append("birthdate", birth);
+    }
+    if(address){
+      formData.append("address", address);
+    }
+    if(file){
+      formData.append("image",file );
+    }
     formData.append("username", name);
-    formData.append("phone", phone);
     formData.append("email", email);
-    formData.append("gender", gender);
-    formData.append("city", city);
     formData.append("password", password);
-    formData.append("birthdate", birth);
-    formData.append("address", address);
-    formData.append("image", file);
+
+
 
     let response = await FormPostApi("/user", formData, token.accessToken);
 
@@ -129,7 +143,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="city"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
+              className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600"
             >
               Contact Address
             </label>
@@ -148,7 +162,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="file-upload"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
+              className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600"
             >
               Image Upload
             </label>
@@ -167,7 +181,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="gender"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
+              className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600"
             >
               Date Of Birth
             </label>
@@ -187,7 +201,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="phone"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
+              className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600"
             >
               Phone Number
             </label>
@@ -196,7 +210,7 @@ export default function () {
                 onChange={(e) => setphone(e.target.value)}
                 id="phone"
                 name="phone"
-                type="phone"
+                type="number"
                 required
                 className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
               />
@@ -206,7 +220,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="gender"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
+              className="mb-3 after:ml-0.5block text-lg font-semibold text-slate-600"
             >
               Gender
             </label>
@@ -231,7 +245,7 @@ export default function () {
           <div className="w-72 my-3">
             <label
               htmlFor="city"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
+              className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600"
             >
               City
             </label>

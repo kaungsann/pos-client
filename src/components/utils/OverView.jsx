@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
   PieChart,
   Pie,
   Cell,
   LineChart,
   Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   ResponsiveContainer,
-  Legend,
-  Rectangle,
-
+  Bar
 } from "recharts";
 import { format } from "date-fns";
 
@@ -22,294 +17,386 @@ import FadeLoader from "react-spinners/FadeLoader";
 import { getApi } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
+import { Icon } from '@iconify/react';
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
+
 
 export default function OverView() {
-  const [sale, setSale] = useState([]);
-  const [purchase , setPurchase] = useState([])
+  const [day, setDay] = useState('1');
+  const [month, setMonth] = useState('January');
+  const [year, setYear] = useState('2023');
 
-  const [loading, setLoading] = useState(false);
+  const[ShowFilter , setShowFilter] = useState(false)
+  const[showFilterDateBox ,setShowFilterDateBox] = useState(false)
 
+  const [startDate , setStartDate ] = useState("")
+  const [endDate , setEndDate ] = useState("")
 
+  const handleDayChange = (e) => setDay(e.target.value);
+  const handleMonthChange = (e) => setMonth(e.target.value);
+  const handleYearChange = (e) => setYear(e.target.value);
+
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const saleOrderApi = async () => {
-    setLoading(true);
-    const resData = await getApi("/purchase", token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
+  const data = [
+    { name: "A", value: 80, color: "#ff0000" },
+    { name: "B", value: 45, color: "#00ff00" },
+    { name: "C", value: 25, color: "#0000ff" },
+  ];
+  const cx = 150;
+  const cy = 200;
+  const iR = 50;
+  const oR = 100;
+  const value = 50;
 
-    if (resData.success) {
-      setLoading(false);
-      setSale(resData.data);
-    }  else {
-      setLoading(true);
-    }
+  const needle = (value, data, cx, cy, iR, oR, color) => {
+    let total = 0;
+    data.forEach((v) => {
+      total += v.value;
+    });
   };
 
-  const purchaseOrderApi = async() => {
-    setLoading(true);
-    const resData = await getApi("/purchase", token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    if (resData.status) {
-      setLoading(false);
-      setPurchase(resData.data);
-    } else {
-      setLoading(true);
-    }
-  }
-
-  const formattedSaleData = sale.map((item) => ({
-    ...item,
-    created: format(
-      new Date(item.orderDate ? item.orderDate : item.createdAt),
-      "dd-MMM-yyyy"
-    ),
-  }));
-
-  const formattedPurchaseData = purchase.map((item) => ({
-    ...item,
-    created: format(
-      new Date(item.orderDate ? item.orderDate : item.createdAt),
-      "dd-MMM-yyyy"
-    ),
-  }));
-
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-  const today = new Date().toISOString().split("T")[0];
-
-
-  const todaySaleOrders = sale.filter((order) => {
-    const orderDate = order.createdAt.split("T")[0];
-    return orderDate === today;
-  });
-
-  const datas = [
+  const data1 = [
     {
-      name: 'Page A',
+      name: "Page A",
       uv: 4000,
       pv: 2400,
       amt: 2400,
     },
     {
-      name: 'Page B',
+      name: "Page B",
       uv: 3000,
       pv: 1398,
       amt: 2210,
     },
     {
-      name: 'Page C',
+      name: "Page C",
       uv: 2000,
       pv: 9800,
       amt: 2290,
     },
     {
-      name: 'Page D',
+      name: "Page D",
       uv: 2780,
       pv: 3908,
       amt: 2000,
     },
     {
-      name: 'Page E',
+      name: "Page E",
       uv: 1890,
       pv: 4800,
       amt: 2181,
     },
     {
-      name: 'Page F',
+      name: "Page F",
       uv: 2390,
       pv: 3800,
       amt: 2500,
     },
     {
-      name: 'Page G',
+      name: "Page G",
       uv: 3490,
       pv: 4300,
       amt: 2100,
     },
   ];
 
-  // Calculate today total
-
-
-  // Calculate weekly total (similar to the calculation for todaySaleTotal and monthlyTotal)
-  const oneWeekAgo = new Date();
-  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-
-  const weeklySaleOrders = sale.filter((order) => {
-    const orderDate = new Date(order.createdAt);
-    return orderDate > oneWeekAgo;
-  });
-
-  const weeklyTotal = weeklySaleOrders.reduce(
-    (total, order) => total + order.total,
-    0
-  );
-
-  // Calculate monthly total
- const monthlyTotal = sale.reduce((total, order) => total + order.total, 0);
-
-
- const purchaseMonthlyTotal = purchase.reduce((total, order) => total + order.total, 0);
-
- const weeklyPurchaseOrders = purchase.filter((order) => {
-  const orderDate = new Date(order.createdAt);
-  return orderDate > oneWeekAgo;
-});
-
-const weeklyPurchaseTotal = weeklyPurchaseOrders.reduce(
-  (total, order) => total + order.total,
-  0
-);
-
-
- useEffect(() => {
-  saleOrderApi();
-  purchaseOrderApi()
-}, []);
-
-  
-
   return (
     <>
-      <div className="flex">
-        <div className="z-40 w-3/5 flex flex-col">
-          <div className="p-4 bg-white shadow-md mr-4 mb-5">
-            <h3 className="text-slate-500 font-semibold text-lg mb-6">
-              Monthly Sale and Purchase
-            </h3>
+      <div className="relative">
+        <div className="flex">
 
-
-             <ResponsiveContainer height={400}>
-               <BarChart
-
-          height={300}
-          data={datas}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-          <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-          <Tooltip />
-          <Legend />
-          <Bar yAxisId="left" dataKey="pv" fill="#8884d8" />
-          <Bar yAxisId="right" dataKey="uv" fill="#0496C7" />
-                </BarChart>
-            </ResponsiveContainer>
-
-
+          {/* Sale Order  */}
+          <div className="w-2/5	bg-white p-4 border-2 rounded-lg shadow-md">
+            <div className="flex justify-between">
+              <h3 className="text-lg font-semibold text-slate-700">
+                Sales Overview
+              </h3>
+              <div>
+                 <Icon onClick={() => setShowFilter(true)} icon="icon-park-outline:filter" className="text-[#8b5cf6] hover:text-[#4f3b80] font-extrabold text-xl"/>
+              </div>
+            </div>
+            {/* Annula Sales */}
+            <div className=" my-3 px-4 flex">
+              <div className="flex items-center w-2/4	">
+                <div className="p-4 bg-blue-200 rounded-md">
+                   <Icon icon="solar:cart-4-outline" className="text-4xl text-cyan-600 font-extrabold"/>
+                </div>
+                <div className="mx-3 w-2/4">
+                  <h2 className="text-slate-400 text-md font-semibold">
+                    Annual Sales
+                  </h2>
+                  <h2 className="text-slate-800 text-xl font-extrabold">
+                    $ 124,56
+                  </h2>
+                </div>
+              </div>
+              <div className="flex items-center w-2/4	">
+                 <div className="p-4 bg-yellow-100 rounded-md">
+                   <Icon icon="uil:file-graph" className="text-4xl text-yellow-600 font-extrabold"/>
+                 </div>
+                <div className="px-3">
+                  <h2 className="text-slate-400 text-md font-semibold">
+                    Annual Profits
+                  </h2>
+                  <h2 className="text-slate-800 text-xl font-extrabold">
+                    $ 124,56
+                  </h2>
+                </div>
+              </div>
+            </div>
+            {/* Monthly Sales */}
+            <div className=" my-3 px-4 flex">
+              <div className="flex items-center w-2/4	">
+                <div className="p-4 bg-orange-200 rounded-md">
+                   <Icon icon="solar:cart-4-outline" className="text-4xl text-orange-600 font-extrabold"/>
+                </div>
+                <div className="mx-3 w-2/4">
+                  <h2 className="text-slate-400 text-md font-semibold">
+                  Monthly Sales
+                  </h2>
+                  <h2 className="text-slate-800 text-xl font-extrabold">
+                    $ 124,56
+                  </h2>
+                </div>
+              </div>
+              <div className="flex items-center w-2/4	">
+                 <div className="p-4 bg-green-100 rounded-md">
+                   <Icon icon="uil:file-graph" className="text-4xl text-green-600 font-extrabold"/>
+                 </div>
+                <div className="px-3">
+                  <h2 className="text-slate-400 text-md font-semibold">
+                  Monthly Profits
+                  </h2>
+                  <h2 className="text-slate-800 text-xl font-extrabold">
+                    $ 124,56
+                  </h2>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="p-4 bg-white shadow-md mr-4">
-            <h3 className="text-slate-500 font-semibold text-lg mb-6">
-              Monthly Sale
-            </h3>
+          {/* Purchase Order */}
+          <div className="w-2/5	bg-white p-4 border-2 rounded-lg mx-3 shadow-md">
+            <div className="flex justify-between">
+              <h3 className="text-lg font-semibold text-slate-700">
+                Purchases Overview
+              </h3>
+              <div>
+                 <Icon onClick={() => setShowFilter(true)} icon="icon-park-outline:filter" className="text-[#8b5cf6] font-extrabold text-xl"/>
+              </div>
+            </div>
+            {/* Annula Purchase */}
+            <div className=" my-3 px-4 flex">
+              <div className="flex items-center w-2/4">
+                <div className="p-4 bg-violet-300 rounded-md">
+                <Icon icon="la:cart-plus"  className="text-4xl text-violet-600 font-extrabold"/>
+                </div>
+                <div className="mx-3">
+                  <h2 className="text-slate-400 text-md font-semibold">
+                   No Of Purchase
+                  </h2>
+                  <h2 className="text-slate-800 text-xl font-extrabold">
+                    $ 124,56
+                  </h2>
+                </div>
+              </div>
+              <div className="flex items-center w-2/4">
+                 <div className="p-4 bg-pink-100 rounded-md">
+                 <Icon icon="pepicons-pencil:cart-off" className="text-4xl text-pink-600 font-extrabold" />
+                 </div>
+                <div className="px-3">
+                  <h2 className="text-slate-400 text-md font-semibold">
+                    Cancle Order
+                  </h2>
+                  <h2 className="text-slate-800 text-xl font-extrabold">
+                    $ 124,56
+                  </h2>
+                </div>
+              </div>
+            </div>
+            {/* Monthly Sales */}
+            <div className=" my-3 px-4 flex">
+              <div className="flex items-center w-2/4	">
+                <div className="p-4 bg-orange-200 rounded-md">
+                   <Icon icon="carbon:purchase" className="text-4xl text-orange-600 font-extrabold" />
+
+                </div>
+                <div className="mx-3">
+                  <h2 className="text-slate-400 text-md font-semibold">
+                    Purchase Amount
+                  </h2>
+                  <h2 className="text-slate-800 text-xl font-extrabold">
+                    $ 124,56
+                  </h2>
+                </div>
+              </div>
+              <div className="flex items-center w-2/4	">
+                 <div className="p-4 bg-rose-100 rounded-md">
+                    <Icon icon="la:cart-arrow-down" className="text-4xl text-rose-600 font-extrabold"/>
+                 </div>
+                <div className="px-3">
+                  <h2 className="text-slate-400 text-md font-semibold">
+                    Returns
+                  </h2>
+                  <h2 className="text-slate-800 text-xl font-extrabold">
+                    $ 124,56
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div className="w-1/5 bg-white rounded-lg mx-auto shadow-md p-4 relative">
+            <div className="flex justify-between">
+              <h3 className="text-lg font-semibold text-slate-700">
+                Stock
+              </h3>
+              <div>
+                <span>X</span>
+                <span>X</span>
+              </div>
+            </div>
+            <div>
+              <div className="w-4/5 flex justify-center">
+                <PieChart  width={260} height={200}>
+                  <Pie
+                    dataKey="value"
+                    startAngle={180}
+                    endAngle={0}
+                    data={data}
+                    cx={cx}
+                    cy={cy}
+                    innerRadius={iR}
+                    outerRadius={oR}
+                    fill="#8884d8"
+                    stroke="none"
+                  >
+                    {data.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  {needle(value, data, cx, cy, iR, oR, "#d0d000")}
+                  <Bar dataKey="name" fill="#8884d8" />
+                  <Bar dataKey="value" fill="#82ca9d" />
+                </PieChart>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex my-4">
+          <div className="w-3/5 bg-white rounded-lg shadow-md p-4">
+            <h2 className="text-slate-600 text-lg font-semibold my-3">
+              Sales Statistics
+            </h2>
+            <ResponsiveContainer height={450} width="100%">
+              <LineChart data={data1} margin={{ right: 25, top: 10 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Line
+                  type="monotone"
+                  dataKey="pv"
+                  stroke="#8884d8"
+                  activeDot={{ r: 8 }}
+                />
+                <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="w-2/5 bg-white rounded-lg shadow-md p-4 mx-3">
+            <h2 className="text-slate-600 text-lg font-semibold my-3">
+              Top Selling Items
+            </h2>
             <ResponsiveContainer height={400}>
-            <BarChart
- 
-              data={sale}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 60,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis
-                dataKey="createdAt"
-                tickFormatter={(value) => format(new Date(value), "dd.MM.yyyy")}
-                angle={-60}
-                textAnchor="end"
-              />
-              <YAxis dataKey="total" />
-              <Tooltip />
-
-              <Bar dataKey="total" fill="#8884d8" />
-            </BarChart>
+              <PieChart>
+                <Pie dataKey="value" data={data} fill="#8884d8" label />
+              </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
-        <div className="w-2/5 bg-white p-4 shadow-md">
-          <div className="flex w-full justify-between h-24">
-            <div className="bg-[#8884d8] w-1/2 flex flex-col justify-center rounded-md">
-              <h3 className="text-3xl text-white font-bold text-center">7</h3>
-              <h4 className="text-center text-white text-md font-bold">
-                Out Of Stock Products
-              </h4>
+        {
+          ShowFilter && (
+            <div className="w-2/4 bg-white rounded-sm shadow-md absolute top-24 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="px-3 bg-slate-600 py-3 w-full flex justify-between items-center">
+               <h1 className="font-bold text-xl text-white">Filter by Date & Months & Year</h1>
+               {
+                showFilterDateBox ? <IoMdArrowRoundBack onClick={() => setShowFilterDateBox(false) } className="text-white text-xl hover:text-slate-300"/> :  <IoMdArrowRoundForward onClick={() => setShowFilterDateBox(true) } className="text-white text-2xl hover:text-slate-300"/>
+               }
+              
             </div>
-            <div className="bg-[#8884d8] w-1/2 ml-4 flex flex-col justify-center rounded-md">
-              <h3 className="text-3xl text-white font-bold text-center">8</h3>
-              <h4 className="text-center text-white text-md font-bold">
-                No Of Customers
-              </h4>
+            {
+              showFilterDateBox ? (
+                <div className="mx-auto pb-4 bg-white">
+                  <div className="flex w-3/5 mx-auto">
+                    <div className="flex flex-col items-center w-2/4">
+                      <label className="my-2 text-lg font-semibold text-slate-500">From</label>
+                        <input type="date" onChange={(e) => setStartDate(e.target.value)} className="p-3 bg-slate-100"/>
+                    </div>
+                    <div className="flex flex-col items-center w-2/4">
+                      <label className="my-2 text-lg font-semibold text-slate-500">To</label>
+                        <input type="date" onChange={(e) => setEndDate(e.target.value)} className="p-3 bg-slate-100"/>
+                    </div>
+                  </div>
+                    <div className="w-3/5 mx-auto my-4 flex justify-end">
+                      <button onClick={() => setShowFilter(false )} className="text-md py-2 px-4 bg-slate-200 rounded-sm hover:bg-slate-300">Cancel</button>
+                      <button className="text-md py-2 px-6 bg-blue-600 rounded-sm text-white hover:bg-blue-700 ml-6">Filter</button>
+                    </div>
+                </div>
+              ) : (
+              <>
+                <div className="w-3/5 mx-auto flex justify-between">
+                  <div className="flex flex-col items-center">
+                    <label className="my-3 text-lg font-semibold text-slate-500">Days</label>
+                    <select value={day} onChange={handleDayChange} className="custom-scrollbar w-16 h-12 p-2 bg-slate-100">
+                      {Array.from({ length: 31 }, (_, index) => index + 1).map((day) => (
+                        <option key={day} value={day} className="custom-scrollbar">
+                          {day}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <label className="my-3 text-lg font-semibold text-slate-500">Months</label>
+                    <select value={month} onChange={handleMonthChange} className="p-2 h-12 bg-slate-100">
+                      {months.map((month) => (
+                        <option key={month} value={month} >
+                          {month}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                    <div className="flex flex-col items-center">
+                      <label className="my-3 text-lg font-semibold text-slate-500">Years</label>
+                      <select value={year} onChange={handleYearChange} className="p-2 h-12 bg-slate-100">
+                        {/* Add options for years (e.g., 2023 to 2030) */}
+                        {Array.from({ length: 8 }, (_, index) => 2023 + index).map((year) => (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                </div>
+                <div className="w-3/5 mx-auto my-4 flex justify-end">
+                  <button onClick={() => setShowFilter(false )} className="text-md py-2 px-4 bg-slate-200 rounded-sm hover:bg-slate-300">Cancel</button>
+                  <button className="text-md py-2 px-6 bg-blue-600 rounded-sm text-white hover:bg-blue-700 ml-6">Filter</button>
+                </div>
+              </>
+              )
+            }
+           
             </div>
-          </div>
-          <div className="bg-blue-50 py-3 rounded-md mt-3 shadow-sm">
-            <h5 className="mt-1.5 text-center text-sm font-semibold text-slate-500">
-              This Month Sale
-            </h5>
-            <h2 className="text-3xl text-green-600 font-bold text-center">
-              {monthlyTotal ? monthlyTotal.toFixed(2) : "0"}
-            </h2>
-
-          </div>
-          <div className="bg-blue-50 py-3 rounded-md mt-3 shadow-sm">
-            <h5 className="mt-1.5 text-center text-sm font-semibold text-slate-500">
-              This Weekend Sale
-            </h5>
-            <h2 className="text-3xl text-orange-500 font-bold text-center">
-              {weeklyTotal ? weeklyTotal.toFixed(2) : "0"}
-            </h2>
-     
-          </div>
-
-
-          <div className="border-b-slate-300 border-b-2 my-8"></div>
-
-            <div className="bg-blue-50 py-3 rounded-md mt-3 shadow-sm">
-          <h5 className="mt-1.5 text-center text-sm font-semibold text-slate-500">
-              This Month Purchase
-            </h5>
-            <h2 className="text-3xl text-green-600 font-bold text-center">
-              {purchaseMonthlyTotal ? purchaseMonthlyTotal.toFixed(2) : "0"}
-            </h2>
-   
-             </div>
-            <div className="bg-blue-50 py-3 rounded-md mt-3 shadow-sm">
-            <h5 className="mt-1.5 text-center text-sm font-semibold text-slate-500">
-              This Weekend Purchase
-            </h5>
-            <h2 className="text-3xl text-orange-500 font-bold text-center">
-              {weeklyPurchaseTotal ? weeklyPurchaseTotal.toFixed(2) : "0"}
-            </h2>
-             </div>
-        </div>
+          )
+        }
       </div>
-      {sale.length > 0 && (
-        <div className="absolute inset-0 flex justify-center items-center">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
-        </div>
-      )}
     </>
   );
 }

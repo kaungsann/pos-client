@@ -51,19 +51,19 @@ export default function PartnerDetail() {
       {detail && detail.length > 0 ? (
         <div className="flex justify-between">
           <div className="w-2/4">
-            <div className="flex justify-between my-3">
+            <div className="flex justify-between my-3 items-center">
               <h4 className="font-bold text-lg text-slate-500">Date</h4>
               <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100">
                 {new Date(detail[0].createdAt).toLocaleDateString("en-US")}
               </h3>
             </div>
-            <div className="flex justify-between my-3">
+            <div className="flex justify-between my-3 items-center">
               <h4 className="font-bold text-lg text-slate-500">Parnter Name</h4>
               <h3 className="font-bold text-lg text-blue-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                 {detail[0].name}
               </h3>
             </div>
-            <div className="flex justify-between my-3">
+            <div className="flex justify-between my-3 items-center">
               <h4 className="font-bold text-lg text-slate-500">City</h4>
               <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                 {detail[0].city}
@@ -71,13 +71,13 @@ export default function PartnerDetail() {
             </div>
           </div>
           <div className="w-2/4 justify-between">
-            <div className="flex justify-between my-3">
+            <div className="flex justify-between my-3 items-center">
               <h4 className="font-bold text-lg text-slate-500">Address</h4>
               <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                 {detail[0].address}
               </h3>
             </div>
-            <div className="flex justify-between my-3">
+            <div className="flex justify-between my-3 items-center">
               <h4 className="font-bold text-lg text-slate-500">
                 Is Customer ?
               </h4>
@@ -85,7 +85,7 @@ export default function PartnerDetail() {
                 {detail[0].isCustomer ? "YES" : "NO"}
               </h3>
             </div>
-            <div className="flex justify-between my-3">
+            <div className="flex justify-between my-3 items-center">
               <h4 className="font-bold text-lg text-slate-500">Is Company ?</h4>
               <h3 className="font-bold text-lg text-blue-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                 {detail[0].isCompany ? "YES" : "NO"}

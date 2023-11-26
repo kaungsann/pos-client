@@ -17,7 +17,9 @@ export default function ProductsEdit() {
   const [expiredate, setExpiredate] = useState("");
   const [description, setDescription] = useState("");
   const [bar, setBar] = useState(0);
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(null);
+  const [tax, setTax] = useState(null);
+  const [stockQuantity, setStockQuantity] = useState(null);
   const [catName, setCatName] = useState("");
   const [avaliable, setAAvaliable] = useState(null);
   const navigate = useNavigate();
@@ -36,17 +38,27 @@ export default function ProductsEdit() {
 
   const SingleProductApi = async () => {
     let resData = await getApi(`/product/${id}`, token.accessToken);
+    
+  console.log("single roduct is a" ,  resData)
     setRef(resData.data[0].ref);
     setName(resData.data[0].name);
     setDescription(resData.data[0].description);
-    setExpiredate(new Date(resData.data[0].expiredAt).toLocaleDateString());
+    if(resData.data[0].expiredAt){
+      setExpiredate(new Date(resData.data[0].expiredAt).toLocaleDateString());
+    }
+    setPurchasePrice(resData.data[0].purchasePrice);
+    setProfit(resData.data[0].marginProfit);
     setPrice(resData.data[0].salePrice);
     setBar(resData.data[0].barcode);
     setCatName(resData.data[0].category.name);
     setSelect(resData.data[0].image);
-    setPurchasePrice(resData.data[0].purchasePrice);
-    setProfit(resData.data[0].marginProfit);
+    setTax(resData.data[0].tax);
+    setStockQuantity(resData.data[0].minStockQty);
+
+
   };
+
+  console.log("ur chase rice is of" , purchasePrice)
 
   const createProductApi = async () => {
     const formData = new FormData();
@@ -72,7 +84,7 @@ export default function ProductsEdit() {
     if (category) {
       formData.append("category", category);
     }
-    if (price) {
+    if (updatePrice) {
       formData.append("salePrice", updatePrice);
     }
     if (file) {
@@ -84,20 +96,24 @@ export default function ProductsEdit() {
     if (profit) {
       formData.append("marginProfit", profit);
     }
+    if (tax) {
+      formData.append("tax", tax);
+    }
+    if (stockQuantity) {
+      formData.append("minStockQty", stockQuantity);
+    }
 
-    // if (profit == 0 || purchasePrice == 0) {
-    //   return;
-    // }
 
     let resData = await FormPathApi(
       `/product/${id}`,
       formData,
       token.accessToken
     );
+
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-
+     console.log(" data is res roduct" , resData)
     if (resData.status) {
       navigate("/admin/products/all");
     } else {
@@ -147,9 +163,10 @@ export default function ProductsEdit() {
     const calculatedSalePrice =
       parseFloat(purchasePrice) +
       parseFloat(purchasePrice) * (parseFloat(profit) / 100);
-    setUpdatePrice(calculatedSalePrice);
-    setUpdatePrice(calculatedSalePrice);
+      setUpdatePrice(calculatedSalePrice);
+      setUpdatePrice(calculatedSalePrice);
   }, [purchasePrice, profit]);
+
   return (
     <>
       <ToastContainer
@@ -244,13 +261,13 @@ export default function ProductsEdit() {
             <div className="w-60 mx-8 mb-3">
               <label className="text-md font-semibold">Category Name*</label>
               <select
-                required
                 id="catid"
+                value={category ? category : catName}
                 onChange={(e) => setGategory(e.target.value)}
                 style={{ backgroundColor: "transparent" }}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
               >
-                <option disabled value selected>
+                <option selected disabled className="invisible">
                   {catName}
                 </option>
                 {cat.length > 0 &&
@@ -279,7 +296,7 @@ export default function ProductsEdit() {
             <div className="w-60 mx-8 mb-3">
               <label className="text-md font-semibold">Expire-Date*</label>
               <input
-                type="date"
+                type="text"
                 value={expiredate}
                 style={{ backgroundColor: "transparent" }}
                 onChange={(e) => setExpiredate(e.target.value)}
@@ -298,6 +315,35 @@ export default function ProductsEdit() {
                 placeholder="Enter product description"
               />
             </div>
+
+            <div className="w-60 mb-3 mx-8">
+              <label className="text-md font-semibold">Tax*</label>
+              <input
+                required
+                value={tax}
+                style={{ backgroundColor: "transparent" }}
+                type="number"
+                onChange={(e) => setTax(e.target.value)}
+                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
+                placeholder="Enter product stock quantity"
+              />
+            </div>
+
+            <div className="w-60 mb-3 mx-8">
+              <label className="text-md font-semibold">
+                Minium Stock Quantity*
+              </label>
+              <input
+                required
+                value={stockQuantity}
+                type="number"
+                style={{ backgroundColor: "transparent" }}
+                onChange={(e) => setStockQuantity(e.target.value)}
+                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
+                placeholder="Enter product stock quantity"
+              />
+            </div>
+
             <div className="w-60 mx-8 mb-3">
               <label className="text-md font-semibold">AvaliableInPos*</label>
 
@@ -318,7 +364,6 @@ export default function ProductsEdit() {
             </div>
             <div className="w-60 mb-3 mx-8">
               <label className="text-md font-semibold">PurchasePrice*</label>
-
               <input
                 required
                 value={purchasePrice}
@@ -345,7 +390,7 @@ export default function ProductsEdit() {
               <label className="text-md font-semibold">Sale Price*</label>
               <input
                 required
-                value={updatePrice || price}
+                value={updatePrice ? updatePrice : price}
                 type="number"
                 style={{ backgroundColor: "transparent" }}
                 className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"

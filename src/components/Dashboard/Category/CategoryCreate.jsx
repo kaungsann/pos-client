@@ -46,6 +46,7 @@ export default function CategoryCreate() {
     e.preventDefault();
     createCategoryApi();
   };
+  console.log("name is" , name)
   return (
     <>
       <ToastContainer
@@ -95,7 +96,7 @@ export default function CategoryCreate() {
               type="text"
               value={name}
               style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value.toLocaleLowerCase())}
               className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
                 showNameError ? "border-red-600" : "border-slate-400"
               }`}

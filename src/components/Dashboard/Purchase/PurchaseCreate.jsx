@@ -14,7 +14,7 @@ export default function SaleOrderCreate() {
   const [part, setPart] = useState([]);
   const [partner, setPartner] = useState("");
   const [loca, setLoca] = useState("");
-  const [state, setState] = useState("");
+  const [state, setState] = useState("pending");
   const [note, setNote] = useState("");
 
   const [payment, setPayment] = useState(null);
@@ -47,6 +47,10 @@ export default function SaleOrderCreate() {
   const dipatch = useDispatch();
 
   const createProductApi = async () => {
+    if(saleOrderLines.length == 0 ){
+      toast("you need to selecte the product")
+      return
+    }
     if (date === "") {
       setShowErrorDate(true);
     } else {
@@ -99,6 +103,7 @@ export default function SaleOrderCreate() {
 
     try {
       let resData = await sendJsonToApi("/purchase", data, token.accessToken);
+      console.log("data is" ,resData )
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
@@ -117,16 +122,18 @@ export default function SaleOrderCreate() {
   };
   const getLocation = async () => {
     const resData = await getApi("/location", token.accessToken);
-    setLocation(resData.data);
+    const filteredLocation = resData.data.filter((la) => la.active === true);
+    setLocation(filteredLocation);
   };
   const getProduct = async () => {
     const resData = await getApi("/product", token.accessToken);
-    setProduct(resData.data);
+    const filteredProduct = resData.data.filter((pt) => pt.active === true);
+    setProduct(filteredProduct);
   };
   const getPartner = async () => {
     const resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCustomer === false
+      (partner) => partner.isCustomer === false && partner.active === true
     );
     setPart(filteredPartners);
   };
@@ -286,7 +293,7 @@ export default function SaleOrderCreate() {
                 showErrorPartner ? "text-red-600" : ""
               }`}
             >
-              partner :
+              Partner :
             </label>
             <select
               required
@@ -365,15 +372,15 @@ export default function SaleOrderCreate() {
               onChange={(e) => setState(e.target.value)}
             >
               <option value="default">Select an option</option>
-              <option value="pending" className="py-2">
+              <option value="pending" className="py-2" selected>
                 Pending
               </option>
-              <option value="deliver" className="py-2">
+              {/* <option value="deliver" className="py-2">
                 Deliver
               </option>
               <option value="arrived" className="py-2">
                 Arrived
-              </option>
+              </option> */}
             </select>
           </div>
 
@@ -451,8 +458,8 @@ export default function SaleOrderCreate() {
                   (pt) => pt.id === e.target.value
                 );
                 if (selectedProduct) {
-                  setUnitPrice(selectedProduct.salePrice);
-                  setTotalPrice(selectedProduct.salePrice);
+                  setUnitPrice(selectedProduct.purchasePrice);
+                  setTotalPrice(selectedProduct.purchasePrice);
                   setTax(selectedProduct.tax);
                   setItem(selectedProduct);
                 }

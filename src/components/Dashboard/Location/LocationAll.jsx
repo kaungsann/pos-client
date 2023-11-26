@@ -38,7 +38,10 @@ export default function LocationAll() {
     }
     if (resData.status) {
       setLoading(false);
-      setLocations(resData.data);
+      const filteredLocation = resData.data.filter(
+        (partner) =>  partner.active === true
+      );
+      setLocations(filteredLocation);
     } else {
       setLoading(true);
     }
@@ -133,7 +136,7 @@ export default function LocationAll() {
     }
 
     const response = await deleteMultiple(
-      "/location/multiple-delete",
+      "/location",
       {
         locationIds: selectedItems,
       },
@@ -152,6 +155,7 @@ export default function LocationAll() {
   useEffect(() => {
     getLocationApi();
   }, []);
+  
   return (
     <>
       <ToastContainer
