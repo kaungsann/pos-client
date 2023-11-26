@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { getApi, deleteMultiple } from "../../Api";
+import { getApi, deleteMultiple, FormPostApi } from "../../Api";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
@@ -98,9 +98,8 @@ export default function LocationAll() {
     const selectedFile = event.target.files[0];
     setimportFile(selectedFile);
     const formData = new FormData();
-    formData.append("excel", importFile);
-    const sendExcelApi = await FormPostApi("/product/import-excel", formData);
-    s;
+    formData.append("excel", selectedFile);
+    const sendExcelApi = await FormPostApi("/location/import-excel", formData, token.accessToken);
     setLoading(true);
     toast(sendExcelApi.message);
     if (sendExcelApi.status) {
