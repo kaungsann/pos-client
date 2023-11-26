@@ -8,70 +8,54 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 
 export default function PartnerCreate() {
-  const [city, setCity] = useState("");
-  const [phone, setPhone] = useState("");
-  const [name, setName] = useState("");
-  const [contactAddress, setContactAddress] = useState("");
-  const [isCustomer, setIsCustomer] = useState(false);
-  const [isCompany, setIsCompany] = useState(false);
   const navigate = useNavigate();
-
-  // State variables for showing red borders and error messages
-  const [showNameError, setShowNameError] = useState(false);
-  const [showErrorAddress, setShowErrorAddress] = useState(false);
-  const [showErrorPhone, setShowErrorPhon] = useState(false);
-  const [showErrorCity, setShowErrorCity] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const createPartnerApi = async () => {
-    if (name.trim() === "") {
-      setShowNameError(true);
-    } else {
-      setShowNameError(false);
-    }
-    if (contactAddress.trim() === "") {
-      setShowErrorAddress(true);
-    } else {
-      setShowErrorAddress(false);
-    }
-    if (phone.trim() === "") {
-      setShowErrorPhon(true);
-    } else {
-      setShowErrorPhon(false);
-    }
-    if (city.trim() === "") {
-      setShowErrorCity(true);
-    } else {
-      setShowErrorCity(false);
-    }
-    const data = {
-      name: name,
-      address: contactAddress,
-      city: city,
-      phone: phone,
-      isCustomer: isCustomer,
-      isCompany: isCompany,
-    };
-    try {
-      let resData = await sendJsonToApi("/partner", data, token.accessToken);
-      if (resData.message == "Token Expire , Please Login Again") {
-        dipatch(removeData(null));
-      }
-      if (resData.status) {
-        navigate("/admin/partners/all");
-      } else {
-        toast(resData.message);
-      }
-    } catch (error) {
-      toast(resData.message);
-      console.error("Error creating partner:", error);
-    }
+  const [formData, setFormData] = useState({
+    name: "",
+    address: "",
+    city: "",
+    phone: "",
+    isCustomer: false,
+    isCompany: false,
+  });
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleCheckboxChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.checked });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    createPartnerApi();
+    try {
+      const response = await sendJsonToApi(
+        "/partner",
+        formData,
+        token.accessToken
+      );
+
+      setFormData({
+        name: "",
+        contactAddress: "",
+        city: "",
+        phone: "",
+        isCustomer: false,
+        isCompany: false,
+      });
+
+      if (response.message === "Token Expire , Please Login Again")
+        dipatch(removeData(null));
+      else
+        response.status
+          ? navigate("/admin/partners/all")
+          : toast(response.message);
+    } catch (error) {
+      console.error("Error creating partner:", error);
+    }
   };
 
   return (
@@ -113,78 +97,58 @@ export default function PartnerCreate() {
 
         <form onSubmit={handleSubmit} className="flex mt-4">
           <div className="w-80">
-            <label
-              className={`text-md font-semibold ${
-                showNameError ? "text-red-600" : ""
-              }`}
-            >
-              Name*
-            </label>
+            <label className={"text-md font-semibold"}>Name*</label>
             <input
               type="text"
-              value={name}
+              name="name"
+              value={formData.name}
               style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setName(e.target.value)}
-              className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
-                showNameError ? "border-red-600" : "border-slate-400"
-              }`}
+              onChange={handleInputChange}
+              className={
+                "w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-400"
+              }
               placeholder="Enter product name"
             />
           </div>
           <div className="w-80 mx-2">
-            <label
-              className={`text-md font-semibold ${
-                showErrorAddress ? "text-red-600" : ""
-              }`}
-            >
-              Content Address
-            </label>
+            <label className={"text-md font-semibold"}>Content Address</label>
             <input
               type="text"
-              value={contactAddress}
+              name="address"
+              value={formData.address}
               style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setContactAddress(e.target.value)}
-              className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
-                showErrorAddress ? "border-red-600" : "border-slate-400"
-              }`}
+              onChange={handleInputChange}
+              className={
+                "w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-400"
+              }
               placeholder="Enter product description"
             />
           </div>
           <div className="w-80 mx-2">
-            <label
-              className={`text-md font-semibold ${
-                showErrorCity ? "text-red-600" : ""
-              }`}
-            >
-              City
-            </label>
+            <label className={"text-md font-semibold"}>City</label>
             <input
               type="text"
-              value={city}
+              name="city"
+              value={formData.city}
               style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setCity(e.target.value)}
-              className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
-                showErrorCity ? "border-red-600" : "border-slate-400"
-              }`}
+              onChange={handleInputChange}
+              className={
+                "w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-400"
+              }
               placeholder="Enter product description"
             />
           </div>
           <div className="w-80 mx-2">
-            <label
-              className={`text-md font-semibold ${
-                showErrorPhone ? "text-red-600" : ""
-              }`}
-            >
-              Phone
-            </label>
+            <label className={"text-md font-semibold"}>Phone</label>
             <input
               type="number"
-              value={phone}
+              name="phone"
+              value={formData.phone}
               style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setPhone(e.target.value)}
-              className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
-                showErrorPhone ? "border-red-600" : "border-slate-400"
-              }`}
+              onChange={handleInputChange}
+              className={
+                "w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-400"
+              }
               placeholder="Enter product description"
             />
           </div>
@@ -194,9 +158,10 @@ export default function PartnerCreate() {
               type="checkbox"
               id="customer"
               className="w-6 h-6 text-xl my-5"
-              checked={isCustomer}
+              name="isCustomer"
+              checked={formData.isCustomer}
               style={{ backgroundColor: "transparent" }}
-              onChange={() => setIsCustomer(!isCustomer)}
+              onChange={handleCheckboxChange}
             />
           </div>
           <div className="ml-3 flex flex-col items-center">
@@ -205,9 +170,10 @@ export default function PartnerCreate() {
               type="checkbox"
               id="customer"
               className="w-6 h-6 text-xl my-5"
-              checked={isCompany}
+              name="isCompany"
+              checked={formData.isCompany}
               style={{ backgroundColor: "transparent" }}
-              onChange={() => setIsCompany(!isCompany)}
+              onChange={handleCheckboxChange}
             />
           </div>
         </form>

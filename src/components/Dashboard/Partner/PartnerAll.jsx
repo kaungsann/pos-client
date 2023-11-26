@@ -251,11 +251,6 @@ export default function PartnerAll() {
               <h4>Import Excel </h4>
               <BiExport className="text-xl mx-2" />
             </div>
-            <Link to="/admin/employee/all">
-              <div className="font-bold mx-3 rounded-sm shadow-sm flex items-cente text-slate-700 border-slate-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-slate-700 px-6 py-2">
-                Add Employee
-              </div>
-            </Link>
           </div>
 
           <div className="w-96 md:w-72 relative">
@@ -310,7 +305,7 @@ export default function PartnerAll() {
               <th className=" py-2 text-center">City</th>
               <th className=" py-2 text-center">Phone</th>
               <th className=" py-2 text-center">Date</th>
-              <th className=" py-2 text-center">Customer</th>
+              <th className=" py-2 text-center">Desc</th>
               <th className=" py-2 text-center">Company</th>
               <th className=" py-2 text-center">Action</th>
               <th></th>
@@ -349,7 +344,7 @@ export default function PartnerAll() {
                       {format(new Date(partner.createdAt), "yyyy-MM-dd")}
                     </td>
                     <td className="py-2 text-center">
-                      {partner.isCustomer ? "Member" : "Guest"}
+                      {partner.isCustomer ? "Customer" : "Vendor"}
                     </td>
                     <td className="py-2 text-center">
                       {partner.isCompany ? "Yes" : "No"}

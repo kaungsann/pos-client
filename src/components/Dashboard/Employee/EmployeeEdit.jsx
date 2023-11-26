@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FormPathApi, getApi } from "../../Api";
 import { removeData } from "../../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
@@ -20,6 +20,7 @@ export default function EmployeeEdit() {
   const [showBox , setShowBox] = useState(false)
 
   const token = useSelector((state) => state.IduniqueData);
+  const navigate = useNavigate();
   const dipatch = useDispatch();
 
   const getSingleStaff = async () => {
@@ -37,9 +38,8 @@ export default function EmployeeEdit() {
 
   const EditStaffInfoApi = async () => {
     const formData = new FormData();
-    formData.append("password", password);
     if (name) {
-      formData.append("username", name);
+      formData.append("name", name);
     }
     if (email) {
       formData.append("email", email);
@@ -60,13 +60,13 @@ export default function EmployeeEdit() {
       formData.append("gender", gender);
     }
 
-    let resData = await FormPathApi(`/user/${id}`, formData, token.accessToken);
+    let resData = await FormPathApi(`/employee/${id}`, formData, token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
 
     if (resData.status) {
-      navigate("/admin/user/all");
+      navigate("/admin/employee/all");
     } else {
       toast(resData.message);
     }
@@ -145,7 +145,6 @@ export default function EmployeeEdit() {
                 id="email"
                 name="email"
                 type="email"
-                autocomplete="email"
                 required
                 className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
               />
@@ -186,7 +185,6 @@ export default function EmployeeEdit() {
                 id="birth"
                 name="birth"
                 type="date"
-                autocomplete="phone"
                 required
                 className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
               />
@@ -268,7 +266,7 @@ export default function EmployeeEdit() {
 
         </form>
         <button
-          onClick={() => setShowBox(true)}
+          onClick={handleSubmit}
           className="w-80 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Submit
@@ -276,7 +274,7 @@ export default function EmployeeEdit() {
       </div>
 
       
-      <div className="w-96 absolute top-32 left-0 right-0 z-50 mx-auto bg-white rounded-md shadow-md flex justify-center">
+      {/* <div className="w-96 absolute top-32 left-0 right-0 z-50 mx-auto bg-white rounded-md shadow-md flex justify-center">
         {showBox && (
           <div className="w-72 my-3">
             <div className="mt-2">
@@ -311,7 +309,7 @@ export default function EmployeeEdit() {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
     </>
   );
 }

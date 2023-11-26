@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import MoonLoader from "react-spinners/MoonLoader";
 import { FormPostApi, sendJsonToApi } from "../../Api";
 import { useSelector } from "react-redux";
 
@@ -15,17 +14,15 @@ export default function EmployeeCreate() {
   const [birthdate, setBirthDate] = useState("");
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
-  const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
 
-  const token = useSelector((state) => state.IduniqueData)
+  const token = useSelector((state) => state.IduniqueData);
 
   const handleEmployee = async () => {
     let data = {
       name,
       email,
-      password,
       phone,
       gender,
       city,
@@ -39,7 +36,6 @@ export default function EmployeeCreate() {
     formData.append("email", email);
     formData.append("gender", gender);
     formData.append("city", city);
-    formData.append("password", password);
     formData.append("birthdate", birthdate);
     formData.append("address", address);
     formData.append("image", file);
@@ -93,7 +89,7 @@ export default function EmployeeCreate() {
 
         <div>
           <div>
-            <form className="mt-4 flex justify-between flex-wrap">
+            <form className="mt-4 flex flex-wrap gap-5">
               <div className="w-80 my-2">
                 <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Name
@@ -180,9 +176,8 @@ export default function EmployeeCreate() {
                   name="phone"
                 />
               </div>
-
               <div className="w-80 my-2">
-                <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
+                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Gender
                 </label>
                 <select
@@ -199,19 +194,6 @@ export default function EmployeeCreate() {
                   <option value="female">Female</option>
                   <option value="other">Other</option>
                 </select>
-              </div>
-
-              <div className="w-80 my-2">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
-                  Password
-                </label>
-                <input
-                  type="text"
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Your Company Email"
-                  name="addresss"
-                />
               </div>
             </form>
           </div>

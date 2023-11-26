@@ -37,7 +37,7 @@ export default function PartnerAll() {
     setLoading(true);
     let resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCustomer === false &&  partner.active === true
+      (partner) => partner.isCustomer === false && partner.active === true
     );
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
@@ -86,20 +86,12 @@ export default function PartnerAll() {
     if (filterPhone && !pt.phone.includes(filterPhone)) {
       return false;
     }
-    if (
-      filterCompay &&
-      !pt.isComapany.toLowerCase().includes(filterCompay.toLowerCase())
-    ) {
-      // Filter by company name
-      return false;
-    }
     return true;
   });
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
     setFilterAddress("");
-    setFilterCompany("");
     setFilterPhone("");
     setIsFilterActive(false);
   };
@@ -154,11 +146,11 @@ export default function PartnerAll() {
       <div className="flex w-full">
         <div className="flex w-full justify-between items-center">
           <div className="flex md:mr-8 justify-around">
-            <Link to="/admin/partners/create">
+            {/* <Link to="/admin/partners/create">
               <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
                 Add Client
               </div>
-            </Link>
+            </Link> */}
             <div
               onClick={toggleFilterBox}
               className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
@@ -219,7 +211,6 @@ export default function PartnerAll() {
               <th className=" py-2 text-center">City</th>
               <th className=" py-2 text-center">Phone</th>
               <th className=" py-2 text-center">Date</th>
-              <th className=" py-2 text-center">Customer</th>
               <th className=" py-2 text-center">Company</th>
               <th className=" py-2 text-center">Action</th>
             </tr>
@@ -256,9 +247,6 @@ export default function PartnerAll() {
                     <td className="py-2 text-center">{partner.phone}</td>
                     <td className="py-2 text-center">
                       {format(new Date(partner.createdAt), "yyyy-MM-dd")}
-                    </td>
-                    <td className="py-2 text-center">
-                      {partner.isCustomer ? "Yes" : "No"}
                     </td>
                     <td className="py-2 text-center">
                       {partner.isCompany ? "Yes" : "No"}
@@ -345,17 +333,6 @@ export default function PartnerAll() {
               <input
                 type="text"
                 onChange={(e) => setFilterPhone(e.target.value)}
-                className="w-full rounded-md py-2 px-3 border-2 border-blue-300"
-                placeholder="Search By client address"
-              />
-            </div>
-            <div className="my-3 flex flex-col">
-              <label className="text-lg my-2 text-slate-600 font-semibold">
-                Company
-              </label>
-              <input
-                type="text"
-                onChange={(e) => setFilterCompany(e.target.value)}
                 className="w-full rounded-md py-2 px-3 border-2 border-blue-300"
                 placeholder="Search By client address"
               />
