@@ -175,12 +175,10 @@ export default function ProductsAll() {
       ) {
         return false;
       }
-  
       // Filter by barcode
       if (filterBarcode && !product.barcode.includes(filterBarcode)) {
         return false;
       }
-  
       // Filter by category
       if (filterCategory) {
         if (product.category) {
@@ -191,11 +189,10 @@ export default function ProductsAll() {
           return false;
         }
       }
-  
       // Filter by price
       if (
         filterPrice &&
-        parseFloat(product.listPrice) !== parseFloat(filterPrice)
+        parseFloat(product.salePrice) !== parseFloat(filterPrice)
       ) {
         return false;
       }

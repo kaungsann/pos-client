@@ -32,7 +32,8 @@ export default function Stock() {
     console.log("stock is a" ,resData )
     if (resData.status) {
       setLoading(false);
-      setStock(resData.data);
+      const filteredStock = resData.data.filter((st) => st.active === true);
+      setStock(filteredStock);
     } else {
       toast(resData.data);
       setLoading(true);
@@ -57,7 +58,6 @@ export default function Stock() {
       const downloadUrl = "http://3.0.102.114/stock/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
-      console.log("res download is", response);
 
       if (response.ok) {
         const blob = await response.blob();

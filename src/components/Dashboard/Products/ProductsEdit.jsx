@@ -38,8 +38,6 @@ export default function ProductsEdit() {
 
   const SingleProductApi = async () => {
     let resData = await getApi(`/product/${id}`, token.accessToken);
-    
-  console.log("single roduct is a" ,  resData)
     setSelect(resData.data[0].image);
     setTax(resData.data[0].tax);
     setStockQuantity(resData.data[0].minStockQty);
@@ -56,11 +54,10 @@ export default function ProductsEdit() {
     }
   };
 
-  console.log("ur chase rice is of" , purchasePrice)
 
   const createProductApi = async () => {
     const formData = new FormData();
-
+    
     if (name) {
       formData.append("name", name);
     }
@@ -85,9 +82,6 @@ export default function ProductsEdit() {
     if (updatePrice) {
       formData.append("salePrice", updatePrice);
     }
-    if (file) {
-      formData.append("image", file);
-    }
     if (purchasePrice) {
       formData.append("purchasePrice", purchasePrice);
     }
@@ -100,19 +94,22 @@ export default function ProductsEdit() {
     if (stockQuantity) {
       formData.append("minStockQty", stockQuantity);
     }
-
-
+    if (file) {
+      formData.append("image", file);
+    }
+    console.log("edit form  data is" , formData)
     let resData = await FormPathApi(
       `/product/${id}`,
       formData,
       token.accessToken
     );
-
-    if (resData.message == "Token Expire , Please Login Again") {
+  
+    if (resData.message === "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-     console.log(" data is res roduct" , resData)
+  
     if (resData.status) {
+      console.log("edit res data is" , resData)
       navigate("/admin/products/all");
     } else {
       toast(resData.message);
@@ -137,8 +134,9 @@ export default function ProductsEdit() {
   const handleFileInputClick = () => {
     fileInputRef.current.click();
   };
-  console.log(file)
+
   const handleFileInputChange = (event) => {
+    console.log("File input changed");
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
 
@@ -162,10 +160,8 @@ export default function ProductsEdit() {
       parseFloat(purchasePrice) +
       parseFloat(purchasePrice) * (parseFloat(profit) / 100);
       setUpdatePrice(calculatedSalePrice);
-      setUpdatePrice(calculatedSalePrice);
-
-      setSelectedImage(select);
-  }, [purchasePrice, profit ,select]);
+      setUpdatePrice(calculatedSalePrice)
+  }, [purchasePrice, profit ]);
 
   return (
     <>
@@ -209,16 +205,9 @@ export default function ProductsEdit() {
             <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
               <RiImageAddFill className=" text-slate-400 text-6xl" />
               {file ? (
-                <img
-                  src={selectedImage}
-                  className="absolute object-cover w-full h-full"
-                />
+                <img loading="eager | lazy" src={selectedImage} className="absolute object-cover w-full h-full" />
               ) : (
-                <img
-                  loading="eager | lazy"
-                  src={select}
-                  className="absolute object-cover w-full h-full"
-                />
+                <img loading="eager | lazy" src={select} className="absolute object-cover w-full h-full" />
               )}
             </div>
             <div

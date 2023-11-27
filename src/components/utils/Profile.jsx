@@ -262,15 +262,12 @@ export default function Profile() {
             <div>
               <div className="flex justify-between w-full  text-slate-700 pb-6 border-b-2 border-b-slate-300">
                 <h3 className="text-2xl font-bold">Personal Information</h3>
-
-                {userInfo.role.name == "user" && (
                   <button
                     onClick={() => navigate("/admin/pos/all")}
                     className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
                   >
                     Back
                   </button>
-                )}
               </div>
 
               <div className="mt-4">
@@ -405,23 +402,6 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
-
-                {userInfo.role && userInfo.role.name == "admin" && (
-                  <div className="flex">
-                    <button
-                      onClick={() => navigate("/admin/pos/all")}
-                      className="w-6/12 rounded-md mt-4 border-2 hover:bg-cyan-600 hover:text-white text-blue-500 border-blue-400  py-2 text-center font-bold"
-                    >
-                      Discard Change
-                    </button>
-                    <button
-                      onClick={handleSubmit}
-                      className="w-6/12 ml-2 hover:opacity-80 rounded-md mt-4 bg-blue-600 py-2 text-center text-white font-bold"
-                    >
-                      Edit Save
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
           )}
