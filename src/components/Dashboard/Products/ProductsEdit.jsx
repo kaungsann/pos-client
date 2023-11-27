@@ -97,7 +97,6 @@ export default function ProductsEdit() {
     if (file) {
       formData.append("image", file);
     }
-    console.log("edit form  data is" , formData)
     let resData = await FormPathApi(
       `/product/${id}`,
       formData,

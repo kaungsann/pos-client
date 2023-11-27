@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReactPaginate from "react-paginate";
-import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 import { getApi } from "../../Api";
 import FadeLoader from "react-spinners/FadeLoader";
@@ -10,16 +8,20 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import { removeData } from "../../../redux/actions";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 export default function Stock() {
   const inputRef = useRef();
+
   const [searchItems, setSearchItems] = useState([]);
-  const [stock, setStock] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const token = useSelector((state) => state.IduniqueData);
 
   const itemsPerPage = 5; 
   const [currentPage, setCurrentPage] = useState(0);
+
+  const [stock, setStock] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const token = useSelector((state) => state.IduniqueData);
 
   const dipatch = useDispatch();
 
@@ -32,8 +34,7 @@ export default function Stock() {
     console.log("stock is a" ,resData )
     if (resData.status) {
       setLoading(false);
-      const filteredStock = resData.data.filter((st) => st.active === true);
-      setStock(filteredStock);
+      setStock(resData.data);
     } else {
       toast(resData.data);
       setLoading(true);
@@ -55,9 +56,10 @@ export default function Stock() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "http://3.0.102.114/stock/export-excel";
+      const downloadUrl = "http://localhost:8000/stock/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
+      console.log("res download is", response);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -90,7 +92,7 @@ export default function Stock() {
   const endIndex = startIndex + itemsPerPage;
 
   const pageCount = Math.ceil(stock.length / itemsPerPage);
-  const currentStock = stock.slice(startIndex, endIndex);
+  const currentStocks = stock.slice(startIndex, endIndex);
 
   useEffect(() => {
     stockApi();
@@ -142,8 +144,8 @@ export default function Stock() {
             <th className="lg:px-4 py-2 text-center">Date</th>
             <th className="lg:px-4 py-2 text-center">Location</th>
           </tr>
-          {currentStock.length > 0 &&
-            currentStock
+          {stock.length > 0 &&
+            currentStocks
               .filter((item) =>
                 searchItems.toLowerCase === ""
                   ? item
@@ -165,15 +167,15 @@ export default function Stock() {
                     {format(new Date(stk.createdAt), "yyyy-MM-dd")}
                   </td>
                   <td className="py-3">
-                    {stk.location ? stk.location : "no have location"}
+                    {stk.location ? stk.location.name : "no have location"}
                   </td>
                 </tr>
               ))}
         </table>
 
         {loading && (
-            <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
-              {loading && (
+          <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+            {loading && (
               <FadeLoader
                 color={"#0284c7"}
                 loading={loading}
@@ -185,18 +187,19 @@ export default function Stock() {
           </div>
         )}
       </div>
-      <div className="fixed bottom-20 right-3 w-96 items-center">
+      <div className="fixed bottom-12 right-28 w-80 items-center">
         <ReactPaginate
           containerClassName="pagination-container flex justify-center items-center"
           pageLinkClassName="page-link text-center"
-          pageClassName="page-item mx-2"
-          className="flex justify-around text-center items-center"
+          pageClassName="page-item"
+          className="flex justify-around text-center bg-slate-200 items-center"
           activeClassName="bg-blue-500 text-white text-center"
-          previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
-          nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
-          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          previousClassName="text-slate-500 font-semibold hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold hover:text-slate-700"
+          breakLabel={<div className="break-label">...</div>} // Custom break element with margin
           onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={5} // Number of pages to display in the pagination
+          marginPagesDisplayed={1}
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
