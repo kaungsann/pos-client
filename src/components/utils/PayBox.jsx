@@ -6,7 +6,7 @@ import { BsFillTrash3Fill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { add } from "../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
-import img from "../../assets/user.jpeg";
+import img from "../../assets/product.svg";
 import "react-toastify/dist/ReactToastify.css";
 import {
   itemRemove,

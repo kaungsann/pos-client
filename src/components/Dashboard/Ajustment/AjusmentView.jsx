@@ -33,7 +33,7 @@ export default function AjusmentView() {
 
       // Define the URL for downloading the file
       const downloadUrl =
-        "http://localhost:8000/inventory-adjustment/export-excel";
+        "http://3.0.102.114/inventory-adjustment/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
 

@@ -8,7 +8,7 @@ import { FaEye } from "react-icons/fa6";
 import { format } from "date-fns";
 import DeleteAlert from "../../utils/DeleteAlert";
 import FadeLoader from "react-spinners/FadeLoader";
-import img from "../../../assets/tablet.png";
+import img from "../../../assets/product.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -562,23 +562,23 @@ export default function ProductsAll() {
         <ReactPaginate
           containerClassName="pagination-container flex justify-center items-center"
           pageLinkClassName="page-link text-center"
-          pageClassName="page-item mx-2"
+          pageClassName="page-item"
           className="flex justify-around text-center items-center"
           activeClassName="bg-blue-500 text-white text-center"
-          previousClassName="text-slate-500 font-semibold pr-8 hover:text-slate-700"
-          nextClassName="text-slate-500 font-semibold pl-8 hover:text-slate-700"
-          breakLabel={<div className="break-label px-8">...</div>} // Custom break element with margin
+          previousClassName="text-slate-500 font-semibold hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold hover:text-slate-700"
+          breakLabel={<div className="break-label">...</div>} // Custom break element with margin
           onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={1}
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
-              <IoMdArrowRoundBack className="mr-2" /> Previous
+              <IoMdArrowRoundBack className="" />
             </div>
           }
           nextLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
-              Next <IoMdArrowRoundForward className="ml-2" />
+              <IoMdArrowRoundForward className="" />
             </div>
           }
           forcePage={currentPage}

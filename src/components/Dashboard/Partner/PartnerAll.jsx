@@ -73,7 +73,7 @@ export default function PartnerAll() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "http://localhost:8000/partner/export-excel";
+      const downloadUrl = "http://3.0.102.114/partner/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
       console.log("res download is", response);
