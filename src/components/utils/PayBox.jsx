@@ -19,7 +19,6 @@ import ChoosePay from "./ChoosePay";
 
 export default function PayBox({ onContinueToPay }) {
   const [payment, setPayment] = useState(false);
-  const [dynamicInputValue, setDynamicInputValue] = useState(0);
   const dispatch = useDispatch();
 
   const product = useSelector((state) => state.orderData);

@@ -24,7 +24,6 @@ export default function SaleOrderCreate() {
   const [quantity, setQuantity] = useState(0);
   const [Tax, setTax] = useState(0);
   const [unitPrice, setUnitPrice] = useState(0);
-  const [subTotal, setTotalPrice] = useState(0);
   const [saleOrderLines, setSaleOrderLines] = useState([]);
   const [date, setDate] = useState("");
   const [totalTax, setTotalTax] = useState(0);
@@ -106,8 +105,6 @@ export default function SaleOrderCreate() {
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
-
-      console.log("salei is", resData);
       if (resData.status) {
         toast(resData.message);
         navigate("/admin/saleorders/all");
@@ -135,7 +132,7 @@ export default function SaleOrderCreate() {
   const getPartner = async () => {
     const resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCustomer === false && partner.active === true
+      (partner) => partner.isCustomer === true && partner.active === true
     );
     setPart(filteredPartners);
   };
@@ -164,7 +161,7 @@ export default function SaleOrderCreate() {
     const newSaleOrderLine = {
       product: item,
       qty: quantity,
-      tax: Tax * quantity,
+      tax: (selectedProduct.tax / 100) * quantity * unitPrice,
       unitPrice: unitPrice,
       subTotal: subTotal,
     };
@@ -190,7 +187,7 @@ export default function SaleOrderCreate() {
     let calculatedSubTotal = 0;
 
     saleOrderLines.forEach((sel) => {
-      calculatedTotalTax += ((sel.tax * sel.qty) / 100) * sel.unitPrice;
+      calculatedTotalTax += sel.tax;
       calculatedSubTotal += sel.unitPrice * sel.qty;
     });
 
@@ -400,31 +397,10 @@ export default function SaleOrderCreate() {
               placeholder="Enter note"
             />
           </div>
-
-          <div className="flex">
-            <div className="flex mt-8">
-              <label className="text-md font-semibold">TaxTotal :</label>
-              <input
-                style={{ backgroundColor: "transparent" }}
-                value={totalTax}
-                type="number"
-                className="border-b ml-3 border-slate-400 outline-none w-36"
-              />
-            </div>
-            <div className="flex mt-8">
-              <label className="text-md font-semibold">Total :</label>
-              <input
-                style={{ backgroundColor: "transparent" }}
-                value={totalCost}
-                type="number"
-                className="border-b  ml-3 border-slate-400 outline-none w-36"
-              />
-            </div>
-          </div>
         </form>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-10">
         <div className="flex justify-between">
           <h2 className="lg:text-2xl font-semibold">New Sale Order Line</h2>
           <button
@@ -456,7 +432,7 @@ export default function SaleOrderCreate() {
                 );
                 if (selectedProduct) {
                   setUnitPrice(selectedProduct.salePrice);
-                  setTotalPrice(selectedProduct.salePrice);
+                  setQuantity(1);
                   setTax(selectedProduct.tax);
                   setItem(selectedProduct);
                 }
@@ -499,11 +475,11 @@ export default function SaleOrderCreate() {
             />
           </div>
           <div>
-            <label className="text-md font-semibold">Tax:</label>
+            <label className="text-md font-semibold">Tax %:</label>
             <input
               style={{ backgroundColor: "transparent" }}
               type="number"
-              value={Tax * quantity}
+              value={(Tax * quantity) / 100}
               className="border-b border-slate-400 outline-none w-36"
             />
           </div>
@@ -514,7 +490,6 @@ export default function SaleOrderCreate() {
               style={{ backgroundColor: "transparent" }}
               value={unitPrice}
               className="border-b border-slate-400 outline-none w-36"
-              onChange={(e) => setUnitPrice(e.target.value)}
             />
           </div>
           <div>
@@ -522,7 +497,7 @@ export default function SaleOrderCreate() {
             <input
               style={{ backgroundColor: "transparent" }}
               type="number"
-              value={subTotal * quantity}
+              value={unitPrice * quantity}
               className="border-b border-slate-400 outline-none w-36"
             />
           </div>
@@ -560,7 +535,7 @@ export default function SaleOrderCreate() {
                 )}
               </td>
               <td className="lg:px-4 py-2 text-center">{line.product.name}</td>
-              <td className="lg:px-4 py-2 text-center">{line.tax}</td>
+              <td className="lg:px-4 py-2 text-center">{line.tax.toFixed(2)}</td>
               <td className="lg:px-4 py-2 text-center">{line.qty}</td>
               <td className="lg:px-4 py-2 text-center">{line.unitPrice}</td>
               <td className="lg:px-4 py-2 text-center">{line.subTotal}</td>
@@ -576,6 +551,18 @@ export default function SaleOrderCreate() {
           ))}
         </tbody>
       </table>
+      <div className="flex flex-col">
+        <div className="flex mt-8 justify-self-end">
+          <h1 className="text-lg font-semibold">
+            TaxTotal : <span>{totalTax.toFixed(2) ?? 0}</span>
+          </h1>
+        </div>
+        <div className="flex mt-4 justify-self-end">
+          <h1 className="text-lg font-semibold">
+            Total : <span>{totalCost.toFixed(2) ?? 0}</span>
+          </h1>
+        </div>
+      </div>
     </>
   );
 }

@@ -69,7 +69,7 @@ export default function ProductDetails() {
           </h2>
           <div className="flex items-center">
             <img
-              src={detail[0].image ? detail[0].image : img}
+              src={detail[0]?.image ? detail[0]?.image : img}
               className="w-42 h-36 my-4 rounded-md shadow-md mr-8"
             />
             <div className="mx-8" ref={componentRef}>

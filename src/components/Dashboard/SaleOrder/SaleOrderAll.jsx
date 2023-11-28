@@ -282,15 +282,15 @@ export default function SaleOrderAll() {
                     <td
                       className="lg:px-4 py-2 text-center"
                     >
-                     <span className={`px-4 rounded-2xl border-2 py-1 font-bold ${
+                     <span className={`rounded-xl py-2 text-sm  ${
                         sale.state == "pending"
-                        ? "text-orange-500 bg-orange-100 border-orange-400"
+                        ? " bg-orange-50 text-orange-700 px-6"
                         : sale.state == "deliver"
-                        ? "bg-cyan-100 text-cyan-500 border-cyan-400"
+                        ? "bg-cyan-50 text-cyan-700 px-6"
                         : sale.state == "arrived"
-                        ? "bg-blue-100 text-blue-500 border-blue-400"
+                        ? "bg-blue-50 text-blue-700 px-6"
                         : sale.state == "confirmed"
-                        ? "bg-green-100 text-green-500 border-green-400"
+                        ? "bg-green-50 text-green-700 px-4"
                         : ""
                       }`}>{sale.state ? sale.state : "no state"}</span>
                    
@@ -321,7 +321,7 @@ export default function SaleOrderAll() {
                       onClick={() => {
                         handleConfirm(sale.id);
                       }}>
-                       {sale.state === "pending" &&  <button className="px-2 py-1 ml-2 bg-green-500 text-white rounded-lg hover:opacity-75">confirm</button> }
+                       {sale.state === "pending" &&  <button className="px-4 py-2 ml-2 text-white text-sm text-bold bg-blue-700 rounded-md hover:opacity-75">confirm</button> }
                     </td>
                   </tr>
                 ))

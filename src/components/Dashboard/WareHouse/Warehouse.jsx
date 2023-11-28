@@ -167,13 +167,13 @@ export default function Warehouse() {
                     <td
                       className="lg:px-4 py-2 text-center"
                     >
-                     <span className={`px-6 rounded-2xl border-2 py-1.5 font-bold ${
+                     <span className={`rounded-xl py-2 text-sm ${
                         wh.state == "pending"
-                        ? "text-orange-500 bg-orange-100 border-orange-400"
+                        ? " bg-orange-50 text-orange-700 px-6"
                         : wh.state == "deliver"
-                        ? "bg-cyan-100 text-cyan-500 border-cyan-400"
+                        ? "bg-cyan-50 text-cyan-600 px-6"
                         : wh.state == "arrived"
-                        ? "bg-green-100 text-green-500 border-green-400"
+                        ? "bg-green-50 text-green-700 px-4"
                         : ""
                       }`}>{wh.state ? wh.state : "no state"}</span>
                    
@@ -183,10 +183,10 @@ export default function Warehouse() {
                     </td>
                     <td   className="lg:px-4 py-2 text-center">
                       <span
-                        className={`px-6 rounded-2xl border-2 py-1.5 font-bold ${
-                          wh.paymentStatus  === "pending" ? "text-orange-500 bg-orange-100 border-orange-400" 
+                        className={`rounded-xl py-2 text-sm ${
+                          wh.paymentStatus  == "pending" ? "text-orange-700 px-6" 
                           : wh.paymentStatus == "comfirm"
-                          ? "bg-green-100 text-green-500 border-green-400"
+                          ? " text-green-700 px-4"
                           : ""
                         }`}
                       >

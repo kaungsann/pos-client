@@ -78,7 +78,7 @@ export default function PartnerAll() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "http://localhost:8000/partner/export-excel";
+      const downloadUrl = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/partner/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
       console.log("res download is", response);
@@ -86,7 +86,7 @@ export default function PartnerAll() {
       if (response.ok) {
         const blob = await response.blob();
         const filename =
-          response.headers.get("content-disposition") || "exported-data.xlsx";
+          response.headers.get("content-disposition") || "partner-export-data.xlsx";
 
         const url = window.URL.createObjectURL(blob);
 
@@ -105,9 +105,11 @@ export default function PartnerAll() {
       console.error("An error occurred while downloading the file:", error);
     }
   };
+
   const handleFileImportClick = () => {
     importRef.current.click();
   };
+
   const handleFileImportChange = async (event) => {
     const selectedFile = event.target.files[0];
     setimportFile(selectedFile);
@@ -150,8 +152,6 @@ export default function PartnerAll() {
     });
     return filterPartner
   }
-
-
 
   const toggleSelectItem = (partnerID) => {
     setSelectAll(true);
