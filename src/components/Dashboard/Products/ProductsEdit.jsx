@@ -48,6 +48,7 @@ export default function ProductsEdit() {
     setPurchasePrice(resData.data[0].purchasePrice);
     setProfit(resData.data[0].marginProfit);
     setPrice(resData.data[0].salePrice);
+    setRef(resData.data[0].ref);
     setBar(resData.data[0].barcode);
     setCatName(resData.data[0].category?.name);
     setImage(resData.data[0]?.image);
@@ -59,7 +60,7 @@ export default function ProductsEdit() {
 
   const createProductApi = async () => {
     const formData = new FormData();
-
+    
     if (name) {
       formData.append("name", name);
     }
@@ -81,9 +82,6 @@ export default function ProductsEdit() {
     if (updatePrice) {
       formData.append("salePrice", updatePrice);
     }
-    if (file) {
-      formData.append("image", file);
-    }
     if (purchasePrice) {
       formData.append("purchasePrice", purchasePrice);
     }
@@ -102,12 +100,13 @@ export default function ProductsEdit() {
       formData,
       token.accessToken
     );
-
-    if (resData.message == "Token Expire , Please Login Again") {
+  
+    if (resData.message === "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
     console.log(" data is res roduct", resData);
     if (resData.status) {
+      console.log("edit res data is" , resData)
       navigate("/admin/products/all");
     } else {
       toast(resData.message);
@@ -134,6 +133,7 @@ export default function ProductsEdit() {
   };
 
   const handleFileInputChange = (event) => {
+    console.log("File input changed");
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
 
@@ -205,10 +205,7 @@ export default function ProductsEdit() {
             <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
               <RiImageAddFill className=" text-slate-400 text-6xl" />
               {file ? (
-                <img
-                  src={selectedImage}
-                  className="absolute object-cover w-full h-full"
-                />
+                <img loading="eager | lazy" src={selectedImage} className="absolute object-cover w-full h-full" />
               ) : (
                 <img
                   loading="eager | lazy"

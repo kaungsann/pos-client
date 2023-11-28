@@ -27,7 +27,7 @@ export default function ProductsCreate() {
   const [tax, setTax] = useState(0);
 
   const fileInputRef = useRef(null);
-  const [select, setSelect] = useState("");
+  const [select, setSelect] = useState(null);
   const [profit, setProfit] = useState(0);
 
   // State variables for showing red borders and error messages
@@ -91,11 +91,6 @@ export default function ProductsCreate() {
 
     try {
       let resData = await FormPostApi("/product", formData, token.accessToken);
-
-  
-
-      console.log("bar code data is" , bar)
-      console.log("form data  is" , formData)
       if (resData.status) {
         navigate("/admin/products/all");
       } else {
@@ -154,7 +149,7 @@ const generateBarCode = () => {
       parseFloat(purchasePrice) +
       parseFloat(purchasePrice) * (parseFloat(profit) / 100);
 
-    setPrice(calculatedSalePrice);
+      setPrice(calculatedSalePrice);
   }, [purchasePrice, profit]);
 
   return (

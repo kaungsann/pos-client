@@ -9,9 +9,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { FaEye } from "react-icons/fa6";
 import { removeData } from "../../../redux/actions";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 export default function LocationAll() {
   const inputRef = useRef();
+
+  const itemsPerPage = 5; 
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -151,12 +156,24 @@ export default function LocationAll() {
       toast("Failed to locations selected locations.");
     }
   };
+
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+
+  const pageCount = Math.ceil(locations.length / itemsPerPage);
+  const currentLocations = locations.slice(startIndex, endIndex);
+
   useEffect(() => {
     getLocationApi();
   }, []);
   
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -241,8 +258,8 @@ export default function LocationAll() {
             <th className="lg:px-4 py-2 text-center">Action</th>
             <th></th>
           </tr>
-          {locations.length > 0 ? (
-            locations
+          {currentLocations.length > 0 ? (
+            currentLocations
               .filter((item) =>
                 searchItems.toLowerCase === ""
                   ? item
@@ -290,7 +307,7 @@ export default function LocationAll() {
                 </tr>
               ))
           ) : (
-            <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+            <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
               {loading && (
                 <FadeLoader
                   color={"#0284c7"}
@@ -316,6 +333,38 @@ export default function LocationAll() {
           />
         )}
       </div>
-    </>
+      <div className="fixed bottom-12 right-28 w-80 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item"
+          className="flex justify-around text-center bg-slate-200 items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold hover:text-slate-700"
+          breakLabel={<div className="break-label">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5} // Number of pages to display in the pagination
+          marginPagesDisplayed={1}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
+    </div>
   );
 }
