@@ -8,7 +8,7 @@ import { FaEye } from "react-icons/fa6";
 import { format } from "date-fns";
 import DeleteAlert from "../../utils/DeleteAlert";
 import FadeLoader from "react-spinners/FadeLoader";
-import img from "../../../assets/tablet.png";
+import img from "../../../assets/product.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,7 @@ import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function ProductsAll() {
   const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 10; // Choose the number of items per page
   const itemsPerPage = 20; // Choose the number of items per page
   const navigate = useNavigate();
 
@@ -572,12 +573,12 @@ export default function ProductsAll() {
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
-              <IoMdArrowRoundBack className="mr-2" /> Previous
+              <IoMdArrowRoundBack className="" />
             </div>
           }
           nextLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
-              Next <IoMdArrowRoundForward className="ml-2" />
+              <IoMdArrowRoundForward className="" />
             </div>
           }
           forcePage={currentPage}

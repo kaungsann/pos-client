@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { itemsAdd, updateItemQuantity } from "../../redux/actions";
-import img from "../../assets/user.jpeg/";
+import img from "../../assets/product.svg/";
 export default function Card({ product }) {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.orderData);

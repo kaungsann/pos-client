@@ -192,19 +192,6 @@ export default function SaleOrderAll() {
               <FiFilter className="text-xl mx-2" />
               <h4>Filter</h4>
             </div>
-            <div
-              onClick={handleFileImportClick}
-              className="rounded-sm mx-3 shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"
-            >
-              <input
-                type="file"
-                style={{ display: "none" }}
-                ref={importRef}
-                onChange={handleFileImportChange}
-              />
-              <h4>Import Excel </h4>
-              <BiExport className="text-xl mx-2" />
-            </div>
           </div>
 
           <div className="w-96 md:w-72 relative">
