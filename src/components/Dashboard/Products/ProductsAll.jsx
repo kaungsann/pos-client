@@ -19,7 +19,6 @@ import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 export default function ProductsAll() {
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10; // Choose the number of items per page
-  const itemsPerPage = 20; // Choose the number of items per page
   const navigate = useNavigate();
 
   const [selectedItems, setSelectedItems] = useState([]);
