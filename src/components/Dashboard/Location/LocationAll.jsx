@@ -15,7 +15,7 @@ import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 export default function LocationAll() {
   const inputRef = useRef();
 
-  const itemsPerPage = 5; 
+  const itemsPerPage = 10; 
   const [currentPage, setCurrentPage] = useState(0);
 
   const [selectedItems, setSelectedItems] = useState([]);

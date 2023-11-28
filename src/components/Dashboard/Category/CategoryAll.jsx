@@ -19,7 +19,7 @@ export default function CategoryAll() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  const itemsPerPage = 5; 
+  const itemsPerPage = 10; 
   const [currentPage, setCurrentPage] = useState(0);
 
   const [alert, setAlert] = useState(false);
