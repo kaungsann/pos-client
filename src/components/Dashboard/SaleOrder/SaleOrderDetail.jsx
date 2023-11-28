@@ -28,10 +28,12 @@ export default function SaleOrderDetail() {
       dipatch(removeData(null));
     }
     if (resData.status) {
-      let name = resData.data.filter((pid) => pid.orderId._id == id);
+      let name = resData.data.filter((pid) => pid.orderId && pid.orderId._id === id);
+      console.log("sale lines iss single name is" , name)
       setLines(name);
     }
   };
+  console.log("sale lines iss single" , lines)
   useEffect(() => {
     saleLinesApi();
     singleSaleOrder();

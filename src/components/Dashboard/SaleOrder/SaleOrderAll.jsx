@@ -12,12 +12,17 @@ import { format } from "date-fns";
 import { FiFilter } from "react-icons/fi";
 import { FaEye } from "react-icons/fa6";
 import ConfrimBox from "../../utils/ConfrimBox"
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io"
 
 
 export default function SaleOrderAll() {
   const [saleorders, setSaleOrders] = useState([]);
   const [searchItems, setSearchItems] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const itemsPerPage = 10; 
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [showFilter, setShowFilter] = useState(false);
   const [isFilterActive, setIsFilterActive] = useState(false); // Track if any filter is active
@@ -73,29 +78,34 @@ export default function SaleOrderAll() {
     setShowFilter(!showFilter);
   };
 
-  const filterSaleOrder = saleorders.filter((sale) => {
-    //Filter by date
-    if (filterDate && !sale.orderDate.includes(filterDate)) {
-      return false;
-    }
-    // Filter by staff
-    if (
-      filterStaff &&
-      sale.user &&
-      !sale.user.username.toLowerCase().includes(filterStaff.toLowerCase())
-    ) {
-      return false;
-    }
+  const filterSaleOrdered = ( ) => {
+    const filterSaleOrder = saleorders.filter((sale) => {
+      //Filter by date
+      if (filterDate && !sale.orderDate.includes(filterDate)) {
+        return false;
+      }
+      // Filter by staff
+      if (
+        filterStaff &&
+        sale.user &&
+        !sale.user.username.toLowerCase().includes(filterStaff.toLowerCase())
+      ) {
+        return false;
+      }
+  
+      // Filter by location
+      if (
+        filterLocation &&
+        !sale.location.name.toLowerCase().includes(filterLocation.toLowerCase())
+      ) {
+        return false;
+      }
+      return true;
+    })
+    return filterSaleOrder
+  }
 
-    // Filter by location
-    if (
-      filterLocation &&
-      !sale.location.name.toLowerCase().includes(filterLocation.toLowerCase())
-    ) {
-      return false;
-    }
-    return true;
-  });
+;
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -132,6 +142,18 @@ export default function SaleOrderAll() {
     setconfrimShowBox(false);
   }
 
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const filteredsale = filterSaleOrdered();
+
+  const pageCount = Math.ceil(filteredsale.length / itemsPerPage);
+  const currentSale = filteredsale.slice(startIndex, endIndex);
+
   useEffect(() => {
     saleOrderApi();
     if (filterDate || filterStaff || filterLocation) {
@@ -141,7 +163,7 @@ export default function SaleOrderAll() {
     }
   }, [filterDate, filterStaff, filterLocation]);
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -209,7 +231,7 @@ export default function SaleOrderAll() {
             </button>
           )}
         </div>
-        <table className="w-full text-center relative">
+        <table className="w-full text-center relative  mb-20">
           <tr className="bg-blue-600 text-white">
             <th className="text-center">Order Date</th>
             <th className="lg:px-4 py-2 text-center">User</th>
@@ -224,8 +246,8 @@ export default function SaleOrderAll() {
             <th className="lg:px-4 py-2 text-center"></th>
           </tr>
           <tbody className="w-full space-y-10 bg-slate-300">
-            {filterSaleOrder.length > 0 ? (
-              filterSaleOrder
+            {currentSale.length > 0 ? (
+              currentSale
                 .filter(
                   (item) =>
                     searchItems.toLowerCase() === "" ||
@@ -304,7 +326,7 @@ export default function SaleOrderAll() {
                   </tr>
                 ))
             ) : (
-              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
@@ -389,6 +411,38 @@ export default function SaleOrderAll() {
           </div>
         </div>
       )}
-    </>
+      <div className="fixed bottom-12 right-28 w-80 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item"
+          className="flex justify-around text-center bg-slate-200 items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold hover:text-slate-700"
+          breakLabel={<div className="break-label">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5} // Number of pages to display in the pagination
+          marginPagesDisplayed={1}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
+    </div>
   );
 }
