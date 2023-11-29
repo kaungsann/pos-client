@@ -10,6 +10,8 @@ import {
   Pie,
   Cell,
   PieChart,
+  Legend,
+  Rectangle,
 } from "recharts";
 
 import { getApi } from "../../Api";
@@ -19,12 +21,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { removeData } from "../../../redux/actions";
 
-export default function PurchaseView() {
+export default function SaleView() {
   const [purchase, setPurchase] = useState([]);
-  const [product, setProduct] = useState([]);
   const [purchaseLines, setPurchaseLines] = useState([]);
   const [popularProductsData, setPopularProductsData] = useState([]);
   const [stock, setStock] = useState([]);
+
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPerDay, setTotalPerDay] = useState([]);
+  const [orderLines, setOrderLines] = useState([]);
+  const [popularProducts, setPopularProducts] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
@@ -73,64 +81,60 @@ export default function PurchaseView() {
     }
   };
 
-  const getProduct = async () => {
+  const lineChartData = orderLines.map((line) => {
+    return {
+      id: line._id,
+      orderRef: line.orderId.orderRef,
+      productId: line.product.name,
+      total: line.subTotal,
+    };
+  });
+
+  const todayDate = format(new Date(), "MM-dd-yyyy"); // Get today's date in the same format as orderDate
+
+  const todayPurchaseLine = purchaseLines.filter(
+    (purchase) =>
+      format(new Date(purchase.orderDate), "MM-dd-yyyy") === todayDate
+  );
+
+  const getTotals = async () => {
     setLoading(true);
-    let resData = await getApi("/product", token.accessToken);
+    let resData = await getApi(
+      `/orders/totals?startDate=${todayDate.toString()}`,
+      token.accessToken
+    );
     if (resData.status) {
+      console.log(resData.data);
+      setTotalAmount(resData.data.sales.totalAmountWithTax);
+      setTotalOrders(resData.data.sales.totalOrders);
+      setTotalPerDay(resData.data.sales.totalsAmountPerDay);
+      setTotalItems(resData.data.sales.totalItems);
+      setOrderLines(resData.data.sales.allLines);
+      setPopularProducts(resData.data.sales.topProducts);
       setLoading(false);
-      setProduct(resData.data);
     } else {
       setLoading(true);
     }
   };
 
-  const todayDate = format(new Date(), "dd.MM.yyyy"); // Get today's date in the same format as orderDate
-
-  const filteredPurchase = purchase.filter((pur) => {
-    const formattedOrderDate = format(new Date(pur.orderDate), "dd.MM.yyyy");
-    return formattedOrderDate === todayDate;
-  });
-
-    //To show barchart for only today date
-    const todayPurchaseDate  = filteredPurchase.map((item) => ({
-      ...item,
-      created: format(new Date(item.createdAt), "yyyy-MM-dd"),
-    }));
-
-  const todayPurchaseLine = purchaseLines.filter(
-    (purchase) =>
-      format(new Date(purchase.orderDate), "dd.MM.yyyy") === todayDate
-  );
-
-  const getProductQuantity = () => {
-    // Calculate the total quantity of products purchased
-    const totalQuantity = filteredPurchase.reduce(
-      (total, purchaseLine) => total + purchaseLine.lines.length,
-      0
-    );
-    return totalQuantity;
-  };
-
-  const todayTotalPurchase = filteredPurchase.reduce(
-    (total, sale) => total + sale.total,
-    0
-  );
-
   useEffect(() => {
     getStockApi();
-    getProduct();
     getPurchase();
+    getTotals();
     getPurhaseLines();
   }, []);
 
-  const formattedSaleData = purchase.map((item) => ({
-    ...item,
-    created: format(new Date(item.createdAt), "yyyy-MM-dd"),
-  }));
-
   const todayStock = stock.filter(
-    (stk) => format(new Date(stk.updatedAt), "dd.MM.yyyy") === todayDate
+    (stk) => format(new Date(stk.updatedAt), "MM-dd-yyyy") === todayDate
   );
+
+  const orderList = Array.from(
+    new Set(orderLines.map((line) => line.orderId._id))
+  ).map(
+    (orderId) => orderLines.find((line) => line.orderId._id === orderId).orderId
+  );
+
+  console.log(orderList);
 
   useEffect(() => {
     // Count the quantity sold for each product
@@ -165,6 +169,7 @@ export default function PurchaseView() {
     );
     return todayStockEntry ? todayStockEntry.onHand : 0;
   };
+
   return (
     <>
       <div className="px-8 w-full">
@@ -176,10 +181,10 @@ export default function PurchaseView() {
             />
             <div className="">
               <h3 className="font-bold text-slate-600 text-xl">
-                Total Sales
+                Total Sales <span className="text-sm">(Inc. Tax)</span>
               </h3>
               <h4 className="text-lg font-bold text-slate-600">
-                {todayTotalPurchase} mmk
+                {totalAmount}
               </h4>
             </div>
           </div>
@@ -190,11 +195,9 @@ export default function PurchaseView() {
             />
 
             <div className="">
-              <h3 className="font-bold text-slate-600 text-xl">
-                Today Sale
-              </h3>
+              <h3 className="font-bold text-slate-600 text-xl">Transactions</h3>
               <h4 className="text-lg font-bold text-slate-600">
-                {filteredPurchase.length}
+                {totalOrders}
               </h4>
             </div>
           </div>
@@ -208,9 +211,7 @@ export default function PurchaseView() {
               <h4 className="text-lg font-bold text-slate-600">
                 {
                   new Set(
-                    filteredPurchase.map(
-                      (sal) => sal.partner && sal.partner._id
-                    )
+                    orderList.map((line) => line.partner && line.partner._id)
                   ).size
                 }
               </h4>
@@ -227,48 +228,51 @@ export default function PurchaseView() {
               <h3 className="font-bold text-slate-600 text-xl">
                 Product Sales
               </h3>
-              <h4 className="text-lg font-bold text-slate-600">
-                {getProductQuantity()}
-              </h4>
+              <h4 className="text-lg font-bold text-slate-600">{totalItems}</h4>
             </div>
           </div>
         </div>
         <div className="mt-6">
           <div className="w-full flex my-4">
-
             <div className="w-3/5 bg-white p-2 rounded-md shadow-md">
-               <h3 className="text-red-500 font-semibold text-lg mb-6">
-                 Sale Order Dashboard
-               </h3>
+              <h3 className="text-slate-500 font-semibold text-lg mb-6">
+                Daily Sale Order Dashboard
+              </h3>
               <ResponsiveContainer height={300} className="mx-auto">
-               <BarChart
-                width={700}
-                height={400}
-                data={todayPurchaseDate}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 60,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="created"
-                  angle={-60} // Rotate the text by -90 degrees
-                  textAnchor="end" // Anchor the text at the end (right)
-                />
-                <YAxis dataKey="total" />
-                <Tooltip />
-                <Bar dataKey="total" barSize={20} fill="#8884d8" />
-              </BarChart>
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={lineChartData}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="orderRef" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  {/* <Bar
+                    dataKey="pv"
+                    fill="#8884d8"
+                    activeBar={<Rectangle fill="pink" stroke="blue" />}
+                  /> */}
+                  <Bar
+                    dataKey="total"
+                    fill="#82ca9d"
+                    activeBar={<Rectangle fill="gold" stroke="purple" />}
+                  />
+                </BarChart>
               </ResponsiveContainer>
             </div>
             <div className="items-center w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
               <h1 className="text-slate-500 font-semibold text-lg mb-6">
-                Most of sale products
+                All Time Popular Products
               </h1>
-              <ResponsiveContainer  height={300} className="mx-auto">
+              <ResponsiveContainer height={300} className="mx-auto">
                 <PieChart>
                   <Pie
                     dataKey="value"
@@ -314,8 +318,8 @@ export default function PurchaseView() {
                 </tr>
 
                 <tbody className="w-full space-y-10 relative">
-                  {filteredPurchase.length > 0 ? (
-                    filteredPurchase.map((sal) => (
+                  {orderList.length > 0 ? (
+                    orderList.map((sal) => (
                       <tr key={sal.id}>
                         <td className="lg:px-4 py-2 text-center">
                           {sal.partner && sal.partner.name}
@@ -335,7 +339,7 @@ export default function PurchaseView() {
                               ? "text-red-400"
                               : sal.state == "deliver"
                               ? "text-cyan-700"
-                              : sal.state == "arrived"
+                              : sal.state == "confirmed"
                               ? "text-green-600"
                               : ""
                           }`}
@@ -358,7 +362,7 @@ export default function PurchaseView() {
               </h1>
               <div className="px-2 max-h-80 overflow-y-scroll custom-scrollbar mb-6">
                 {todayPurchaseLine.length > 0 ? (
-                  todayPurchaseLine.slice(0,3).map((purchaseLines) => (
+                  todayPurchaseLine.slice(0, 3).map((purchaseLines) => (
                     <div
                       key={purchaseLines._id}
                       className="w-full flex justify-between mb-3 border-b-2 pb-3"

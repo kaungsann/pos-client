@@ -92,9 +92,9 @@ export default function PurchaseView() {
             />
 
             <div className="">
-              <h3 className="font-bold text-slate-600 text-xl">Total Amount</h3>
+              <h3 className="font-bold text-slate-600 text-xl">Total Cost <span className="text-sm">(Inc. Tax)</span></h3>
               <h4 className="text-lg font-bold text-slate-600">
-                {totalAmount} mmk
+                {totalAmount}
               </h4>
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function PurchaseView() {
             <Icon icon="fa:users" className="text-4xl text-[#8884d8]" />
             <div>
               <h3 className="font-bold text-slate-600 text-xl">
-                Total Customer
+                Vendors
               </h3>
               <h4 className="text-lg font-bold text-slate-600">
                 {
