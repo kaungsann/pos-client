@@ -10,6 +10,9 @@ import {
   Pie,
   Cell,
   PieChart,
+  LineChart,
+  Legend,
+  Rectangle,
 } from "recharts";
 
 import { getApi } from "../../Api";
@@ -22,149 +25,61 @@ import { removeData } from "../../../redux/actions";
 export default function PurchaseView() {
   const [purchase, setPurchase] = useState([]);
   const [product, setProduct] = useState([]);
-  const [purchaseLines, setPurchaseLines] = useState([]);
-  const [popularProductsData, setPopularProductsData] = useState([]);
-  const [stock, setStock] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPerDay, setTotalPerDay] = useState([]);
+  const [orderLines, setOrderLines] = useState([]);
+  const [popularProducts, setPopularProducts] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const getPurchase = async () => {
+  const todayDate = format(new Date(), "MM-dd-yyyy"); // Get today's date in the same format as orderDate
+
+  const getTotals = async () => {
     setLoading(true);
-    let resData = await getApi("/purchase", token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    if (resData.success) {
-      setLoading(false);
-      setPurchase(resData.data);
-    } else {
-      setLoading(true);
-    }
-  };
-
-  const getStockApi = async () => {
-    setLoading(true);
-    let resData = await getApi("/stock", token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    if (resData.status) {
-      setLoading(false);
-      setStock(resData.data);
-    } else {
-      setLoading(true);
-    }
-  };
-
-  const getPurhaseLines = async () => {
-    setLoading(true);
-    let resData = await getApi("/purchaselines", token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-
-    if (resData.status) {
-      setLoading(false);
-      setPurchaseLines(resData.data);
-    } else {
-      setLoading(true);
-    }
-  };
-
-  const getProduct = async () => {
-    setLoading(true);
-    let resData = await getApi("/product", token.accessToken);
-    if (resData.status) {
-      setLoading(false);
-      setProduct(resData.data);
-    } else {
-      setLoading(true);
-    }
-  };
-
-  const todayDate = format(new Date(), "dd.MM.yyyy"); // Get today's date in the same format as orderDate
-
-  const filteredPurchase = purchase.filter((pur) => {
-    const formattedOrderDate = format(new Date(pur.orderDate), "dd.MM.yyyy");
-    return formattedOrderDate === todayDate;
-  });
-
-    //To show barchart for only today date
-    const todayPurchaseDate  = filteredPurchase.map((item) => ({
-      ...item,
-      created: format(new Date(item.createdAt), "yyyy-MM-dd"),
-    }));
-
-  const todayPurchaseLine = purchaseLines.filter(
-    (purchase) =>
-      format(new Date(purchase.orderDate), "dd.MM.yyyy") === todayDate
-  );
-
-  const getProductQuantity = () => {
-    // Calculate the total quantity of products purchased
-    const totalQuantity = filteredPurchase.reduce(
-      (total, purchaseLine) => total + purchaseLine.lines.length,
-      0
+    let resData = await getApi(
+      `/orders/totals?startDate=${todayDate.toString()}`,
+      token.accessToken
     );
-    return totalQuantity;
+    if (resData.status) {
+      console.log(resData.data);
+      setTotalAmount(resData.data.purchases.totalAmount);
+      setTotalOrders(resData.data.purchases.totalOrders);
+      setTotalPerDay(resData.data.purchases.totalsAmountPerDay);
+      setTotalItems(resData.data.purchases.totalItems);
+      setOrderLines(resData.data.purchases.allLines);
+      setPopularProducts(resData.data.purchases.topProducts);
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
   };
-
-  const todayTotalPurchase = filteredPurchase.reduce(
-    (total, sale) => total + sale.total,
-    0
-  );
 
   useEffect(() => {
-    getStockApi();
-    getProduct();
-    getPurchase();
-    getPurhaseLines();
+    getTotals();
   }, []);
 
-  const formattedSaleData = purchase.map((item) => ({
-    ...item,
-    created: format(new Date(item.createdAt), "yyyy-MM-dd"),
-  }));
-
-  const todayStock = stock.filter(
-    (stk) => format(new Date(stk.updatedAt), "dd.MM.yyyy") === todayDate
+  const orderList = Array.from(
+    new Set(orderLines.map((line) => line.orderId._id))
+  ).map(
+    (orderId) => orderLines.find((line) => line.orderId._id === orderId).orderId
   );
 
-  useEffect(() => {
-    // Count the quantity sold for each product
-    const productCount = purchaseLines.reduce((acc, purchaseLine) => {
-      const productId = purchaseLine.product._id;
-      acc[productId] = (acc[productId] || 0) + purchaseLine.qty;
-      return acc;
-    }, {});
+  console.log(orderList);
 
-    // Sort products by quantity sold in descending order
-    const sortedProducts = Object.keys(productCount).sort(
-      (a, b) => productCount[b] - productCount[a]
-    );
+  const lineChartData = orderLines.map((line) => {
+    return {
+      id: line._id,
+      orderRef: line.orderId.orderRef,
+      productId: line.product.name,
+      total: line.subTotal,
+    };
+  });
 
-    // Take the top 4 products
-    const topProducts = sortedProducts.slice(0, 5);
-
-    // Create data for the pie chart
-    const pieChartData = topProducts.map((productId, index) => ({
-      name:
-        purchaseLines.find((purchase) => purchase.product._id === productId)
-          ?.product.name || `Product ${index + 1}`,
-      value: productCount[productId],
-    }));
-
-    setPopularProductsData(pieChartData);
-  }, [purchaseLines]);
-
-  const getStockQuantity = (productId) => {
-    const todayStockEntry = todayStock.find(
-      (stockItem) => stockItem.product._id === productId
-    );
-    return todayStockEntry ? todayStockEntry.onHand : 0;
-  };
+  const COLORS = ["#96c3ea", "#88c3c7", "#b8bd85", "#8f90c9"];
 
   return (
     <>
@@ -177,11 +92,9 @@ export default function PurchaseView() {
             />
 
             <div className="">
-              <h3 className="font-bold text-slate-600 text-xl">
-                Total Purchase
-              </h3>
+              <h3 className="font-bold text-slate-600 text-xl">Total Amount</h3>
               <h4 className="text-lg font-bold text-slate-600">
-                {todayTotalPurchase} mmk
+                {totalAmount} mmk
               </h4>
             </div>
           </div>
@@ -192,11 +105,9 @@ export default function PurchaseView() {
             />
 
             <div className="">
-              <h3 className="font-bold text-slate-600 text-xl">
-                Today Purchases
-              </h3>
+              <h3 className="font-bold text-slate-600 text-xl">Today Orders</h3>
               <h4 className="text-lg font-bold text-slate-600">
-                {filteredPurchase.length}
+                {totalOrders}
               </h4>
             </div>
           </div>
@@ -210,9 +121,7 @@ export default function PurchaseView() {
               <h4 className="text-lg font-bold text-slate-600">
                 {
                   new Set(
-                    filteredPurchase.map(
-                      (sal) => sal.partner && sal.partner._id
-                    )
+                    orderList.map((line) => line.partner && line.partner._id)
                   ).size
                 }
               </h4>
@@ -224,14 +133,11 @@ export default function PurchaseView() {
               icon="fluent-mdl2:product-variant"
               className="text-4xl text-green-500"
             />
-
             <div>
               <h3 className="font-bold text-slate-600 text-xl">
                 Product Purchased
               </h3>
-              <h4 className="text-lg font-bold text-slate-600">
-                {getProductQuantity()}
-              </h4>
+              <h4 className="text-lg font-bold text-slate-600">{totalItems}</h4>
             </div>
           </div>
         </div>
@@ -239,50 +145,84 @@ export default function PurchaseView() {
           <div className="w-full flex my-4">
             <div className="w-3/5 bg-white p-2 rounded-md shadow-md">
               <h3 className="text-slate-500 font-semibold text-lg mb-6">
-                Purchase Order Dashboard
+                Daily Purchase Order Dashboard
               </h3>
               <ResponsiveContainer height={300} className="mx-auto">
-               <BarChart
-                width={700}
-                height={400}
-                data={todayPurchaseDate}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 60,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="created"
-                  angle={-60} // Rotate the text by -90 degrees
-                  textAnchor="end" // Anchor the text at the end (right)
-                />
-                <YAxis dataKey="total" />
-                <Tooltip />
-                <Bar dataKey="total" barSize={20} fill="#8884d8" />
-              </BarChart>
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={lineChartData}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="orderRef" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  {/* <Bar
+                    dataKey="pv"
+                    fill="#8884d8"
+                    activeBar={<Rectangle fill="pink" stroke="blue" />}
+                  /> */}
+                  <Bar
+                    dataKey="total"
+                    fill="#82ca9d"
+                    activeBar={<Rectangle fill="gold" stroke="purple" />}
+                  />
+                </BarChart>
               </ResponsiveContainer>
             </div>
             <div className="items-center w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
               <h1 className="text-slate-500 font-semibold text-lg mb-6">
-                Most of sale products
+                All Time Purchased Product
               </h1>
-              <ResponsiveContainer  height={300} className="mx-auto">
-                <PieChart>
+              <ResponsiveContainer height={300} className="mx-auto">
+                <PieChart width={400} height={400}>
                   <Pie
-                    dataKey="value"
-                    data={popularProductsData}
+                    data={popularProducts}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({
+                      cx,
+                      cy,
+                      midAngle,
+                      innerRadius,
+                      outerRadius,
+                      index,
+                    }) => {
+                      const radius =
+                        innerRadius + (outerRadius - innerRadius) * 1;
+                      const x =
+                        cx + radius * Math.cos(-midAngle * (Math.PI / 180));
+                      const y =
+                        cy + radius * Math.sin(-midAngle * (Math.PI / 180));
+
+                      return (
+                        <text
+                          x={x}
+                          y={y}
+                          fill="black"
+                          textAnchor={x > cx ? "start" : "end"}
+                          dominantBaseline="central"
+                        >
+                          {popularProducts[index].product}
+                        </text>
+                      );
+                    }}
+                    outerRadius={80}
                     fill="#8884d8"
-                    label={(entry) => entry.name}
+                    dataKey="count"
                   >
-                    {popularProductsData.map((entry, index) => (
+                    {popularProducts.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={`#${Math.floor(Math.random() * 16777215).toString(
-                          16
-                        )}`}
+                        fill={COLORS[index % COLORS.length]}
                       />
                     ))}
                   </Pie>
@@ -293,7 +233,7 @@ export default function PurchaseView() {
           <div className="w-full flex">
             <div className="w-3/4 bg-white p-2 rounded-md shadow-md">
               <h2 className="text-slate-600 font-semibold text-lg mb-3">
-                Recents Purchase Order
+                Recents Purchase Orders
               </h2>
               <table className="w-full mb-6">
                 <tr className="bg-[#e2e8f0]">
@@ -304,7 +244,7 @@ export default function PurchaseView() {
                     Order Date
                   </th>
                   <th className="lg:px-4 py-2 text-center text-slate-800">
-                    Order Total
+                    Total
                   </th>
                   <th className="lg:px-4 py-2 text-center text-slate-800">
                     Address
@@ -315,9 +255,9 @@ export default function PurchaseView() {
                 </tr>
 
                 <tbody className="w-full space-y-10 relative">
-                  {filteredPurchase.length > 0 ? (
-                    filteredPurchase.map((sal) => (
-                      <tr key={sal.id}>
+                  {orderList.length > 0 ? (
+                    orderList.map((sal) => (
+                      <tr key={sal._id}>
                         <td className="lg:px-4 py-2 text-center">
                           {sal.partner && sal.partner.name}
                         </td>
@@ -327,7 +267,7 @@ export default function PurchaseView() {
                         <td className="lg:px-4 py-2 text-center">
                           {sal.total}
                         </td>
-                        <td className="lg:px-4 py-2 text-center">
+                        <td className="lg:px-4 py-2 text-center ">
                           {sal.location && sal.location.name}
                         </td>
                         <td
@@ -336,7 +276,7 @@ export default function PurchaseView() {
                               ? "text-red-400"
                               : sal.state == "deliver"
                               ? "text-cyan-700"
-                              : sal.state == "arrived"
+                              : sal.state == "confirmed"
                               ? "text-green-600"
                               : ""
                           }`}
@@ -355,25 +295,23 @@ export default function PurchaseView() {
             </div>
             <div className="items-center w-1/4 bg-white p-2 ml-4 rounded-md h-fix shadow-md">
               <h1 className="text-slate-600 font-semibold text-lg mb-6">
-                Purchase Products
+                Recent Purchased Products
               </h1>
               <div className="px-2 max-h-80 overflow-y-scroll custom-scrollbar mb-6">
-                {todayPurchaseLine.length > 0 ? (
-                  todayPurchaseLine.slice(0,3).map((purchaseLines) => (
+                {orderLines.length > 0 ? (
+                  orderLines.slice(0, 5).map((line) => (
                     <div
-                      key={purchaseLines._id}
-                      className="w-full flex justify-between mb-3 border-b-2 pb-3"
+                      key={line._id}
+                      className="w-full flex justify-between mb-3 border-b-2 pb-2"
                     >
                       <div className="flex flex-col">
-                        <h4 className="text-md text-slate-700 font-bold">
-                          {purchaseLines.product.name}
-                        </h4>
-                        <h4 className="font-bold text-green-700">
-                          Stock in {getStockQuantity(purchaseLines.product._id)}
+                        <h4 className="text-md text-slate-700">
+                          {line.product.name}
                         </h4>
                       </div>
-                      <p className="text-slate-500 font-semibold">
-                        {purchaseLines.product.salePrice} mmk
+                      <p className="text-slate-500">
+                        <span className="text-red-800">{line.qty} </span>x{" "}
+                        {line.unitPrice}
                       </p>
                     </div>
                   ))
