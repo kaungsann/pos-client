@@ -23,18 +23,15 @@ import { Icon } from "@iconify/react";
 import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function OverView() {
-
   const [day, setDay] = useState("");
-  const [month , setMonth] = useState("");
-  const [year , setYear] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
   const handleDayChange = (e) => setDay(e.target.value);
   const handleMonthChange = (e) => setMonth(e.target.value);
   const handleYearChange = (e) => setYear(e.target.value);
-
-
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
@@ -68,7 +65,7 @@ export default function OverView() {
     startDate.setMonth(today.getMonth() - 1); // Subtract 1 month for "Monthly"
     return format(startDate, "MM-dd-yyyy");
   };
-  
+
   const calculateYearlyStartDate = () => {
     const today = new Date();
     const startDate = new Date(today);
@@ -76,23 +73,22 @@ export default function OverView() {
     return format(startDate, "MM-dd-yyyy");
   };
 
-
   const getTotals = async () => {
     let startDate;
     if (day === "7") {
       // Weekly
-      setMonth("")
-      setYear("")
+      setMonth("");
+      setYear("");
       startDate = calculateStartDate();
     } else if (month === "Monthly") {
       // Monthly
-      setDay("")
-      setYear("")
+      setDay("");
+      setYear("");
       startDate = calculateMonthlyStartDate();
     } else if (year === "Yearly") {
       // Yearly
-      setMonth("")
-      setDay("")
+      setMonth("");
+      setDay("");
       startDate = calculateYearlyStartDate();
     } else {
       // Default to daily (today)
@@ -103,7 +99,7 @@ export default function OverView() {
       `/orders/totals?${startDate}=${todayDate.toString()}`,
       token.accessToken
     );
-    console.log("res data is week" , resData)
+    console.log("res data is week", resData);
     if (resData.status) {
       setTotalPurchaseAmount(resData.data.purchases.totalAmountWithTax);
       setTotalPurchaseOrders(resData.data.purchases.totalOrders);
@@ -124,7 +120,7 @@ export default function OverView() {
   };
   useEffect(() => {
     getTotals();
-  }, [setMonth , setYear]);
+  }, [setMonth, setYear]);
 
   const orderList = Array.from(
     new Set(orderPurchaseLines.map((line) => line.orderId._id))
@@ -141,7 +137,6 @@ export default function OverView() {
       total: line.subTotal,
     };
   });
-
 
   const lineChartData = totalPurchasePerDay.map((item1) => {
     const matchingItem2 = totalSalePerDay.find(
@@ -338,7 +333,7 @@ export default function OverView() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center my-6">
+        {/* <div className="flex justify-center my-6">
              <button className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
                  Weekly
               </button>
@@ -366,7 +361,7 @@ export default function OverView() {
             <h2 className="text-slate-600 text-lg font-semibold my-3">
               Sales Statistics
             </h2>
-'          <ResponsiveContainer height={450} width="100%">
+            <ResponsiveContainer height={450} width="100%">
               <LineChart data={lineChartData} margin={{ right: 25, top: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
@@ -393,55 +388,54 @@ export default function OverView() {
             </h2>
             <ResponsiveContainer height={400}>
               <PieChart>
-              <Pie
-                    data={popularPurchaseProducts}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({
-                      cx,
-                      cy,
-                      midAngle,
-                      innerRadius,
-                      outerRadius,
-                      index,
-                    }) => {
-                      const radius =
-                        innerRadius + (outerRadius - innerRadius) * 1;
-                      const x =
-                        cx + radius * Math.cos(-midAngle * (Math.PI / 180));
-                      const y =
-                        cy + radius * Math.sin(-midAngle * (Math.PI / 180));
+                <Pie
+                  data={popularPurchaseProducts}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({
+                    cx,
+                    cy,
+                    midAngle,
+                    innerRadius,
+                    outerRadius,
+                    index,
+                  }) => {
+                    const radius =
+                      innerRadius + (outerRadius - innerRadius) * 1;
+                    const x =
+                      cx + radius * Math.cos(-midAngle * (Math.PI / 180));
+                    const y =
+                      cy + radius * Math.sin(-midAngle * (Math.PI / 180));
 
-                      return (
-                        <text
-                          x={x}
-                          y={y}
-                          fill="black"
-                          textAnchor={x > cx ? "start" : "end"}
-                          dominantBaseline="central"
-                        >
-                          {popularPurchaseProducts[index].product}
-                        </text>
-                      );
-                    }}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="count"
-                  >
-                    {popularPurchaseProducts.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
+                    return (
+                      <text
+                        x={x}
+                        y={y}
+                        fill="black"
+                        textAnchor={x > cx ? "start" : "end"}
+                        dominantBaseline="central"
+                      >
+                        {popularPurchaseProducts[index].product}
+                      </text>
+                    );
+                  }}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="count"
+                >
+                  {popularPurchaseProducts.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
                 {/* <Pie dataKey="value" data={popularPurchaseProducts} fill="#8884d8" label /> */}
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
-
       </div>
     </>
   );
