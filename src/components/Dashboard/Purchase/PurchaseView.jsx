@@ -165,7 +165,6 @@ export default function PurchaseView() {
     );
     return todayStockEntry ? todayStockEntry.onHand : 0;
   };
-
   return (
     <>
       <div className="px-8 w-full">

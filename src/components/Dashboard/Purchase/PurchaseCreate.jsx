@@ -99,7 +99,6 @@ export default function SaleOrderCreate() {
       taxTotal: totalTax,
       total: totalCost,
     };
-
     try {
       let resData = await sendJsonToApi("/purchase", data, token.accessToken);
       console.log("data is", resData);

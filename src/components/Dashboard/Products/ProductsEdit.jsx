@@ -40,9 +40,7 @@ export default function ProductsEdit() {
     setRef(resData.data[0].ref);
     setName(resData.data[0].name);
     setDescription(resData.data[0].description);
-    if (resData.data[0].expiredAt) {
-      setExpiredate(resData.data[0].expiredAt);
-    }
+    setExpiredate(resData.data[0].expiredAt);
     setPurchasePrice(resData.data[0].purchasePrice);
     setProfit(resData.data[0].marginProfit);
     setPrice(resData.data[0].salePrice);
@@ -290,7 +288,7 @@ export default function ProductsEdit() {
               <label className="text-md font-semibold">Expire-Date</label>
               <input
                 style={{ backgroundColor: "transparent" }}
-                type="date"
+                type="text"
                 value={expiredate}
                 onChange={(e) => setExpiredate(e.target.value)}
                 className="w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-600"

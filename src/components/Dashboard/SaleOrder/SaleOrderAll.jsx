@@ -121,7 +121,6 @@ export default function SaleOrderAll() {
     setConfirmOrderId(id)
   }
 
-
   const changeConfirmOrder = async() => {
        const response = await fetch(`https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/sale/${ConfirmOrderId}?state=confirmed`,
        {
@@ -162,6 +161,8 @@ export default function SaleOrderAll() {
       setIsFilterActive(false);
     }
   }, [filterDate, filterStaff, filterLocation]);
+
+
   return (
     <div className="relative">
       <ToastContainer

@@ -11,9 +11,11 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
   const [partner, setPartner] = useState([]);
   const [payslip, setPaySlip] = useState(false);
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState(null);
   const [order, setOrder] = useState([]);
   const [name, setName] = useState("");
+  const [location , setLocation] = useState([])
+  const [Locate , setLocate] = useState ("")
 
   const orderData = useSelector((state) => state.orderData);
   const user = useSelector((state) => state.loginData);
@@ -26,10 +28,19 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
     let resData = await getApi("/partner", token.accessToken);
 
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCustomer === true
+      (partner) => partner.isCustomer === true  &&  partner.active === true
     );
     setPartner(filteredPartners);
     setName(resData.data[0].id);
+  };
+  const getLocation = async () => {
+    let resData = await getApi("/location", token.accessToken);
+      
+    const filteredLocations = resData.data.filter(
+      (locate) => locate.active === true
+    );
+    setLocation(filteredLocations);
+    setLocate(resData.data[0].id);
   };
 
   const createSaleOrder = async () => {
@@ -53,7 +64,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
       const data = {
         user: user._id,
-        location: "6527b644f124316c798d7702",
+        location: Locate,
         partner: name,
         taxTotal: totalCost,
         // payment: text,
@@ -88,6 +99,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
   useEffect(() => {
     getPartner();
+    getLocation ()
   }, []);
 
   let pay = display - totalCost;
@@ -127,7 +139,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
           </div>
           <div className="mt-4 flex justify-center">
             <button
-              onClick={() => (text ? "" : setText("CASH"))}
+              onClick={() => setText("CASH")}
               className={`px-8 py-2 rounded-md mx-1 text-blue-700 border-blue-500 border-2 hover:opacity-75 bg-outline-none shadow-md ${
                 text === "CASH" && "bg-cyan-700 text-white"
               }`}
@@ -135,7 +147,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               Cash
             </button>
             <button
-              onClick={() => (text ? "" : setText("BANK"))}
+              onClick={() => setText("BANK")}
               className={`px-8 py-2 rounded-md mx-1 text-blue-700 border-blue-500 border-2 hover:opacity-75 shadow-md bg-outline-none ${
                 text === "BANK" && "bg-cyan-700 text-white"
               }`}
@@ -143,13 +155,13 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               Bank
             </button>
           </div>
-          <div className="mt-8">
+          <div className="mt-4">
             <span className="text-lg font-semibold text-slate-600">
               Total Due
             </span>
             <span className="text-lg font-bold ml-4">{totalCost}</span>
           </div>
-          <div className="flex flex-col justify-between my-4">
+          <div className="flex flex-col justify-between my-2 ">
             <div>
               <span className="text-lg font-semibold text-slate-600">Cash</span>
               <span className="text-lg font-bold ml-10">
@@ -165,31 +177,60 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               </span>
             </div>
           </div>
-          <div className="flex">
-            <h3 className="text-lg font-semibold text-slate-600">Customer</h3>
-            <select
-              required
-              id="nameId"
-              onChange={(e) => setName(e.target.value)}
-              // value={partner.length > 0 ? partner[0].name : name}
-              className="ml-3 pl-2 py-1 border-2 hover:opacity-75 border-blue-500 rounded-md shadow-md"
-            >
-              <option disabled value selected>
-                Select an option
-              </option>
-              {partner.length > 0 &&
-                partner.map((pt) => (
-                  <option
-                    key={pt.id}
-                    value={pt.id}
-                    className="hover:bg-cyan-300 hover:font-bold"
-                  >
-                    {pt.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div className="calculator mt-12 flex  justify-center">
+
+           <div className="flex justify-around">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-600 my-2">Customer</h3>
+              <select
+                required
+                id="nameId"
+                onChange={(e) => setName(e.target.value)}
+                // value={partner.length > 0 ? partner[0].name : name}
+                className="pl-2 py-1 border-2 hover:opacity-75 border-blue-500 rounded-md shadow-md"
+              >
+                <option disabled value selected>
+                  Select an option
+                </option>
+                {partner.length > 0 &&
+                  partner.map((pt) => (
+                    <option
+                      key={pt.id}
+                      value={pt.id}
+                      className="hover:bg-cyan-300 hover:font-bold"
+                    >
+                      {pt.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+
+            <div className="">
+              <h3 className="text-lg font-semibold text-slate-600 my-2">Location</h3>
+              <select
+                required
+                id="nameId"
+                onChange={(e) => setLocate(e.target.value)}
+                // value={partner.length > 0 ? partner[0].name : name}
+                className="pl-2 py-1 border-2 hover:opacity-75 border-blue-500 rounded-md shadow-md"
+              >
+                <option disabled value selected>
+                  Select an option
+                </option>
+                {location.length > 0 &&
+                  location.map((loc) => (
+                    <option
+                      key={loc.id}
+                      value={loc.id}
+                      className="hover:bg-cyan-300 hover:font-bold"
+                    >
+                      {loc.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            </div>
+
+          <div className="calculator mt-8 flex justify-center">
             <div className="buttons  ">
               <div className="row">
                 <button
