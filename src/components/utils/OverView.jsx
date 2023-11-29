@@ -70,7 +70,7 @@ export default function OverView() {
   const [loading, setLoading] = useState(false);
 
   const todayDate = format(new Date(), "MM-dd-yyyy"); // Get today's date in the same format as orderDate
-
+  const COLORS = ["#96c3ea", "#88c3c7", "#b8bd85", "#8f90c9"];
   const getTotals = async () => {
     setLoading(true);
     let resData = await getApi(
@@ -136,7 +136,7 @@ export default function OverView() {
 
     return item1;
   });
-  
+
   return (
     <>
       <div className="relative">
@@ -194,10 +194,10 @@ export default function OverView() {
             <div className=" my-3 px-4 flex">
               <div className="flex items-center w-2/4	">
                 <div className="p-4 bg-orange-200 rounded-md">
-                  {/* <Icon
+                  <Icon
                     icon="solar:cart-4-outline"
                     className="text-4xl text-orange-600 font-extrabold"
-                  /> */}
+                  />
                 </div>
                 <div className="mx-3 w-2/4">
                   <h2 className="text-slate-400 text-md font-semibold">
@@ -313,7 +313,7 @@ export default function OverView() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center my-6">
+        {/* <div className="flex justify-center my-6">
              <button className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
                  Weekly
               </button>
@@ -323,7 +323,7 @@ export default function OverView() {
               <button className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
                  Yearly
               </button>
-        </div>
+        </div> */}
         <div className="flex my-4">
           <div className="w-3/5 bg-white rounded-lg shadow-md p-4">
             <h2 className="text-slate-600 text-lg font-semibold my-3">
@@ -354,9 +354,51 @@ export default function OverView() {
             <h2 className="text-slate-600 text-lg font-semibold my-3">
               Top Selling Items
             </h2>
-            <ResponsiveContainer height={400}>
-              <PieChart>
-                <Pie dataKey="value" data={popularPurchaseProducts} fill="#8884d8" label />
+            <ResponsiveContainer height={300} className="mx-auto">
+              <PieChart width={400} height={400}>
+                <Pie
+                  data={popularSaleProducts}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({
+                    cx,
+                    cy,
+                    midAngle,
+                    innerRadius,
+                    outerRadius,
+                    index,
+                  }) => {
+                    const radius =
+                      innerRadius + (outerRadius - innerRadius) * 1;
+                    const x =
+                      cx + radius * Math.cos(-midAngle * (Math.PI / 180));
+                    const y =
+                      cy + radius * Math.sin(-midAngle * (Math.PI / 180));
+
+                    return (
+                      <text
+                        x={x}
+                        y={y}
+                        fill="black"
+                        textAnchor={x > cx ? "start" : "end"}
+                        dominantBaseline="central"
+                      >
+                        {popularSaleProducts[index].product}
+                      </text>
+                    );
+                  }}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="count"
+                >
+                  {popularSaleProducts.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
               </PieChart>
             </ResponsiveContainer>
           </div>
