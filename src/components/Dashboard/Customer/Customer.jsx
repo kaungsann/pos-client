@@ -12,9 +12,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { format } from "date-fns";
 import { removeData } from "../../../redux/actions";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
+
 
 export default function PartnerAll() {
   const inputRef = useRef();
+  const itemsPerPage = 5; 
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -78,6 +83,7 @@ export default function PartnerAll() {
     setShowFilter(!showFilter);
   };
 
+const filterCustomer = () => {
   const filterCustomer = partners.filter((pt) => {
     //Filter by address
     if (
@@ -92,6 +98,8 @@ export default function PartnerAll() {
     }
     return true;
   });
+   return  filterCustomer
+}
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -125,6 +133,16 @@ export default function PartnerAll() {
     }
   };
 
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const filteredCus = filterCustomer(); // Add this line to get the filtered products
+  const pageCount = Math.ceil(filteredCus.length / itemsPerPage);
+  const currentCustomers = filteredCus.slice(startIndex, endIndex);
+
   useEffect(() => {
     getPartnersApi();
     if (filterAddress || filterPhone || filterCompay) {
@@ -135,7 +153,7 @@ export default function PartnerAll() {
   }, [filterAddress, filterPhone, filterCompay]);
 
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -150,21 +168,9 @@ export default function PartnerAll() {
       />
       <div className="flex w-full">
         <div className="flex w-full justify-between items-center">
-          <div className="flex md:mr-8 justify-around">
-            {/* <Link to="/admin/partners/create">
-              <div className="rounded-sm transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2">
-                Add Customer
-              </div>
-            </Link> */}
-            <div
-              onClick={toggleFilterBox}
-              className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
-            >
-              <FiFilter className="text-xl mx-2" />
-              <h4>Filter</h4>
-            </div>
-          </div>
-          <div className="w-96 md:w-72 relative">
+          <div className="flex justify-between w-full justify-items-end">
+           <h2 className="lg:text-2xl font-bold my-4">Customers</h2>  
+           <div className="w-96 md:w-72 relative">
             <input
               ref={inputRef}
               type="text"
@@ -174,11 +180,14 @@ export default function PartnerAll() {
               onChange={(e) => setSearchItems(e.target.value.toLowerCase())}
             />
           </div>
+
+          </div>
+
         </div>
       </div>
       <div className="w-full">
         <div className="flex justify-between items-center">
-          <h2 className="lg:text-2xl font-bold my-4">Customers</h2>
+
           {isFilterActive && (
             <button
               className="bg-red-500 px-4 h-8 rounded-md text-white hover:opacity-70"
@@ -222,8 +231,8 @@ export default function PartnerAll() {
             </tr>
           </thead>
           <tbody className="w-full space-y-10">
-            {filterCustomer.length > 0 ? (
-              filterCustomer
+            {currentCustomers.length > 0 ? (
+              currentCustomers
                 .filter((item) =>
                   searchItems.toLowerCase === ""
                     ? item
@@ -277,7 +286,7 @@ export default function PartnerAll() {
                   </tr>
                 ))
             ) : (
-              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
@@ -358,6 +367,34 @@ export default function PartnerAll() {
           </div>
         </div>
       )}
-    </>
+      <div className="fixed bottom-12 right-28 w-80 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item"
+          className="flex justify-around text-center bg-slate-200 items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold hover:text-slate-700"
+          breakLabel={<div className="break-label">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5} // Number of pages to display in the pagination
+          marginPagesDisplayed={1}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2" /> Previous
+            </div>
+          }
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next <IoMdArrowRoundForward className="ml-2" />
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+       </div>
+    </div>
   );
 }

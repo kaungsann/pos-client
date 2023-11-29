@@ -8,10 +8,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import { removeData } from "../../../redux/actions";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 export default function Stock() {
   const inputRef = useRef();
+
   const [searchItems, setSearchItems] = useState([]);
+
+  const itemsPerPage = 5; 
+  const [currentPage, setCurrentPage] = useState(0);
+
   const [stock, setStock] = useState([]);
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
@@ -49,7 +56,7 @@ export default function Stock() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "http://3.0.102.114/stock/export-excel";
+      const downloadUrl = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/stock/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
       console.log("res download is", response);
@@ -57,7 +64,7 @@ export default function Stock() {
       if (response.ok) {
         const blob = await response.blob();
         const filename =
-          response.headers.get("content-disposition") || "exported-data.xlsx";
+          response.headers.get("content-disposition") || "stock-exported-data.xlsx";
 
         const url = window.URL.createObjectURL(blob);
 
@@ -77,11 +84,21 @@ export default function Stock() {
     }
   };
 
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const pageCount = Math.ceil(stock.length / itemsPerPage);
+  const currentStocks = stock.slice(startIndex, endIndex);
+
   useEffect(() => {
     stockApi();
   }, []);
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -96,7 +113,7 @@ export default function Stock() {
         style={{ width: "450px" }}
       />
       <div className="flex cursor-pointer">
-        <div className="flex w-full justify-between items-center">
+        <div className="flex w-full justify-between items-center cursor-pointer">
           <div
             onClick={receiveExcel}
             className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"
@@ -128,7 +145,7 @@ export default function Stock() {
             <th className="lg:px-4 py-2 text-center">Location</th>
           </tr>
           {stock.length > 0 &&
-            stock
+            currentStocks
               .filter((item) =>
                 searchItems.toLowerCase === ""
                   ? item
@@ -170,6 +187,38 @@ export default function Stock() {
           </div>
         )}
       </div>
-    </>
+      <div className="fixed bottom-12 right-28 w-80 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item"
+          className="flex justify-around text-center bg-slate-200 items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold hover:text-slate-700"
+          breakLabel={<div className="break-label">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5} // Number of pages to display in the pagination
+          marginPagesDisplayed={1}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
+    </div>
   );
 }

@@ -18,7 +18,7 @@ import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function ProductsAll() {
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 5; // Choose the number of items per page
+  const itemsPerPage = 10; // Choose the number of items per page
   const navigate = useNavigate();
 
   const [selectedItems, setSelectedItems] = useState([]);
@@ -61,13 +61,14 @@ export default function ProductsAll() {
       setLoading(true);
     }
   };
-
   const categoryApi = async () => {
     let resData = await getApi("/category", token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    setCategorys(resData.data);
+    const filteredCategory = resData.data.filter((ct) => ct.active === true);
+
+    setCategorys(filteredCategory);
   };
 
   const editRoute = (id) => {
@@ -89,14 +90,14 @@ export default function ProductsAll() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "http://3.0.102.114/product/export-excel";
+      const downloadUrl = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/product/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
 
       if (response.ok) {
         const blob = await response.blob();
         const filename =
-          response.headers.get("content-disposition") || "exported-data.xlsx";
+          response.headers.get("content-disposition") || "product-exported-data.xlsx";
 
         const url = window.URL.createObjectURL(blob);
 
@@ -180,12 +181,11 @@ export default function ProductsAll() {
       ) {
         return false;
       }
-
       // Filter by barcode
-      if (filterBarcode && !product.barcode.includes(filterBarcode)) {
+      if (filterBarcode && 
+        !product.barcode.includes(filterBarcode.toString())) {
         return false;
       }
-
       // Filter by category
       if (filterCategory) {
         if (product.category) {
@@ -232,7 +232,6 @@ export default function ProductsAll() {
       },
       token.accessToken
     );
-    console.log("response data delete  is ", response);
 
     if (response.status) {
       toast("Selected products deleted successfully.");
@@ -312,14 +311,14 @@ export default function ProductsAll() {
               <BiImport className="text-xl mx-2" />
               <h4> Export Excel</h4>
             </div>
-            <div className="rounded-sm shadow-sm flex items-center text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2">
+            <div onClick={handleFileImportClick} className="rounded-sm shadow-sm flex items-center text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2">
               <input
                 type="file"
                 ref={importRef}
                 style={{ display: "none" }}
                 onChange={handleFileImportChange}
               />
-              <button onClick={handleFileImportClick}>
+              <button>
                 Import Excel
               </button>
               <BiExport className="text-xl mx-2" />
@@ -331,7 +330,7 @@ export default function ProductsAll() {
               className="px-3 py-2 w-96 md:w-72 rounded-md border-2 border-blue-500 shadow-md bg-white focus:outline-none"
               id="products"
               placeholder="search products"
-              onChange={(e) => setFilterName(e.target.value)}
+              onChange={(e) => setFilterName(e.target.value.toLocaleLowerCase())}
             />
           </div>
         </div>
@@ -383,7 +382,7 @@ export default function ProductsAll() {
               <th className="lg:px-4 py-2">Action</th>
             </tr>
           </thead>
-          <tbody className="w-full space-y-10">
+          <tbody className="w-full space-y-10 mb-20">
             {currentProducts.length > 0 ? (
               currentProducts.map((product) => (
                 <tr
@@ -404,7 +403,7 @@ export default function ProductsAll() {
                   </td>
                   <td className="lg:px-4 py-2 text-center">
                     <img
-                      src={product.image ? product.image : img}
+                      src={product?.image || img}
                       className="w-10 h-10 rounded-md shadow-md mx-auto text-center"
                     />
                   </td>
@@ -553,23 +552,23 @@ export default function ProductsAll() {
               </button>
             </div>
           </div>
-        </div>
+        </div>               
       ) : (
         ""
       )}
-
-      <div className="fixed bottom-20 right-3 w-96 items-center">
+      <div className="fixed bottom-12 right-28 w-80 items-center">
         <ReactPaginate
           containerClassName="pagination-container flex justify-center items-center"
           pageLinkClassName="page-link text-center"
           pageClassName="page-item"
-          className="flex justify-around text-center items-center"
+          className="flex justify-around text-center bg-slate-200 items-center"
           activeClassName="bg-blue-500 text-white text-center"
           previousClassName="text-slate-500 font-semibold hover:text-slate-700"
           nextClassName="text-slate-500 font-semibold hover:text-slate-700"
           breakLabel={<div className="break-label">...</div>} // Custom break element with margin
           onPageChange={handlePageClick}
-          pageRangeDisplayed={1}
+          pageRangeDisplayed={5} // Number of pages to display in the pagination
+          marginPagesDisplayed={1}
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">

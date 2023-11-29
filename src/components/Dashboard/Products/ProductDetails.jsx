@@ -69,7 +69,7 @@ export default function ProductDetails() {
           </h2>
           <div className="flex items-center">
             <img
-              src={detail[0].image ? detail[0].image : img}
+              src={detail[0]?.image ? detail[0]?.image : img}
               className="w-42 h-36 my-4 rounded-md shadow-md mr-8"
             />
             <div className="mx-8" ref={componentRef}>
@@ -101,7 +101,7 @@ export default function ProductDetails() {
                   Expiration Date
                 </h4>
                 <h3 className="font-bold text-lg text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
-                  {new Date(detail[0].expiredAt).toLocaleDateString()}
+                  {detail[0].expiredAt  && new Date(detail[0].expiredAt).toLocaleDateString()}
                 </h3>
               </div>
               {/* <div className="flex justify-between my-3 items-center">

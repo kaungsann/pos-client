@@ -35,7 +35,7 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
         <h3 className="text-black text-lg font-bold mt-1">Tel+95-973426589</h3>
         <h3 className="text-black text-lg font-bold mt-1">TextID:US39699</h3>
         <h3 className="text-black text-lg font-bold mt-1">
-          kaungsann@ambitboundtech.com
+          ambitboundtech@gmail.com
         </h3>
         <a className="text-black text-lg font-bold mt-1">
           https://www.amitboundtech.com

@@ -116,9 +116,9 @@ export default function PosItems() {
           user.role && user.role.name == "user" && "mt-20"
         }`}
       >
-        <div className="lg:w-2/3 md:w-2/4 shadow-sm bg-white overflow-y-scroll my-3 custom-scrollbar h-screen">
+        <div className="lg:w-2/3 md:w-2/4 shadow-sm bg-white overflow-y-scroll  custom-scrollbar h-screen">
           <div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold ml-2">Avaliable Items</h3>
               <input
                 ref={searchInputRef}

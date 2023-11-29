@@ -12,11 +12,16 @@ import { FiFilter } from "react-icons/fi";
 import { FaEye } from "react-icons/fa6";
 import { removeData } from "../../../redux/actions";
 import ConfrimBox from "../../utils/ConfrimBox";
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io"
 
 export default function PurchaseAll() {
   const [saleorders, setSaleOrders] = useState([]);
   const [searchItems, setSearchItems] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const itemsPerPage = 10; 
+  const [currentPage, setCurrentPage] = useState(0);
 
   const [showFilter, setShowFilter] = useState(false);
   const [isFilterActive, setIsFilterActive] = useState(false); // Track if any filter is active
@@ -71,28 +76,31 @@ export default function PurchaseAll() {
     setShowFilter(!showFilter);
   };
 
-  const filterPurchase = saleorders.filter((sale) => {
-    //Filter by date
-    if (filterDate && !sale.orderDate.includes(filterDate)) {
-      return false;
-    }
-    // Filter by staff
-    if (
-      filterStaff &&
-      !sale.user.username.toLowerCase().includes(filterStaff.toLowerCase())
-    ) {
-      return false;
-    }
-
-    // Filter by location
-    if (
-      filterLocation &&
-      !sale.location.name.toLowerCase().includes(filterLocation.toLowerCase())
-    ) {
-      return false;
-    }
-    return true;
-  });
+  const filteredPurchase = () => {
+    const filterPurchase = saleorders.filter((sale) => {
+      //Filter by date
+      if (filterDate && !sale.orderDate.includes(filterDate)) {
+        return false;
+      }
+      // Filter by staff
+      if (
+        filterStaff &&
+        !sale.user.username.toLowerCase().includes(filterStaff.toLowerCase())
+      ) {
+        return false;
+      }
+  
+      // Filter by location
+      if (
+        filterLocation &&
+        !sale.location.name.toLowerCase().includes(filterLocation.toLowerCase())
+      ) {
+        return false;
+      }
+      return true;
+    });
+    return filterPurchase
+  }
 
   const handleConfirm = (id) => {
     setconfrimShowBox(true);
@@ -122,6 +130,18 @@ export default function PurchaseAll() {
     setIsFilterActive(false);
   };
 
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const filteredPurchased = filteredPurchase();
+
+  const pageCount = Math.ceil(filteredPurchased.length / itemsPerPage);
+  const currentPurchase = filteredPurchased.slice(startIndex, endIndex);
+
   useEffect(() => {
     PurchaseOrderApi();
     if (filterDate || filterStaff || filterLocation) {
@@ -132,7 +152,7 @@ export default function PurchaseAll() {
   }, [filterDate, filterStaff, filterLocation]);
 
   return (
-    <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -156,7 +176,7 @@ export default function PurchaseAll() {
             </Link>
             <div
               onClick={toggleFilterBox}
-              className="rounded-sm ml-3 transition shadow-sm flex items-center z-50 text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
+              className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
             >
               <FiFilter className="text-xl mx-2" />
               <h4>Filter</h4>
@@ -186,24 +206,24 @@ export default function PurchaseAll() {
             </button>
           )}
         </div>
-        <table className="w-full text-center relative">
+        <table className="w-full text-center relative  mb-20">
           <tr className="bg-blue-600 text-white">
             <th className="text-center">Order Date</th>
             <th className="lg:px-4 py-2 text-center">User</th>
             <th className="lg:px-4 py-2 text-center">Partner</th>
             <th className="lg:px-4 py-2 text-center">Location</th>
             <th className="lg:px-4 py-2 text-center">Note</th>
-            <th className="lg:px-4 py-2 text-center">Total Product</th>
+            <th className="lg:px-4 py-2 text-center">Total Items</th>
             <th className="lg:px-4 py-2 text-center">Status</th>
-            <th className="lg:px-4 py-2 text-center">TaxTotal</th>
+            <th className="lg:px-4 py-2 text-center">Tax Total</th>
             <th className="lg:px-4 py-2 text-center">Total</th>
             <th className="lg:px-4 py-2 text-center">Action</th>
             <th className="lg:px-4 py-2 text-center"></th>
           </tr>
 
           <tbody className="w-full space-y-10 bg-slate-300">
-            {filterPurchase.length > 0 ? (
-              filterPurchase
+            {currentPurchase.length > 0 ? (
+              currentPurchase
                 .filter(
                   (item) =>
                     searchItems.toLowerCase() === "" ||
@@ -241,16 +261,16 @@ export default function PurchaseAll() {
                     </td>
                     <td className="lg:px-4 py-2 text-center">
                       <span
-                        className={`px-4 rounded-2xl border-2 py-1 font-bold ${
+                        className={`rounded-xl py-2 text-sm ${
                           sale.state == "pending"
-                            ? "text-orange-500 bg-orange-100 border-orange-400"
-                            : sale.state == "deliver"
-                            ? "bg-cyan-100 text-cyan-500 border-cyan-400"
-                            : sale.state == "arrived"
-                            ? "bg-blue-100 text-blue-500 border-blue-400"
-                            : sale.state == "confirmed"
-                            ? "bg-green-100 text-green-500 border-green-300"
-                            : ""
+                          ? " bg-orange-50 text-orange-700 px-6"
+                          : sale.state == "deliver"
+                          ? "bg-cyan-50 text-cyan-600 px-6"
+                          : sale.state == "arrived"
+                          ? "bg-blue-50 text-blue-600 px-6"
+                          : sale.state == "confirmed"
+                          ? "bg-green-50 text-green-700 px-4"
+                          : ""
                         }`}
                       >
                         {sale.state}
@@ -276,7 +296,7 @@ export default function PurchaseAll() {
                       }}
                     >
                       {sale.state === "pending" && (
-                        <button className="px-2 py-1 ml-2 bg-green-500 text-white rounded-lg hover:opacity-75">
+                        <button className="px-4 py-2 ml-2 text-white text-sm text-bold bg-blue-700  rounded-md hover:opacity-75">
                           confirm
                         </button>
                       )}
@@ -284,7 +304,7 @@ export default function PurchaseAll() {
                   </tr>
                 ))
             ) : (
-              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
                 {loading && (
                   <FadeLoader
                     color={"#0284c7"}
@@ -369,6 +389,34 @@ export default function PurchaseAll() {
           </div>
         </div>
       )}
-    </>
+      <div className="fixed bottom-12 right-28 w-80 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item"
+          className="flex justify-around text-center bg-slate-200 items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold hover:text-slate-700"
+          breakLabel={<div className="break-label">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5} // Number of pages to display in the pagination
+          marginPagesDisplayed={1}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2" /> Previous
+            </div>
+          }
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next <IoMdArrowRoundForward className="ml-2" />
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+       </div>
+    </div>
   );
 }

@@ -29,7 +29,7 @@ import Profile from "./components/utils/Profile";
 import OverView from "./components/utils/OverView";
 import Customer from "./components/Dashboard/Customer/Customer";
 import Vendors from "./components/Dashboard/Customer/Vendors";
-import View from "./components/Dashboard/SaleOrder/View";
+import View from "./components/Dashboard/SaleOrder/SaleView";
 import PurchaseAll from "./components/Dashboard/Purchase/PurchaseAll";
 import PurchaseCreate from "./components/Dashboard/Purchase/PurchaseCreate";
 import PurchaseDetail from "./components/Dashboard/Purchase/PurchaseDetail";
@@ -44,6 +44,7 @@ import StaffEdit from "./components/Dashboard/Staff/StaffEdit";
 import EmployeeDetail from "./components/Dashboard/Employee/EmployeeDetail";
 import EmployeeEdit from "./components/Dashboard/Employee/EmployeeEdit";
 import Warehouse from "./components/Dashboard/WareHouse/Warehouse";
+import SaleView from "./components/Dashboard/SaleOrder/SaleView";
 
 function App() {
   return (
@@ -120,7 +121,7 @@ function App() {
             </Route>
             <Route path="saleorders">
               <Route path="all" element={<SaleOrderAll />} />
-              <Route path="view" element={<View />} />
+              <Route path="view" element={<SaleView />} />
               <Route path="create" element={<SaleOrderCreate />} />
               <Route path="detail/:id" element={<SaleOrderDetail />} />
             </Route>

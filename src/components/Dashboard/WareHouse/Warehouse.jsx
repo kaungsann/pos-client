@@ -9,14 +9,17 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { format } from "date-fns";
 import { Icon } from '@iconify/react';
-
-
+import ReactPaginate from "react-paginate";
+import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
 
 export default function Warehouse() {
     const [showFilter, setShowFilter] = useState(false);
     const [warehouse , setWarehouse] = useState([])
     const [loading, setLoading] = useState(false);
     const [status , setStatus ] = useState(false)
+
+    const itemsPerPage = 10; 
+    const [currentPage, setCurrentPage] = useState(0);
 
     const [payment ,setpayment]  = useState("")
     const [location ,setlocation]  = useState("")
@@ -38,26 +41,41 @@ export default function Warehouse() {
       }
     }
 
-    const filterWarehouse = warehouse.filter((ware) => {
-      //Filter by location
-      if (
-        location &&
-        !ware.location.name.toLowerCase().includes(location.toLowerCase())
-      ) {
-        return false;
-      }
-      // Filter by payment
-      if (payment && !ware.paymentStatus.includes(payment)) {
-        return false;
-      }
-      return true;
-    });
+    const filteredWarehouse = () => {
+      const filterWarehouse = warehouse.filter((ware) => {
+        //Filter by location
+        if (
+          location &&
+          !ware.location.name.toLowerCase().includes(location.toLowerCase())
+        ) {
+          return false;
+        }
+        // Filter by payment
+        if (payment && !ware.paymentStatus.includes(payment)) {
+          return false;
+        }
+        return true;
+      });
+      return filterWarehouse
+    }
+
 
     const filterRemove = () => {
       setlocation("");
       setpayment("");
       setIsFilterActive(false);
     };
+
+    const handlePageClick = (selectedPage) => {
+      setCurrentPage(selectedPage.selected);
+    };
+  
+    const startIndex = currentPage * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const filterWare = filteredWarehouse()
+  
+    const pageCount = Math.ceil(filterWare.length / itemsPerPage);
+    const currentWarehouse = filterWare.slice(startIndex, endIndex);
   
 
     useEffect(() => {
@@ -71,7 +89,7 @@ export default function Warehouse() {
 
 
   return (
-     <>
+    <div className="relative">
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -120,8 +138,8 @@ export default function Warehouse() {
             {/* <th className="lg:px-4 py-2 text-center">Action</th> */}
           </tr>
           <tbody className="w-full space-y-10 bg-slate-300">
-            {warehouse.length > 0 ? (
-              filterWarehouse
+            {currentWarehouse.length > 0 ? (
+              currentWarehouse
                 .map((wh) => (
                   <tr
                     key={wh.id}
@@ -149,13 +167,13 @@ export default function Warehouse() {
                     <td
                       className="lg:px-4 py-2 text-center"
                     >
-                     <span className={`px-6 rounded-2xl border-2 py-1.5 font-bold ${
+                     <span className={`rounded-xl py-2 text-sm ${
                         wh.state == "pending"
-                        ? "text-orange-500 bg-orange-100 border-orange-400"
+                        ? " bg-orange-50 text-orange-700 px-6"
                         : wh.state == "deliver"
-                        ? "bg-cyan-100 text-cyan-500 border-cyan-400"
+                        ? "bg-cyan-50 text-cyan-600 px-6"
                         : wh.state == "arrived"
-                        ? "bg-green-100 text-green-500 border-green-400"
+                        ? "bg-green-50 text-green-700 px-4"
                         : ""
                       }`}>{wh.state ? wh.state : "no state"}</span>
                    
@@ -165,10 +183,10 @@ export default function Warehouse() {
                     </td>
                     <td   className="lg:px-4 py-2 text-center">
                       <span
-                        className={`px-6 rounded-2xl border-2 py-1.5 font-bold ${
-                          wh.paymentStatus  === "pending" ? "text-orange-500 bg-orange-100 border-orange-400" 
+                        className={`rounded-xl py-2 text-sm ${
+                          wh.paymentStatus  == "pending" ? "text-orange-700 px-6" 
                           : wh.paymentStatus == "comfirm"
-                          ? "bg-green-100 text-green-500 border-green-400"
+                          ? " text-green-700 px-4"
                           : ""
                         }`}
                       >
@@ -187,12 +205,12 @@ export default function Warehouse() {
                   </tr>
                 ))
             ) : (
-              <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
                 {loading && (
                   <ClipLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={10}
+                    size={35}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />
@@ -288,6 +306,38 @@ export default function Warehouse() {
                     </div>
                </div>
           )}
-     </>
+      <div className="fixed bottom-12 right-28 w-80 items-center">
+        <ReactPaginate
+          containerClassName="pagination-container flex justify-center items-center"
+          pageLinkClassName="page-link text-center"
+          pageClassName="page-item"
+          className="flex justify-around text-center bg-slate-200 items-center"
+          activeClassName="bg-blue-500 text-white text-center"
+          previousClassName="text-slate-500 font-semibold hover:text-slate-700"
+          nextClassName="text-slate-500 font-semibold hover:text-slate-700"
+          breakLabel={<div className="break-label">...</div>} // Custom break element with margin
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5} // Number of pages to display in the pagination
+          marginPagesDisplayed={1}
+          pageCount={pageCount}
+          previousLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+              <IoMdArrowRoundBack className="mr-2"/>
+              {' '}
+              Previous
+            </div>
+          } 
+          nextLabel={
+            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+              Next
+              {' '}
+              <IoMdArrowRoundForward className="ml-2"/>
+            </div>
+          }
+          forcePage={currentPage}
+          renderOnZeroPageCount={null}
+        />
+      </div>
+     </div>
   )
 }

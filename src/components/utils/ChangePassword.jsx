@@ -17,8 +17,7 @@ export default function ChangePassword({close , id}) {
         }
         try {
           let resData = await PathData(`/user/change-password/${id}`, data, token.accessToken);
-          console.log("user password is" ,resData )
-          console.log("user password is" ,password )
+
           if (resData.status) {
             toast(resData.message);
             handleClose()

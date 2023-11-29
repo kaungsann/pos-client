@@ -24,7 +24,6 @@ export default function SaleOrderCreate() {
   const [quantity, setQuantity] = useState(0);
   const [Tax, setTax] = useState(0);
   const [unitPrice, setUnitPrice] = useState(0);
-  const [subTotal, setTotalPrice] = useState(0);
   const [saleOrderLines, setSaleOrderLines] = useState([]);
   const [date, setDate] = useState("");
   const [totalTax, setTotalTax] = useState(0);
@@ -100,7 +99,6 @@ export default function SaleOrderCreate() {
       taxTotal: totalTax,
       total: totalCost,
     };
-
     try {
       let resData = await sendJsonToApi("/purchase", data, token.accessToken);
       console.log("data is", resData);
@@ -111,6 +109,8 @@ export default function SaleOrderCreate() {
       if (resData.status) {
         toast(resData.message);
         navigate("/admin/purchase/all");
+      }else {
+        toast(resData.message);
       }
     } catch (error) {
       toast(resData.message);
@@ -542,6 +542,7 @@ export default function SaleOrderCreate() {
           ))}
         </tbody>
       </table>
+
       <div className="flex flex-col">
         <div className="flex mt-8 justify-self-end">
           <h1 className="text-lg font-semibold">
