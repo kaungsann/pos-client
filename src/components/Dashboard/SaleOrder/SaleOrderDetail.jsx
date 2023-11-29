@@ -68,7 +68,7 @@ export default function SaleOrderDetail() {
                 </div>
                 <div className="flex justify-between my-3">
                   <h4 className="font-bold text-lg text-slate-500">
-                    Customer Name
+                    Customer
                   </h4>
                   <h3 className="font-bold text-lg text-blue-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                     {detail[0].partner ? detail[0].partner.name : "none"}
@@ -84,7 +84,7 @@ export default function SaleOrderDetail() {
 
               <div className="w-2/4 justify-between">
                 <div className="flex justify-between my-3">
-                  <h4 className="font-bold text-lg text-slate-500">TaxTotal</h4>
+                  <h4 className="font-bold text-lg text-slate-500">Tax Total</h4>
                   <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                     {detail[0].taxTotal}
                   </h3>
@@ -111,13 +111,12 @@ export default function SaleOrderDetail() {
               <table className="w-full">
                 <thead className="w-full">
                   <tr className="">
-                    <th className="text-center">Photo</th>
                     <th className="text-center">Name</th>
 
                     <th className="py-2 text-center">Tax</th>
-                    <th className="py-2 text-center">StockQty</th>
-                    <th className="py-2 text-center">unitPrice</th>
-                    <th className="py-2">subTotal</th>
+                    <th className="py-2 text-center">Stock Qty</th>
+                    <th className="py-2 text-center">Unit Price</th>
+                    <th className="py-2">Subtotal</th>
                   </tr>
                 </thead>
                 <tbody className="w-full space-y-10">
@@ -127,19 +126,6 @@ export default function SaleOrderDetail() {
                         key={item.orderId._id}
                         className="odd:bg-white even:bg-slate-200 space-y-10  mb-8 w-full items-center cursor-pointer"
                       >
-                        <td className="lg:px-4 py-2 text-center flex justify-center items-center">
-                          {item.product.image ? (
-                            <img
-                              src="http://3.0.102.114/product/65546e0db0e6e4580d5136e9.jfif"
-                              className="w-10 h-10 rounded-md shadow-md mx-auto"
-                            />
-                          ) : (
-                            <Icon
-                              icon="material-symbols:hide-image-outline-sharp"
-                              className="text-2xl"
-                            />
-                          )}
-                        </td>
                         <td className="text-center">
                           {item.product ? item.product.name : "no have name"}
                         </td>

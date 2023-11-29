@@ -213,9 +213,9 @@ export default function PurchaseAll() {
             <th className="lg:px-4 py-2 text-center">Partner</th>
             <th className="lg:px-4 py-2 text-center">Location</th>
             <th className="lg:px-4 py-2 text-center">Note</th>
-            <th className="lg:px-4 py-2 text-center">Total Product</th>
+            <th className="lg:px-4 py-2 text-center">Total Items</th>
             <th className="lg:px-4 py-2 text-center">Status</th>
-            <th className="lg:px-4 py-2 text-center">TaxTotal</th>
+            <th className="lg:px-4 py-2 text-center">Tax Total</th>
             <th className="lg:px-4 py-2 text-center">Total</th>
             <th className="lg:px-4 py-2 text-center">Action</th>
             <th className="lg:px-4 py-2 text-center"></th>

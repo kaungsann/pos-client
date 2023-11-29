@@ -67,7 +67,7 @@ export default function LocationAll() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "http://3.0.102.114/location/export-excel";
+      const downloadUrl = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/location/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
       console.log("res download is", response);
