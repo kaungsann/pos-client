@@ -107,7 +107,7 @@ export default function PartnerCreate() {
               className={
                 "w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-400"
               }
-              placeholder="Enter product name"
+              placeholder="Enter partner name"
             />
           </div>
           <div className="w-80 mx-2">

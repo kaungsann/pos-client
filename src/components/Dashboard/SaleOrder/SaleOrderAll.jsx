@@ -201,7 +201,7 @@ export default function SaleOrderAll() {
               type="text"
               className="px-3 py-2 w-full rounded-md border-2 border-blue-500 shadow-md bg-white focus:outline-none"
               id="products"
-              placeholder="search products"
+              placeholder="search ref"
               onChange={(e) => setSearchItems(e.target.value.toLowerCase())}
             />
           </div>
@@ -373,7 +373,7 @@ export default function SaleOrderAll() {
                 placeholder="Search By staff name"
               />
             </div>
-            <div className="my-3 flex flex-col">
+            {/* <div className="my-3 flex flex-col">
               <label className="text-lg my-2 text-slate-600 font-semibold">
                 Location
               </label>
@@ -383,12 +383,8 @@ export default function SaleOrderAll() {
                 className="w-full rounded-md py-2 px-3 border-2 border-blue-300"
                 placeholder="Search By staff name"
               />
-            </div>
+            </div> */}
             <div className="flex justify-end w-full my-4">
-              {/* <button className="flex hover:opacity-70 px-4 py-2 justify-center items-center bg-blue-500 rounded-md text-white w-2/4">
-                <FiFilter className="mx-1" />
-                Filter
-              </button> */}
               <button
                 onClick={() => setShowFilter(!showFilter)}
                 className="px-4 hover:opacity-70 py-2 bg-red-500 rounded-md text-white w-full"

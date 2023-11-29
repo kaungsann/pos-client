@@ -176,7 +176,7 @@ const filterCustomer = () => {
               type="text"
               className="px-3 py-2 w-full rounded-md border-2 border-blue-500 shadow-md bg-white focus:outline-none"
               id="products"
-              placeholder="search products"
+              placeholder="search customers"
               onChange={(e) => setSearchItems(e.target.value.toLowerCase())}
             />
           </div>
