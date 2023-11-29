@@ -102,8 +102,6 @@ export default function PurchaseAll() {
     return filterPurchase
   }
 
-
-
   const handleConfirm = (id) => {
     setconfrimShowBox(true);
     setConfirmOrderId(id);
@@ -131,6 +129,18 @@ export default function PurchaseAll() {
     setFilterLocation("");
     setIsFilterActive(false);
   };
+
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
+  };
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const filteredPurchased = filteredPurchase();
+
+  const pageCount = Math.ceil(filteredPurchased.length / itemsPerPage);
+  const currentPurchase = filteredPurchased.slice(startIndex, endIndex);
 
   useEffect(() => {
     PurchaseOrderApi();
@@ -212,8 +222,8 @@ export default function PurchaseAll() {
           </tr>
 
           <tbody className="w-full space-y-10 bg-slate-300">
-            {saleorders.length > 0 ? (
-              saleorders
+            {currentPurchase.length > 0 ? (
+              currentPurchase
                 .filter(
                   (item) =>
                     searchItems.toLowerCase() === "" ||
@@ -251,16 +261,16 @@ export default function PurchaseAll() {
                     </td>
                     <td className="lg:px-4 py-2 text-center">
                       <span
-                        className={`px-4 rounded-2xl border-2 py-1 font-bold ${
+                        className={`rounded-xl py-2 text-sm ${
                           sale.state == "pending"
-                            ? "text-orange-500 bg-orange-100 border-orange-400"
-                            : sale.state == "deliver"
-                            ? "bg-cyan-100 text-cyan-500 border-cyan-400"
-                            : sale.state == "arrived"
-                            ? "bg-blue-100 text-blue-500 border-blue-400"
-                            : sale.state == "confirmed"
-                            ? "bg-green-100 text-green-500 border-green-300"
-                            : ""
+                          ? " bg-orange-50 text-orange-700 px-6"
+                          : sale.state == "deliver"
+                          ? "bg-cyan-50 text-cyan-600 px-6"
+                          : sale.state == "arrived"
+                          ? "bg-blue-50 text-blue-600 px-6"
+                          : sale.state == "confirmed"
+                          ? "bg-green-50 text-green-700 px-4"
+                          : ""
                         }`}
                       >
                         {sale.state}
@@ -286,7 +296,7 @@ export default function PurchaseAll() {
                       }}
                     >
                       {sale.state === "pending" && (
-                        <button className="px-2 py-1 ml-2 bg-green-500 text-white rounded-lg hover:opacity-75">
+                        <button className="px-4 py-2 ml-2 text-white text-sm text-bold bg-blue-700  rounded-md hover:opacity-75">
                           confirm
                         </button>
                       )}
@@ -379,7 +389,7 @@ export default function PurchaseAll() {
           </div>
         </div>
       )}
-      {/* <div className="fixed bottom-12 right-28 w-80 items-center">
+      <div className="fixed bottom-12 right-28 w-80 items-center">
         <ReactPaginate
           containerClassName="pagination-container flex justify-center items-center"
           pageLinkClassName="page-link text-center"
@@ -395,22 +405,18 @@ export default function PurchaseAll() {
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
-              <IoMdArrowRoundBack className="mr-2"/>
-              {' '}
-              Previous
+              <IoMdArrowRoundBack className="mr-2" /> Previous
             </div>
-          } 
+          }
           nextLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
-              Next
-              {' '}
-              <IoMdArrowRoundForward className="ml-2"/>
+              Next <IoMdArrowRoundForward className="ml-2" />
             </div>
           }
           forcePage={currentPage}
           renderOnZeroPageCount={null}
         />
-      </div> */}
+       </div>
     </div>
   );
 }

@@ -184,35 +184,26 @@ export default function PartnerAll() {
       />
       <div className="flex w-full">
         <div className="flex w-full justify-between items-center">
-          <div className="flex md:mr-8 justify-around">
-            {/* <Link to="/admin/partners/create">
-              <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
-                Add Client
-              </div>
-            </Link> */}
-            <div
-              onClick={toggleFilterBox}
-              className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2"
-            >
-              <FiFilter className="text-xl mx-2" />
-              <h4>Filter</h4>
-            </div>
-          </div>
-          <div className="w-96 md:w-72 relative">
-            <input
-              ref={inputRef}
-              type="text"
-              className="px-3 py-2 w-full rounded-md border-2 border-blue-500 shadow-md bg-white focus:outline-none"
-              id="products"
-              placeholder="search products"
-              onChange={(e) => setSearchItems(e.target.value.toLowerCase())}
-            />
-          </div>
+  
+
         </div>
       </div>
       <div className="w-full">
         <div className="flex justify-between items-center">
-          <h2 className="lg:text-2xl font-bold my-4">Vendors</h2>
+  
+          <div className="flex justify-between items-center w-full my-4">
+            <h2 className="lg:text-2xl font-bold">Vendors</h2>
+            <div className="w-96 md:w-72 relative">
+            <input
+                ref={inputRef}
+                type="text"
+                className="px-3 py-2 w-full rounded-md border-2 border-blue-500 shadow-md bg-white focus:outline-none"
+                id="products"
+                placeholder="search products"
+                onChange={(e) => setSearchItems(e.target.value.toLowerCase())}
+              />
+          </div>
+          </div>
           {isFilterActive && (
             <button
               className="bg-red-500 px-4 h-8 rounded-md text-white hover:opacity-70"

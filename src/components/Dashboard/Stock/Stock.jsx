@@ -64,7 +64,7 @@ export default function Stock() {
       if (response.ok) {
         const blob = await response.blob();
         const filename =
-          response.headers.get("content-disposition") || "exported-data.xlsx";
+          response.headers.get("content-disposition") || "stock-exported-data.xlsx";
 
         const url = window.URL.createObjectURL(blob);
 
@@ -113,7 +113,7 @@ export default function Stock() {
         style={{ width: "450px" }}
       />
       <div className="flex cursor-pointer">
-        <div className="flex w-full justify-between items-center">
+        <div className="flex w-full justify-between items-center cursor-pointer">
           <div
             onClick={receiveExcel}
             className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"

@@ -37,8 +37,6 @@ export default function ProductsEdit() {
 
   const SingleProductApi = async () => {
     let resData = await getApi(`/product/${id}`, token.accessToken);
-
-    console.log("single roduct is a", resData);
     setRef(resData.data[0].ref);
     setName(resData.data[0].name);
     setDescription(resData.data[0].description);
@@ -69,6 +67,9 @@ export default function ProductsEdit() {
     }
     if (expiredate) {
       formData.append("expiredAt", expiredate);
+    }
+    if (file) {
+      formData.append("image", file);
     }
     if (description) {
       formData.append("description", description);
@@ -205,10 +206,9 @@ export default function ProductsEdit() {
             <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
               <RiImageAddFill className=" text-slate-400 text-6xl" />
               {file ? (
-                <img loading="eager | lazy" src={selectedImage} className="absolute object-cover w-full h-full" />
+                <img src={selectedImage} className="absolute object-cover w-full h-full" />
               ) : (
                 <img
-                  loading="eager | lazy"
                   src={image}
                   className="absolute object-cover w-full h-full"
                 />

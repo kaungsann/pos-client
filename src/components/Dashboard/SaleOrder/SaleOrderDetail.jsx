@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
-
+import { Icon } from '@iconify/react';
 import { MdAddShoppingCart } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";

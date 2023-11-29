@@ -75,7 +75,7 @@ export default function LocationAll() {
       if (response.ok) {
         const blob = await response.blob();
         const filename =
-          response.headers.get("content-disposition") || "exported-data.xlsx";
+          response.headers.get("content-disposition") || "location-exported-data.xlsx";
 
         const url = window.URL.createObjectURL(blob);
 

@@ -97,7 +97,7 @@ export default function ProductsAll() {
       if (response.ok) {
         const blob = await response.blob();
         const filename =
-          response.headers.get("content-disposition") || "exported-data.xlsx";
+          response.headers.get("content-disposition") || "product-exported-data.xlsx";
 
         const url = window.URL.createObjectURL(blob);
 
@@ -182,7 +182,8 @@ export default function ProductsAll() {
         return false;
       }
       // Filter by barcode
-      if (filterBarcode && !product.barcode.includes(filterBarcode)) {
+      if (filterBarcode && 
+        !product.barcode.includes(filterBarcode.toString())) {
         return false;
       }
       // Filter by category
@@ -231,7 +232,6 @@ export default function ProductsAll() {
       },
       token.accessToken
     );
-    console.log("response data delete  is ", response);
 
     if (response.status) {
       toast("Selected products deleted successfully.");
@@ -311,14 +311,14 @@ export default function ProductsAll() {
               <BiImport className="text-xl mx-2" />
               <h4> Export Excel</h4>
             </div>
-            <div className="rounded-sm shadow-sm flex items-center text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2">
+            <div onClick={handleFileImportClick} className="rounded-sm shadow-sm flex items-center text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2">
               <input
                 type="file"
                 ref={importRef}
                 style={{ display: "none" }}
                 onChange={handleFileImportChange}
               />
-              <button onClick={handleFileImportClick}>
+              <button>
                 Import Excel
               </button>
               <BiExport className="text-xl mx-2" />
@@ -330,7 +330,7 @@ export default function ProductsAll() {
               className="px-3 py-2 w-96 md:w-72 rounded-md border-2 border-blue-500 shadow-md bg-white focus:outline-none"
               id="products"
               placeholder="search products"
-              onChange={(e) => setFilterName(e.target.value)}
+              onChange={(e) => setFilterName(e.target.value.toLocaleLowerCase())}
             />
           </div>
         </div>
@@ -403,7 +403,7 @@ export default function ProductsAll() {
                   </td>
                   <td className="lg:px-4 py-2 text-center">
                     <img
-                      src={product.image ? product.image : img}
+                      src={product?.image || img}
                       className="w-10 h-10 rounded-md shadow-md mx-auto text-center"
                     />
                   </td>

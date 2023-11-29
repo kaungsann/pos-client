@@ -73,7 +73,7 @@ export default function CategoryAll() {
       if (response.ok) {
         const blob = await response.blob();
         const filename =
-          response.headers.get("content-disposition") || "exported-data.xlsx";
+          response.headers.get("content-disposition") || "category-exported-data.xlsx";
 
         const url = window.URL.createObjectURL(blob);
 
@@ -199,14 +199,14 @@ export default function CategoryAll() {
               <BiImport className="text-xl mx-2" />
               <h4>Export Excel</h4>
             </div>
-            <div className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2">
+            <div onClick={handleFileImportClick} className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2">
               <input
                 type="file"
                 ref={importRef}
                 style={{ display: "none" }}
                 onChange={handleFileImportChange}
               />
-              <button onClick={handleFileImportClick}>Import Excel</button>
+              <button>Import Excel</button>
               <BiExport className="text-xl mx-2" />
             </div>
           </div>
