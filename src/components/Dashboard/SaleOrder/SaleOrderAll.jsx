@@ -294,7 +294,7 @@ export default function SaleOrderAll() {
                       {sale.active ? "Yes" : "No"}
                     </td>
                     <td className="lg:px-4 py-2 text-center">
-                      {sale.taxTotal}
+                      {sale.taxTotal.toFixed(2)}
                     </td>
                     <td className="lg:px-4 py-2 text-center">{sale.total}</td>
                     <td className="py-3 flex ml-3 lg:px-4 justify-center">
