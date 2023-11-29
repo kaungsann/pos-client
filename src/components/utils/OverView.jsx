@@ -107,14 +107,14 @@ export default function OverView() {
                 Sales Overview
               </h3>
               <div>
-                 <Icon onClick={() => setShowFilter(true)} icon="icon-park-outline:filter" className="text-[#8b5cf6] hover:text-[#4f3b80] font-extrabold text-xl"/>
+                 {/* <Icon onClick={() => setShowFilter(true)} icon="icon-park-outline:filter" className="text-[#8b5cf6] hover:text-[#4f3b80] font-extrabold text-xl"/> */}
               </div>
             </div>
             {/* Annula Sales */}
             <div className=" my-3 px-4 flex">
               <div className="flex items-center w-2/4	">
                 <div className="p-4 bg-blue-200 rounded-md">
-                   <Icon icon="solar:cart-4-outline" className="text-4xl text-cyan-600 font-extrabold"/>
+                   {/* <Icon icon="solar:cart-4-outline" className="text-4xl text-cyan-600 font-extrabold"/> */}
                 </div>
                 <div className="mx-3 w-2/4">
                   <h2 className="text-slate-400 text-md font-semibold">
@@ -241,6 +241,17 @@ export default function OverView() {
             </div>
           </div>
         </div>
+          <div className="my-6 flex justify-center">
+             <button className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
+                 Weekly
+              </button>
+              <button className="font-bold rounded-sm mx-4 shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
+                 Monthly
+              </button>
+              <button className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
+                 Yearly
+              </button>
+          </div>
         <div className="flex my-4">
           <div className="w-3/5 bg-white rounded-lg shadow-md p-4">
             <h2 className="text-slate-600 text-lg font-semibold my-3">
