@@ -7,7 +7,7 @@ import { MdClear } from "react-icons/md";
 import { FaEye } from "react-icons/fa6";
 import { format } from "date-fns";
 import DeleteAlert from "../../utils/DeleteAlert";
-import FadeLoader from "react-spinners/FadeLoader";
+import ClipLoader from "react-spinners/ClipLoader";
 import img from "../../../assets/product.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -446,12 +446,12 @@ export default function ProductsAll() {
                 </tr>
               ))
             ) : (
-              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
                 {loading && (
-                  <FadeLoader
+                  <ClipLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={10}
+                    size={35}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />

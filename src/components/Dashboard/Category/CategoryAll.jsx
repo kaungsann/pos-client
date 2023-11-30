@@ -3,7 +3,7 @@ import { getApi, FormPostApi, deleteMultiple } from "../../Api";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
-import FadeLoader from "react-spinners/FadeLoader";
+import ClipLoader from "react-spinners/ClipLoader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -247,7 +247,6 @@ export default function CategoryAll() {
               />
             </th>
             <th className="lg:px-4 py-2 text-center">Name</th>
-            <th className="lg:px-4 py-2 text-center">Date</th>
             <th className="lg:px-4 py-2 text-center">Action</th>
             <th></th>
           </tr>
@@ -277,10 +276,6 @@ export default function CategoryAll() {
                   </td>
 
                   <td className="py-3 lg:px-4">{pd.name}</td>
-                  <td className="py-3 lg:px-4">
-                    {format(new Date(pd.createdAt), "yyyy-MM-dd")}
-                  </td>
-
                   <td className="py-3 flex ml-3 lg:px-4 justify-center">
                     <FaEye
                       onClick={() =>
@@ -299,12 +294,12 @@ export default function CategoryAll() {
                 </tr>
               ))
           ) : (
-            <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
-             {loading && (
-                <FadeLoader
+            <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
+            {loading && (
+                <ClipLoader
                   color={"#0284c7"}
                   loading={loading}
-                  size={20}
+                  size={35}
                   aria-label="Loading Spinner"
                   data-testid="loader"
                 />

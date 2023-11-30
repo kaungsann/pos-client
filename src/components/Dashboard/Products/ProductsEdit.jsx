@@ -59,8 +59,6 @@ export default function ProductsEdit() {
     setStockQuantity(resData.data[0].minStockQty);
   };
 
-  console.log("EXPIRE DATE IS", expiredate);
-
   const createProductApi = async () => {
     const formData = new FormData();
     
@@ -130,7 +128,8 @@ export default function ProductsEdit() {
       dipatch(removeData(null));
     }
     if (resData.status) {
-      setCat(resData.data);
+      const filteredCategory = resData.data.filter((ct) => ct.active === true);
+      setCat(filteredCategory);
     }
   };
 

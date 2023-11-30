@@ -5,7 +5,7 @@ import { BiExport } from "react-icons/bi";
 import { MdClear } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import FadeLoader from "react-spinners/FadeLoader";
+import ClipLoader from "react-spinners/ClipLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import { FiFilter } from "react-icons/fi";
@@ -78,18 +78,17 @@ export default function PurchaseAll() {
 
   const filteredPurchase = () => {
     const filterPurchase = saleorders.filter((sale) => {
-      //Filter by date
+      // Filter by date
       if (filterDate && !sale.orderDate.includes(filterDate)) {
         return false;
       }
       // Filter by staff
       if (
         filterStaff &&
-        !sale.user.username.toLowerCase().includes(filterStaff.toLowerCase())
+        !sale.partner.name.toLowerCase().includes(filterStaff.toLowerCase())
       ) {
         return false;
       }
-  
       // Filter by location
       if (
         filterLocation &&
@@ -99,8 +98,8 @@ export default function PurchaseAll() {
       }
       return true;
     });
-    return filterPurchase
-  }
+    return filterPurchase;
+  };
 
   const handleConfirm = (id) => {
     setconfrimShowBox(true);
@@ -304,12 +303,12 @@ export default function PurchaseAll() {
                   </tr>
                 ))
             ) : (
-              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
                 {loading && (
-                  <FadeLoader
+                  <ClipLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={10}
+                    size={35}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />
@@ -354,13 +353,13 @@ export default function PurchaseAll() {
             </div>
             <div className="my-3 flex flex-col">
               <label className="text-lg my-2 text-slate-600 font-semibold">
-                User
+                 Partner
               </label>
               <input
                 type="text"
                 onChange={(e) => setFilterStaff(e.target.value)}
                 className="w-full rounded-md py-2 px-3 border-2 border-blue-300"
-                placeholder="Search By staff name"
+                placeholder="Search By partner name"
               />
             </div>
             <div className="my-3 flex flex-col">

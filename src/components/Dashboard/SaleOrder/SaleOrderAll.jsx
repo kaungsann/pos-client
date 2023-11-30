@@ -5,7 +5,7 @@ import { BiExport } from "react-icons/bi";
 import { MdClear } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import FadeLoader from "react-spinners/FadeLoader";
+import ClipLoader from "react-spinners/ClipLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 import { format } from "date-fns";
@@ -33,7 +33,6 @@ export default function SaleOrderAll() {
 
   const [confrimShowBox , setconfrimShowBox] = useState(false)
   const [ConfirmOrderId  , setConfirmOrderId] = useState(null)
-
 
   const navigate = useNavigate();
   const inputRef = useRef();
@@ -104,8 +103,6 @@ export default function SaleOrderAll() {
     })
     return filterSaleOrder
   }
-
-;
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -314,12 +311,12 @@ export default function SaleOrderAll() {
                   </tr>
                 ))
             ) : (
-              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
                 {loading && (
-                  <FadeLoader
+                  <ClipLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={10}
+                    size={35}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />

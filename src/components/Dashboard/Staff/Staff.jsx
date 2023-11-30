@@ -224,7 +224,7 @@ export default function Staff() {
                   </td>
                 </tr>
               )):
-              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
               {loading && (
                 <ClipLoader
                   color={"#0284c7"}

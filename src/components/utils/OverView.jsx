@@ -24,10 +24,11 @@ import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function OverView() {
 
-  const [day, setDay] = useState("1");
-  const [month, setMonth] = useState("January");
-  const [year, setYear] = useState("2023");
-  const [startDate, setStartDate] = useState("");
+  const [filter ,setFilter] = useState("")
+  const [day , setDay] = useState("1")
+  const [month , setMonth] = useState("January")
+  const [year , setYear] = useState("2023")
+  const [StartDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
   const [ShowFilter, setShowFilter] = useState(false);
@@ -69,7 +70,7 @@ export default function OverView() {
   const [popularSaleProducts, setPopularSaleProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const todayDate = format(new Date(), "MM-dd-yyyy"); // Get today's date in the same format as orderDate
+  const todayDate = format(new Date(), "MM-dd-yyyy"); 
 
   const calculateStartDate = () => {
     const today = new Date();
@@ -92,34 +93,45 @@ export default function OverView() {
     return format(startDate, "MM-dd-yyyy");
   };
 
+  const handleFilterChange = (e) => {
+    setEndDate(todayDate);
+    setFilter(e.target.value);
+  };
+
+  const calculateDailyFilter = () => {
+    setMonth("")
+    setYear("")
+    setDay("");
+    getTotals()
+  }
 
   const getTotals = async () => {
     let startDate;
     if (day === "7") {
       // Weekly
-      setMonth("")
-      setYear("")
       startDate = calculateStartDate();
     } else if (month === "Monthly") {
       // Monthly
-      setDay("")
-      setYear("")
       startDate = calculateMonthlyStartDate();
     } else if (year === "Yearly") {
       // Yearly
-      setMonth("")
-      setDay("")
       startDate = calculateYearlyStartDate();
+    } else if (StartDate &&  endDate) {
+      // Yearly
+      startDate = StartDate
     } else {
       // Default to daily (today)
       startDate = todayDate;
     }
 
+    const formattedStartDate = format(new Date(startDate), "MM-dd-yyyy");
+    const formattedEndDate = format(new Date(endDate), "MM-dd-yyyy");
+
     let resData = await getApi(
-      `/orders/totals?${startDate}=${todayDate.toString()}`,
+      `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
       token.accessToken
     );
-    console.log("res data is week" , resData)
+    
     if (resData.status) {
       setTotalPurchaseAmount(resData.data.purchases.totalAmountWithTax);
       setTotalPurchaseOrders(resData.data.purchases.totalOrders);
@@ -133,14 +145,17 @@ export default function OverView() {
       setTotalSaleItems(resData.data.sales.totalItems);
       setOrderSaleLines(resData.data.sales.allLines);
       setPopularSaleProducts(resData.data.sales.topProducts);
-      setLoading(false);
+      setLoading(false)
     } else {
       setLoading(true);
     }
   };
+
+
   useEffect(() => {
     getTotals();
-  }, [setMonth , setYear]);
+  }, [day , month , year , StartDate]);
+
 
   const orderList = Array.from(
     new Set(orderPurchaseLines.map((line) => line.orderId._id))
@@ -157,6 +172,7 @@ export default function OverView() {
       total: line.subTotal,
     };
   });
+
 
 
   const lineChartData = totalPurchasePerDay.map((item1) => {
@@ -176,6 +192,7 @@ export default function OverView() {
 
     return item1;
   });
+
   const COLORS = ["#96c3ea", "#88c3c7", "#b8bd85", "#8f90c9"];
 
   return (
@@ -350,9 +367,11 @@ export default function OverView() {
             </div>
           </div>
         </div>
-        {/* <div className="flex justify-center my-6">
+        <div className="flex justify-center my-6">
              <button  
               onClick={() => {
+                setMonth("")
+                setYear("")
                 setEndDate(todayDate); // Set end date to today
                 setDay("7");
                 getTotals();
@@ -362,6 +381,8 @@ export default function OverView() {
               </button>
               <button 
                 onClick={() => {
+                  setDay("")
+                  setYear("")
                   setEndDate(todayDate); // Set end date to today
                   setMonth("Monthly"); // Set month to "Monthly"
                   getTotals();
@@ -371,6 +392,8 @@ export default function OverView() {
               </button>
               <button
                 onClick={() => {
+                  setDay("")
+                  setMonth("")
                   setEndDate(todayDate); // Set end date to today
                   setYear("Yearly"); // Set year to "Yearly"
                   getTotals();
@@ -378,17 +401,17 @@ export default function OverView() {
               className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
                  Yearly
               </button>
-        </div> */}
+        </div>
         <div className="flex my-4">
           <div className="w-3/5 bg-white rounded-lg shadow-md p-4">
             <h2 className="text-slate-600 text-lg font-semibold my-3">
               Sales Statistics
             </h2>
-'          <ResponsiveContainer height={450} width="100%">
-              <LineChart data={lineChartData} margin={{ right: 25, top: 10 }}>
+            <ResponsiveContainer height={500} width="100%">
+              <LineChart data={lineChartData} margin={{ right: 20, top: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
+                <XAxis dataKey="date" tick={{ fontSize: 14 }} />
+                <YAxis tick={{ fontSize: 12 }}  padding={{ left: 50 }}/>
                 <Tooltip />
                 <Legend />
                 <Line
@@ -477,7 +500,7 @@ export default function OverView() {
                 />
               )}
             </div>
-            {showFilterDateBox ? (
+            {!showFilterDateBox ? (
               <div className="mx-auto pb-4 bg-white">
                 <div className="flex w-3/5 mx-auto">
                   <div className="flex flex-col items-center w-2/4">
@@ -508,74 +531,38 @@ export default function OverView() {
                   >
                     Cancel
                   </button>
-                  <button className="text-md py-2 px-6 bg-blue-600 rounded-sm text-white hover:bg-blue-700 ml-6">
+                  <button 
+                   onClick={calculateDailyFilter} 
+                  className="text-md py-2 px-6 bg-blue-600 rounded-sm text-white hover:bg-blue-700 ml-6">
                     Filter
                   </button>
                 </div>
               </div>
             ) : (
               <>
-                <div className="w-3/5 mx-auto flex justify-between">
-                  <div className="flex flex-col items-center">
-                    <label className="my-3 text-lg font-semibold text-slate-500">
-                      Days
-                    </label>
-                    <select
-                      value={day}
-                      onChange={handleDayChange}
-                      className="custom-scrollbar w-16 h-12 p-2 bg-slate-100"
-                    >
-                      {Array.from({ length: 31 }, (_, index) => index + 1).map(
-                        (day) => (
-                          <option
-                            key={day}
-                            value={day}
-                            className="custom-scrollbar"
-                          >
-                            {day}
-                          </option>
-                        )
-                      )}
-                    </select>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <label className="my-3 text-lg font-semibold text-slate-500">
-                      Months
-                    </label>
-                    <select
-                      value={month}
-                      onChange={handleMonthChange}
-                      className="p-2 h-12 bg-slate-100"
-                    >
-                      {months.map((month) => (
-                        <option key={month} value={month}>
-                          {month}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <label className="my-3 text-lg font-semibold text-slate-500">
-                      Years
-                    </label>
-                    <select
-                      value={year}
-                      onChange={handleYearChange}
-                      className="p-2 h-12 bg-slate-100"
-                    >
-                      {/* Add options for years (e.g., 2023 to 2030) */}
-                      {Array.from(
-                        { length: 8 },
-                        (_, index) => 2023 + index
-                      ).map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="mx-auto">
+                  <select
+                  required
+                  id="catid"
+                  style={{ backgroundColor: "transparent" }}
+                  onChange={handleFilterChange}
+                  className="block w-80 mx-auto custom-select rounded-md border-0 my-4 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
+                  >
+                    <option disabled value selected>
+                       Select an option
+                    </option>
+                    <option value="7" className="py-4 px-4">
+                       Weekly
+                    </option>
+                    <option value="Monthly" className="py-4 px-4">
+                       Monthly
+                    </option>
+                    <option value="Yearly" className="py-4 px-4">
+                       Yearly
+                    </option>
+                </select>
                 </div>
-                <div className="w-3/5 mx-auto my-4 flex justify-end">
+                <div className="w-80 mx-auto my-4 flex justify-end">
                   <button
                     onClick={() => setShowFilter(false)}
                     className="text-md py-2 px-4 bg-slate-200 rounded-sm hover:bg-slate-300"
