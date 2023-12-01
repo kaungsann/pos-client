@@ -1,6 +1,6 @@
 //const BASE_URL = "http://18.143.238.45";
-//const BASE_URL = "http://127.0.0.1:8000";
-const BASE_URL = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/";
+const BASE_URL = "http://127.0.0.1:8000";
+//const BASE_URL = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/";
 export const getApi = async (route, token = null) => {
   const headers = {
     "Content-Type": "application/json",

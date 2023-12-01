@@ -4,11 +4,13 @@ import { getApi } from "../../Api";
 import ProductList from "./ProductList";
 import FilterBox from "./FilterBox";
 import SearchBox from "./SearchBox";
+import ExcelExportButton from "../../utils/ExcelExportButton";
+import ExcelImportButton from "../../utils/ExcelImportButton";
 
 const COMPARISION = {
   LESS: "LESS",
   GREATER: "GREATER",
-}
+};
 
 const ProductTemplate = () => {
   const [products, setProducts] = useState([]);
@@ -61,8 +63,10 @@ const ProductTemplate = () => {
           const salePrice = product.salePrice;
 
           return (
-            (price.comparison === COMPARISION.LESS && salePrice < price.value) ||
-            (price.comparison === COMPARISION.GREATER && salePrice > price.value)
+            (price.comparison === COMPARISION.LESS &&
+              salePrice < price.value) ||
+            (price.comparison === COMPARISION.GREATER &&
+              salePrice > price.value)
           );
         };
 
@@ -86,6 +90,8 @@ const ProductTemplate = () => {
         keyword={filteredKeywords.name}
         onSearch={handleFilterChange}
       />
+      <ExcelExportButton token={token.accessToken} />
+      <ExcelImportButton token={token.accessToken} />
       <ProductList products={filteredProducts} />
     </>
   );
