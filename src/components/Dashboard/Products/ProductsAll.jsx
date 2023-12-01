@@ -38,8 +38,6 @@ export default function ProductsAll() {
   const [loading, setLoading] = useState(false);
   const [categorys, setCategorys] = useState([]);
 
-  const [importFile, setimportFile] = useState(null);
-
   const importRef = useRef(null);
 
   const userData = useSelector((state) => state.loginData);
@@ -241,14 +239,6 @@ export default function ProductsAll() {
     } else {
       toast("Failed to delete selected products.");
     }
-  };
-
-  const handleFilterButtonClick = () => {
-    const filteredProducts = filterProducts();
-    setProducts(filteredProducts);
-    // Update other state variables as needed
-    setIsFilterActive(true);
-    setCurrentPage(0); // Reset the current page to 0 after filtering
   };
 
   const handlePageClick = (selectedPage) => {

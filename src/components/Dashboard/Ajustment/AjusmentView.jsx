@@ -140,6 +140,7 @@ export default function AjusmentView() {
         <table className="w-full text-center">
           <tr className="bg-blue-600 text-white">
             <th className="lg:px-4 py-2 text-center">ID</th>
+            <th className="lg:px-4 py-2 text-center">User</th>
             <th className="lg:px-4 py-2 text-center">Date</th>
             <th className="lg:px-4 py-2 text-center">Product</th>
             <th className="lg:px-4 py-2 text-center">Barcode</th>
@@ -155,6 +156,7 @@ export default function AjusmentView() {
                 }
               >
                 <td className="py-3 lg:px-4 text-black">{pd.id}</td>
+                <td className="py-3 lg:px-4 text-black">{pd.createdBy}</td>
                 <td className="py-3 lg:px-4 text-black">
                   {format(new Date(pd.createdAt), "yyyy-MM-dd")}
                 </td>

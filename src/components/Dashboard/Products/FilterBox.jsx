@@ -1,42 +1,101 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import PropTypes from 'prop-types';
 
-const FilterBox = ({ onFilterChange }) => {
-  const [filterName, setFilterName] = useState("");
-  const [filterCode, setFilterCode] = useState("");
+const FilterBox = ({ categories, onFilter }) => {
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [price, setPrice] = useState("");
+  const [priceComparison, setPriceComparison] = useState("LESS");
 
-  const handleFilterChange = () => {
-    onFilterChange({
-      name: filterName,
-      code: filterCode,
+  const handleFilterClick = () => {
+    onFilter({
+      category: selectedCategory,
+      startDate,
+      endDate,
+      price: {
+        value: price,
+        comparison: priceComparison,
+      },
+    });
+  };
+
+  const handleClearFiltersClick = () => {
+    setSelectedCategory("");
+    setStartDate("");
+    setEndDate("");
+    setPrice("");
+    setPriceComparison("LESS");
+    onFilter({
+      category: "",
+      startDate: "",
+      endDate: "",
+      price: {
+        value: "",
+        comparison: "LESS",
+      },
     });
   };
 
   return (
     <div>
-      {/* Filter form */}
       <div>
-        <label htmlFor="name">Name:</label>
+        <label htmlFor="name">Category</label>
+        <select
+          id="category"
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          value={selectedCategory}
+        >
+          <option value="">All</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+
+        <label htmlFor="startDate">Start Date</label>
         <input
-          type="text"
-          id="name"
-          name="name"
-          value={filterName}
-          onChange={(e) => setFilterName(e.target.value)}
+          type="date"
+          id="startDate"
+          onChange={(e) => setStartDate(e.target.value)}
+          value={startDate || ""}
         />
-      </div>
-      <div>
-        <label htmlFor="code">Code:</label>
+
+        <label htmlFor="endDate">End Date</label>
         <input
-          type="text"
-          id="code"
-          name="code"
-          value={filterCode}
-          onChange={(e) => setFilterCode(e.target.value)}
+          type="date"
+          id="endDate"
+          onChange={(e) => setEndDate(e.target.value)}
+          value={endDate || ""}
         />
+
+        <label htmlFor="price">Price</label>
+        <input
+          type="number"
+          id="price"
+          onChange={(e) => setPrice(e.target.value)}
+          value={price || ""}
+        />
+        <select
+          id="priceComparison"
+          onChange={(e) => setPriceComparison(e.target.value)}
+          value={priceComparison}
+        >
+          <option value="LESS">Less Than</option>
+          <option value="GREATER">Greater Than</option>
+        </select>
+
+        <button onClick={handleFilterClick}>Apply</button>
+        <button onClick={handleClearFiltersClick}>Clear</button>
       </div>
-      <button onClick={handleFilterChange}>Apply Filters</button>
     </div>
   );
 };
+
+FilterBox.propTypes = {
+  categories: PropTypes.array,
+  onFilter: PropTypes.func,
+}
 
 export default FilterBox;
