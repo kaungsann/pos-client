@@ -52,7 +52,9 @@ const ProductTemplate = () => {
 
   useEffect(() => {
     const uniqueCategories = [
-      ...new Set(products.map((product) => product.category.name)),
+      ...new Set(
+        products.map((product) => product.category && product.category.name)
+      ),
     ];
     setCategories(uniqueCategories);
   }, [products]);
@@ -84,6 +86,7 @@ const ProductTemplate = () => {
 
         return (
           product.name.toLowerCase().includes(name.toLowerCase()) &&
+          product.category &&
           product.category.name
             .toLowerCase()
             .includes(category.toLowerCase()) &&

@@ -1,6 +1,7 @@
 //const BASE_URL = "http://18.143.238.45";
-export const BASE_URL = "http://127.0.0.1:8000";
-//export const BASE_URL = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com";
+//export const BASE_URL = "http://127.0.0.1:8000";
+export const BASE_URL =
+  "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com";
 
 export const getApi = async (route, token = null) => {
   const headers = {
