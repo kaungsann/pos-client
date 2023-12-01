@@ -1,15 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { getApi } from "../../Api";
+import { BASE_URL } from "../../Api";
 import ProductList from "./ProductList";
 import FilterBox from "./FilterBox";
 import SearchBox from "./SearchBox";
 import ExcelExportButton from "../../utils/ExcelExportButton";
 import ExcelImportButton from "../../utils/ExcelImportButton";
+import axios from "axios";
 
 const COMPARISION = {
   LESS: "LESS",
   GREATER: "GREATER",
+};
+
+const PRODUCT_API = {
+  INDEX: BASE_URL + "/product",
+  IMPORT: BASE_URL + "/product/import-excel",
+  EXPORT: BASE_URL + "/product/export-excel",
 };
 
 const ProductTemplate = () => {
@@ -30,13 +37,18 @@ const ProductTemplate = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await getApi(`/product`, token.accessToken);
-        setProducts(response?.data);
+        const response = await axios.get(PRODUCT_API.INDEX, {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        setProducts(response.data?.data);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     })();
-  }, [token.accessToken]);
+  }, [token]);
 
   useEffect(() => {
     const uniqueCategories = [
@@ -90,8 +102,14 @@ const ProductTemplate = () => {
         keyword={filteredKeywords.name}
         onSearch={handleFilterChange}
       />
-      <ExcelExportButton token={token.accessToken} />
-      <ExcelImportButton token={token.accessToken} />
+      <ExcelExportButton
+        token={token.accessToken}
+        apiEndpoint={PRODUCT_API.EXPORT}
+      />
+      <ExcelImportButton
+        token={token.accessToken}
+        apiEndpoint={PRODUCT_API.IMPORT}
+      />
       <ProductList products={filteredProducts} />
     </>
   );

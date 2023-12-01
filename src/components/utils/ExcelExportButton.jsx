@@ -1,10 +1,8 @@
 import PropTypes from "prop-types";
 import axios from "axios";
 
-const ExcelExportButton = ({ token }) => {
+const ExcelExportButton = ({ token, apiEndpoint }) => {
   const handleDownloadClick = async () => {
-    const apiEndpoint = "http://127.0.0.1:8000/product/export-excel";
-
     try {
       const response = await axios.get(apiEndpoint, {
         headers: {
@@ -35,6 +33,7 @@ const ExcelExportButton = ({ token }) => {
 
 ExcelExportButton.propTypes = {
   token: PropTypes.string,
+  apiEndpoint: PropTypes.string,
 };
 
 export default ExcelExportButton;
