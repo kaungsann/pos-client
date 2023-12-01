@@ -156,7 +156,7 @@ export default function Staff() {
       )}
 
 
-        <table class="table-fixed w-full mt-8 ">
+        <table class="table-fixed w-full mt-8">
           <tr className="bg-blue-600 text-white">
             <th className="lg:px-4 py-2 text-center">
               <input
@@ -172,7 +172,7 @@ export default function Staff() {
             <th className="lg:px-4 py-2 text-center">Action</th>
           </tr>
 
-          <tbody>
+          <tbody className="mb-12">
             {currentUsers.length > 0 ?
               currentUsers.map((usr) => (
                 <tr
@@ -224,7 +224,7 @@ export default function Staff() {
                   </td>
                 </tr>
               )):
-              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
               {loading && (
                 <ClipLoader
                   color={"#0284c7"}
@@ -254,7 +254,7 @@ export default function Staff() {
       <div className={`absolute top-32 left-0 right-0 z-50 transition-transform transform flex justify-center ${show ? "translate-y-0" : "-translate-y-full"}`}>
         {show && <ChangePassword id={userId} close={closeShowBox} />}
       </div>
-      <div className="fixed bottom-12 right-28 w-80 items-center">
+      <div className="fixed bottom-10 right-20 w-80 items-center">
         <ReactPaginate
           containerClassName="pagination-container flex justify-center items-center"
           pageLinkClassName="page-link text-center"

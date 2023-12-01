@@ -105,10 +105,11 @@ export default function PosItems() {
   useEffect(() => {
     getProducts();
     getCategorysApi();
+    const user = JSON.parse(localStorage.getItem("user"));
     if (search) {
       handleBarcodeDetected(search);
     }
-  }, [search]);
+  }, [search , user]);
   return (
     <>
       <div

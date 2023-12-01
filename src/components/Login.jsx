@@ -8,6 +8,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
 import { sendJsonToApi } from "./Api";
+import { useEffect } from "react";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -22,6 +24,7 @@ export default function Login() {
   const loginApi = async () => {
     let user = { email, password };
 
+   try {
     const { success, message, data, tokens } = await sendJsonToApi(
       "/auth/signin",
       user
@@ -36,8 +39,11 @@ export default function Login() {
     } else {
       setLoading(false);
       toast(message);
-      console.log("res data is", message);
     }
+   } catch (error) {
+    setLoading(false);
+    return console.error(error)
+   }
   };
 
   const loginUser = (e) => {
@@ -45,6 +51,8 @@ export default function Login() {
     setLoading(true);
     loginApi();
   };
+
+
 
   return (
     <>

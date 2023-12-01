@@ -3,7 +3,7 @@ import { getApi, deleteMultiple } from "../../Api";
 import { BiSolidEdit } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
-import FadeLoader from "react-spinners/FadeLoader";
+import ClipLoader from "react-spinners/ClipLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { FiFilter } from "react-icons/fi";
 import { MdClear } from "react-icons/md";
@@ -286,12 +286,12 @@ const filterCustomer = () => {
                   </tr>
                 ))
             ) : (
-              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
-                {loading && (
-                  <FadeLoader
+              <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
+              {loading && (
+                  <ClipLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={10}
+                    size={35}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />

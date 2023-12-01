@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { Icon } from '@iconify/react';
 import ReactPaginate from "react-paginate";
 import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
+import ConfrimBox from '../../utils/ConfrimBox';
 
 export default function Warehouse() {
     const [showFilter, setShowFilter] = useState(false);
@@ -24,6 +25,9 @@ export default function Warehouse() {
     const [payment ,setpayment]  = useState("")
     const [location ,setlocation]  = useState("")
     const [isFilterActive, setIsFilterActive] = useState(false);
+
+    const [confrimShowBox , setconfrimShowBox] = useState(false)
+    const [ConfirmOrderId  , setConfirmOrderId] = useState(null)
 
     const token = useSelector((state) => state.IduniqueData);
 
@@ -59,7 +63,6 @@ export default function Warehouse() {
       return filterWarehouse
     }
 
-
     const filterRemove = () => {
       setlocation("");
       setpayment("");
@@ -69,6 +72,31 @@ export default function Warehouse() {
     const handlePageClick = (selectedPage) => {
       setCurrentPage(selectedPage.selected);
     };
+
+    const handleConfirm = (id) => {
+      setconfrimShowBox(true);
+      setConfirmOrderId(id)
+    }
+
+  const changeConfirmOrder = async() => {
+      const response = await fetch(`https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/orders/${ConfirmOrderId}?state=confirmed`,
+      {
+       method: "PATCH",
+       headers: {
+         authorization: `Bearer ${token.accessToken}`,
+       },
+      }
+   )
+   let resData = await response.json();
+     console.log("res data confirm is" ,response )
+       toast(resData.message)
+       getWareHouuseApi()
+       setconfrimShowBox(false);
+   }
+
+  const closeBox = () => {
+    setconfrimShowBox(false);
+  }
   
     const startIndex = currentPage * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -135,7 +163,7 @@ export default function Warehouse() {
             <th className="lg:px-4 py-2 text-center">Payment</th>
             <th className="lg:px-4 py-2 text-center">TaxTotal</th>
             <th className="lg:px-4 py-2 text-center">Total</th>
-            {/* <th className="lg:px-4 py-2 text-center">Action</th> */}
+            <th className="lg:px-4 py-2 text-center">Action</th>
           </tr>
           <tbody className="w-full space-y-10 bg-slate-300">
             {currentWarehouse.length > 0 ? (
@@ -195,17 +223,19 @@ export default function Warehouse() {
                     </td>
 
                     <td className="lg:px-4 py-2 text-center">
-                      {wh.taxTotal}
+                      {wh.taxTotal.toFixed(2)}
                     </td>
                     <td className="lg:px-4 py-2 text-center">{wh.total}</td>
-                    {/* <td className="py-3 flex ml-3 lg:px-4 justify-center">
-                    <Icon onClick={() => setStatus(true)} icon="fluent:status-16-regular" className="text-2xl text-sky-700 font-bold hover:text-blue-900"
-                      />
-                    </td> */}
+                    <td className="lg:px-4 py-2 text-center"
+                      onClick={() => {
+                        handleConfirm(wh.id);
+                      }}>
+                       {wh.state === "pending" &&  <button className="px-4 py-2 ml-2 text-white text-sm text-bold bg-blue-700 rounded-md hover:opacity-75">confirm</button> }
+                    </td>
                   </tr>
                 ))
             ) : (
-              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
                 {loading && (
                   <ClipLoader
                     color={"#0284c7"}
@@ -338,6 +368,11 @@ export default function Warehouse() {
           renderOnZeroPageCount={null}
         />
       </div>
+          <div className=" w-96 z-50 fixed top-40 bottom-0 left-0 right-0  mx-auto">
+              {
+               confrimShowBox  && <ConfrimBox close={closeBox} comfirmHandle={changeConfirmOrder}/>
+              }
+          </div>
      </div>
   )
 }

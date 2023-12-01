@@ -1,5 +1,16 @@
 import { combineReducers } from "redux";
 
+// const pos = "pos";
+
+// const getUser = () => {
+//   let haveUser = localStorage.getItem(localDb);
+//   return haveUser ? JSON.parse(haveUser) : [];
+// };
+
+// const saveUser = (user) => {
+//   localStorage.setItem(localDb, JSON.stringify(user));
+// };
+
 const idReducers = (state = null, { type, payload }) => {
   switch (type) {
     case "idAdd":
@@ -21,6 +32,21 @@ const userReducers = (state = null, { type, payload }) => {
       return state;
   }
 };
+
+// const userReducers = (state = null, { type, payload }) => {
+//   switch (type) {
+//     case "add":
+//       //return (state = payload);
+//       saveUser(payload);
+//       state = getUser();
+//       return state;
+//     case "remove":
+//       return (state = payload);
+//     default:
+//       let haveUser = localStorage.getItem(pos);
+//       return haveUser ? (state = getUser()) : state;
+//   }
+// };
 
 const orderValidReducers = (state = false, { type, payload }) => {
   switch (type) {

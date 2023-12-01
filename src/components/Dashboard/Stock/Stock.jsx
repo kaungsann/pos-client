@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { getApi } from "../../Api";
-import FadeLoader from "react-spinners/FadeLoader";
+import ClipLoader from "react-spinners/ClipLoader";
 import { BiImport } from "react-icons/bi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -139,10 +139,10 @@ export default function Stock() {
         <h2 className="lg:text-2xl font-bold my-4">Stocks</h2>
         <table className="w-full text-center">
           <tr className="bg-blue-600 text-white">
-            <th className="lg:px-4 py-2 text-center">Name</th>
-            <th className="lg:px-4 py-2 text-center">Quantity</th>
-            <th className="lg:px-4 py-2 text-center">Date</th>
+            <th className="lg:px-4 py-2 text-center">Product</th>
             <th className="lg:px-4 py-2 text-center">Location</th>
+            <th className="lg:px-4 py-2 text-center">Quantity</th>
+            <th className="lg:px-4 py-2 text-center">Updated On</th>
           </tr>
           {stock.length > 0 &&
             currentStocks
@@ -162,24 +162,24 @@ export default function Stock() {
                       ? stk.product.name
                       : "none"}
                   </td>
-                  <td className="py-3">{stk.onHand}</td>
-                  <td className="py-3">
-                    {format(new Date(stk.createdAt), "yyyy-MM-dd")}
-                  </td>
                   <td className="py-3">
                     {stk.location ? stk.location.name : "no have location"}
+                  </td>
+                  <td className="py-3">{stk.onHand}</td>
+                  <td className="py-3">
+                    {format(new Date(stk.updatedAt), "yyyy-MM-dd")}
                   </td>
                 </tr>
               ))}
         </table>
 
         {loading && (
-          <div className="w-10/12 mx-auto absolute  mt-40 flex justify-center items-center">
+            <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
             {loading && (
-              <FadeLoader
+              <ClipLoader
                 color={"#0284c7"}
                 loading={loading}
-                size={15}
+                size={35}
                 aria-label="Loading Spinner"
                 data-testid="loader"
               />

@@ -68,8 +68,6 @@ export default function PurchaseView() {
     (orderId) => orderLines.find((line) => line.orderId._id === orderId).orderId
   );
 
-  console.log(orderList);
-
   const lineChartData = orderLines.map((line) => {
     return {
       id: line._id,

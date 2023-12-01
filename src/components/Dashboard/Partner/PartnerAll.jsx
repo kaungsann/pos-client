@@ -3,7 +3,7 @@ import { getApi, deleteMultiple, FormPostApi } from "../../Api";
 import { BiSolidEdit, BiImport, BiExport } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
-import FadeLoader from "react-spinners/FadeLoader";
+import ClipLoader from "react-spinners/ClipLoader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -389,12 +389,12 @@ export default function PartnerAll() {
                   </tr>
                 ))
             ) : (
-              <div className="w-full mx-auto absolute mt-40 flex justify-center items-center">
+              <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
                 {loading && (
-                  <FadeLoader
+                  <ClipLoader
                     color={"#0284c7"}
                     loading={loading}
-                    size={10}
+                    size={35}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />

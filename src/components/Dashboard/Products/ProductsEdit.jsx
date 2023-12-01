@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { removeData } from "../../../redux/actions";
+import { format } from "date-fns";
 
 export default function ProductsEdit() {
   const [cat, setCat] = useState([]);
@@ -37,10 +38,16 @@ export default function ProductsEdit() {
 
   const SingleProductApi = async () => {
     let resData = await getApi(`/product/${id}`, token.accessToken);
+    // setExpiredate(
+    //   format(new Date(resData.data[0].expiredAt), "MM/dd/yyyy")
+    // );
+    const formattedExpireDate = resData.data[0].expiredAt
+    ? new Date(resData.data[0].expiredAt).toISOString().split('T')[0]
+    : '';
+    setExpiredate(formattedExpireDate);
     setRef(resData.data[0].ref);
     setName(resData.data[0].name);
     setDescription(resData.data[0].description);
-    setExpiredate(resData.data[0].expiredAt);
     setPurchasePrice(resData.data[0].purchasePrice);
     setProfit(resData.data[0].marginProfit);
     setPrice(resData.data[0].salePrice);
@@ -51,8 +58,6 @@ export default function ProductsEdit() {
     setTax(resData.data[0]?.tax);
     setStockQuantity(resData.data[0].minStockQty);
   };
-
-  console.log("ur chase rice is of", purchasePrice);
 
   const createProductApi = async () => {
     const formData = new FormData();
@@ -123,7 +128,8 @@ export default function ProductsEdit() {
       dipatch(removeData(null));
     }
     if (resData.status) {
-      setCat(resData.data);
+      const filteredCategory = resData.data.filter((ct) => ct.active === true);
+      setCat(filteredCategory);
     }
   };
 
@@ -288,8 +294,8 @@ export default function ProductsEdit() {
               <label className="text-md font-semibold">Expire-Date</label>
               <input
                 style={{ backgroundColor: "transparent" }}
-                type="text"
-                value={expiredate}
+                type="date"
+                value={expiredate ? expiredate : "NIL"}
                 onChange={(e) => setExpiredate(e.target.value)}
                 className="w-full px-3 py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-600"
                 placeholder="Enter expire-date"
@@ -334,25 +340,6 @@ export default function ProductsEdit() {
                 placeholder="Enter product stock quantity"
               />
             </div>
-
-            {/* <div className="w-60 mx-8 mb-3">
-              <label className="text-md font-semibold">AvaliableInPos*</label>
-
-              <select
-                id="payment"
-                style={{ backgroundColor: "transparent" }}
-                className="w-full px-3 py-1 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-                value={avaliable}
-                onChange={(e) => setAAvaliable(e.target.value)}
-              >
-                <option value="true" className="py-2">
-                  true
-                </option>
-                <option value="false" className="py-2">
-                  false
-                </option>
-              </select>
-            </div> */}
             <div className="w-60 mb-3 mx-8">
               <label className="text-md font-semibold">PurchasePrice*</label>
               <input

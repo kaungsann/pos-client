@@ -6,6 +6,8 @@ import { removeData } from "../../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ChangePassword from "../../utils/ChangePassword"
+import { format } from "date-fns";
+
 
 export default function StaffEdit() {
   const { id } = useParams();
@@ -27,11 +29,14 @@ export default function StaffEdit() {
   const getSingleStaff = async () => {
     const response = await getApi(`/user/${id}`, token.accessToken);
     if (response.status) {
+      const formattedExpireDate = response.data[0].birthdate
+      ? new Date(response.data[0].birthdate).toISOString().split('T')[0]
+      : '';
+      setBirth(formattedExpireDate);
       setName(response.data[0].username);
       setEmail(response.data[0].email);
       setAddress(response.data[0].address ? response.data[0].address : null);
       setPhone(response.data[0].phone ? response.data[0].phone : null);
-      setBirth(response.data[0].birthdate ? response.data[0].birthdate : null);
       setCity(response.data[0].city ? response.data[0].city : null);
       setGender(response.data[0].gender ? response.data[0].gender : null);
     }
@@ -82,6 +87,7 @@ export default function StaffEdit() {
   useEffect(() => {
     getSingleStaff();
   }, []);
+  
   return (
     <>
       <ToastContainer

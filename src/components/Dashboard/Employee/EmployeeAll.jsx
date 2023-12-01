@@ -317,7 +317,7 @@ export default function EmployeeAll() {
                       </td>
                     </tr>
                   )): 
-                  <div className="w-10/12 mx-auto absolute mt-40 flex justify-center">
+                  <div className="w-10/12 mx-auto absolute mt-56 flex justify-center">
                   {loading && (
                     <ClipLoader
                       color={"#0284c7"}

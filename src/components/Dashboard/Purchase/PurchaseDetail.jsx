@@ -64,13 +64,13 @@ export default function SaleOrderDetail() {
             </h2>
             <div className="flex justify-between">
               <div className="w-2/4">
-                <div className="flex justify-between my-3">
-                  <h4 className="font-bold text-lg text-slate-500">Date</h4>
+                <div className="flex justify-between my-3 items-center">
+                  <h4 className="font-bold text-lg text-slate-500">Order-Date</h4>
                   <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100">
                     {new Date(detail[0].orderDate).toLocaleDateString()}
                   </h3>
                 </div>
-                <div className="flex justify-between my-3">
+                <div className="flex justify-between my-3 items-center">
                   <h4 className="font-bold text-lg text-slate-500">
                     Customer
                   </h4>
@@ -78,29 +78,34 @@ export default function SaleOrderDetail() {
                     {detail[0].partner.name}
                   </h3>
                 </div>
-                <div className="flex justify-between my-3">
+                <div className="flex justify-between my-3 items-center">
                   <h4 className="font-bold text-lg text-slate-500">Location</h4>
                   <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                     {detail[0].location.name}
                   </h3>
                 </div>
+                <div className="flex justify-between my-3 items-center">
+                  <h4 className="font-bold text-lg text-slate-500">ModifiedDate</h4>
+                  <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
+                    {new Date(detail[0].updatedAt).toLocaleDateString()}
+                  </h3>
+                </div>
               </div>
 
               <div className="w-2/4 justify-between">
-                <div className="flex justify-between my-3">
+                <div className="flex justify-between my-3 items-center">
                   <h4 className="font-bold text-lg text-slate-500">Tax Total</h4>
                   <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                     {detail[0].taxTotal}
                   </h3>
                 </div>
-
-                <div className="flex justify-between my-3">
+                <div className="flex justify-between my-3 items-center">
                   <h4 className="font-bold text-lg text-slate-500">Total</h4>
                   <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                     {detail[0].total}
                   </h3>
                 </div>
-                <div className="flex justify-between my-3">
+                <div className="flex justify-between my-3 items-center">
                   <h4 className="font-bold text-lg text-slate-500">State</h4>
                   <h3 className="font-bold text-lg text-blue-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                     {detail[0].state}

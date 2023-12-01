@@ -110,7 +110,8 @@ export default function ProductsCreate() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    setCat(resData.data);
+    const filteredCategory = resData.data.filter((ct) => ct.active === true);
+    setCat(filteredCategory);
   };
   const handleFileInputClick = () => {
     fileInputRef.current.click();
