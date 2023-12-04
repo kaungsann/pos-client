@@ -221,7 +221,7 @@ export default function Staff() {
               </tr>
             ))
           ) : (
-            <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
+            <div className="w-full mx-auto absolute mt-56 flex -center items-center">
               {loading && (
                 <ClipLoader
                   color={"#0284c7"}
@@ -248,40 +248,37 @@ export default function Staff() {
         />
       )}
 
-      <div
-        className={`absolute top-32 left-0 right-0 z-50 transition-transform transform flex justify-center ${
-          show ? "translate-y-0" : "-translate-y-full"
-        }`}
-      >
-        {show && <ChangePassword id={userId} close={closeShowBox} />}
-      </div>
+      {show && <ChangePassword id={userId} close={closeShowBox} />}
+
       <div className="fixed bottom-10 right-20 w-80 items-center">
-        <ReactPaginate
-          containerClassName="pagination-container flex justify-center items-center"
-          pageLinkClassName="page-link text-center"
-          pageClassName="page-item"
-          className="flex justify-around text-center bg-slate-200 items-center"
-          activeClassName="bg-blue-500 text-white text-center"
-          previousClassName="text-slate-500 font-semibold hover:text-slate-700"
-          nextClassName="text-slate-500 font-semibold hover:text-slate-700"
-          breakLabel={<div className="break-label">...</div>} // Custom break element with margin
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5} // Number of pages to display in the pagination
-          marginPagesDisplayed={1}
-          pageCount={pageCount}
-          previousLabel={
-            <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
-              <IoMdArrowRoundBack className="mr-2" /> Previous
-            </div>
-          }
-          nextLabel={
-            <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
-              Next <IoMdArrowRoundForward className="ml-2" />
-            </div>
-          }
-          forcePage={currentPage}
-          renderOnZeroPageCount={null}
-        />
+        <div>
+          <ReactPaginate
+            containerClassName="pagination-container flex justify-center items-center"
+            pageLinkClassName="page-link text-center"
+            pageClassName="page-item"
+            className="flex justify-around text-center bg-slate-200 items-center"
+            activeClassName="bg-blue-500 text-white text-center"
+            previousClassName="text-slate-500 font-semibold hover:text-slate-700"
+            nextClassName="text-slate-500 font-semibold hover:text-slate-700"
+            breakLabel={<div className="break-label">...</div>} // Custom break element with margin
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5} // Number of pages to display in the pagination
+            marginPagesDisplayed={1}
+            pageCount={pageCount}
+            previousLabel={
+              <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
+                <IoMdArrowRoundBack className="mr-2" /> Previous
+              </div>
+            }
+            nextLabel={
+              <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
+                Next <IoMdArrowRoundForward className="ml-2" />
+              </div>
+            }
+            forcePage={currentPage}
+            renderOnZeroPageCount={null}
+          />
+        </div>
       </div>
     </div>
   );
