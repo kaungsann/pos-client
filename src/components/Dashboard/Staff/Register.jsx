@@ -37,29 +37,27 @@ export default function () {
     e.preventDefault();
     const formData = new FormData();
 
-    if(phone){
+    if (phone) {
       formData.append("phone", phone);
     }
-    if(gender){
+    if (gender) {
       formData.append("gender", gender);
     }
-    if(city){
+    if (city) {
       formData.append("city", city);
     }
-    if(birth){
+    if (birth) {
       formData.append("birthdate", birth);
     }
-    if(address){
+    if (address) {
       formData.append("address", address);
     }
-    if(file){
-      formData.append("image",file );
+    if (file) {
+      formData.append("image", file);
     }
     formData.append("username", name);
     formData.append("email", email);
     formData.append("password", password);
-
-
 
     let response = await FormPostApi("/user", formData, token.accessToken);
 

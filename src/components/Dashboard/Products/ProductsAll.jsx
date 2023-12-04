@@ -33,6 +33,7 @@ export default function ProductsAll() {
   const [isFilterActive, setIsFilterActive] = useState(false); // Track if any filter is active
 
   const [products, setProducts] = useState([]);
+  const [importFile, setimportFile] = useState("");
   const [alert, setAlert] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -88,14 +89,16 @@ export default function ProductsAll() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/product/export-excel";
+      const downloadUrl =
+        "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/product/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
 
       if (response.ok) {
         const blob = await response.blob();
         const filename =
-          response.headers.get("content-disposition") || "product-exported-data.xlsx";
+          response.headers.get("content-disposition") ||
+          "product-exported-data.xlsx";
 
         const url = window.URL.createObjectURL(blob);
 
@@ -180,8 +183,10 @@ export default function ProductsAll() {
         return false;
       }
       // Filter by barcode
-      if (filterBarcode && 
-        !product.barcode.includes(filterBarcode.toString())) {
+      if (
+        filterBarcode &&
+        !product.barcode.includes(filterBarcode.toString())
+      ) {
         return false;
       }
       // Filter by category
@@ -301,16 +306,17 @@ export default function ProductsAll() {
               <BiImport className="text-xl mx-2" />
               <h4> Export Excel</h4>
             </div>
-            <div onClick={handleFileImportClick} className="rounded-sm shadow-sm flex items-center text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2">
+            <div
+              onClick={handleFileImportClick}
+              className="rounded-sm shadow-sm flex items-center text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"
+            >
               <input
                 type="file"
                 ref={importRef}
                 style={{ display: "none" }}
                 onChange={handleFileImportChange}
               />
-              <button>
-                Import Excel
-              </button>
+              <button>Import Excel</button>
               <BiExport className="text-xl mx-2" />
             </div>
           </div>
@@ -320,7 +326,9 @@ export default function ProductsAll() {
               className="px-3 py-2 w-96 md:w-72 rounded-md border-2 border-blue-500 shadow-md bg-white focus:outline-none"
               id="products"
               placeholder="search products"
-              onChange={(e) => setFilterName(e.target.value.toLocaleLowerCase())}
+              onChange={(e) =>
+                setFilterName(e.target.value.toLocaleLowerCase())
+              }
             />
           </div>
         </div>
@@ -402,7 +410,9 @@ export default function ProductsAll() {
                     {product.ref ? product.ref : "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center">
-                    {product.expiredAt ? format(new Date(product.expiredAt), "yyyy-MM-dd") : "none"}
+                    {product.expiredAt
+                      ? format(new Date(product.expiredAt), "yyyy-MM-dd")
+                      : "none"}
                   </td>
                   <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
                     {product.description
@@ -542,7 +552,7 @@ export default function ProductsAll() {
               </button>
             </div>
           </div>
-        </div>               
+        </div>
       ) : (
         ""
       )}

@@ -5,6 +5,7 @@ import { removeData } from "../../../redux/actions";
 import { TbEdit } from "react-icons/tb";
 import { getApi } from "../../Api";
 import { Icon } from "@iconify/react";
+import { format } from "date-fns";
 
 export default function EmployeeDetail() {
   const { id } = useParams();
@@ -19,7 +20,7 @@ export default function EmployeeDetail() {
     setLoading(true);
     let resData = await getApi(`/employee/${id}`, token.accessToken);
 
-    console.log("res data is" , resData)
+    console.log("res data is", resData);
 
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
@@ -49,12 +50,14 @@ export default function EmployeeDetail() {
         Employee Information
       </h2>
 
-     {detail.length > 0 && (
+      {detail.length > 0 && (
         <>
           <div className="flex justify-between">
             <div className="w-2/4">
               <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Employee Id</h4>
+                <h4 className="font-bold text-lg text-slate-500">
+                  Employee Id
+                </h4>
                 <h3 className="font-bold text-lg text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100">
                   {detail[0].employeeId}
                 </h3>
@@ -95,7 +98,7 @@ export default function EmployeeDetail() {
                   }`}
                 >
                   {detail[0].birthdate
-                    ? detail[0].birthdate
+                    ? format(new Date(detail[0].birthdate), "yyyy-MM-dd")
                     : "This user need to add birthday"}
                 </h3>
               </div>
@@ -138,7 +141,7 @@ export default function EmployeeDetail() {
             </div>
           </div>
         </>
-      )} 
+      )}
     </>
   );
 }

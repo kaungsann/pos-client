@@ -8,11 +8,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaEye } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteAlert from "../../utils/DeleteAlert";
-import { Icon } from '@iconify/react';
+import { Icon } from "@iconify/react";
 import ChangePassword from "../../utils/ChangePassword";
 import ReactPaginate from "react-paginate";
-import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
-
+import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function Staff() {
   const [users, setUsers] = useState([]);
@@ -21,9 +20,9 @@ export default function Staff() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [userId, setUserId] = useState(null);
   const [alert, setAlert] = useState(false);
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(false);
 
-  const itemsPerPage = 10; 
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
 
   const token = useSelector((state) => state.IduniqueData);
@@ -47,9 +46,9 @@ export default function Staff() {
   };
 
   const toggleSelectItem = (cateogryID) => {
-    if(show) {
-      setSelectedItems(null)
-      return
+    if (show) {
+      setSelectedItems(null);
+      return;
     }
     setSelectAll(true);
     const isSelected = selectedItems.includes(cateogryID);
@@ -62,9 +61,9 @@ export default function Staff() {
 
   // Handle select all items
   const toggleSelectAll = () => {
-    if(show) {
-      setSelectedItems([])
-      return
+    if (show) {
+      setSelectedItems([]);
+      return;
     }
     if (selectAll) {
       setSelectedItems([]);
@@ -99,8 +98,8 @@ export default function Staff() {
   };
 
   const closeShowBox = (text) => {
-     setShow(text)
-  }
+    setShow(text);
+  };
 
   const handlePageClick = (selectedPage) => {
     setCurrentPage(selectedPage.selected);
@@ -108,7 +107,6 @@ export default function Staff() {
 
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-
 
   const pageCount = Math.ceil(users.length / itemsPerPage);
   const currentUsers = users.slice(startIndex, endIndex);
@@ -131,14 +129,12 @@ export default function Staff() {
         theme="light"
       />
       <div className=" pb-6 border-b-2 border-b-slate-300 flex justify-between">
-        <h1 className="text-2xl text-slate-700 font-bold">
-          Users Information
-        </h1>
-        <Link to="/admin/user/create">
+        <h1 className="text-2xl text-slate-700 font-bold">Users Information</h1>
+        {/* <Link to="/admin/user/create">
           <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
             Add User
           </div>
-        </Link>
+        </Link> */}
       </div>
 
       {selectedItems.length > 0 && (
@@ -155,76 +151,77 @@ export default function Staff() {
         </div>
       )}
 
+      <table class="table-fixed w-full mt-8">
+        <tr className="bg-blue-600 text-white">
+          <th className="lg:px-4 py-2 text-center">
+            <input
+              type="checkbox"
+              onChange={toggleSelectAll}
+              checked={selectAll && selectedItems.length > 0}
+            />
+          </th>
+          <th className="lg:px-4 py-2 text-center">Role</th>
+          <th className="lg:px-4 py-2 text-center">Name</th>
+          <th className="lg:px-4 py-2 text-center">Email</th>
+          <th className="lg:px-4 py-2 text-center">Phone</th>
+          <th className="lg:px-4 py-2 text-center">Action</th>
+        </tr>
 
-        <table class="table-fixed w-full mt-8">
-          <tr className="bg-blue-600 text-white">
-            <th className="lg:px-4 py-2 text-center">
-              <input
-                type="checkbox"
-                onChange={toggleSelectAll}
-                checked={selectAll && selectedItems.length > 0}
-              />
-            </th>
-            <th className="lg:px-4 py-2 text-center">Role</th>
-            <th className="lg:px-4 py-2 text-center">Name</th>
-            <th className="lg:px-4 py-2 text-center">Email</th>
-            <th className="lg:px-4 py-2 text-center">Phone</th>
-            <th className="lg:px-4 py-2 text-center">Action</th>
-          </tr>
+        <tbody className="mb-12">
+          {currentUsers.length > 0 ? (
+            currentUsers.map((usr) => (
+              <tr
+                key={usr._id}
+                onClick={() => toggleSelectItem(usr._id)}
+                className={`${
+                  selectedItems.includes(usr._id)
+                    ? "bg-[#60a5fa] text-white"
+                    : "odd:bg-white even:bg-slate-200"
+                }  mb-8 w-full items-center cursor-pointer hover:text-white hover:bg-[#60a5fa]`}
+              >
+                <td className="lg:px-4 py-2 text-center">
+                  <input
+                    type="checkbox"
+                    onChange={() => toggleSelectItem(usr._id)}
+                    checked={selectedItems.includes(usr._id)}
+                  />
+                </td>
+                <td className="lg:px-4 py-2 text-center text-blue-600 font-bold">
+                  {usr.role.name ? usr.role.name.toUpperCase() : "none"}
+                </td>
+                <td className="lg:px-4 py-2 text-center">{usr.username}</td>
+                <td className="lg:px-4 py-2 text-center">{usr.email}</td>
+                <td className="lg:px-4 py-2 text-center">
+                  {usr.phone ? usr.phone : "none"}
+                </td>
 
-          <tbody className="mb-12">
-            {currentUsers.length > 0 ?
-              currentUsers.map((usr) => (
-                <tr
-                  key={usr._id}
-                  onClick={() =>  toggleSelectItem(usr._id)}
-                  className={`${
-                    selectedItems.includes(usr._id)
-                      ? "bg-[#60a5fa] text-white"
-                      : "odd:bg-white even:bg-slate-200"
-                  }  mb-8 w-full items-center cursor-pointer hover:text-white hover:bg-[#60a5fa]`}
-                >
-                  <td className="lg:px-4 py-2 text-center">
-                    <input
-                      type="checkbox"
-                      onChange={() => toggleSelectItem(usr._id)}
-                      checked={selectedItems.includes(usr._id)}
+                <td className="lg:px-4 py-2 text-center">
+                  <div className="flex justify-center">
+                    <FaEye
+                      onClick={() => navigate(`/admin/user/detail/${usr._id}`)}
+                      className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
                     />
-                  </td>
-                  <td className="lg:px-4 py-2 text-center text-blue-600 font-bold">
-                    {usr.role.name ? usr.role.name.toUpperCase() : "none"}
-                  </td>
-                  <td className="lg:px-4 py-2 text-center">{usr.username}</td>
-                  <td className="lg:px-4 py-2 text-center">{usr.email}</td>
-                  <td className="lg:px-4 py-2 text-center">
-                    {usr.phone ? usr.phone : "none"}
-                  </td>
-
-                  <td className="lg:px-4 py-2 text-center">
-                    <div className="flex justify-center">
-                      <FaEye
-                        onClick={() =>
-                          navigate(`/admin/user/detail/${usr._id}`)
-                        }
-                        className="text-2xl text-sky-600 BiSolidEdit hover:text-sky-900"
-                      />
-                      <BiSolidEdit
-                        className="text-2xl mx-2 text-[#5e54cd] BiSolidEdit hover:text-[#2c285f]"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/admin/user/edit/${usr._id}`);
-                        }}
-                      />
-                      <Icon  onClick={() => {
-                                setShow(true);
-                                setUserId(usr._id);
-                              }} icon="mynaui:lock-open-password" className="text-2xl text-[#eb4a54] BiSolidEdit hover:text-[#2c285f]"
-                         />
-                    </div>
-                  </td>
-                </tr>
-              )):
-              <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
+                    <BiSolidEdit
+                      className="text-2xl mx-2 text-[#5e54cd] BiSolidEdit hover:text-[#2c285f]"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/admin/user/edit/${usr._id}`);
+                      }}
+                    />
+                    <Icon
+                      onClick={() => {
+                        setShow(true);
+                        setUserId(usr._id);
+                      }}
+                      icon="mynaui:lock-open-password"
+                      className="text-2xl text-[#eb4a54] BiSolidEdit hover:text-[#2c285f]"
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
               {loading && (
                 <ClipLoader
                   color={"#0284c7"}
@@ -235,9 +232,9 @@ export default function Staff() {
                 />
               )}
             </div>
-              }
-          </tbody>
-        </table>
+          )}
+        </tbody>
+      </table>
       {alert && (
         <DeleteAlert
           cancel={() => {
@@ -251,7 +248,11 @@ export default function Staff() {
         />
       )}
 
-      <div className={`absolute top-32 left-0 right-0 z-50 transition-transform transform flex justify-center ${show ? "translate-y-0" : "-translate-y-full"}`}>
+      <div
+        className={`absolute top-32 left-0 right-0 z-50 transition-transform transform flex justify-center ${
+          show ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
         {show && <ChangePassword id={userId} close={closeShowBox} />}
       </div>
       <div className="fixed bottom-10 right-20 w-80 items-center">
@@ -270,16 +271,12 @@ export default function Staff() {
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
-              <IoMdArrowRoundBack className="mr-2"/>
-              {' '}
-              Previous
+              <IoMdArrowRoundBack className="mr-2" /> Previous
             </div>
-          } 
+          }
           nextLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
-              Next
-              {' '}
-              <IoMdArrowRoundForward className="ml-2"/>
+              Next <IoMdArrowRoundForward className="ml-2" />
             </div>
           }
           forcePage={currentPage}

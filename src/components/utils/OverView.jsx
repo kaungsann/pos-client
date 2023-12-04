@@ -23,11 +23,10 @@ import { Icon } from "@iconify/react";
 import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function OverView() {
-
-  const [filter ,setFilter] = useState("")
-  const [day , setDay] = useState("1")
-  const [month , setMonth] = useState("January")
-  const [year , setYear] = useState("2023")
+  const [filter, setFilter] = useState("");
+  const [day, setDay] = useState("1");
+  const [month, setMonth] = useState("January");
+  const [year, setYear] = useState("2023");
   const [StartDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -70,7 +69,7 @@ export default function OverView() {
   const [popularSaleProducts, setPopularSaleProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const todayDate = format(new Date(), "MM-dd-yyyy"); 
+  const todayDate = format(new Date(), "MM-dd-yyyy");
 
   const calculateStartDate = () => {
     const today = new Date();
@@ -99,14 +98,15 @@ export default function OverView() {
   };
 
   const calculateDailyFilter = () => {
-    setMonth("")
-    setYear("")
+    setMonth("");
+    setYear("");
     setDay("");
-    getTotals()
-  }
+    getTotals();
+  };
 
   const getTotals = async () => {
     let startDate;
+    let resData;
     if (day === "7") {
       // Weekly
       startDate = calculateStartDate();
@@ -116,22 +116,25 @@ export default function OverView() {
     } else if (year === "Yearly") {
       // Yearly
       startDate = calculateYearlyStartDate();
-    } else if (StartDate &&  endDate) {
+    } else if (StartDate && endDate) {
       // Yearly
-      startDate = StartDate
+      startDate = StartDate;
     } else {
       // Default to daily (today)
-      startDate = todayDate;
+      resData = await getApi(`/orders/totals`, token.accessToken);
     }
 
-    const formattedStartDate = format(new Date(startDate), "MM-dd-yyyy");
-    const formattedEndDate = format(new Date(endDate), "MM-dd-yyyy");
+    if (startDate) {
+      let formattedStartDate = format(new Date(startDate), "MM-dd-yyyy");
+      let formattedEndDate = format(new Date(endDate), "MM-dd-yyyy");
 
-    let resData = await getApi(
-      `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
-      token.accessToken
-    );
-    
+      //day === "7" & month === "Monthly" &  year === "Yearly"
+      resData = await getApi(
+        `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+        token.accessToken
+      );
+    }
+
     if (resData.status) {
       setTotalPurchaseAmount(resData.data.purchases.totalAmountWithTax);
       setTotalPurchaseOrders(resData.data.purchases.totalOrders);
@@ -145,17 +148,15 @@ export default function OverView() {
       setTotalSaleItems(resData.data.sales.totalItems);
       setOrderSaleLines(resData.data.sales.allLines);
       setPopularSaleProducts(resData.data.sales.topProducts);
-      setLoading(false)
+      setLoading(false);
     } else {
       setLoading(true);
     }
   };
 
-
   useEffect(() => {
     getTotals();
-  }, [day , month , year , StartDate]);
-
+  }, [day, month, year, StartDate]);
 
   const orderList = Array.from(
     new Set(orderPurchaseLines.map((line) => line.orderId._id))
@@ -173,8 +174,6 @@ export default function OverView() {
     };
   });
 
-
-
   const lineChartData = totalPurchasePerDay.map((item1) => {
     const matchingItem2 = totalSalePerDay.find(
       (item2) => item2.date === item1.date
@@ -183,8 +182,8 @@ export default function OverView() {
     if (matchingItem2) {
       return {
         date: item1.date,
-        totalSaleWithTax: item1.totalWithTax,
-        totalPurchaseWithTax: matchingItem2.totalWithTax,
+        totalPurchaseWithTax: item1.totalWithTax,
+        totalSaleWithTax: matchingItem2.totalWithTax,
         totalSaleTax: item1.totalTax,
         totalPurchaseTax: matchingItem2.totalTax,
       };
@@ -233,8 +232,10 @@ export default function OverView() {
               </div>
               <div className="flex items-center w-2/4">
                 <div className="p-4 bg-yellow-100 rounded-md">
-                  <Icon icon="tdesign:undertake-transaction"    
-                   className="text-4xl text-yellow-600 font-extrabold"/>
+                  <Icon
+                    icon="tdesign:undertake-transaction"
+                    className="text-4xl text-yellow-600 font-extrabold"
+                  />
                 </div>
                 <div className="px-3">
                   <h2 className="text-slate-400 text-md font-semibold">
@@ -317,8 +318,10 @@ export default function OverView() {
               </div>
               <div className="flex items-center w-2/4">
                 <div className="p-4 bg-pink-100 rounded-md">
-                <Icon icon="tdesign:undertake-transaction"    
-                  className="text-4xl text-pink-600 font-extrabold"/>
+                  <Icon
+                    icon="tdesign:undertake-transaction"
+                    className="text-4xl text-pink-600 font-extrabold"
+                  />
                 </div>
                 <div className="px-3">
                   <h2 className="text-slate-400 text-md font-semibold">
@@ -368,39 +371,42 @@ export default function OverView() {
           </div>
         </div>
         <div className="flex justify-center my-6">
-             <button  
-              onClick={() => {
-                setMonth("")
-                setYear("")
-                setEndDate(todayDate); // Set end date to today
-                setDay("7");
-                getTotals();
-               }} 
-              className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
-                 Weekly
-              </button>
-              <button 
-                onClick={() => {
-                  setDay("")
-                  setYear("")
-                  setEndDate(todayDate); // Set end date to today
-                  setMonth("Monthly"); // Set month to "Monthly"
-                  getTotals();
-                }}
-              className="font-bold mx-4 rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
-                 Monthly
-              </button>
-              <button
-                onClick={() => {
-                  setDay("")
-                  setMonth("")
-                  setEndDate(todayDate); // Set end date to today
-                  setYear("Yearly"); // Set year to "Yearly"
-                  getTotals();
-                }}
-              className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
-                 Yearly
-              </button>
+          <button
+            onClick={() => {
+              setMonth("");
+              setYear("");
+              setEndDate(todayDate); // Set end date to today
+              setDay("7");
+              getTotals();
+            }}
+            className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
+          >
+            Weekly
+          </button>
+          <button
+            onClick={() => {
+              setDay("");
+              setYear("");
+              setEndDate(todayDate); // Set end date to today
+              setMonth("Monthly"); // Set month to "Monthly"
+              getTotals();
+            }}
+            className="font-bold mx-4 rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
+          >
+            Monthly
+          </button>
+          <button
+            onClick={() => {
+              setDay("");
+              setMonth("");
+              setEndDate(todayDate); // Set end date to today
+              setYear("Yearly"); // Set year to "Yearly"
+              getTotals();
+            }}
+            className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
+          >
+            Yearly
+          </button>
         </div>
         <div className="flex my-4">
           <div className="w-3/5 bg-white rounded-lg shadow-md p-4">
@@ -411,7 +417,7 @@ export default function OverView() {
               <LineChart data={lineChartData} margin={{ right: 20, top: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" tick={{ fontSize: 14 }} />
-                <YAxis tick={{ fontSize: 12 }}  padding={{ left: 50 }}/>
+                <YAxis tick={{ fontSize: 12 }} padding={{ left: 50 }} />
                 <Tooltip />
                 <Legend />
                 <Line
@@ -531,9 +537,10 @@ export default function OverView() {
                   >
                     Cancel
                   </button>
-                  <button 
-                   onClick={calculateDailyFilter} 
-                  className="text-md py-2 px-6 bg-blue-600 rounded-sm text-white hover:bg-blue-700 ml-6">
+                  <button
+                    onClick={calculateDailyFilter}
+                    className="text-md py-2 px-6 bg-blue-600 rounded-sm text-white hover:bg-blue-700 ml-6"
+                  >
                     Filter
                   </button>
                 </div>
@@ -542,25 +549,25 @@ export default function OverView() {
               <>
                 <div className="mx-auto">
                   <select
-                  required
-                  id="catid"
-                  style={{ backgroundColor: "transparent" }}
-                  onChange={handleFilterChange}
-                  className="block w-80 mx-auto custom-select rounded-md border-0 my-4 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
+                    required
+                    id="catid"
+                    style={{ backgroundColor: "transparent" }}
+                    onChange={handleFilterChange}
+                    className="block w-80 mx-auto custom-select rounded-md border-0 my-4 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
                   >
                     <option disabled value selected>
-                       Select an option
+                      Select an option
                     </option>
                     <option value="7" className="py-4 px-4">
-                       Weekly
+                      Weekly
                     </option>
                     <option value="Monthly" className="py-4 px-4">
-                       Monthly
+                      Monthly
                     </option>
                     <option value="Yearly" className="py-4 px-4">
-                       Yearly
+                      Yearly
                     </option>
-                </select>
+                  </select>
                 </div>
                 <div className="w-80 mx-auto my-4 flex justify-end">
                   <button
