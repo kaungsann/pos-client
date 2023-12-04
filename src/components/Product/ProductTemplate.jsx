@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { BASE_URL } from "../../Api";
+import { BASE_URL } from "../Api";
 import ProductList from "./ProductList";
 import FilterBox from "./FilterBox";
 import SearchBox from "./SearchBox";
-import ExcelExportButton from "../../utils/ExcelExportButton";
-import ExcelImportButton from "../../utils/ExcelImportButton";
+import ExcelExportButton from "../ExcelExportButton";
+import ExcelImportButton from "../ExcelImportButton";
 import axios from "axios";
 
 const COMPARISION = {
@@ -53,7 +53,7 @@ const ProductTemplate = () => {
   useEffect(() => {
     const uniqueCategories = [
       ...new Set(
-        products.map((product) => product.category && product.category.name)
+        products.map((product) => product?.category?.name).filter(Boolean)
       ),
     ];
     setCategories(uniqueCategories);
@@ -84,14 +84,25 @@ const ProductTemplate = () => {
           );
         };
 
+        const isCategory = () => {
+          if (!category) {
+            return true;
+          }
+
+          if (product?.category) {
+            return product.category?.name
+              .toLowerCase()
+              .includes(category.toLowerCase());
+          }
+
+          return false;
+        };
+
         return (
           product.name.toLowerCase().includes(name.toLowerCase()) &&
-          product.category &&
-          product.category.name
-            .toLowerCase()
-            .includes(category.toLowerCase()) &&
           (!startDate || new Date(product.expiredAt) >= new Date(startDate)) &&
           (!endDate || new Date(product.expiredAt) <= new Date(endDate)) &&
+          isCategory() &&
           isStockValid()
         );
       }),
