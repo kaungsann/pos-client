@@ -66,7 +66,7 @@ export default function CategoryAll() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/category/export-excel";
+      const downloadUrl = "https://80a2e3emcc.execute-api.ap-southeast-1.amazonaws.com/category/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
 

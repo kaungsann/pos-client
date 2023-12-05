@@ -82,7 +82,7 @@ export default function Warehouse() {
 
   const changeConfirmOrder = async () => {
     const response = await fetch(
-      `https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/orders/${ConfirmOrderId}?state=confirmed`,
+      `https://80a2e3emcc.execute-api.ap-southeast-1.amazonaws.com/orders/${ConfirmOrderId}?state=confirmed`,
       {
         method: "PATCH",
         headers: {

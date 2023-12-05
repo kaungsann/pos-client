@@ -119,7 +119,7 @@ export default function SaleOrderAll() {
   }
 
   const changeConfirmOrder = async() => {
-       const response = await fetch(`https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/sale/${ConfirmOrderId}?state=confirmed`,
+       const response = await fetch(`https://80a2e3emcc.execute-api.ap-southeast-1.amazonaws.com/sale/${ConfirmOrderId}?state=confirmed`,
        {
         method: "PATCH",
         headers: {
