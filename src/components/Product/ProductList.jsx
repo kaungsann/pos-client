@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Image } from "@nextui-org/react";
-import box from "../../../assets/box.png";
+import box from "../../assets/box.png";
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "@nextui-org/react";

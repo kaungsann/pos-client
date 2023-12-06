@@ -46,6 +46,7 @@ import EmployeeEdit from "./components/Dashboard/Employee/EmployeeEdit";
 import Warehouse from "./components/Dashboard/WareHouse/Warehouse";
 import SaleView from "./components/Dashboard/SaleOrder/SaleView";
 import ProductTemplate from "./components/Product/ProductTemplate";
+import CategoryTemplate from "./components/Dashboard/Category/CategoryTemplate";
 
 function App() {
   return (
@@ -61,9 +62,8 @@ function App() {
               </GuardRouter>
             }
           >
-       
-              <Route path="warehouse" element={<Warehouse />} />
-        
+            <Route path="warehouse" element={<Warehouse />} />
+
             <Route path="inventory/overview" element={<OverView />} />
             <Route path="user">
               <Route path="all" element={<Staff />} />
@@ -93,13 +93,13 @@ function App() {
               <Route path="detail/:id" element={<PurchaseDetail />} />
             </Route>
             <Route path="products">
-              <Route path="all" element={< ProductTemplate/>} />
+              <Route path="all" element={<ProductTemplate />} />
               <Route path="create" element={<ProductsCreate />} />
               <Route path="edit/:id" element={<ProductsEdit />} />
               <Route path="detail/:id" element={<ProductDetails />} />
             </Route>
             <Route path="categorys">
-              <Route path="all" element={<CategoryAll />} />
+              <Route path="all" element={<CategoryTemplate />} />
               <Route path="create" element={<CategoryCreate />} />
               <Route path="edit/:id" element={<CategoryEdit />} />
               <Route path="detail/:id" element={<CategoryDetail />} />
