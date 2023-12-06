@@ -7,6 +7,8 @@ import SearchBox from "./SearchBox";
 import ExcelExportButton from "../../utils/ExcelExportButton";
 import ExcelImportButton from "../../utils/ExcelImportButton";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { Icon } from "@iconify/react";
 
 const COMPARISION = {
   LESS: "LESS",
@@ -22,6 +24,11 @@ const PRODUCT_API = {
 const ProductTemplate = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [showBox, setShowBox] = useState(false);
+
+  console.log("product all is", products);
+  console.log("category s all is", categories);
+
   const [filteredKeywords, setFilteredKeywords] = useState({
     name: "",
     category: "",
@@ -84,35 +91,74 @@ const ProductTemplate = () => {
           );
         };
 
+        const isCategory = () => {
+          if (!category) {
+            return true;
+          }
+
+          if (product?.category) {
+            return product.category?.name
+              .toLowerCase()
+              .includes(category.toLowerCase());
+          }
+
+          return false;
+        };
+
         return (
           product.name.toLowerCase().includes(name.toLowerCase()) &&
-          product.category &&
-          product.category.name
-            .toLowerCase()
-            .includes(category.toLowerCase()) &&
           (!startDate || new Date(product.expiredAt) >= new Date(startDate)) &&
           (!endDate || new Date(product.expiredAt) <= new Date(endDate)) &&
+          isCategory() &&
           isStockValid()
         );
       }),
     [products, filteredKeywords]
   );
 
+  const handleShowBox = () => {
+    setShowBox(!showBox);
+  };
+
   return (
     <>
-      <FilterBox categories={categories} onFilter={handleFilterChange} />
-      <SearchBox
-        keyword={filteredKeywords.name}
-        onSearch={handleFilterChange}
-      />
-      <ExcelExportButton
-        token={token.accessToken}
-        apiEndpoint={PRODUCT_API.EXPORT}
-      />
-      <ExcelImportButton
-        token={token.accessToken}
-        apiEndpoint={PRODUCT_API.IMPORT}
-      />
+      {/* <h2 className="lg:text-2xl font-bold mb-3">Categorys</h2> */}
+      {showBox && (
+        <FilterBox
+          show={handleShowBox}
+          categories={categories}
+          onFilter={handleFilterChange}
+        />
+      )}
+
+      <div className="flex justify-between items-center my-3">
+        <div className="flex">
+          <Link to="/admin/products/create">
+            <div className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
+              Add
+            </div>
+          </Link>
+          <div
+            onClick={handleShowBox}
+            className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-[#4338ca] font-bold px-3 py-1.5"
+          >
+            <Icon icon="basil:filter-outline" className="text-lg" />
+            <h4>Filter</h4>
+          </div>
+          <ExcelExportButton
+            token={token.accessToken}
+            apiEndpoint={PRODUCT_API.EXPORT}
+          />
+          <ExcelImportButton
+            token={token.accessToken}
+            apiEndpoint={PRODUCT_API.IMPORT}
+          />
+        </div>
+        <SearchBox
+          keyword={filteredKeywords.name}
+          onSearch={handleFilterChange}
+        />
+      </div>
       <ProductList products={filteredProducts} />
     </>
   );

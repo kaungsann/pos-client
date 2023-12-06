@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { Input } from "@nextui-org/react";
 
 const SearchBox = ({ keyword, onSearch }) => {
   const handleInputChange = (key, value) => {
@@ -9,16 +10,19 @@ const SearchBox = ({ keyword, onSearch }) => {
 
   return (
     <div>
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={keyword}
-          onChange={(e) => handleInputChange("name", e.target.value)}
-        />
-      </div>
+      <Input
+        type="text"
+        variant="underlined"
+        label="Search Product Name"
+        id="name"
+        name="name"
+        value={keyword}
+        onChange={(e) => handleInputChange("name", e.target.value)}
+        radius="sm"
+        classNames={{
+          inputWrapper: ["shadow-sm w-60"],
+        }}
+      />
     </div>
   );
 };

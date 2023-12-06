@@ -28,7 +28,14 @@ const ExcelExportButton = ({ token, apiEndpoint }) => {
     }
   };
 
-  return <button onClick={handleDownloadClick}>Download Excel</button>;
+  return (
+    <button
+      onClick={handleDownloadClick}
+      className="rounded-sm mx-3 shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold px-3 py-1.5"
+    >
+      Download Excel
+    </button>
+  );
 };
 
 ExcelExportButton.propTypes = {

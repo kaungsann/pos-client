@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import {Button} from "@nextui-org/react";
 
 const ExcelImportButton = ({ token, apiEndpoint }) => {
   const uploadRef = useRef(null);
@@ -15,7 +14,7 @@ const ExcelImportButton = ({ token, apiEndpoint }) => {
       const response = await axios.post(apiEndpoint, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -33,9 +32,12 @@ const ExcelImportButton = ({ token, apiEndpoint }) => {
         style={{ display: "none" }}
         onChange={handleFileChange}
       />
-      <Button color="primary" variant="bordered" onClick={() => uploadRef.current.click()}>
+      <button
+        className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold  px-3 py-1.5"
+        onClick={() => uploadRef.current.click()}
+      >
         Import Excel
-      </Button>  
+      </button>
     </div>
   );
 };

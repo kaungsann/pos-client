@@ -1,12 +1,24 @@
 import { useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import { Select, SelectItem } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 
-const FilterBox = ({ categories, onFilter }) => {
+const FilterBox = ({ categories, onFilter, show }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [price, setPrice] = useState("");
   const [priceComparison, setPriceComparison] = useState("LESS");
+
+  console.log(
+    "select category and start date and ende date & price and priceComparison ",
+    selectedCategory,
+    endDate,
+    startDate,
+    price,
+    priceComparison
+  );
 
   const handleFilterClick = () => {
     onFilter({
@@ -39,55 +51,108 @@ const FilterBox = ({ categories, onFilter }) => {
 
   return (
     <div>
-      <div>
-        <label htmlFor="name">Category</label>
-        <select
-          id="category"
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          value={selectedCategory}
-        >
-          <option value="">All</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
+      <div className="w-full flex justify-around items-center bg-white shadow-md rounded-md py-3">
+        <div className="flex flex-col">
+          <label className="text-md font-semibold my-2">Category</label>
+          <Select
+            variant="bordered"
+            placeholder="select category"
+            className="w-52"
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            isClearable
+            value={selectedCategory}
+            radius="sm"
+            classNames={{
+              trigger: "h-[38px]",
+            }}
+          >
+            <SelectItem value="">All</SelectItem>
+            {categories.map((category) => (
+              <SelectItem key={category} value={category}>
+                {category}
+              </SelectItem>
+            ))}
+          </Select>
+        </div>
 
-        <label htmlFor="startDate">Start Date</label>
-        <input
-          type="date"
-          id="startDate"
-          onChange={(e) => setStartDate(e.target.value)}
-          value={startDate || ""}
-        />
+        <div className="flex flex-col">
+          <label className="text-md font-semibold my-2">Start Date</label>
+          <Input
+            type="date"
+            variant="bordered"
+            id="startDate"
+            value={startDate || ""}
+            onChange={(e) => setStartDate(e.target.value)}
+            radius="sm"
+            classNames={{
+              inputWrapper: ["shadow-sm h-[12px]"],
+            }}
+          />
+        </div>
 
-        <label htmlFor="endDate">End Date</label>
-        <input
-          type="date"
-          id="endDate"
-          onChange={(e) => setEndDate(e.target.value)}
-          value={endDate || ""}
-        />
+        <div className="flex flex-col">
+          <label className="text-md font-semibold my-2">End Date</label>
+          <Input
+            type="date"
+            variant="bordered"
+            id="endDate"
+            value={endDate || ""}
+            onChange={(e) => setEndDate(e.target.value)}
+            radius="sm"
+            classNames={{
+              inputWrapper: ["shadow-sm h-[12px]"],
+            }}
+          />
+        </div>
 
-        <label htmlFor="price">Price</label>
-        <input
-          type="number"
-          id="price"
-          onChange={(e) => setPrice(e.target.value)}
-          value={price || ""}
-        />
-        <select
-          id="priceComparison"
-          onChange={(e) => setPriceComparison(e.target.value)}
-          value={priceComparison}
-        >
-          <option value="LESS">Less Than</option>
-          <option value="GREATER">Greater Than</option>
-        </select>
+        <div className="flex flex-col">
+          <label className="text-md font-semibold my-2">Price</label>
+          <Input
+            type="number"
+            variant="bordered"
+            id="price"
+            onChange={(e) => setPrice(e.target.value)}
+            value={price || ""}
+            radius="sm"
+            classNames={{
+              inputWrapper: ["shadow-sm  h-[12px]"],
+            }}
+            placeholder="enter the price"
+            size="md"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-md font-semibold my-2">Price Comparison</label>
+          <Select
+            variant="bordered"
+            radius="sm"
+            id="priceComparison"
+            onChange={(e) => setPriceComparison(e.target.value)}
+            value={priceComparison}
+            classNames={{
+              trigger: "h-[38px]",
+            }}
+          >
+            <SelectItem value="LESS" selected>
+              Less Than
+            </SelectItem>
+            <SelectItem value="GREATER">Greater Than</SelectItem>
+          </Select>
+        </div>
 
-        <button onClick={handleFilterClick}>Apply</button>
-        <button onClick={handleClearFiltersClick}>Clear</button>
+        <div className="flex items-center mx-3 mt-8">
+          <Button
+            color="primary"
+            variant="bordered"
+            onClick={handleFilterClick}
+            className="mx-3"
+          >
+            Apply
+          </Button>
+          <Button color="danger" onClick={handleClearFiltersClick}>
+            Clear
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -96,6 +161,6 @@ const FilterBox = ({ categories, onFilter }) => {
 FilterBox.propTypes = {
   categories: PropTypes.array,
   onFilter: PropTypes.func,
-}
+};
 
 export default FilterBox;
