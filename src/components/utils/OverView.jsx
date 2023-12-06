@@ -27,10 +27,6 @@ export default function OverView() {
   const [day, setDay] = useState("1");
   const [month, setMonth] = useState("January");
   const [year, setYear] = useState("2023");
-  const [filter, setFilter] = useState("");
-  const [day, setDay] = useState("1");
-  const [month, setMonth] = useState("January");
-  const [year, setYear] = useState("2023");
   const [StartDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
