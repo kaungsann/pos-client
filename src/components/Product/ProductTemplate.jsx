@@ -26,9 +26,6 @@ const ProductTemplate = () => {
   const [categories, setCategories] = useState([]);
   const [showBox, setShowBox] = useState(false);
 
-  console.log("product all is", products);
-  console.log("category s all is", categories);
-
   const [filteredKeywords, setFilteredKeywords] = useState({
     name: "",
     category: "",
@@ -140,19 +137,22 @@ const ProductTemplate = () => {
           </Link>
           <div
             onClick={handleShowBox}
-            className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-[#4338ca] font-bold px-3 py-1.5"
+            className="rounded-sm mx-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-[#4338ca] font-bold px-3 py-1.5"
           >
             <Icon icon="basil:filter-outline" className="text-lg" />
             <h4>Filter</h4>
           </div>
+
           <ExcelExportButton
             token={token.accessToken}
             apiEndpoint={PRODUCT_API.EXPORT}
           />
-          <ExcelImportButton
-            token={token.accessToken}
-            apiEndpoint={PRODUCT_API.IMPORT}
-          />
+          <div className="ml-3">
+            <ExcelImportButton
+              token={token.accessToken}
+              apiEndpoint={PRODUCT_API.IMPORT}
+            />
+          </div>
         </div>
         <SearchBox
           keyword={filteredKeywords.name}

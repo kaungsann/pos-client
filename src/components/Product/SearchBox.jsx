@@ -13,7 +13,7 @@ const SearchBox = ({ keyword, onSearch }) => {
       <Input
         type="text"
         variant="underlined"
-        label="Search Product Name"
+        label="search by name"
         id="name"
         name="name"
         value={keyword}
