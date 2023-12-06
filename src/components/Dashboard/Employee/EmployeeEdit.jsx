@@ -5,6 +5,7 @@ import { FormPathApi, getApi } from "../../Api";
 import { removeData } from "../../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { format } from "date-fns";
 
 export default function EmployeeEdit() {
   const { id } = useParams();
@@ -16,8 +17,8 @@ export default function EmployeeEdit() {
   const [city, setCity] = useState("");
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
-  const [password , setPassword] = useState("")
-  const [showBox , setShowBox] = useState(false)
+  const [password, setPassword] = useState("");
+  const [showBox, setShowBox] = useState(false);
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
@@ -26,11 +27,15 @@ export default function EmployeeEdit() {
   const getSingleStaff = async () => {
     const response = await getApi(`/employee/${id}`, token.accessToken);
     if (response.status) {
+      const formattedBirthDate = response.data[0].birthdate
+        ? new Date(response.data[0].birthdate).toISOString().split("T")[0]
+        : "";
+      setBirth(formattedBirthDate);
       setName(response.data[0].name);
       setEmail(response.data[0].email);
       setAddress(response.data[0].address ? response.data[0].address : null);
       setPhone(response.data[0].phone ? response.data[0].phone : null);
-      setBirth(response.data[0].birthdate ? response.data[0].birthdate : null);
+      //setBirth(response.data[0].birthdate ? response.data[0].birthdate : null);
       setCity(response.data[0].city ? response.data[0].city : null);
       setGender(response.data[0].gender ? response.data[0].gender : null);
     }
@@ -60,7 +65,11 @@ export default function EmployeeEdit() {
       formData.append("gender", gender);
     }
 
-    let resData = await FormPathApi(`/employee/${id}`, formData, token.accessToken);
+    let resData = await FormPathApi(
+      `/employee/${id}`,
+      formData,
+      token.accessToken
+    );
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
@@ -111,7 +120,7 @@ export default function EmployeeEdit() {
           action="#"
           method="POST"
         >
-         <div className="w-80 my-2 mr-1">
+          <div className="w-80 my-2 mr-1">
             <label
               htmlFor="name"
               className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
@@ -151,7 +160,7 @@ export default function EmployeeEdit() {
             </div>
           </div>
 
-         <div className="w-80 my-2 mr-1">
+          <div className="w-80 my-2 mr-1">
             <label
               htmlFor="city"
               className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
@@ -171,7 +180,7 @@ export default function EmployeeEdit() {
             </div>
           </div>
 
-         <div className="w-80 my-2 mr-1">
+          <div className="w-80 my-2 mr-1">
             <label
               htmlFor="gender"
               className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
@@ -191,7 +200,7 @@ export default function EmployeeEdit() {
             </div>
           </div>
 
-         <div className="w-80 my-2 mr-1">
+          <div className="w-80 my-2 mr-1">
             <label
               htmlFor="phone"
               className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
@@ -211,7 +220,7 @@ export default function EmployeeEdit() {
             </div>
           </div>
 
-         <div className="w-80 my-2 mr-1">
+          <div className="w-80 my-2 mr-1">
             <label
               htmlFor="gender"
               className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
@@ -262,8 +271,6 @@ export default function EmployeeEdit() {
               </select>
             </div>
           </div>
-
-
         </form>
         <button
           onClick={handleSubmit}
@@ -273,7 +280,6 @@ export default function EmployeeEdit() {
         </button>
       </div>
 
-      
       {/* <div className="w-96 absolute top-32 left-0 right-0 z-50 mx-auto bg-white rounded-md shadow-md flex justify-center">
         {showBox && (
           <div className="w-72 my-3">
