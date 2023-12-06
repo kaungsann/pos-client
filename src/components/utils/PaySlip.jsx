@@ -69,7 +69,7 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
           </div>
           <div className="flex justify-between mx-6">
             <h4 className="text-md font-bold text-black">Tax</h4>
-            <h4 className="text-md font-bold text-black">{tax}</h4>
+            <h4 className="text-md font-bold text-black">{tax.toFixed(2)}</h4>
           </div>
           <div className="flex justify-between mx-6">
             <h4 className="text-md font-bold text-black">Total Tax</h4>

@@ -27,6 +27,10 @@ export default function OverView() {
   const [day, setDay] = useState("1");
   const [month, setMonth] = useState("January");
   const [year, setYear] = useState("2023");
+  const [filter, setFilter] = useState("");
+  const [day, setDay] = useState("1");
+  const [month, setMonth] = useState("January");
+  const [year, setYear] = useState("2023");
   const [StartDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -106,6 +110,7 @@ export default function OverView() {
 
   const getTotals = async () => {
     let startDate;
+    let resData;
     if (day === "7") {
       // Weekly
       startDate = calculateStartDate();
@@ -116,25 +121,23 @@ export default function OverView() {
       // Yearly
       startDate = calculateYearlyStartDate();
     } else if (StartDate && endDate) {
-      //Customized
+      // Yearly
       startDate = StartDate;
+    } else {
+      // Default to daily (today)
+      resData = await getApi(`/orders/totals`, token.accessToken);
     }
 
-    const formattedStartDate = format(new Date(startDate), "MM-dd-yyyy");
+    if (startDate) {
+      let formattedStartDate = format(new Date(startDate), "MM-dd-yyyy");
+      let formattedEndDate = format(new Date(endDate), "MM-dd-yyyy");
 
-    const formattedEndDate = format(new Date(endDate), "MM-dd-yyyy");
-
-    let resData = await getApi(
-      `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
-      token.accessToken
-    );
-
-    console.log(
-      "api route is",
-      `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
-    );
-
-    console.log("today filter data is", resData);
+      //day === "7" & month === "Monthly" &  year === "Yearly"
+      resData = await getApi(
+        `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+        token.accessToken
+      );
+    }
 
     if (resData.status) {
       setTotalPurchaseAmount(resData.data.purchases.totalAmountWithTax);
@@ -157,7 +160,8 @@ export default function OverView() {
 
   useEffect(() => {
     getTotals();
-  }, [day, month, year, StartDate]);
+  }, [day , month , year , StartDate]);
+
 
   const orderList = Array.from(
     new Set(orderPurchaseLines.map((line) => line.orderId._id))
@@ -183,8 +187,8 @@ export default function OverView() {
     if (matchingItem2) {
       return {
         date: item1.date,
-        totalSaleWithTax: item1.totalWithTax,
-        totalPurchaseWithTax: matchingItem2.totalWithTax,
+        totalPurchaseWithTax: item1.totalWithTax,
+        totalSaleWithTax: matchingItem2.totalWithTax,
         totalSaleTax: item1.totalTax,
         totalPurchaseTax: matchingItem2.totalTax,
       };

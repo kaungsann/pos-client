@@ -51,6 +51,14 @@ export default function LocationDetail() {
           <div className="flex justify-between">
             <div className="w-2/4">
               <div className="flex justify-between my-3">
+                <h4 className="font-bold text-lg text-slate-500">
+                  Location Id
+                </h4>
+                <h3 className="font-bold text-lg text-blue-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
+                  {detail[0].id}
+                </h3>
+              </div>
+              <div className="flex justify-between my-3">
                 <h4 className="font-bold text-lg text-slate-500">Location</h4>
                 <h3 className="font-bold text-lg text-blue-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
                   {detail[0].name}
