@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { Image } from "@nextui-org/react";
 import box from "../../assets/box.png";
@@ -15,36 +14,11 @@ import {
 } from "@nextui-org/react";
 
 const ProductList = ({ products }) => {
-  // const INITIAL_VISIBLE_COLUMNS = [
-  //   "Name",
-  //   "Expiredate",
-  //   "Barcode",
-  //   "Price",
-  //   "Action",
-  // ];
-  // let columns = [
-  //   { name: "Photo", uid: "img", sortable: true },
-  //   { name: "Name", uid: "name", sortable: true },
-  //   { name: "Expiredate", uid: "expire", sortable: true },
-  //   { name: "Ref", uid: "ref", sortable: true },
-  //   { name: "Description", uid: "description" },
-  //   { name: "Price", uid: "price" },
-  //   { name: "Action", uid: "action", sortable: true },
-  // ];
-
-  // const statusOptions = [
-  //   { name: "Active", uid: "active" },
-  //   { name: "Paused", uid: "paused" },
-  //   { name: "Vacation", uid: "vacation" },
-  // ];
-
   const navigate = useNavigate();
 
   const editRoute = (id) => {
     navigate(`/admin/products/edit/${id}`);
   };
-
-  console.log("products array in have", products);
 
   return (
     <>
@@ -55,7 +29,7 @@ const ProductList = ({ products }) => {
             <TableColumn>Photo</TableColumn>
             <TableColumn>Name</TableColumn>
             <TableColumn>Ref</TableColumn>
-            <TableColumn>Expiredate</TableColumn>
+            <TableColumn>Expire date</TableColumn>
             <TableColumn>Description</TableColumn>
             <TableColumn>Barcode</TableColumn>
             <TableColumn>Price</TableColumn>
@@ -69,7 +43,7 @@ const ProductList = ({ products }) => {
                     <Image
                       width={50}
                       height={30}
-                      alt="NextUI hero Image with delay"
+                      alt={product.name}
                       src={product.image ? product.image : box}
                     />
                   </TableCell>
@@ -79,13 +53,11 @@ const ProductList = ({ products }) => {
                     {product.expiredAt ? product.expiredAt : "none"}
                   </TableCell>
                   <TableCell>
-                    {" "}
                     {product.description
                       ? product.description.substring(0, 30)
                       : "none"}
                   </TableCell>
                   <TableCell>
-                    {" "}
                     {product.barcode ? product.barcode : "none"}
                   </TableCell>
                   <TableCell>

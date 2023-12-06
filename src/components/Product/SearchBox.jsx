@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { Input } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
 const SearchBox = ({ keyword, onSearch }) => {
   const handleInputChange = (key, value) => {
@@ -9,21 +10,20 @@ const SearchBox = ({ keyword, onSearch }) => {
   };
 
   return (
-    <div>
-      <Input
-        type="text"
-        variant="underlined"
-        label="search by name"
-        id="name"
-        name="name"
-        value={keyword}
-        onChange={(e) => handleInputChange("name", e.target.value)}
-        radius="sm"
-        classNames={{
-          inputWrapper: ["shadow-sm w-60"],
-        }}
-      />
-    </div>
+    <>
+      <div>
+        <Input
+          isClearable
+          type="text"
+          radius="sm"
+          variant="faded"
+          label="Search"
+          value={keyword}
+          onChange={(e) => handleInputChange("name", e.target.value)}
+          startContent={<Icon icon="ic:sharp-search" />}
+        />
+      </div>
+    </>
   );
 };
 

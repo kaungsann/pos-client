@@ -46,7 +46,6 @@ import EmployeeEdit from "./components/Dashboard/Employee/EmployeeEdit";
 import Warehouse from "./components/Dashboard/WareHouse/Warehouse";
 import SaleView from "./components/Dashboard/SaleOrder/SaleView";
 import ProductTemplate from "./components/Product/ProductTemplate";
-import CategoryTemplate from "./components/Dashboard/Category/CategoryTemplate";
 
 function App() {
   return (
@@ -99,7 +98,7 @@ function App() {
               <Route path="detail/:id" element={<ProductDetails />} />
             </Route>
             <Route path="categorys">
-              <Route path="all" element={<CategoryTemplate />} />
+              <Route path="all" element={<CategoryAll />} />
               <Route path="create" element={<CategoryCreate />} />
               <Route path="edit/:id" element={<CategoryEdit />} />
               <Route path="detail/:id" element={<CategoryDetail />} />
