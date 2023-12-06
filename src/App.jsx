@@ -46,7 +46,6 @@ import EmployeeEdit from "./components/Dashboard/Employee/EmployeeEdit";
 import Warehouse from "./components/Dashboard/WareHouse/Warehouse";
 import SaleView from "./components/Dashboard/SaleOrder/SaleView";
 import ProductTemplate from "./components/Product/ProductTemplate";
-import CategoryTemplate from "./components/Dashboard/Category/CategoryTemplate";
 
 function App() {
   return (
