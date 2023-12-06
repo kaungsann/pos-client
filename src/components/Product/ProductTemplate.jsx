@@ -122,10 +122,12 @@ const ProductTemplate = () => {
             Add
           </Link>
           <FilterBox categories={categories} onFilter={handleFilterChange} />
-          <ExcelExportButton
-            token={token.accessToken}
-            apiEndpoint={PRODUCT_API.EXPORT}
-          />
+          <div className="ml-3">
+            <ExcelExportButton
+              token={token.accessToken}
+              apiEndpoint={PRODUCT_API.EXPORT}
+            />
+          </div>
           <div className="ml-3">
             <ExcelImportButton
               token={token.accessToken}

@@ -61,20 +61,20 @@ export default function LocationCreate() {
       <div className="flex">
         <button
           type="submit"
-          className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
+          className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-4 py-1.5 textt-sm"
           onClick={handleChange}
         >
           Save
         </button>
         <Link to="/admin/locations/all">
-          <button className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2">
+          <button className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-4 py-1.5 textt-sm">
             Discard
           </button>
         </Link>
       </div>
 
       <h2 className="py-1.5 text-lg font-bold mt-6 bg-blue-600 text-white pl-4">
-        Location Information
+        Create Location
       </h2>
 
       <div className="w-full">

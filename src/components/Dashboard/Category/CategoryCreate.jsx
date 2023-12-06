@@ -25,11 +25,7 @@ export default function CategoryCreate() {
     };
 
     try {
-      let resData = await sendJsonToApi(
-        "/category",
-        data,
-        token.accessToken
-      );
+      let resData = await sendJsonToApi("/category", data, token.accessToken);
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
@@ -46,7 +42,7 @@ export default function CategoryCreate() {
     e.preventDefault();
     createCategoryApi();
   };
-  console.log("name is" , name)
+  console.log("name is", name);
   return (
     <>
       <ToastContainer
@@ -65,13 +61,13 @@ export default function CategoryCreate() {
       <div className="flex">
         <button
           type="submit"
-          className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
+          className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-3 py-1.5 text-sm"
           onClick={handleChange}
         >
           Save
         </button>
         <Link to="/admin/categorys/all">
-          <button className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2">
+          <button className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-3 py-1.5">
             Discard
           </button>
         </Link>
@@ -79,7 +75,7 @@ export default function CategoryCreate() {
 
       <div className="mt-2">
         <div className="w-full mx-auto flex justify-center cursor-pointer flex-col">
-          <h2 className="py-1.5 text-lg font-bold mt-2 bg-blue-600 text-white pl-4">
+          <h2 className="py-1.5 text-md font-bold mt-2 bg-blue-600 text-white pl-4">
             Add New Category
           </h2>
         </div>

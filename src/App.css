@@ -21,7 +21,6 @@ body {
   background-color: #f9fafb;
 }
 .Toastify__toast {
-
   background-color: #f4f4f5;
 }
 
@@ -30,7 +29,7 @@ body {
   color: #ef4444;
   font-size: 20px;
 }
-.page-item{
+.page-item {
   padding: 5px 10px;
   border-radius: 8px;
 }
@@ -53,4 +52,3 @@ body::-webkit-scrollbar-track {
 .custom-select {
   padding: 10px; /* Add your desired padding */
 }
-

@@ -36,7 +36,7 @@ export default function CategoryDetail() {
     <>
       <div className="flex justify-between items-center cursor-pointer">
         <Link to="/admin/categorys/all">
-          <button className="hover:opacity-75 lg:px-8 md:px-4 py-2 text-white bg-blue-600 rounded-sm shadow-md border-2 border-blue-600 hover:opacity-75text-white">
+          <button className="hover:opacity-75 text-sm px-6 py-1.5 text-white bg-blue-600 rounded-sm shadow-md border-2 border-blue-600 hover:opacity-75text-white">
             Back
           </button>
         </Link>
@@ -49,7 +49,7 @@ export default function CategoryDetail() {
         <div className="text-center">
           {detail && detail.length > 0 ? (
             <div className="w-full">
-              <h2 className="py-1.5 text-lg text-start font-bold mt-2 bg-blue-600 text-white pl-4">
+              <h2 className="py-1.5 text-md text-start font-bold my-4 bg-blue-600 text-white pl-4">
                 Category Information
               </h2>
               <div className="flex justify-between">

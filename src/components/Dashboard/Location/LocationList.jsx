@@ -17,15 +17,14 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
-import { columns, users, statusOptions } from "./data";
-import { capitalize } from "./utils";
-import SearchBox from "./SearchBox";
+import { columns, users, statusOptions } from "../Category/data";
+import { capitalize } from "../Category/utils";
+import SearchBox from "../Category/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../Api";
 import { useSelector } from "react-redux";
-import { Icon } from "@iconify/react";
 
 const statusColorMap = {
   active: "success",
@@ -33,9 +32,9 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
 
-export default function CategoryList({ categorys }) {
+export default function LocationList() {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -44,13 +43,13 @@ export default function CategoryList({ categorys }) {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-  const addCategoryRoute = () => {
-    navigate("/admin/categorys/create");
+  const addLocationRoute = () => {
+    navigate("/admin/locations/create");
   };
-  const CATEGORY_API = {
-    INDEX: BASE_URL + "/category",
-    IMPORT: BASE_URL + "/category/import-excel",
-    EXPORT: BASE_URL + "/category/export-excel",
+  const STOCK_API = {
+    INDEX: BASE_URL + "/stock",
+    IMPORT: BASE_URL + "/stock/import-excel",
+    EXPORT: BASE_URL + "/stock/export-excel",
   };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
@@ -72,24 +71,24 @@ export default function CategoryList({ categorys }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredCategory = [...categorys];
+    let filteredUsers = [...users];
 
     if (hasSearchFilter) {
-      filteredCategory = filteredCategory.filter((cat) =>
-        cat.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter((user) =>
+        user.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredCategory = filteredCategory.filter((cat) =>
-        Array.from(statusFilter).includes(cat.active)
+      filteredUsers = filteredUsers.filter((user) =>
+        Array.from(statusFilter).includes(user.status)
       );
     }
 
-    return filteredCategory;
-  }, [categorys, filterValue, statusFilter]);
+    return filteredUsers;
+  }, [users, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -110,17 +109,34 @@ export default function CategoryList({ categorys }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((categorys, columnKey) => {
-    const cellValue = categorys[columnKey];
+  const renderCell = React.useCallback((user, columnKey) => {
+    const cellValue = user[columnKey];
 
     switch (columnKey) {
       case "name":
-        return <User name={cellValue}>{categorys.email}</User>;
-
+        return (
+          <User
+            avatarProps={{ radius: "lg", src: user.avatar }}
+            description={user.email}
+            name={cellValue}
+          >
+            {user.email}
+          </User>
+        );
+      case "role":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">{cellValue}</p>
+            <p className="text-bold text-tiny capitalize text-default-400">
+              {user.team}
+            </p>
+          </div>
+        );
+      case "status":
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[categorys.active]}
+            color={statusColorMap[user.status]}
             size="sm"
             variant="flat"
           >
@@ -129,27 +145,19 @@ export default function CategoryList({ categorys }) {
         );
       case "actions":
         return (
-          <div className="p-2 flex w-full justify-start">
-            <Icon
-              icon="mdi:eye-outline"
-              onClick={() => {
-                console.log("category eye is working");
-                navigate(`/admin/categorys/detail/${categorys.id}`);
-              }}
-              className="text-xl font-bold hover:text-cyan-600"
-            />
-            <Icon
-              icon="ep:edit"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/admin/categorys/edit/${categorys.id}`);
-              }}
-              className="text-xl mx-3 text-blue-800 font-bold hover:text-green-500"
-            />
-            <Icon
-              icon="mdi:delete-outline"
-              className="text-xl text-red-800 font-bold"
-            />
+          <div className="relative flex justify-end items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  click
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem>View</DropdownItem>
+                <DropdownItem>Edit</DropdownItem>
+                <DropdownItem>Delete</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         );
       default:
@@ -201,19 +209,19 @@ export default function CategoryList({ categorys }) {
             <div>
               <ExcelExportButton
                 token={token.accessToken}
-                apiEndpoint={CATEGORY_API.EXPORT}
+                apiEndpoint={STOCK_API.EXPORT}
               />
             </div>
             <div>
               <ExcelImportButton
                 token={token.accessToken}
-                apiEndpoint={CATEGORY_API.IMPORT}
+                apiEndpoint={STOCK_API.IMPORT}
               />
             </div>
-            {/* <Dropdown>
+            <Dropdown>
               <div>
                 <DropdownTrigger className="hidden sm:flex">
-                  <button className=" font-bold rounded-sm shadow-sm flex items-center text-cyan-700 border-cyan-700 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-cyan-700 px-3 py-1.5">
+                  <button className="font-bold rounded-sm shadow-sm flex items-center text-cyan-700 border-cyan-700 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-cyan-700 px-3 py-1.5">
                     Status
                   </button>
                 </DropdownTrigger>
@@ -237,7 +245,7 @@ export default function CategoryList({ categorys }) {
             <Dropdown>
               <div>
                 <DropdownTrigger className="hidden sm:flex">
-                  <button className=" font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
+                  <button className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
                     Columns
                   </button>
                 </DropdownTrigger>
@@ -256,10 +264,10 @@ export default function CategoryList({ categorys }) {
                   </DropdownItem>
                 ))}
               </DropdownMenu>
-            </Dropdown> */}
+            </Dropdown>
             <div>
               <button
-                onClick={addCategoryRoute}
+                onClick={addLocationRoute}
                 className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
               >
                 Add New
@@ -269,9 +277,9 @@ export default function CategoryList({ categorys }) {
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Category</h2>
+            <h2 className="text-xl font-bold my-2">Location</h2>
             <h3 className="text-default-400 text-small ml-4">
-              Total {categorys.length}
+              Total {users.length} users
             </h3>
           </div>
 
@@ -367,7 +375,7 @@ export default function CategoryList({ categorys }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Category found"} items={sortedItems}>
+        <TableBody emptyContent={"No users found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

@@ -34,7 +34,7 @@ export default function LocationDetail() {
     <>
       <div className="flex justify-between">
         <Link to="/admin/locations/all">
-          <button className="hover:opacity-75 lg:px-8 md:px-4 py-2  text-white bg-blue-600 rounded-md shadow-md border-2 border-blue-600 hover:opacity-75text-white">
+          <button className="px-4 py-1.5 text-sm bg-blue-600 rounded-md shadow-md border-2 border-blue-600 hover:opacity-75 text-white">
             Back
           </button>
         </Link>

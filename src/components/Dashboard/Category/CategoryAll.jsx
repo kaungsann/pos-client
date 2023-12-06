@@ -11,7 +11,7 @@ import { removeData } from "../../../redux/actions";
 import { FaEye } from "react-icons/fa6";
 import { format } from "date-fns";
 import ReactPaginate from "react-paginate";
-import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
+import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function CategoryAll() {
   const inputRef = useRef();
@@ -19,7 +19,7 @@ export default function CategoryAll() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  const itemsPerPage = 10; 
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
 
   const [alert, setAlert] = useState(false);
@@ -66,14 +66,16 @@ export default function CategoryAll() {
       };
 
       // Define the URL for downloading the file
-      const downloadUrl = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/category/export-excel";
+      const downloadUrl =
+        "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/category/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
 
       if (response.ok) {
         const blob = await response.blob();
         const filename =
-          response.headers.get("content-disposition") || "category-exported-data.xlsx";
+          response.headers.get("content-disposition") ||
+          "category-exported-data.xlsx";
 
         const url = window.URL.createObjectURL(blob);
 
@@ -102,7 +104,11 @@ export default function CategoryAll() {
     setimportFile(selectedFile);
     const formData = new FormData();
     formData.append("excel", selectedFile);
-    const sendExcelApi = await FormPostApi("/category/import-excel", formData, token.accessToken);
+    const sendExcelApi = await FormPostApi(
+      "/category/import-excel",
+      formData,
+      token.accessToken
+    );
     setLoading(true);
     toast(sendExcelApi.message);
     if (sendExcelApi.status) {
@@ -199,7 +205,10 @@ export default function CategoryAll() {
               <BiImport className="text-xl mx-2" />
               <h4>Export Excel</h4>
             </div>
-            <div onClick={handleFileImportClick} className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2">
+            <div
+              onClick={handleFileImportClick}
+              className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 font-bold px-6 py-2"
+            >
               <input
                 type="file"
                 ref={importRef}
@@ -274,7 +283,6 @@ export default function CategoryAll() {
                       checked={selectedItems.includes(pd.id)}
                     />
                   </td>
-
                   <td className="py-3 lg:px-4">{pd.name}</td>
                   <td className="py-3 flex ml-3 lg:px-4 justify-center">
                     <FaEye
@@ -295,7 +303,7 @@ export default function CategoryAll() {
               ))
           ) : (
             <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
-            {loading && (
+              {loading && (
                 <ClipLoader
                   color={"#0284c7"}
                   loading={loading}
@@ -336,16 +344,12 @@ export default function CategoryAll() {
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
-              <IoMdArrowRoundBack className="mr-2"/>
-              {' '}
-              Previous
+              <IoMdArrowRoundBack className="mr-2" /> Previous
             </div>
-          } 
+          }
           nextLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
-              Next
-              {' '}
-              <IoMdArrowRoundForward className="ml-2"/>
+              Next <IoMdArrowRoundForward className="ml-2" />
             </div>
           }
           forcePage={currentPage}

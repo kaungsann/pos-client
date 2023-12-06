@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import axios from "axios";
-import { Button } from "@nextui-org/button";
 
 const ExcelExportButton = ({ token, apiEndpoint }) => {
   const handleDownloadClick = async () => {
@@ -30,12 +29,12 @@ const ExcelExportButton = ({ token, apiEndpoint }) => {
   };
 
   return (
-    <Button
+    <button
       onClick={handleDownloadClick}
-      className="rounded-sm mx-3 shadow-sm flex items-center  text-[#15803d] border-[#15803d] bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold px-3 py-1.5"
+      className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold px-3 py-1.5"
     >
       Download Excel
-    </Button>
+    </button>
   );
 };
 
