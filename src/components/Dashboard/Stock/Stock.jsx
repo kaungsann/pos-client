@@ -9,14 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import { removeData } from "../../../redux/actions";
 import ReactPaginate from "react-paginate";
-import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
+import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function Stock() {
   const inputRef = useRef();
 
   const [searchItems, setSearchItems] = useState([]);
 
-  const itemsPerPage = 5; 
+  const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
 
   const [stock, setStock] = useState([]);
@@ -31,7 +31,7 @@ export default function Stock() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    console.log("stock is a" ,resData )
+    console.log("stock is a", resData);
     if (resData.status) {
       setLoading(false);
       setStock(resData.data);
@@ -54,9 +54,9 @@ export default function Stock() {
         mode: "cors",
         cache: "no-cache",
       };
-
       // Define the URL for downloading the file
-      const downloadUrl = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/stock/export-excel";
+      const downloadUrl =
+        "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/stock/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
       console.log("res download is", response);
@@ -64,7 +64,8 @@ export default function Stock() {
       if (response.ok) {
         const blob = await response.blob();
         const filename =
-          response.headers.get("content-disposition") || "stock-exported-data.xlsx";
+          response.headers.get("content-disposition") ||
+          "stock-exported-data.xlsx";
 
         const url = window.URL.createObjectURL(blob);
 
@@ -174,7 +175,7 @@ export default function Stock() {
         </table>
 
         {loading && (
-            <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
+          <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
             {loading && (
               <ClipLoader
                 color={"#0284c7"}
@@ -203,16 +204,12 @@ export default function Stock() {
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
-              <IoMdArrowRoundBack className="mr-2"/>
-              {' '}
-              Previous
+              <IoMdArrowRoundBack className="mr-2" /> Previous
             </div>
-          } 
+          }
           nextLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
-              Next
-              {' '}
-              <IoMdArrowRoundForward className="ml-2"/>
+              Next <IoMdArrowRoundForward className="ml-2" />
             </div>
           }
           forcePage={currentPage}

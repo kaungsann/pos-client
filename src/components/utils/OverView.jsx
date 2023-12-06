@@ -156,7 +156,8 @@ export default function OverView() {
 
   useEffect(() => {
     getTotals();
-  }, [day, month, year, StartDate]);
+  }, [day , month , year , StartDate]);
+
 
   const orderList = Array.from(
     new Set(orderPurchaseLines.map((line) => line.orderId._id))

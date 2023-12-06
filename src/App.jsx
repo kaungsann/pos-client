@@ -45,7 +45,7 @@ import EmployeeDetail from "./components/Dashboard/Employee/EmployeeDetail";
 import EmployeeEdit from "./components/Dashboard/Employee/EmployeeEdit";
 import Warehouse from "./components/Dashboard/WareHouse/Warehouse";
 import SaleView from "./components/Dashboard/SaleOrder/SaleView";
-import ProductTemplate from "./components/Dashboard/Products/ProductTemplate";
+import ProductTemplate from "./components/Product/ProductTemplate";
 
 function App() {
   return (
@@ -93,7 +93,7 @@ function App() {
               <Route path="detail/:id" element={<PurchaseDetail />} />
             </Route>
             <Route path="products">
-              <Route path="all" element={<ProductTemplate />} />
+              <Route path="all" element={< ProductTemplate/>} />
               <Route path="create" element={<ProductsCreate />} />
               <Route path="edit/:id" element={<ProductsEdit />} />
               <Route path="detail/:id" element={<ProductDetails />} />
