@@ -8,7 +8,6 @@ import ExcelExportButton from "../ExcelExportButton";
 import ExcelImportButton from "../ExcelImportButton";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Icon } from "@iconify/react";
 
 const COMPARISION = {
   LESS: "LESS",
@@ -24,10 +23,6 @@ const PRODUCT_API = {
 const ProductTemplate = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [showBox, setShowBox] = useState(false);
-
-  console.log("product all is", products);
-  console.log("category s all is", categories);
 
   const [filteredKeywords, setFilteredKeywords] = useState({
     name: "",
@@ -116,35 +111,17 @@ const ProductTemplate = () => {
     [products, filteredKeywords]
   );
 
-  const handleShowBox = () => {
-    setShowBox(!showBox);
-  };
-
   return (
     <>
-      {/* <h2 className="lg:text-2xl font-bold mb-3">Categorys</h2> */}
-      {showBox && (
-        <FilterBox
-          show={handleShowBox}
-          categories={categories}
-          onFilter={handleFilterChange}
-        />
-      )}
-
       <div className="flex justify-between items-center my-3">
-        <div className="flex">
-          <Link to="/admin/products/create">
-            <div className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
-              Add
-            </div>
-          </Link>
-          <div
-            onClick={handleShowBox}
-            className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-[#4338ca] font-bold px-3 py-1.5"
+        <div className="container flex">
+          <Link
+            to="/admin/products/create"
+            className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           >
-            <Icon icon="basil:filter-outline" className="text-lg" />
-            <h4>Filter</h4>
-          </div>
+            Add
+          </Link>
+          <FilterBox categories={categories} onFilter={handleFilterChange} />
           <ExcelExportButton
             token={token.accessToken}
             apiEndpoint={PRODUCT_API.EXPORT}
