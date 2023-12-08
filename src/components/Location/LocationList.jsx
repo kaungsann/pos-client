@@ -11,41 +11,36 @@ import {
     TableCell,
 } from "@nextui-org/react";
 
-const EmployeeList = ({ employees }) => {
+const LocationList = ({ locations }) => {
     const navigate = useNavigate();
 
     const editRoute = (id) => {
-        navigate(`/admin/user/edit/${id}`);
+        navigate(`/admin/location/edit/${id}`);
     };
 
     return (
         <>
             <div>
-                <h2 className="lg:text-xl font-bold my-2">employees</h2>
+                <h2 className="lg:text-xl font-bold my-2">Location</h2>
                 <Table aria-label="Example static collection table">
                     <TableHeader>
                         <TableColumn>Name</TableColumn>
-                        <TableColumn>Email</TableColumn>
-                        <TableColumn>Role</TableColumn>
-
-                  
+                   
                     </TableHeader>
                     <TableBody>
-                        {employees ? (
-                            employees.map((employee) => (
-                                <TableRow key={employee.id} className="items-center">
-                                    <TableCell>{employee.name}</TableCell>
-                                    <TableCell>{employee.email}</TableCell>
-                                    <TableCell>{employee.role ? employee.role : "none"}</TableCell>
-
+                        {locations ? (
+                            locations.map((location) => (
+                                <TableRow key={location.id} className="items-center">
+                                    <TableCell>{location.name}</TableCell>
                                   
-                                    
+                                   
+                                  
                                     <TableCell>
                                         <div className="flex items-center">
                                             <Icon
                                                 icon="prime:eye"
                                                 onClick={() =>
-                                                    navigate(`/admin/user/detail/${employee.id}`)
+                                                    navigate(`/admin/location/detail/${location.id}`)
                                                 }
                                                 className="text-xl"
                                             />
@@ -54,7 +49,7 @@ const EmployeeList = ({ employees }) => {
                                                 className="text-lg ml-2"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    editRoute(employee.id);
+                                                    editRoute(location.id);
                                                 }}
                                             />
                                         </div>
@@ -72,8 +67,8 @@ const EmployeeList = ({ employees }) => {
     );
 };
 
-EmployeeList.propTypes = {
-    employees: PropTypes.array,
+LocationList.propTypes = {
+    locations: PropTypes.array,
 };
 
-export default EmployeeList;
+export default LocationList;
