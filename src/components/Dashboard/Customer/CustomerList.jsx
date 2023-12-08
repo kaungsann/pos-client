@@ -23,10 +23,8 @@ import SearchBox from "../Category/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL, deleteMultiple } from "../../Api";
+import { BASE_URL } from "../../Api";
 import { useSelector } from "react-redux";
-import { format } from "date-fns";
-import DeleteAlert from "../../utils/DeleteAlert";
 
 const statusColorMap = {
   active: "success",
@@ -34,16 +32,20 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "create", "update"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "phone", "actions"];
 
 const columns = [
   { name: "NAME", uid: "name", sortable: true },
+  { name: "PHONE", uid: "phone", sortable: true },
+  { name: "ADDRESS", uid: "address", sortable: true },
   { name: "CREATE-DATE", uid: "create", sortable: true },
-  { name: "UPDATE-DATE", uid: "update", sortable: true },
+  { name: "CITY", uid: "city" },
+  { name: "COMPANY", uid: "company" },
+  { name: "ACTIONS", uid: "actions" },
 ];
 
-export default function LocationList({ locations, onDeleteSuccess }) {
-  const [deleteBox, setDeleteBox] = React.useState(false);
+export default function CustomerList({ customers }) {
+  console.log("cusotmer is a", customers);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -52,18 +54,17 @@ export default function LocationList({ locations, onDeleteSuccess }) {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-  const addLocationRoute = () => {
-    navigate("/admin/locations/create");
+  const addCategoryRoute = () => {
+    navigate("/admin/categorys/create");
   };
-  const LOCATION_API = {
-    INDEX: BASE_URL + "/location",
-    IMPORT: BASE_URL + "/location/import-excel",
-    EXPORT: BASE_URL + "/location/export-excel",
+  const STOCK_API = {
+    INDEX: BASE_URL + "/stock",
+    IMPORT: BASE_URL + "/stock/import-excel",
+    EXPORT: BASE_URL + "/stock/export-excel",
   };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "age",
     direction: "ascending",
@@ -73,7 +74,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return INITIAL_VISIBLE_COLUMNS;
+    if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
@@ -81,26 +82,24 @@ export default function LocationList({ locations, onDeleteSuccess }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredLocation = [...locations];
+    let filteredCustomers = [...customers];
 
     if (hasSearchFilter) {
-      filteredLocation = filteredLocation.filter((loca) =>
-        loca.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredCustomers = filteredCustomers.filter((cus) =>
+        cus.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredLocation = filteredLocation.filter((loca) =>
-        Array.from(statusFilter).includes(loca.status)
+      filteredCustomers = filteredCustomers.filter((cus) =>
+        Array.from(statusFilter).includes(cus.status)
       );
     }
 
-    return filteredLocation;
-  }, [locations, filterValue, statusFilter]);
-
-  console.log("filter items is a", filteredItems);
+    return filteredCustomers;
+  }, [customers, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -121,21 +120,52 @@ export default function LocationList({ locations, onDeleteSuccess }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((locations, columnKey) => {
-    const cellValue = locations[columnKey];
+  const renderCell = React.useCallback((customers, columnKey) => {
+    const cellValue = customers[columnKey];
 
     switch (columnKey) {
       case "name":
-        return <h3>{locations.name}</h3>;
-      case "create":
+        return <User name={cellValue}>{customers.name}</User>;
+      case "email":
+        return <h3>{customers.email}</h3>;
+      case "phone":
+        return <h3>{customers.phone?.phone}</h3>;
+      case "city":
+        return <h3>{customers.city?.city}</h3>;
+      case "address":
+        return <h3>{customers.address}</h3>;
+      case "company":
+        return <h3>{customers.isCompany ? "vendor" : "none"}</h3>;
+      case "customer":
+        return <h3>{customers.isCompany ? "customer" : "none"}</h3>;
+      case "status":
         return (
-          <h3>
-            {format(new Date(locations.createdAt), "yyyy-MM-dd")}
-            {}
-          </h3>
+          <Chip
+            className="capitalize"
+            color={statusColorMap[customers.phone]}
+            size="sm"
+            variant="flat"
+          >
+            {cellValue}
+          </Chip>
         );
-      case "update":
-        return <h3>{format(new Date(locations.updatedAt), "yyyy-MM-dd")}</h3>;
+      case "actions":
+        return (
+          <div className="relative flex justify-end items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  click
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem>View</DropdownItem>
+                <DropdownItem>Edit</DropdownItem>
+                <DropdownItem>Delete</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        );
       default:
         return cellValue;
     }
@@ -182,18 +212,6 @@ export default function LocationList({ locations, onDeleteSuccess }) {
             changeValue={onSearchChange}
           />
           <div className="flex gap-3">
-            <div>
-              <ExcelExportButton
-                token={token.accessToken}
-                apiEndpoint={LOCATION_API.EXPORT}
-              />
-            </div>
-            <div>
-              <ExcelImportButton
-                token={token.accessToken}
-                apiEndpoint={LOCATION_API.IMPORT}
-              />
-            </div>
             <Dropdown>
               <div>
                 <DropdownTrigger className="hidden sm:flex">
@@ -241,21 +259,13 @@ export default function LocationList({ locations, onDeleteSuccess }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <div>
-              <button
-                onClick={addLocationRoute}
-                className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
-              >
-                Add New
-              </button>
-            </div>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Location</h2>
+            <h2 className="text-xl font-bold my-2">Customers</h2>
             <h3 className="text-default-400 text-small ml-4">
-              Total {locations.length} users
+              Total {customers.length}
             </h3>
           </div>
 
@@ -270,12 +280,6 @@ export default function LocationList({ locations, onDeleteSuccess }) {
               <option value="15">15</option>
             </select>
           </label>
-          <button
-            onClick={() => setDeleteBox(true)}
-            className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
-          >
-            Delete
-          </button>
         </div>
       </div>
     );
@@ -284,7 +288,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    locations.length,
+    customers.length,
     onSearchChange,
     hasSearchFilter,
   ]);
@@ -328,20 +332,6 @@ export default function LocationList({ locations, onDeleteSuccess }) {
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-  const deleteLocations = async () => {
-    const response = await deleteMultiple(
-      "/location",
-      {
-        locationIds: [...selectedKeys],
-      },
-      token.accessToken
-    );
-    if (response.status) {
-      setSelectedKeys([]);
-      onDeleteSuccess();
-    }
-  };
-
   return (
     <>
       <Table
@@ -371,7 +361,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Location found"} items={sortedItems}>
+        <TableBody emptyContent={"No users found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -381,18 +371,6 @@ export default function LocationList({ locations, onDeleteSuccess }) {
           )}
         </TableBody>
       </Table>
-      {deleteBox && (
-        <DeleteAlert
-          cancel={() => {
-            setDeleteBox(false);
-            setSelectedKeys([]);
-          }}
-          onDelete={() => {
-            deleteLocations();
-            setDeleteBox(false);
-          }}
-        />
-      )}
     </>
   );
 }

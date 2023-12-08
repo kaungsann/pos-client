@@ -6,10 +6,10 @@ export default function SearchBox({ onClear, changeValue, value }) {
     <div>
       <Input
         isClearable
-        variant="bordered"
+        variant="faded"
         //className="w-full sm:max-w-[44%]"
         classNames={{
-          inputWrapper: ["shadow-sm w-60 h-12"],
+          inputWrapper: ["shadow-sm h-[7px]"],
         }}
         placeholder="Search by name..."
         value={value}

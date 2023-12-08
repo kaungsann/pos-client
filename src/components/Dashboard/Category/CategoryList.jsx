@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableHeader,
@@ -6,26 +6,20 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
   Button,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  Chip,
   User,
   Pagination,
 } from "@nextui-org/react";
 
-import { columns, users, statusOptions } from "./data";
-import { capitalize } from "./utils";
+import { columns, statusOptions } from "./data";
 import SearchBox from "./SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../Api";
+import { BASE_URL, deleteMultiple } from "../../Api";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
+import DeleteAlert from "../../utils/DeleteAlert";
 
 const statusColorMap = {
   active: "success",
@@ -35,9 +29,11 @@ const statusColorMap = {
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "actions"];
 
-export default function CategoryList({ categorys }) {
+export default function CategoryList({ categorys, onDeleteSuccess }) {
   const [filterValue, setFilterValue] = React.useState("");
+  const [deleteBox, setDeleteBox] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
+
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
@@ -47,6 +43,7 @@ export default function CategoryList({ categorys }) {
   const addCategoryRoute = () => {
     navigate("/admin/categorys/create");
   };
+
   const CATEGORY_API = {
     INDEX: BASE_URL + "/category",
     IMPORT: BASE_URL + "/category/import-excel",
@@ -62,6 +59,21 @@ export default function CategoryList({ categorys }) {
   const [page, setPage] = React.useState(1);
 
   const hasSearchFilter = Boolean(filterValue);
+
+  const deleteCateogrys = async () => {
+    const response = await deleteMultiple(
+      "/category",
+      {
+        categoryIds: [...selectedKeys],
+      },
+      token.accessToken
+    );
+    console.log(response);
+    if (response.status) {
+      setSelectedKeys([]);
+      onDeleteSuccess();
+    }
+  };
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -115,18 +127,18 @@ export default function CategoryList({ categorys }) {
 
     switch (columnKey) {
       case "name":
-        return <User name={cellValue}>{categorys.email}</User>;
+        return <User name={cellValue}>{categorys.name}</User>;
 
-        return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[categorys.active]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
+      // return (
+      //   <Chip
+      //     className="capitalize"
+      //     color={statusColorMap[categorys.active]}
+      //     size="sm"
+      //     variant="flat"
+      //   >
+      //     {cellValue}
+      //   </Chip>
+      // );
       case "actions":
         return (
           <div className="p-2 flex w-full justify-start">
@@ -136,7 +148,7 @@ export default function CategoryList({ categorys }) {
                 console.log("category eye is working");
                 navigate(`/admin/categorys/detail/${categorys.id}`);
               }}
-              className="text-xl font-bold hover:text-cyan-600"
+              className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
             />
             <Icon
               icon="ep:edit"
@@ -144,11 +156,7 @@ export default function CategoryList({ categorys }) {
                 e.stopPropagation();
                 navigate(`/admin/categorys/edit/${categorys.id}`);
               }}
-              className="text-xl mx-3 text-blue-800 font-bold hover:text-green-500"
-            />
-            <Icon
-              icon="mdi:delete-outline"
-              className="text-xl text-red-800 font-bold"
+              className="text-2xl mx-3 text-blue-800 font-bold hover:text-blue-500"
             />
           </div>
         );
@@ -197,7 +205,7 @@ export default function CategoryList({ categorys }) {
             clear={onClear}
             changeValue={onSearchChange}
           />
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center">
             <div>
               <ExcelExportButton
                 token={token.accessToken}
@@ -210,61 +218,13 @@ export default function CategoryList({ categorys }) {
                 apiEndpoint={CATEGORY_API.IMPORT}
               />
             </div>
-            {/* <Dropdown>
-              <div>
-                <DropdownTrigger className="hidden sm:flex">
-                  <button className=" font-bold rounded-sm shadow-sm flex items-center text-cyan-700 border-cyan-700 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-cyan-700 px-3 py-1.5">
-                    Status
-                  </button>
-                </DropdownTrigger>
-              </div>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
 
-            <Dropdown>
-              <div>
-                <DropdownTrigger className="hidden sm:flex">
-                  <button className=" font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
-                    Columns
-                  </button>
-                </DropdownTrigger>
-              </div>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown> */}
-            <div>
-              <button
-                onClick={addCategoryRoute}
-                className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
-              >
-                Add New
-              </button>
-            </div>
+            <button
+              onClick={addCategoryRoute}
+              className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
+            >
+              Add New
+            </button>
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -275,17 +235,25 @@ export default function CategoryList({ categorys }) {
             </h3>
           </div>
 
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
+          <div className="flex items-center">
+            <label className="flex items-center text-default-400 text-small">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
+            <button
+              onClick={() => setDeleteBox(true)}
+              className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
             >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -294,7 +262,7 @@ export default function CategoryList({ categorys }) {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    users.length,
+    categorys.length,
     onSearchChange,
     hasSearchFilter,
   ]);
@@ -345,9 +313,9 @@ export default function CategoryList({ categorys }) {
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
-        classNames={{
-          wrapper: "max-h-[382px]",
-        }}
+        // classNames={{
+        //   wrapper: "max-h-[382px]",
+        // }}
         selectedKeys={selectedKeys}
         selectionMode="multiple"
         sortDescriptor={sortDescriptor}
@@ -377,6 +345,18 @@ export default function CategoryList({ categorys }) {
           )}
         </TableBody>
       </Table>
+      {deleteBox && (
+        <DeleteAlert
+          cancel={() => {
+            setDeleteBox(false);
+            setSelectedKeys([]);
+          }}
+          onDelete={() => {
+            deleteCateogrys();
+            setDeleteBox(false);
+          }}
+        />
+      )}
     </>
   );
 }

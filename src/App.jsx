@@ -50,6 +50,9 @@ import CategoryTemplate from "./components/Dashboard/Category/CategoryTemplate";
 import StockTemplate from "./components/Dashboard/Stock/StockTemplate";
 import AdjustmentTemplate from "./components/Dashboard/Ajustment/AdjustmentTemplate";
 import LocationTemplate from "./components/Dashboard/Location/LocationTemplate";
+import PurchaseTemplate from "./components/Dashboard/Purchase/PurchaseTemplate";
+import SaleTemplate from "./components/Dashboard/SaleOrder/SaleTemplate";
+import CustomerTemplate from "./components/Dashboard/Customer/CustomerTemplate";
 
 function App() {
   return (
@@ -91,7 +94,7 @@ function App() {
             </Route>
             <Route path="purchase">
               <Route path="view" element={<PurchaseView />} />
-              <Route path="all" element={<PurchaseAll />} />
+              <Route path="all" element={<PurchaseTemplate />} />
               <Route path="create" element={<PurchaseCreate />} />
               <Route path="detail/:id" element={<PurchaseDetail />} />
             </Route>
@@ -114,7 +117,7 @@ function App() {
               <Route path="detail/:id" element={<PartnerDetail />} />
             </Route>
             <Route path="customers">
-              <Route path="all" element={<Customer />} />
+              <Route path="all" element={<CustomerTemplate />} />
               <Route path="vendors" element={<Vendors />} />
             </Route>
             <Route path="locations">
@@ -124,7 +127,7 @@ function App() {
               <Route path="detail/:id" element={<LocationDetail />} />
             </Route>
             <Route path="saleorders">
-              <Route path="all" element={<SaleOrderAll />} />
+              <Route path="all" element={<SaleTemplate />} />
               <Route path="view" element={<SaleView />} />
               <Route path="create" element={<SaleOrderCreate />} />
               <Route path="detail/:id" element={<SaleOrderDetail />} />

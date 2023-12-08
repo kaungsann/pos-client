@@ -17,33 +17,46 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
-import { users, statusOptions } from "../Category/data";
+import { statusOptions } from "../Category/data";
 import { capitalize } from "../Category/utils";
 import SearchBox from "../Category/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL, deleteMultiple } from "../../Api";
+import { BASE_URL } from "../../Api";
 import { useSelector } from "react-redux";
+import { Icon } from "@iconify/react";
 import { format } from "date-fns";
-import DeleteAlert from "../../utils/DeleteAlert";
 
 const statusColorMap = {
   active: "success",
   paused: "danger",
   vacation: "warning",
 };
+//const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "create", "update"];
-
-const columns = [
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "CREATE-DATE", uid: "create", sortable: true },
-  { name: "UPDATE-DATE", uid: "update", sortable: true },
+const INITIAL_VISIBLE_COLUMNS = [
+  "orderdate",
+  "name",
+  "partner",
+  "location",
+  "state",
+  "actions",
 ];
 
-export default function LocationList({ locations, onDeleteSuccess }) {
-  const [deleteBox, setDeleteBox] = React.useState(false);
+const columns = [
+  { name: "ORDERDATE", uid: "orderdate", sortable: true },
+  { name: "NAME", uid: "name", sortable: true },
+  { name: "PARTNER", uid: "partner", sortable: true },
+  { name: "LOCATION", uid: "location", sortable: true },
+  { name: "STATE", uid: "state" },
+  { name: "TOTAL PRODUCT", uid: "totalproduct" },
+  { name: "TAX TOTAL", uid: "taxtotal", sortable: true },
+  { name: "TOTAL", uid: "total" },
+  { name: "ACTIONS", uid: "actions" },
+];
+
+export default function SaleList({ sales }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -52,20 +65,20 @@ export default function LocationList({ locations, onDeleteSuccess }) {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-  const addLocationRoute = () => {
-    navigate("/admin/locations/create");
+
+  const addPurchaseRoute = () => {
+    navigate("/admin/purchase/create");
   };
-  const LOCATION_API = {
-    INDEX: BASE_URL + "/location",
-    IMPORT: BASE_URL + "/location/import-excel",
-    EXPORT: BASE_URL + "/location/export-excel",
+  const SALE_API = {
+    INDEX: BASE_URL + "/sale",
+    IMPORT: BASE_URL + "/sale/import-excel",
+    EXPORT: BASE_URL + "/sale/export-excel",
   };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "Order Date",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -81,26 +94,24 @@ export default function LocationList({ locations, onDeleteSuccess }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredLocation = [...locations];
+    let filteredSale = [...sales];
 
     if (hasSearchFilter) {
-      filteredLocation = filteredLocation.filter((loca) =>
-        loca.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredSale = filteredSale.filter((sale) =>
+        sale.partner.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredLocation = filteredLocation.filter((loca) =>
-        Array.from(statusFilter).includes(loca.status)
+      filteredSale = filteredSale.filter((sale) =>
+        Array.from(statusFilter).includes(sale.status)
       );
     }
 
-    return filteredLocation;
-  }, [locations, filterValue, statusFilter]);
-
-  console.log("filter items is a", filteredItems);
+    return filteredSale;
+  }, [sales, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -121,21 +132,48 @@ export default function LocationList({ locations, onDeleteSuccess }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((locations, columnKey) => {
-    const cellValue = locations[columnKey];
+  const renderCell = React.useCallback((sales, columnKey) => {
+    const cellValue = sales[columnKey];
 
     switch (columnKey) {
+      case "orderdate":
+        return <h3> {format(new Date(sales.orderDate), "yyyy-MM-dd")}</h3>;
       case "name":
-        return <h3>{locations.name}</h3>;
-      case "create":
+        return <h3>{sales.user?.username}</h3>;
+      case "partner":
+        return <h3>{sales.partner?.name}</h3>;
+      case "location":
+        return <h3>{sales.location?.name}</h3>;
+      case "state":
         return (
-          <h3>
-            {format(new Date(locations.createdAt), "yyyy-MM-dd")}
-            {}
-          </h3>
+          <div className="flex gap-4">
+            {sales.state === "pending" ? (
+              <Chip color="danger" variant="bordered">
+                {sales.state}
+              </Chip>
+            ) : (
+              <Chip color="success" variant="bordered">
+                {sales.state}
+              </Chip>
+            )}
+          </div>
         );
-      case "update":
-        return <h3>{format(new Date(locations.updatedAt), "yyyy-MM-dd")}</h3>;
+      case "totalproduct":
+        return <h3>{sales.lines.length}</h3>;
+      case "taxtotal":
+        return <h3>{purchases.taxTotal}</h3>;
+      case "total":
+        return <h3>{sales.total}</h3>;
+      case "actions":
+        return (
+          <Icon
+            icon="mdi:eye-outline"
+            onClick={() => {
+              navigate(`/admin/saleorders/detail/${sales.id}`);
+            }}
+            className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
+          />
+        );
       default:
         return cellValue;
     }
@@ -185,13 +223,13 @@ export default function LocationList({ locations, onDeleteSuccess }) {
             <div>
               <ExcelExportButton
                 token={token.accessToken}
-                apiEndpoint={LOCATION_API.EXPORT}
+                apiEndpoint={SALE_API.EXPORT}
               />
             </div>
             <div>
               <ExcelImportButton
                 token={token.accessToken}
-                apiEndpoint={LOCATION_API.IMPORT}
+                apiEndpoint={SALE_API.IMPORT}
               />
             </div>
             <Dropdown>
@@ -241,21 +279,20 @@ export default function LocationList({ locations, onDeleteSuccess }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <div>
-              <button
-                onClick={addLocationRoute}
-                className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
-              >
-                Add New
-              </button>
-            </div>
+
+            <button
+              onClick={addPurchaseRoute}
+              className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
+            >
+              Add New
+            </button>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Location</h2>
+            <h2 className="text-xl font-bold my-2">Sales</h2>
             <h3 className="text-default-400 text-small ml-4">
-              Total {locations.length} users
+              Total {sales.length}
             </h3>
           </div>
 
@@ -270,12 +307,6 @@ export default function LocationList({ locations, onDeleteSuccess }) {
               <option value="15">15</option>
             </select>
           </label>
-          <button
-            onClick={() => setDeleteBox(true)}
-            className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
-          >
-            Delete
-          </button>
         </div>
       </div>
     );
@@ -284,7 +315,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    locations.length,
+    sales.length,
     onSearchChange,
     hasSearchFilter,
   ]);
@@ -328,19 +359,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-  const deleteLocations = async () => {
-    const response = await deleteMultiple(
-      "/location",
-      {
-        locationIds: [...selectedKeys],
-      },
-      token.accessToken
-    );
-    if (response.status) {
-      setSelectedKeys([]);
-      onDeleteSuccess();
-    }
-  };
+  console.log("items is purchase", items);
 
   return (
     <>
@@ -352,12 +371,9 @@ export default function LocationList({ locations, onDeleteSuccess }) {
         classNames={{
           wrapper: "max-h-[382px]",
         }}
-        selectedKeys={selectedKeys}
-        selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
-        onSelectionChange={setSelectedKeys}
         onSortChange={setSortDescriptor}
       >
         <TableHeader columns={headerColumns}>
@@ -371,7 +387,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Location found"} items={sortedItems}>
+        <TableBody emptyContent={"No Purchases found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -381,18 +397,6 @@ export default function LocationList({ locations, onDeleteSuccess }) {
           )}
         </TableBody>
       </Table>
-      {deleteBox && (
-        <DeleteAlert
-          cancel={() => {
-            setDeleteBox(false);
-            setSelectedKeys([]);
-          }}
-          onDelete={() => {
-            deleteLocations();
-            setDeleteBox(false);
-          }}
-        />
-      )}
     </>
   );
 }

@@ -13,12 +13,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { format } from "date-fns";
 import { removeData } from "../../../redux/actions";
 import ReactPaginate from "react-paginate";
-import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
-
+import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function PartnerAll() {
   const inputRef = useRef();
-  const itemsPerPage = 5; 
+  const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
 
   const [selectedItems, setSelectedItems] = useState([]);
@@ -83,23 +82,23 @@ export default function PartnerAll() {
     setShowFilter(!showFilter);
   };
 
-const filterCustomer = () => {
-  const filterCustomer = partners.filter((pt) => {
-    //Filter by address
-    if (
-      filterAddress &&
-      !pt.address.toLowerCase().includes(filterAddress.toLowerCase())
-    ) {
-      return false;
-    }
-    // Filter by phone
-    if (filterPhone && !pt.phone.includes(filterPhone)) {
-      return false;
-    }
-    return true;
-  });
-   return  filterCustomer
-}
+  const filterCustomer = () => {
+    const filterCustomer = partners.filter((pt) => {
+      //Filter by address
+      if (
+        filterAddress &&
+        !pt.address.toLowerCase().includes(filterAddress.toLowerCase())
+      ) {
+        return false;
+      }
+      // Filter by phone
+      if (filterPhone && !pt.phone.includes(filterPhone)) {
+        return false;
+      }
+      return true;
+    });
+    return filterCustomer;
+  };
 
   const filterRemove = () => {
     // Clear filter criteria and update the state variable
@@ -169,25 +168,22 @@ const filterCustomer = () => {
       <div className="flex w-full">
         <div className="flex w-full justify-between items-center">
           <div className="flex justify-between w-full justify-items-end">
-           <h2 className="lg:text-2xl font-bold my-4">Customers</h2>  
-           <div className="w-96 md:w-72 relative">
-            <input
-              ref={inputRef}
-              type="text"
-              className="px-3 py-2 w-full rounded-md border-2 border-blue-500 shadow-md bg-white focus:outline-none"
-              id="products"
-              placeholder="search customers"
-              onChange={(e) => setSearchItems(e.target.value.toLowerCase())}
-            />
+            <h2 className="lg:text-2xl font-bold my-4">Customers</h2>
+            <div className="w-96 md:w-72 relative">
+              <input
+                ref={inputRef}
+                type="text"
+                className="px-3 py-2 w-full rounded-md border-2 border-blue-500 shadow-md bg-white focus:outline-none"
+                id="products"
+                placeholder="search customers"
+                onChange={(e) => setSearchItems(e.target.value.toLowerCase())}
+              />
+            </div>
           </div>
-
-          </div>
-
         </div>
       </div>
       <div className="w-full">
         <div className="flex justify-between items-center">
-
           {isFilterActive && (
             <button
               className="bg-red-500 px-4 h-8 rounded-md text-white hover:opacity-70"
@@ -287,7 +283,7 @@ const filterCustomer = () => {
                 ))
             ) : (
               <div className="w-full mx-auto absolute mt-56 flex justify-center items-center">
-              {loading && (
+                {loading && (
                   <ClipLoader
                     color={"#0284c7"}
                     loading={loading}
@@ -394,7 +390,7 @@ const filterCustomer = () => {
           forcePage={currentPage}
           renderOnZeroPageCount={null}
         />
-       </div>
+      </div>
     </div>
   );
 }

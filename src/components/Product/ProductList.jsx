@@ -90,7 +90,7 @@ const ProductList = ({ products }) => {
             )}
           </TableBody>
         </Table>
-        <Spinner className="text-center w-full mt-52" />
+        {/* <Spinner className="text-center w-full mt-52" /> */}
       </div>
     </>
   );

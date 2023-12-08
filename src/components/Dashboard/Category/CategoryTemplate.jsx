@@ -17,26 +17,37 @@ export default function CategoryTemplate() {
     EXPORT: BASE_URL + "/category/export-excel",
   };
 
+  const fetchCategoryData = async () => {
+    try {
+      const response = await axios.get(CATEGORY_API.INDEX, {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const filteredCategory = response.data?.data.filter(
+        (ct) => ct.active === true
+      );
+      console.log("category filter response data is", filteredCategory);
+      setCategorys(filteredCategory);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+  const handleDeleteSuccess = async () => {
+    fetchCategoryData();
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await axios.get(CATEGORY_API.INDEX, {
-          headers: {
-            Authorization: `Bearer ${token.accessToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-        console.log("category response data is");
-        setCategorys(response.data?.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    })();
+    fetchCategoryData();
   }, [token]);
 
   return (
     <div>
-      <CategoryList categorys={categorys} />
+      <CategoryList
+        categorys={categorys}
+        onDeleteSuccess={handleDeleteSuccess}
+      />
     </div>
   );
 }
