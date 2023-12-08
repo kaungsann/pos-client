@@ -1,32 +1,32 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../Api";
-import EmployeeList from "./EmployeeList";
+import LocationList from "./LocationList";
 import SearchBox from "./SearchBox";
-// import ExcelExportButton from "../ExcelExportButton";
-// import ExcelImportButton from "../ExcelImportButton";
+import ExcelExportButton from "../ExcelExportButton";
+import ExcelImportButton from "../ExcelImportButton";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const EMPLOYEE_API = {
-    INDEX: BASE_URL + "/user",
-    IMPORT: BASE_URL + "/user/import-excel",
-    EXPORT: BASE_URL + "/user/export-excel",
+const LOCATION_API = {
+    INDEX: BASE_URL + "/location",
+    IMPORT: BASE_URL + "/location/import-excel",
+    EXPORT: BASE_URL + "/location/export-excel",
 };
 
-const EmployeeTemplate = () => {
-    const [employees, setLocations] = useState([]);
+const LocationTemplate = () => {
+    const [locations, setLocations] = useState([]);
 
     const [filteredKeywords, setFilteredKeywords] = useState({
         name: "",
-        // Might Need to add User Role for Search
+       
     });
     const token = useSelector((state) => state.IduniqueData);
 
     useEffect(() => {
         (async () => {
             try {
-                const response = await axios.get(EMPLOYEE_API.INDEX, {
+                const response = await axios.get(LOCATION_API.INDEX, {
                     headers: {
                         Authorization: `Bearer ${token.accessToken}`,
                         "Content-Type": "application/json",
@@ -46,16 +46,16 @@ const EmployeeTemplate = () => {
         }));
     };
 
-    const filteredEmployees = useMemo(
+    const filteredLocation = useMemo(
         () =>
-            employees.filter((employee) => {
+            locations.filter((location) => {
                 const { name } = filteredKeywords;
                 return (
-     
-                    employee.name == name
+
+                    location.name == name
                 );
             }),
-        [employees, filteredKeywords]
+        [locations, filteredKeywords]
     );
 
     return (
@@ -69,23 +69,23 @@ const EmployeeTemplate = () => {
                         Add
                     </Link>
                     {/* <FilterBox categories={categories} onFilter={handleFilterChange} /> */}
-                    {/* <ExcelExportButton
+                    <ExcelExportButton
                         token={token.accessToken}
-                        apiEndpoint={EMPLOYEE_API.EXPORT}
+                        apiEndpoint={LOCATION_API.EXPORT}
                     />
                     <ExcelImportButton
                         token={token.accessToken}
-                        apiEndpoint={EMPLOYEE_API.IMPORT}
-                    /> */}
+                        apiEndpoint={LOCATION_API.IMPORT}
+                    />
                 </div>
                 <SearchBox
                     keyword={filteredKeywords.name}
                     onSearch={handleFilterChange}
                 />
             </div>
-            <EmployeeList employees={employees} />
+            <LocationList locations={locations} />
         </>
     );
 };
 
-export default EmployeeTemplate;
+export default LocationTemplate;
