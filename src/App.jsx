@@ -53,6 +53,11 @@ import LocationTemplate from "./components/Dashboard/Location/LocationTemplate";
 import PurchaseTemplate from "./components/Dashboard/Purchase/PurchaseTemplate";
 import SaleTemplate from "./components/Dashboard/SaleOrder/SaleTemplate";
 import CustomerTemplate from "./components/Dashboard/Customer/CustomerTemplate";
+import VendorTemplate from "./components/Dashboard/Customer/VendorTemplate";
+import PartnerTemplate from "./components/Dashboard/Partner/PartnerTemplate";
+import EmployeeTemplate from "./components/Dashboard/Employee/EmployeeTemplate";
+import WareHouseTemplate from "./components/Dashboard/WareHouse/WareHouseTemplate";
+import StaffTemplate from "./components/Dashboard/Staff/StaffTemplate";
 
 function App() {
   return (
@@ -68,11 +73,11 @@ function App() {
               </GuardRouter>
             }
           >
-            <Route path="warehouse" element={<Warehouse />} />
+            <Route path="warehouse" element={<WareHouseTemplate />} />
 
             <Route path="inventory/overview" element={<OverView />} />
             <Route path="user">
-              <Route path="all" element={<Staff />} />
+              <Route path="all" element={<StaffTemplate />} />
               <Route path="create" element={<Register />} />
               <Route path="edit/:id" element={<StaffEdit />} />
               <Route path="detail/:id" element={<StaffDetail />} />
@@ -81,7 +86,7 @@ function App() {
               <Route path="view" element={<AdjustmentTemplate />} />
             </Route>
             <Route path="employee">
-              <Route path="all" element={<EmployeeAll />} />
+              <Route path="all" element={<EmployeeTemplate />} />
               <Route path="create" element={<EmployeeCreate />} />
               <Route path="edit/:id" element={<EmployeeEdit />} />
               <Route path="detail/:id" element={<EmployeeDetail />} />
@@ -111,14 +116,14 @@ function App() {
               <Route path="detail/:id" element={<CategoryDetail />} />
             </Route>
             <Route path="partners">
-              <Route path="all" element={<PartnerAll />} />
+              <Route path="all" element={<PartnerTemplate />} />
               <Route path="create" element={<PartnerCreate />} />
               <Route path="edit/:id" element={<PartnerEdit />} />
               <Route path="detail/:id" element={<PartnerDetail />} />
             </Route>
             <Route path="customers">
               <Route path="all" element={<CustomerTemplate />} />
-              <Route path="vendors" element={<Vendors />} />
+              <Route path="vendors" element={<VendorTemplate />} />
             </Route>
             <Route path="locations">
               <Route path="all" element={<LocationTemplate />} />

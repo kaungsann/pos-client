@@ -17,24 +17,26 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
-import { columns, users, statusOptions } from "../Category/data";
+import { statusOptions } from "../Category/data";
 import { capitalize } from "../Category/utils";
-import SearchBox from "../Category/SearchBox";
+import SearchBox from "../../utils/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../Api";
 import { useSelector } from "react-redux";
+import { format } from "date-fns";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
+const INITIAL_VISIBLE_COLUMNS = ["product", "location", "quantity", "updateon"];
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+const columns = [
+  { name: "PRODUCT", uid: "product", sortable: true },
+  { name: "LOCATION", uid: "location", sortable: true },
+  { name: "QUANTITY", uid: "quantity", sortable: true },
+  { name: "UPDATE-ON", uid: "updateon", sortable: true },
+];
 
-export default function StockList() {
+export default function StockList({ stocks }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -43,9 +45,7 @@ export default function StockList() {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-  const addCategoryRoute = () => {
-    navigate("/admin/categorys/create");
-  };
+
   const STOCK_API = {
     INDEX: BASE_URL + "/stock",
     IMPORT: BASE_URL + "/stock/import-excel",
@@ -71,24 +71,24 @@ export default function StockList() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredStocks = [...stocks];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredStocks = filteredStocks.filter((stk) =>
+        stk.product.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+      filteredStocks = filteredStocks.filter((stk) =>
+        Array.from(statusFilter).includes(stk.status)
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+    return filteredStocks;
+  }, [stocks, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -109,57 +109,26 @@ export default function StockList() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback((stocks, columnKey) => {
+    const cellValue = stocks[columnKey];
 
     switch (columnKey) {
-      case "name":
+      case "product":
         return (
-          <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
+          <h3>
+            {stocks.product && stocks.product.name
+              ? stocks.product.name
+              : "none"}
+          </h3>
         );
-      case "role":
+      case "location":
         return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">
-              {user.team}
-            </p>
-          </div>
+          <h3>{stocks.location ? stocks.location.name : "no have location"}</h3>
         );
-      case "status":
-        return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  click
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
+      case "quantity":
+        return <h3>{stocks.onHand}</h3>;
+      case "updateon":
+        return <h3> {format(new Date(stocks.updatedAt), "yyyy-MM-dd")}</h3>;
       default:
         return cellValue;
     }
@@ -218,29 +187,6 @@ export default function StockList() {
                 apiEndpoint={STOCK_API.IMPORT}
               />
             </div>
-            <Dropdown>
-              <div>
-                <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-cyan-700 border-cyan-700 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-cyan-700 px-3 py-1.5">
-                    Status
-                  </button>
-                </DropdownTrigger>
-              </div>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
 
             <Dropdown>
               <div>
@@ -271,7 +217,7 @@ export default function StockList() {
           <div className="flex items-center">
             <h2 className="text-xl font-bold my-2">Stock</h2>
             <h3 className="text-default-400 text-small ml-4">
-              Total {users.length} users
+              Total {stocks.length}
             </h3>
           </div>
 
@@ -294,7 +240,7 @@ export default function StockList() {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    users.length,
+    stocks.length,
     onSearchChange,
     hasSearchFilter,
   ]);
@@ -367,7 +313,7 @@ export default function StockList() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No users found"} items={sortedItems}>
+        <TableBody emptyContent={"No stocks found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

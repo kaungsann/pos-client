@@ -12,19 +12,18 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Chip,
-  User,
   Pagination,
 } from "@nextui-org/react";
 
-import { columns, users, statusOptions } from "../Category/data";
+import { statusOptions } from "../Category/data";
 import { capitalize } from "../Category/utils";
-import SearchBox from "../Category/SearchBox";
+import SearchBox from "../../utils/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../Api";
 import { useSelector } from "react-redux";
+import { format } from "date-fns";
 
 const statusColorMap = {
   active: "success",
@@ -32,9 +31,26 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "id",
+  "product",
+  "date",
+  "barcode",
+  "location",
+  "quantity",
+];
 
-export default function AdjustmentList() {
+const columns = [
+  { name: "ID", uid: "id", sortable: true },
+  { name: "PRODUCT", uid: "product", sortable: true },
+  { name: "DATE", uid: "date", sortable: true },
+  { name: "BARCODE", uid: "barcode", sortable: true },
+  { name: "LOCATION", uid: "location", sortable: true },
+  { name: "QUANTITY", uid: "quantity", sortable: true },
+];
+
+export default function AdjustmentList({ adjustments }) {
+  console.log("adjustment is a", adjustments);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -46,10 +62,10 @@ export default function AdjustmentList() {
   const addCategoryRoute = () => {
     navigate("/admin/categorys/create");
   };
-  const STOCK_API = {
-    INDEX: BASE_URL + "/stock",
-    IMPORT: BASE_URL + "/stock/import-excel",
-    EXPORT: BASE_URL + "/stock/export-excel",
+  const ADJUSTMENT_API = {
+    INDEX: BASE_URL + "/inventory-adjustment",
+    IMPORT: BASE_URL + "/inventory-adjustment/import-excel",
+    EXPORT: BASE_URL + "/inventory-adjustment/export-excel",
   };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
@@ -71,24 +87,24 @@ export default function AdjustmentList() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredAdjustment = [...adjustments];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredAdjustment = filteredAdjustment.filter((adjust) =>
+        adjust.productName.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredUsers = filteredUsers.filter((user) =>
+      filteredAdjustment = filteredAdjustment.filter((user) =>
         Array.from(statusFilter).includes(user.status)
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+    return filteredAdjustment;
+  }, [adjustments, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -109,57 +125,22 @@ export default function AdjustmentList() {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback((adjustments, columnKey) => {
+    const cellValue = adjustments[columnKey];
 
     switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
-        );
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">
-              {user.team}
-            </p>
-          </div>
-        );
-      case "status":
-        return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  click
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
+      case "ID":
+        return <h2>{adjustments.id}</h2>;
+      case "product":
+        return <h2>{adjustments.productName}</h2>;
+      case "date":
+        return <h2>{format(new Date(adjustments.createdAt), "yyyy-MM-dd")}</h2>;
+      case "barcode":
+        return <h2>{adjustments.productBarcode}</h2>;
+      case "location":
+        return <h2>{adjustments.locationName}</h2>;
+      case "quantity":
+        return <h2>{adjustments.quantity}</h2>;
       default:
         return cellValue;
     }
@@ -209,38 +190,15 @@ export default function AdjustmentList() {
             <div>
               <ExcelExportButton
                 token={token.accessToken}
-                apiEndpoint={STOCK_API.EXPORT}
+                apiEndpoint={ADJUSTMENT_API.EXPORT}
               />
             </div>
             <div>
               <ExcelImportButton
                 token={token.accessToken}
-                apiEndpoint={STOCK_API.IMPORT}
+                apiEndpoint={ADJUSTMENT_API.IMPORT}
               />
             </div>
-            <Dropdown>
-              <div>
-                <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-cyan-700 border-cyan-700 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-cyan-700 px-3 py-1.5">
-                    Status
-                  </button>
-                </DropdownTrigger>
-              </div>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
 
             <Dropdown>
               <div>
@@ -271,7 +229,7 @@ export default function AdjustmentList() {
           <div className="flex items-center">
             <h2 className="text-xl font-bold my-2">Adjustment</h2>
             <h3 className="text-default-400 text-small ml-4">
-              Total {users.length} users
+              Total {adjustments.length}
             </h3>
           </div>
 
@@ -294,7 +252,7 @@ export default function AdjustmentList() {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    users.length,
+    adjustments.length,
     onSearchChange,
     hasSearchFilter,
   ]);

@@ -10,10 +10,9 @@ import MoonLoader from "react-spinners/MoonLoader";
 import { sendJsonToApi } from "./Api";
 import { useEffect } from "react";
 
-
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPwd] = useState("");
+  const [email, setEmail] = useState("admin@gmail.com");
+  const [password, setPwd] = useState("admin@2468");
   const [hidden, setHidden] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -24,26 +23,26 @@ export default function Login() {
   const loginApi = async () => {
     let user = { email, password };
 
-   try {
-    const { success, message, data, tokens } = await sendJsonToApi(
-      "/auth/signin",
-      user
-    );
+    try {
+      const { success, message, data, tokens } = await sendJsonToApi(
+        "/auth/signin",
+        user
+      );
 
-    if (success) {
+      if (success) {
+        setLoading(false);
+        toast(message);
+        dispatch(addData(data));
+        dispatch(idAdd(tokens));
+        navigate("/admin/pos/all");
+      } else {
+        setLoading(false);
+        toast(message);
+      }
+    } catch (error) {
       setLoading(false);
-      toast(message);
-      dispatch(addData(data));
-      dispatch(idAdd(tokens));
-      navigate("/admin/pos/all");
-    } else {
-      setLoading(false);
-      toast(message);
+      return console.error(error);
     }
-   } catch (error) {
-    setLoading(false);
-    return console.error(error)
-   }
   };
 
   const loginUser = (e) => {
@@ -51,8 +50,6 @@ export default function Login() {
     setLoading(true);
     loginApi();
   };
-
-
 
   return (
     <>

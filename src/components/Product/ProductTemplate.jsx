@@ -114,7 +114,11 @@ const ProductTemplate = () => {
   return (
     <>
       <div className="flex justify-between items-center my-3">
-        <div className="container flex">
+        <SearchBox
+          keyword={filteredKeywords.name}
+          onSearch={handleFilterChange}
+        />
+        <div className="flex">
           <Link
             to="/admin/products/create"
             className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
@@ -135,10 +139,6 @@ const ProductTemplate = () => {
             />
           </div>
         </div>
-        <SearchBox
-          keyword={filteredKeywords.name}
-          onSearch={handleFilterChange}
-        />
       </div>
       <ProductList products={filteredProducts} />
     </>

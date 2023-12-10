@@ -2,38 +2,39 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../Api";
+import StaffList from "./StaffList.";
 
-import AdjustmentList from "./AdjustmentList";
-
-export default function AdjustmentTemplate() {
-  const [adjustment, setAdjustment] = useState([]);
+export default function StaffTemplate() {
+  const [staff, setSaff] = useState([]);
   const token = useSelector((state) => state.IduniqueData);
 
-  const ADJUSTMENT_API = {
-    INDEX: BASE_URL + "/inventory-adjustment",
+  const STAFF_API = {
+    INDEX: BASE_URL + "/user",
   };
 
-  const fetchStockData = async () => {
+  const fetchStaffData = async () => {
     try {
-      const response = await axios.get(ADJUSTMENT_API.INDEX, {
+      const response = await axios.get(STAFF_API.INDEX, {
         headers: {
           Authorization: `Bearer ${token.accessToken}`,
           "Content-Type": "application/json",
         },
       });
-      setAdjustment(response.data?.data);
+      const filteredUser = response.data?.data.filter(
+        (em) => em.active === true
+      );
+      setSaff(filteredUser);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
 
   useEffect(() => {
-    fetchStockData();
+    fetchStaffData();
   }, [token]);
-
   return (
-    <div>
-      <AdjustmentList adjustments={adjustment} />
-    </div>
+    <>
+      <StaffList staffs={staff} onDeleteSuccess={fetchStaffData} />
+    </>
   );
 }

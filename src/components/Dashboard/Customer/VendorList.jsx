@@ -6,52 +6,48 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Input,
   Button,
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
   DropdownItem,
   Chip,
+  User,
   Pagination,
 } from "@nextui-org/react";
-
+import { Icon } from "@iconify/react";
+import { statusOptions } from "../Category/data";
 import { capitalize } from "../Category/utils";
 import SearchBox from "../../utils/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../Api";
+import { BASE_URL, deleteMultiple } from "../../Api";
 import { useSelector } from "react-redux";
-import { Icon } from "@iconify/react";
 import { format } from "date-fns";
+import DeleteAlert from "../../utils/DeleteAlert";
 
-const statusOptions = [
-  { name: "pending", uid: "pending" },
-  { name: "confirmed", uid: "confirmed" },
-];
+const statusColorMap = {
+  active: "success",
+  paused: "danger",
+  vacation: "warning",
+};
 
-const INITIAL_VISIBLE_COLUMNS = [
-  "orderdate",
-  "name",
-  "partner",
-  "location",
-  "state",
-  "actions",
-];
+const INITIAL_VISIBLE_COLUMNS = ["name", "phone", "actions"];
 
 const columns = [
-  { name: "ORDERDATE", uid: "orderdate", sortable: true },
   { name: "NAME", uid: "name", sortable: true },
-  { name: "PARTNER", uid: "partner", sortable: true },
-  { name: "LOCATION", uid: "location", sortable: true },
-  { name: "STATE", uid: "state" },
-  { name: "TOTAL PRODUCT", uid: "totalproduct" },
-  { name: "TAX TOTAL", uid: "taxtotal", sortable: true },
-  { name: "TOTAL", uid: "total" },
+  { name: "PHONE", uid: "phone", sortable: true },
+  { name: "ADDRESS", uid: "address", sortable: true },
+  { name: "CREATE-DATE", uid: "create", sortable: true },
+  { name: "CITY", uid: "city" },
+  { name: "COMPANY", uid: "company" },
   { name: "ACTIONS", uid: "actions" },
 ];
 
-export default function SaleList({ sales }) {
+export default function VendorList({ vendors, onDeleteSuccess }) {
+  const [deleteBox, setDeleteBox] = React.useState(false);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -60,28 +56,36 @@ export default function SaleList({ sales }) {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-
-  const addPurchaseRoute = () => {
-    navigate("/admin/purchase/create");
-  };
-  const SALE_API = {
-    INDEX: BASE_URL + "/sale",
-    IMPORT: BASE_URL + "/sale/import-excel",
-    EXPORT: BASE_URL + "/sale/export-excel",
+  const addCustomerRoute = () => {
+    navigate("/admin/partners/create");
   };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "Order Date",
+    column: "age",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
 
   const hasSearchFilter = Boolean(filterValue);
 
+  const deleteCateogrys = async () => {
+    const response = await deleteMultiple(
+      "/partner",
+      {
+        partnerIds: [...selectedKeys],
+      },
+      token.accessToken
+    );
+    if (response.status) {
+      setSelectedKeys([]);
+      onDeleteSuccess();
+    }
+  };
+
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return INITIAL_VISIBLE_COLUMNS;
+    if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
@@ -89,24 +93,24 @@ export default function SaleList({ sales }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredSale = [...sales];
+    let filteredVendors = [...vendors];
 
     if (hasSearchFilter) {
-      filteredSale = filteredSale.filter((sale) =>
-        sale.partner.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredVendors = filteredVendors.filter((ven) =>
+        ven.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredSale = filteredSale.filter((sale) =>
-        Array.from(statusFilter).includes(sale.state)
+      filteredVendors = filteredVendors.filter((ven) =>
+        Array.from(statusFilter).includes(ven.status)
       );
     }
 
-    return filteredSale;
-  }, [sales, filterValue, statusFilter]);
+    return filteredVendors;
+  }, [vendors, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -127,47 +131,56 @@ export default function SaleList({ sales }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((sales, columnKey) => {
-    const cellValue = sales[columnKey];
+  const renderCell = React.useCallback((vendors, columnKey) => {
+    const cellValue = vendors[columnKey];
 
     switch (columnKey) {
-      case "orderdate":
-        return <h3> {format(new Date(sales.orderDate), "yyyy-MM-dd")}</h3>;
       case "name":
-        return <h3>{sales.user?.username}</h3>;
-      case "partner":
-        return <h3>{sales.partner?.name}</h3>;
-      case "location":
-        return <h3>{sales.location?.name}</h3>;
-      case "state":
+        return <User name={cellValue}>{vendors.name}</User>;
+      case "email":
+        return <h3>{vendors.email}</h3>;
+      case "phone":
+        return <h3>{vendors.phone ? vendors.phone : "none"}</h3>;
+      case "city":
+        return <h3>{vendors.city ? vendors.city : "none"}</h3>;
+      case "address":
+        return <h3>{vendors.address ? vendors.address : "none"}</h3>;
+      case "company":
+        return <h3>{vendors.isCompany ? "vendor" : "none"}</h3>;
+      case "customer":
+        return <h3>{vendors.isCustomer ? "customer" : "none"}</h3>;
+      case "create":
+        return <h3>{format(new Date(vendors.createdAt), "yyyy-MM-dd")}</h3>;
+      case "status":
         return (
-          <div className="flex gap-4">
-            {sales.state === "pending" ? (
-              <Chip color="danger" variant="bordered">
-                {sales.state}
-              </Chip>
-            ) : (
-              <Chip color="success" variant="bordered">
-                {sales.state}
-              </Chip>
-            )}
-          </div>
+          <Chip
+            className="capitalize"
+            color={statusColorMap[vendors.phone]}
+            size="sm"
+            variant="flat"
+          >
+            {cellValue}
+          </Chip>
         );
-      case "totalproduct":
-        return <h3>{sales.lines.length}</h3>;
-      case "taxtotal":
-        return <h3>{sales.taxTotal.toFixed(2)}</h3>;
-      case "total":
-        return <h3>{sales.total.toFixed(2)}</h3>;
       case "actions":
         return (
-          <Icon
-            icon="mdi:eye-outline"
-            onClick={() => {
-              navigate(`/admin/saleorders/detail/${sales.id}`);
-            }}
-            className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
-          />
+          <div className="p-2 flex w-full justify-start">
+            <Icon
+              icon="mdi:eye-outline"
+              onClick={() => {
+                navigate(`/admin/partners/detail/${vendors.id}`);
+              }}
+              className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
+            />
+            <Icon
+              icon="ep:edit"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/admin/partners/edit/${vendors.id}`);
+              }}
+              className="text-2xl mx-3 text-blue-800 font-bold hover:text-blue-500"
+            />
+          </div>
         );
       default:
         return cellValue;
@@ -215,18 +228,6 @@ export default function SaleList({ sales }) {
             changeValue={onSearchChange}
           />
           <div className="flex gap-3">
-            <div>
-              <ExcelExportButton
-                token={token.accessToken}
-                apiEndpoint={SALE_API.EXPORT}
-              />
-            </div>
-            <div>
-              <ExcelImportButton
-                token={token.accessToken}
-                apiEndpoint={SALE_API.IMPORT}
-              />
-            </div>
             <Dropdown>
               <div>
                 <DropdownTrigger className="hidden sm:flex">
@@ -276,7 +277,7 @@ export default function SaleList({ sales }) {
             </Dropdown>
 
             <button
-              onClick={addPurchaseRoute}
+              onClick={addCustomerRoute}
               className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
             >
               Add New
@@ -285,23 +286,33 @@ export default function SaleList({ sales }) {
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Sales</h2>
+            <h2 className="text-xl font-bold my-2">Vendors</h2>
             <h3 className="text-default-400 text-small ml-4">
-              Total {sales.length}
+              Total {vendors.length}
             </h3>
           </div>
 
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
+          <div className="flex">
+            <label className="flex items-center text-default-400 text-small">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
+            {selectedKeys.size > 0 && (
+              <button
+                onClick={() => setDeleteBox(true)}
+                className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
+              >
+                Delete
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -310,9 +321,10 @@ export default function SaleList({ sales }) {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    sales.length,
+    vendors.length,
     onSearchChange,
     hasSearchFilter,
+    selectedKeys,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -354,8 +366,6 @@ export default function SaleList({ sales }) {
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-  console.log("items is purchase", items);
-
   return (
     <>
       <Table
@@ -366,9 +376,12 @@ export default function SaleList({ sales }) {
         classNames={{
           wrapper: "max-h-[382px]",
         }}
+        selectedKeys={selectedKeys}
+        selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
         onSortChange={setSortDescriptor}
       >
         <TableHeader columns={headerColumns}>
@@ -382,7 +395,7 @@ export default function SaleList({ sales }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Purchases found"} items={sortedItems}>
+        <TableBody emptyContent={"No users found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -392,6 +405,18 @@ export default function SaleList({ sales }) {
           )}
         </TableBody>
       </Table>
+      {deleteBox && (
+        <DeleteAlert
+          cancel={() => {
+            setDeleteBox(false);
+            setSelectedKeys([]);
+          }}
+          onDelete={() => {
+            deleteCateogrys();
+            setDeleteBox(false);
+          }}
+        />
+      )}
     </>
   );
 }

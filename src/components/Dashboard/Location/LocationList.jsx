@@ -128,12 +128,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
       case "name":
         return <h3>{locations.name}</h3>;
       case "create":
-        return (
-          <h3>
-            {format(new Date(locations.createdAt), "yyyy-MM-dd")}
-            {}
-          </h3>
-        );
+        return <h3>{format(new Date(locations.createdAt), "yyyy-MM-dd")}</h3>;
       case "update":
         return <h3>{format(new Date(locations.updatedAt), "yyyy-MM-dd")}</h3>;
       default:
@@ -194,29 +189,6 @@ export default function LocationList({ locations, onDeleteSuccess }) {
                 apiEndpoint={LOCATION_API.IMPORT}
               />
             </div>
-            <Dropdown>
-              <div>
-                <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-cyan-700 border-cyan-700 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-cyan-700 px-3 py-1.5">
-                    Status
-                  </button>
-                </DropdownTrigger>
-              </div>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
 
             <Dropdown>
               <div>
@@ -258,24 +230,27 @@ export default function LocationList({ locations, onDeleteSuccess }) {
               Total {locations.length} users
             </h3>
           </div>
-
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
-          <button
-            onClick={() => setDeleteBox(true)}
-            className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
-          >
-            Delete
-          </button>
+          <div className="flex">
+            <label className="flex items-center text-default-400 text-small">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
+            {selectedKeys.size > 0 && (
+              <button
+                onClick={() => setDeleteBox(true)}
+                className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
+              >
+                Delete
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -287,6 +262,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
     locations.length,
     onSearchChange,
     hasSearchFilter,
+    selectedKeys,
   ]);
 
   const bottomContent = React.useMemo(() => {

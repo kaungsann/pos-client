@@ -16,15 +16,17 @@ import {
   User,
   Pagination,
 } from "@nextui-org/react";
-
-import { users, statusOptions } from "../Category/data";
+import { Icon } from "@iconify/react";
+import { statusOptions } from "../Category/data";
 import { capitalize } from "../Category/utils";
-import SearchBox from "../Category/SearchBox";
+import SearchBox from "../../utils/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../Api";
+import { BASE_URL, deleteMultiple } from "../../Api";
 import { useSelector } from "react-redux";
+import { format } from "date-fns";
+import DeleteAlert from "../../utils/DeleteAlert";
 
 const statusColorMap = {
   active: "success",
@@ -44,8 +46,8 @@ const columns = [
   { name: "ACTIONS", uid: "actions" },
 ];
 
-export default function CustomerList({ customers }) {
-  console.log("cusotmer is a", customers);
+export default function CustomerList({ customers, onDeleteSuccess }) {
+  const [deleteBox, setDeleteBox] = React.useState(false);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -54,8 +56,8 @@ export default function CustomerList({ customers }) {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-  const addCategoryRoute = () => {
-    navigate("/admin/categorys/create");
+  const addCustomerRoute = () => {
+    navigate("/admin/partners/create");
   };
   const STOCK_API = {
     INDEX: BASE_URL + "/stock",
@@ -72,6 +74,20 @@ export default function CustomerList({ customers }) {
   const [page, setPage] = React.useState(1);
 
   const hasSearchFilter = Boolean(filterValue);
+
+  const deleteCateogrys = async () => {
+    const response = await deleteMultiple(
+      "/partner",
+      {
+        partnerIds: [...selectedKeys],
+      },
+      token.accessToken
+    );
+    if (response.status) {
+      setSelectedKeys([]);
+      onDeleteSuccess();
+    }
+  };
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -129,15 +145,17 @@ export default function CustomerList({ customers }) {
       case "email":
         return <h3>{customers.email}</h3>;
       case "phone":
-        return <h3>{customers.phone?.phone}</h3>;
+        return <h3>{customers.phone ? customers.phone : "none"}</h3>;
       case "city":
-        return <h3>{customers.city?.city}</h3>;
+        return <h3>{customers.city ? customers.city : "none"}</h3>;
       case "address":
-        return <h3>{customers.address}</h3>;
+        return <h3>{customers.address ? customers.address : "none"}</h3>;
       case "company":
         return <h3>{customers.isCompany ? "vendor" : "none"}</h3>;
       case "customer":
         return <h3>{customers.isCompany ? "customer" : "none"}</h3>;
+      case "create":
+        return <h3>{format(new Date(customers.createdAt), "yyyy-MM-dd")}</h3>;
       case "status":
         return (
           <Chip
@@ -151,19 +169,22 @@ export default function CustomerList({ customers }) {
         );
       case "actions":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  click
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+          <div className="p-2 flex w-full justify-start">
+            <Icon
+              icon="mdi:eye-outline"
+              onClick={() => {
+                navigate(`/admin/partners/detail/${customers.id}`);
+              }}
+              className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
+            />
+            <Icon
+              icon="ep:edit"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/admin/partners/edit/${customers.id}`);
+              }}
+              className="text-2xl mx-3 text-blue-800 font-bold hover:text-blue-500"
+            />
           </div>
         );
       default:
@@ -259,6 +280,13 @@ export default function CustomerList({ customers }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
+
+            <button
+              onClick={addCustomerRoute}
+              className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
+            >
+              Add New
+            </button>
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -268,18 +296,27 @@ export default function CustomerList({ customers }) {
               Total {customers.length}
             </h3>
           </div>
-
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
+          <div className="flex">
+            <label className="flex items-center text-default-400 text-small">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
+            {selectedKeys.size > 0 && (
+              <button
+                onClick={() => setDeleteBox(true)}
+                className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
+              >
+                Delete
+              </button>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -291,6 +328,7 @@ export default function CustomerList({ customers }) {
     customers.length,
     onSearchChange,
     hasSearchFilter,
+    selectedKeys,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -371,6 +409,18 @@ export default function CustomerList({ customers }) {
           )}
         </TableBody>
       </Table>
+      {deleteBox && (
+        <DeleteAlert
+          cancel={() => {
+            setDeleteBox(false);
+            setSelectedKeys([]);
+          }}
+          onDelete={() => {
+            deleteCateogrys();
+            setDeleteBox(false);
+          }}
+        />
+      )}
     </>
   );
 }

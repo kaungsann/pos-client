@@ -247,12 +247,14 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
                 <option value="15">15</option>
               </select>
             </label>
-            <button
-              onClick={() => setDeleteBox(true)}
-              className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
-            >
-              Delete
-            </button>
+            {selectedKeys.size > 0 && (
+              <button
+                onClick={() => setDeleteBox(true)}
+                className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
+              >
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -265,6 +267,7 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
     categorys.length,
     onSearchChange,
     hasSearchFilter,
+    selectedKeys,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -305,7 +308,7 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
-
+  console.log("slelect key is a", selectedKeys.size);
   return (
     <>
       <Table

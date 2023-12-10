@@ -17,9 +17,8 @@ import {
   Chip,
 } from "@nextui-org/react";
 
-import { statusOptions } from "../Category/data";
 import { capitalize } from "../Category/utils";
-import SearchBox from "../Category/SearchBox";
+import SearchBox from "../../utils/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +33,11 @@ const statusColorMap = {
   paused: "danger",
   vacation: "warning",
 };
-//const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+
+const statusOptions = [
+  { name: "pending", uid: "pending" },
+  { name: "confirmed", uid: "confirmed" },
+];
 
 const INITIAL_VISIBLE_COLUMNS = [
   "orderdate",
@@ -66,8 +69,6 @@ export default function PurchaseList({ purchases, refresh }) {
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-
-  console.log("initialized col name is", visibleColumns);
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
@@ -113,7 +114,7 @@ export default function PurchaseList({ purchases, refresh }) {
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredPurchase = filteredPurchase.filter((pur) =>
-        Array.from(statusFilter).includes(pur.status)
+        Array.from(statusFilter).includes(pur.state)
       );
     }
 
@@ -140,8 +141,6 @@ export default function PurchaseList({ purchases, refresh }) {
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((purchases, columnKey) => {
-    console.log("key is a", columnKey);
-    console.log("prucahse is a", purchases);
     const cellValue = purchases[columnKey];
 
     switch (columnKey) {
@@ -171,9 +170,9 @@ export default function PurchaseList({ purchases, refresh }) {
       case "totalproduct":
         return <h3>{purchases.lines.length}</h3>;
       case "taxtotal":
-        return <h3>{purchases.taxTotal}</h3>;
+        return <h3>{purchases.taxTotal.toFixed(2)}</h3>;
       case "total":
-        return <h3>{purchases.total}</h3>;
+        return <h3>{purchases.total.toFixed(2)}</h3>;
       case "actions":
         return (
           <div className="flex justify-between items-center">
@@ -259,7 +258,7 @@ export default function PurchaseList({ purchases, refresh }) {
               <div>
                 <DropdownTrigger className="hidden sm:flex">
                   <button className="font-bold rounded-sm shadow-sm flex items-center text-cyan-700 border-cyan-700 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-cyan-700 px-3 py-1.5">
-                    Status
+                    State
                   </button>
                 </DropdownTrigger>
               </div>
@@ -271,9 +270,9 @@ export default function PurchaseList({ purchases, refresh }) {
                 selectionMode="multiple"
                 onSelectionChange={setStatusFilter}
               >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
+                {statusOptions.map((state) => (
+                  <DropdownItem key={state.uid} className="capitalize">
+                    {capitalize(state.name)}
                   </DropdownItem>
                 ))}
               </DropdownMenu>

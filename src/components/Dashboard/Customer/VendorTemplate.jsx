@@ -2,42 +2,41 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../Api";
-import StockList from "./StockList";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
+import VendorList from "./VendorList";
 
-export default function StockTemplate() {
-  const [stocks, setStocks] = useState([]);
+export default function VendorTemplate() {
+  const [vendors, setVendors] = useState([]);
   const token = useSelector((state) => state.IduniqueData);
 
-  const STOCK_API = {
-    INDEX: BASE_URL + "/stock",
+  const CUSTOMER_API = {
+    INDEX: BASE_URL + "/partner",
   };
 
-  const fetchStockData = async () => {
+  const fetchVendorData = async () => {
     try {
-      const response = await axios.get(STOCK_API.INDEX, {
+      const response = await axios.get(CUSTOMER_API.INDEX, {
         headers: {
           Authorization: `Bearer ${token.accessToken}`,
           "Content-Type": "application/json",
         },
       });
-      const filteredStock = response.data?.data.filter(
-        (ct) => ct.active === true
+      const filteredvendors = response.data?.data.filter(
+        (ct) => ct.isCustomer === false && ct.active === true
       );
-      setStocks(filteredStock);
+      setVendors(filteredvendors);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
 
   useEffect(() => {
-    fetchStockData();
+    fetchVendorData();
   }, [token]);
-
   return (
-    <div>
-      <StockList stocks={stocks} />
-    </div>
+    <>
+      <VendorList vendors={vendors} onDeleteSuccess={fetchVendorData} />
+    </>
   );
 }

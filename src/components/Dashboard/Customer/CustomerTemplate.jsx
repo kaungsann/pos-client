@@ -23,7 +23,7 @@ export default function CustomerTemplate() {
         },
       });
       const filteredCustomers = response.data?.data.filter(
-        (ct) => ct.active === true
+        (ct) => ct.isCustomer === true && ct.active === true
       );
       setCustomers(filteredCustomers);
     } catch (error) {
@@ -39,7 +39,7 @@ export default function CustomerTemplate() {
   }, [token]);
   return (
     <>
-      <CustomerList customers={customers} />
+      <CustomerList customers={customers} onDeleteSuccess={fetchCustomerData} />
     </>
   );
 }

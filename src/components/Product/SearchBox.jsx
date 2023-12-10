@@ -8,7 +8,6 @@ const SearchBox = ({ keyword, onSearch }) => {
       [key]: value,
     });
   };
-
   return (
     <>
       <div>
@@ -17,7 +16,10 @@ const SearchBox = ({ keyword, onSearch }) => {
           type="text"
           radius="sm"
           variant="faded"
-          label="Search"
+          classNames={{
+            inputWrapper: ["shadow-sm h-[7px]"],
+          }}
+          placeholder="Search by name..."
           value={keyword}
           onChange={(e) => handleInputChange("name", e.target.value)}
           startContent={<Icon icon="ic:sharp-search" />}
