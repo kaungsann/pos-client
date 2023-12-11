@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { removeData } from "../../../redux/actions";
+import FadeLoader from "react-spinners/FadeLoader";
+
 import { TbEdit } from "react-icons/tb";
 import { getApi } from "../../Api";
 import { Icon } from "@iconify/react";
@@ -41,106 +43,98 @@ export default function EmployeeDetail() {
             Back
           </button>
         </Link>
-        <Link to={`/admin/employee/edit/${id}`}>
-          <TbEdit className="text-4xl font-bold text-blue-700 hover:text-slate-700" />
-        </Link>
+
       </div>
 
-      <h2 className="py-1.5 text-lg text-start font-bold mt-2 bg-blue-600 text-white pl-4">
-        Employee Information
-      </h2>
 
-      {detail.length > 0 && (
-        <>
-          <div className="flex justify-between">
-            <div className="w-2/4">
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">
-                  Employee Id
-                </h4>
-                <h3 className="font-bold text-lg text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100">
-                  {detail[0].employeeId}
-                </h3>
-              </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Name</h4>
-                <h3 className="font-bold text-lg text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100">
-                  {detail[0].name}
-                </h3>
-              </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">
-                  Staff Email
-                </h4>
-                <h3 className="font-bold text-lg text-blue-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
-                  {detail[0].email}
-                </h3>
-              </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Phone</h4>
-                <h3
-                  className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
-                    detail[0].phone ? "text-slate-600" : "text-red-400"
-                  }`}
+
+      {detail && detail.length > 0 ? (
+        <div className="container my-5">
+          <h2 className="lg:text-xl font-bold my-2">Employee Information</h2>
+          <div className="container bg-white p-5 rounded-lg max-w-6xl">
+            <div className="flex">
+
+              <div className="ml-auto">
+                <Link
+                  to={`/admin/employee/edit/${id}`}
                 >
-                  {detail[0].phone
-                    ? detail[0].phone
-                    : "This user need to add phone"}
-                </h3>
+                  <Icon icon="ep:edit" className="text-xl" />
+                </Link>
               </div>
             </div>
-            <div className="w-2/4 justify-between">
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Birthday</h4>
-                <h3
-                  className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
-                    detail[0].birthdate ? "text-slate-600" : "text-red-400"
-                  }`}
-                >
-                  {detail[0].birthdate
-                    ? format(new Date(detail[0].birthdate), "yyyy-MM-dd")
-                    : "This user need to add birthday"}
-                </h3>
+
+            <div className="grid grid-cols-2 max-w-3xl gap-10 my-10">
+              <div className="container space-y-8 font-semibold text-sm">
+                <div className="flex justify-between items-center">
+                  <h4>Name</h4>
+                  <h3 className="font-medium">
+                    {detail[0].name ? detail[0].name.toUpperCase() : ""}
+                  </h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>Staff Email</h4>
+                  <h3 className="font-medium">
+                    {detail[0].email ? detail[0].email : ""}
+                  </h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>Phone</h4>
+                  <h3 className="font-medium">
+                    {detail[0].phone
+                      ? detail[0].phone
+                      : "This user need to add phone"}
+                  </h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>Birthday</h4>
+                  <h3 className="font-medium">
+                    {detail[0].birthdate
+                      ? format(new Date(detail[0].birthdate), "yyyy-MM-dd")
+                      : "This user need to add birthday"}
+                  </h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>Address</h4>
+                  <h3 className="font-medium">
+                    {detail[0].address
+                      ? detail[0].address
+                      : "This user need to add address"}                  </h3>
+                </div>
               </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Address</h4>
-                <h3
-                  className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
-                    detail[0].address ? "text-slate-600" : "text-red-400"
-                  }`}
-                >
-                  {detail[0].address
-                    ? detail[0].address
-                    : "This user need to add address"}
-                </h3>
-              </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">City</h4>
-                <h3
-                  className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
-                    detail[0].city ? "text-slate-600" : "text-red-400"
-                  }`}
-                >
-                  {detail[0].city
+              <div className="container space-y-8 font-semibold text-sm">
+                <div className="flex justify-between items-center">
+                  <h4>City</h4>
+                  <h3 className="font-medium"> {detail[0].city
                     ? detail[0].city
-                    : "This user need to add city"}
-                </h3>
-              </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Gender</h4>
-                <h3
-                  className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
-                    detail[0].gender ? "text-slate-600" : "text-red-400"
-                  }`}
-                >
-                  {detail[0].gender
-                    ? detail[0].gender
-                    : "This user need to add city"}
-                </h3>
+                    : "This user need to add city"}</h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>Gender</h4>
+              
+                  <h3 className="font-medium ">    
+                   {detail[0].gender
+                    ? detail[0].gender 
+                    : "This user need to add city"}</h3>
+                </div>
+
+
+
               </div>
             </div>
           </div>
-        </>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center mt-40">
+          {loading && (
+            <FadeLoader
+              color={"#0284c7"}
+              loading={loading}
+              size={20}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          )}
+        </div>
       )}
     </>
   );
