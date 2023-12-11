@@ -49,9 +49,9 @@ export default function EmployeeDetail() {
 
 
       {detail && detail.length > 0 ? (
-        <div className="container my-5">
+        <div className="container my-5 ">
           <h2 className="lg:text-xl font-bold my-2">Employee Information</h2>
-          <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          <div className="container bg-white p-5 rounded-lg max-w-6xl ">
             <div className="flex">
 
               <div className="ml-auto">
@@ -63,7 +63,7 @@ export default function EmployeeDetail() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 max-w-3xl gap-10 my-10">
+            <div className="grid grid-cols-2 max-w-3xl gap-10 my-10 ">
               <div className="container space-y-8 font-semibold text-sm">
                 <div className="flex justify-between items-center">
                   <h4>Name</h4>
@@ -110,11 +110,11 @@ export default function EmployeeDetail() {
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>Gender</h4>
-              
-                  <h3 className="font-medium ">    
-                   {detail[0].gender
-                    ? detail[0].gender 
-                    : "This user need to add city"}</h3>
+
+                  <h3 className="font-medium ">
+                    {detail[0].gender
+                      ? detail[0].gender
+                      : "This user need to add city"}</h3>
                 </div>
 
 
