@@ -58,7 +58,7 @@ const FilterBox = ({ categories, onFilter }) => {
   return (
     <>
       <button
-        onPress={isFilterActive ? handleClearFiltersClick : onOpen}
+        onClick={isFilterActive ? handleClearFiltersClick : onOpen}
         className={`rounded-sm ml-3 transition shadow-sm flex items-center ${
           isFilterActive
             ? "text-red-500 border-red-500 hover:bg-red-500"
