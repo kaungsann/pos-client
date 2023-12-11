@@ -1,42 +1,48 @@
-import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
 
-class ErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
+const ErrorBoundary = ({ children }) => {
+  const [errorState, setErrorState] = useState({
+    hasError: false,
+    error: null,
+    errorInfo: null,
+  });
 
-    this.state = {
-      hasError: false,
+  useEffect(() => {
+    const componentDidCatch = (error, errorInfo) => {
+      setErrorState({
+        hasError: true,
+        error: error,
+        errorInfo: errorInfo,
+      });
     };
-  }
-  static getDerivedStateFromError(error) {
-    return {
-      hasError: true,
+
+    const cleanup = () =>
+      setErrorState({ hasError: false, error: null, errorInfo: null });
+
+    window.addEventListener("unhandledrejection", componentDidCatch);
+    return () => {
+      window.removeEventListener("unhandledrejection", componentDidCatch);
+      cleanup();
     };
+  }, []);
+
+  if (errorState.hasError) {
+    return (
+      <div>
+        <h2>Something went wrong.</h2>
+        <p>{errorState.error && errorState.error.toString()}</p>
+        <p>Component Stack Error Details:</p>
+        <pre>{errorState.errorInfo && errorState.errorInfo.componentStack}</pre>
+      </div>
+    );
   }
-  componentDidCatch(error, errorInfo) {
-    console.log("error is ", error);
-    console.log("error info is  ", errorInfo);
-  }
-  render() {
-    if (this.state.hasError) {
-      return (
-        <>
-          <div className="flex flex-col  mt-40 items-center justify-center">
-            <div className=" text-red-600 font-serif  text-3xl">
-              Something is not right , Pls Back the main page
-            </div>
-            <a
-              href="/"
-              className="px-4 hover:bg-red-400 py-2 mt-10 bg-red-500 text-white rounded-sm w-40"
-            >
-              Go to Main Page
-            </a>
-          </div>
-        </>
-      );
-    }
-    return this.props.children;
-  }
-}
+
+  return children;
+};
+
+ErrorBoundary.propTypes = {
+  children: PropTypes.node,
+};
 
 export default ErrorBoundary;
