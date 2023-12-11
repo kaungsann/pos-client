@@ -38,15 +38,13 @@ export default function EmployeeDetail() {
   return (
     <>
       <div className="flex justify-between items-center cursor-pointer">
-        <Link to="/admin/employee/all">
-          <button className="hover:opacity-75 lg:px-8 md:px-4 py-2 text-white bg-blue-600 rounded-sm shadow-md border-2 border-blue-600 hover:opacity-75text-white">
-            Back
-          </button>
+        <Link
+          to="/admin/products/all"
+          className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
+        >
+          Back
         </Link>
-
       </div>
-
-
 
       {detail && detail.length > 0 ? (
         <div className="container my-5 ">
