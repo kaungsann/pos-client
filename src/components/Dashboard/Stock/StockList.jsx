@@ -6,14 +6,11 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
   Button,
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Chip,
-  User,
   Pagination,
 } from "@nextui-org/react";
 
@@ -26,14 +23,15 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
+import { Icon } from "@iconify/react";
 
 const INITIAL_VISIBLE_COLUMNS = ["product", "location", "quantity", "updateon"];
 
 const columns = [
-  { name: "PRODUCT", uid: "product", sortable: true },
-  { name: "LOCATION", uid: "location", sortable: true },
-  { name: "QUANTITY", uid: "quantity", sortable: true },
-  { name: "UPDATE-ON", uid: "updateon", sortable: true },
+  { name: "Product", uid: "product", sortable: true },
+  { name: "Location", uid: "location", sortable: true },
+  { name: "Quantity", uid: "quantity", sortable: true },
+  { name: "UpdateOn", uid: "updateon", sortable: true },
 ];
 
 export default function StockList({ stocks }) {
@@ -55,7 +53,7 @@ export default function StockList({ stocks }) {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "Product",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -83,7 +81,7 @@ export default function StockList({ stocks }) {
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredStocks = filteredStocks.filter((stk) =>
-        Array.from(statusFilter).includes(stk.status)
+        Array.from(statusFilter).includes(stk.product.name)
       );
     }
 
@@ -113,6 +111,8 @@ export default function StockList({ stocks }) {
     const cellValue = stocks[columnKey];
 
     switch (columnKey) {
+      case "updateon":
+        return <h3> {format(new Date(stocks.updatedAt), "yyyy-MM-dd")}</h3>;
       case "product":
         return (
           <h3>
@@ -127,8 +127,6 @@ export default function StockList({ stocks }) {
         );
       case "quantity":
         return <h3>{stocks.onHand}</h3>;
-      case "updateon":
-        return <h3> {format(new Date(stocks.updatedAt), "yyyy-MM-dd")}</h3>;
       default:
         return cellValue;
     }
@@ -168,32 +166,51 @@ export default function StockList({ stocks }) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+        <div className="flex justify-between items-center">
           <SearchBox
             value={filterValue}
             clear={onClear}
             changeValue={onSearchChange}
           />
-          <div className="flex gap-3">
+          <div className="flex">
             <div>
               <ExcelExportButton
                 token={token.accessToken}
                 apiEndpoint={STOCK_API.EXPORT}
               />
             </div>
-            <div>
+            <div className="mx-3">
               <ExcelImportButton
                 token={token.accessToken}
                 apiEndpoint={STOCK_API.IMPORT}
               />
             </div>
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <h2 className="text-xl font-bold">Stock</h2>
+            <h3 className="text-default-400 text-small ml-4">
+              Total {stocks.length}
+            </h3>
+          </div>
 
+          <div className="flex">
+            <label className="flex items-center text-default-400 text-small mr-4">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
             <Dropdown>
               <div>
                 <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
-                    Columns
-                  </button>
+                  <Icon icon="system-uicons:filtering" />
                 </DropdownTrigger>
               </div>
               <DropdownMenu
@@ -212,26 +229,6 @@ export default function StockList({ stocks }) {
               </DropdownMenu>
             </Dropdown>
           </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Stock</h2>
-            <h3 className="text-default-400 text-small ml-4">
-              Total {stocks.length}
-            </h3>
-          </div>
-
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
         </div>
       </div>
     );
@@ -294,8 +291,6 @@ export default function StockList({ stocks }) {
         classNames={{
           wrapper: "max-h-[382px]",
         }}
-        selectedKeys={selectedKeys}
-        selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"

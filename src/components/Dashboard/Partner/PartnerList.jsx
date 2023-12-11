@@ -37,13 +37,13 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = ["name", "phone", "actions"];
 
 const columns = [
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "PHONE", uid: "phone", sortable: true },
-  { name: "ADDRESS", uid: "address", sortable: true },
-  { name: "CREATE-DATE", uid: "create", sortable: true },
-  { name: "CITY", uid: "city" },
-  { name: "COMPANY", uid: "company" },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "Name", uid: "name", sortable: true },
+  { name: "Phone", uid: "phone", sortable: true },
+  { name: "Address", uid: "address" },
+  { name: "Create-Date", uid: "create" },
+  { name: "City", uid: "city" },
+  { name: "Company", uid: "company" },
+  { name: "Actions", uid: "actions" },
 ];
 
 export default function PartnerList({ partners, onDeleteSuccess }) {
@@ -172,19 +172,19 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
         return (
           <div className="p-2 flex w-full justify-start">
             <Icon
-              icon="mdi:eye-outline"
+              icon="prime:eye"
+              className="text-xl hover:opacity-75"
               onClick={() => {
                 navigate(`/admin/partners/detail/${partners.id}`);
               }}
-              className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
             />
             <Icon
               icon="ep:edit"
+              className="text-lg ml-2 hover:opacity-75"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/admin/partners/edit/${partners.id}`);
               }}
-              className="text-2xl mx-3 text-blue-800 font-bold hover:text-blue-500"
             />
           </div>
         );
@@ -234,8 +234,14 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
             changeValue={onSearchChange}
           />
 
-          <div className="flex gap-3">
-            <div>
+          <div className="flex">
+            <button
+              onClick={addCustomerRoute}
+              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+            >
+              Add
+            </button>
+            <div className="mx-3">
               <ExcelExportButton
                 token={token.accessToken}
                 apiEndpoint={PARTNER_API.EXPORT}
@@ -247,36 +253,31 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
                 apiEndpoint={PARTNER_API.IMPORT}
               />
             </div>
-            <Dropdown>
-              <div>
-                <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-cyan-700 border-cyan-700 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-cyan-700 px-3 py-1.5">
-                    Status
-                  </button>
-                </DropdownTrigger>
-              </div>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <h2 className="text-xl font-bold">Partners</h2>
+            <h3 className="text-default-400 text-small ml-4">
+              Total {partners.length}
+            </h3>
+          </div>
+          <div className="flex">
+            <label className="flex items-center text-default-400 text-small">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
               >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
             <Dropdown>
-              <div>
+              <div className="mx-4">
                 <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
-                    Columns
-                  </button>
+                  <Icon icon="system-uicons:filtering" />
                 </DropdownTrigger>
               </div>
               <DropdownMenu
@@ -294,38 +295,10 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
-
-            <button
-              onClick={addCustomerRoute}
-              className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
-            >
-              Add New
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Partners</h2>
-            <h3 className="text-default-400 text-small ml-4">
-              Total {partners.length}
-            </h3>
-          </div>
-          <div className="flex">
-            <label className="flex items-center text-default-400 text-small">
-              Rows per page:
-              <select
-                className="bg-transparent outline-none text-default-400 text-small"
-                onChange={onRowsPerPageChange}
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-              </select>
-            </label>
             {selectedKeys.size > 0 && (
               <button
                 onClick={() => setDeleteBox(true)}
-                className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
+                className=" px-3 py-1 text-white bg-rose-500 rounded-md hover:opacity-75"
               >
                 Delete
               </button>

@@ -17,7 +17,7 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
-import { users, statusOptions } from "../Category/data";
+import { statusOptions } from "../Category/data";
 import { capitalize } from "../Category/utils";
 import SearchBox from "../Category/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
@@ -27,6 +27,7 @@ import { BASE_URL, deleteMultiple } from "../../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import DeleteAlert from "../../utils/DeleteAlert";
+import { Icon } from "@iconify/react";
 
 const statusColorMap = {
   active: "success",
@@ -34,12 +35,13 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "create", "update"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "create", "update", "actions"];
 
 const columns = [
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "CREATE-DATE", uid: "create", sortable: true },
-  { name: "UPDATE-DATE", uid: "update", sortable: true },
+  { name: "Name", uid: "name", sortable: true },
+  { name: "Create-Date", uid: "create" },
+  { name: "Update ", uid: "update" },
+  { name: "ACTIONS00", uid: "actions" },
 ];
 
 export default function LocationList({ locations, onDeleteSuccess }) {
@@ -65,7 +67,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "name",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -131,6 +133,26 @@ export default function LocationList({ locations, onDeleteSuccess }) {
         return <h3>{format(new Date(locations.createdAt), "yyyy-MM-dd")}</h3>;
       case "update":
         return <h3>{format(new Date(locations.updatedAt), "yyyy-MM-dd")}</h3>;
+      case "actions":
+        return (
+          <div className="p-2 flex w-full justify-start items-center">
+            <Icon
+              icon="prime:eye"
+              className="text-xl hover:opacity-75"
+              onClick={() => {
+                navigate(`/admin/locations/detail/${locations.id}`);
+              }}
+            />
+            <Icon
+              icon="ep:edit"
+              className="text-lg ml-2 hover:opacity-75"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/admin/locations/edit/${locations.id}`);
+              }}
+            />
+          </div>
+        );
       default:
         return cellValue;
     }
@@ -169,15 +191,21 @@ export default function LocationList({ locations, onDeleteSuccess }) {
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+      <>
+        <div className="flex justify-between items-center">
           <SearchBox
             value={filterValue}
             clear={onClear}
             changeValue={onSearchChange}
           />
-          <div className="flex gap-3">
-            <div>
+          <div className="flex">
+            <button
+              onClick={addLocationRoute}
+              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+            >
+              Add
+            </button>
+            <div className="mx-3">
               <ExcelExportButton
                 token={token.accessToken}
                 apiEndpoint={LOCATION_API.EXPORT}
@@ -189,45 +217,13 @@ export default function LocationList({ locations, onDeleteSuccess }) {
                 apiEndpoint={LOCATION_API.IMPORT}
               />
             </div>
-
-            <Dropdown>
-              <div>
-                <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
-                    Columns
-                  </button>
-                </DropdownTrigger>
-              </div>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-            <div>
-              <button
-                onClick={addLocationRoute}
-                className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
-              >
-                Add New
-              </button>
-            </div>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Location</h2>
+            <h2 className="text-xl font-bold">Location</h2>
             <h3 className="text-default-400 text-small ml-4">
-              Total {locations.length} users
+              Total {locations.length}
             </h3>
           </div>
           <div className="flex">
@@ -252,7 +248,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
             )}
           </div>
         </div>
-      </div>
+      </>
     );
   }, [
     filterValue,

@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
+import { Icon } from "@iconify/react";
 
 const statusColorMap = {
   active: "success",
@@ -32,7 +33,6 @@ const statusColorMap = {
 };
 
 const INITIAL_VISIBLE_COLUMNS = [
-  "id",
   "product",
   "date",
   "barcode",
@@ -41,16 +41,14 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 const columns = [
-  { name: "ID", uid: "id", sortable: true },
-  { name: "PRODUCT", uid: "product", sortable: true },
-  { name: "DATE", uid: "date", sortable: true },
-  { name: "BARCODE", uid: "barcode", sortable: true },
-  { name: "LOCATION", uid: "location", sortable: true },
-  { name: "QUANTITY", uid: "quantity", sortable: true },
+  { name: "Product", uid: "product" },
+  { name: "Location", uid: "location", sortable: true },
+  { name: "Date", uid: "date" },
+  { name: "Barcode", uid: "barcode" },
+  { name: "Quantity", uid: "quantity", sortable: true },
 ];
 
 export default function AdjustmentList({ adjustments }) {
-  console.log("adjustment is a", adjustments);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -59,9 +57,7 @@ export default function AdjustmentList({ adjustments }) {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-  const addCategoryRoute = () => {
-    navigate("/admin/categorys/create");
-  };
+
   const ADJUSTMENT_API = {
     INDEX: BASE_URL + "/inventory-adjustment",
     IMPORT: BASE_URL + "/inventory-adjustment/import-excel",
@@ -129,8 +125,6 @@ export default function AdjustmentList({ adjustments }) {
     const cellValue = adjustments[columnKey];
 
     switch (columnKey) {
-      case "ID":
-        return <h2>{adjustments.id}</h2>;
       case "product":
         return <h2>{adjustments.productName}</h2>;
       case "date":
@@ -179,33 +173,51 @@ export default function AdjustmentList({ adjustments }) {
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+      <>
+        <div className="flex justify-between items-center">
           <SearchBox
             value={filterValue}
             clear={onClear}
             changeValue={onSearchChange}
           />
-          <div className="flex gap-3">
+          <div className="flex">
             <div>
               <ExcelExportButton
                 token={token.accessToken}
                 apiEndpoint={ADJUSTMENT_API.EXPORT}
               />
             </div>
-            <div>
+            <div className="ml-3">
               <ExcelImportButton
                 token={token.accessToken}
                 apiEndpoint={ADJUSTMENT_API.IMPORT}
               />
             </div>
-
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <h2 className="text-xl font-bold">Adjustment</h2>
+            <h3 className="text-default-400 text-small ml-4">
+              Total {adjustments.length}
+            </h3>
+          </div>
+          <div className="flex">
+            <label className="flex items-center text-default-400 text-small mr-4">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
             <Dropdown>
               <div>
                 <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
-                    Columns
-                  </button>
+                  <Icon icon="system-uicons:filtering" />
                 </DropdownTrigger>
               </div>
               <DropdownMenu
@@ -225,27 +237,7 @@ export default function AdjustmentList({ adjustments }) {
             </Dropdown>
           </div>
         </div>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Adjustment</h2>
-            <h3 className="text-default-400 text-small ml-4">
-              Total {adjustments.length}
-            </h3>
-          </div>
-
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
-        </div>
-      </div>
+      </>
     );
   }, [
     filterValue,
@@ -306,8 +298,6 @@ export default function AdjustmentList({ adjustments }) {
         classNames={{
           wrapper: "max-h-[382px]",
         }}
-        selectedKeys={selectedKeys}
-        selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"

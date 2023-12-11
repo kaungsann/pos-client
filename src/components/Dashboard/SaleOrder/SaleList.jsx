@@ -36,19 +36,20 @@ const INITIAL_VISIBLE_COLUMNS = [
   "partner",
   "location",
   "state",
+  "total",
   "actions",
 ];
 
 const columns = [
-  { name: "ORDERDATE", uid: "orderdate", sortable: true },
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "PARTNER", uid: "partner", sortable: true },
-  { name: "LOCATION", uid: "location", sortable: true },
-  { name: "STATE", uid: "state" },
-  { name: "TOTAL PRODUCT", uid: "totalproduct" },
-  { name: "TAX TOTAL", uid: "taxtotal", sortable: true },
-  { name: "TOTAL", uid: "total" },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "OrderDate", uid: "orderdate" },
+  { name: "Name", uid: "name" },
+  { name: "Partner", uid: "partner" },
+  { name: "Location", uid: "location" },
+  { name: "State", uid: "state" },
+  { name: "TotalProduct", uid: "totalproduct" },
+  { name: "TaxTotal", uid: "taxtotal", sortable: true },
+  { name: "Total", uid: "total", sortable: true },
+  { name: "Action", uid: "actions" },
 ];
 
 export default function SaleList({ sales }) {
@@ -73,7 +74,7 @@ export default function SaleList({ sales }) {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "Order Date",
+    column: "total",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -162,11 +163,11 @@ export default function SaleList({ sales }) {
       case "actions":
         return (
           <Icon
-            icon="mdi:eye-outline"
+            icon="prime:eye"
+            className="text-xl hover:opacity-75"
             onClick={() => {
               navigate(`/admin/saleorders/detail/${sales.id}`);
             }}
-            className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
           />
         );
       default:
@@ -215,6 +216,12 @@ export default function SaleList({ sales }) {
             changeValue={onSearchChange}
           />
           <div className="flex gap-3">
+            <button
+              onClick={addPurchaseRoute}
+              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+            >
+              Add
+            </button>
             <div>
               <ExcelExportButton
                 token={token.accessToken}
@@ -250,13 +257,32 @@ export default function SaleList({ sales }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
+          </div>
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <h2 className="text-xl font-bold">Sales</h2>
+            <h3 className="text-default-400 text-small ml-4">
+              Total {sales.length}
+            </h3>
+          </div>
 
+          <div className="flex items-center">
+            <label className="flex items-center text-default-400 text-small mr-4">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
             <Dropdown>
               <div>
                 <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
-                    Columns
-                  </button>
+                  <Icon icon="system-uicons:filtering" />
                 </DropdownTrigger>
               </div>
               <DropdownMenu
@@ -274,34 +300,7 @@ export default function SaleList({ sales }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
-
-            <button
-              onClick={addPurchaseRoute}
-              className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
-            >
-              Add New
-            </button>
           </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Sales</h2>
-            <h3 className="text-default-400 text-small ml-4">
-              Total {sales.length}
-            </h3>
-          </div>
-
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
         </div>
       </div>
     );
