@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { Input } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-const SearchBox = ({ keyword, onSearch }) => {
+const SearchCompo = ({ keyword, onSearch }) => {
   const handleInputChange = (key, value) => {
     onSearch({
       [key]: value,
@@ -30,9 +30,9 @@ const SearchBox = ({ keyword, onSearch }) => {
   );
 };
 
-SearchBox.propTypes = {
+SearchCompo.propTypes = {
   keyword: PropTypes.string,
   onSearch: PropTypes.func,
 };
 
-export default SearchBox;
+export default SearchCompo;

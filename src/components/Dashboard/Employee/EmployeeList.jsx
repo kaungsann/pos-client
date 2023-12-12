@@ -34,12 +34,13 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "email", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "email", "birthdate", "actions"];
 
 const columns = [
   { name: "Name", uid: "name", sortable: true },
   { name: "Email", uid: "email", sortable: true },
   { name: "Address", uid: "address" },
+  { name: "DateOfBirth", uid: "birthdate" },
   { name: "CreateDate", uid: "create" },
   { name: "City", uid: "city" },
   { name: "Actions", uid: "actions" },
@@ -144,6 +145,14 @@ export default function EmployeeList({ employees, onDeleteSuccess }) {
         return <h3>{employees.email ? employees.email : "none"}</h3>;
       case "phone":
         return <h3>{employees.phone ? employees.phone : "none"}</h3>;
+      case "birthdate":
+        return (
+          <h3>
+            {employees.birthdate
+              ? new Date(employees.birthdate).toLocaleDateString()
+              : ""}
+          </h3>
+        );
       case "city":
         return <h3>{employees.city ? employees.city : "none"}</h3>;
       case "address":
@@ -220,22 +229,6 @@ export default function EmployeeList({ employees, onDeleteSuccess }) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <SearchBox
-            value={filterValue}
-            clear={onClear}
-            changeValue={onSearchChange}
-          />
-
-          <div className="flex">
-            <button
-              onClick={addCEmployeeRoute}
-              className="font-bold mr-3 rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
-            >
-              Add
-            </button>
-          </div>
-        </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <h2 className="text-xl font-bold">Employees</h2>

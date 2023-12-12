@@ -248,20 +248,14 @@ export default function () {
               City
             </label>
             <div className="mt-2">
-              <select
-                id="city"
+              <input
                 onChange={(e) => setCity(e.target.value)}
+                id="city"
                 name="city"
-                className=" px-2 block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              >
-                <option disabled value selected>
-                  Select an option
-                </option>
-                <option value="Yagon">Yagon</option>
-                <option value="Mandalay">Mandalay</option>
-                <option value="PyiOoLwin">PyiOoLwin</option>
-                <option value="Pago">Bago</option>
-              </select>
+                type="city"
+                required
+                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
+              />
             </div>
           </div>
 

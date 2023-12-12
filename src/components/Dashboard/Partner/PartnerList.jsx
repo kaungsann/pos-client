@@ -56,15 +56,10 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
 
   const PARTNER_API = {
     INDEX: BASE_URL + "/partner",
-    IMPORT: BASE_URL + "/partner/import-excel",
-    EXPORT: BASE_URL + "/partner/export-excel",
   };
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-  const addCustomerRoute = () => {
-    navigate("/admin/partners/create");
-  };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -76,11 +71,11 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
 
   const hasSearchFilter = Boolean(filterValue);
 
-  const deleteEmployees = async () => {
+  const deletePartners = async () => {
     const response = await deleteMultiple(
-      "/employee",
+      "/partner",
       {
-        employeeIds: [...selectedKeys],
+        partnerIds: [...selectedKeys],
       },
       token.accessToken
     );
@@ -227,34 +222,6 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <SearchBox
-            value={filterValue}
-            clear={onClear}
-            changeValue={onSearchChange}
-          />
-
-          <div className="flex">
-            <button
-              onClick={addCustomerRoute}
-              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
-            >
-              Add
-            </button>
-            <div className="mx-3">
-              <ExcelExportButton
-                token={token.accessToken}
-                apiEndpoint={PARTNER_API.EXPORT}
-              />
-            </div>
-            <div>
-              <ExcelImportButton
-                token={token.accessToken}
-                apiEndpoint={PARTNER_API.IMPORT}
-              />
-            </div>
-          </div>
-        </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <h2 className="text-xl font-bold">Partners</h2>
@@ -403,7 +370,7 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
             setSelectedKeys([]);
           }}
           onDelete={() => {
-            deleteEmployees();
+            deletePartners();
             setDeleteBox(false);
           }}
         />

@@ -122,7 +122,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
         Array.from(statusFilter).includes(staff.status)
       );
     }
-    console.log("FILTERstaff is a", filteredStaff);
     return filteredStaff;
   }, [staffs, filterValue, statusFilter]);
 
@@ -157,7 +156,13 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
       case "email":
         return <h3>{staffs.email}</h3>;
       case "lastlogin":
-        return <h3>{format(new Date(staffs.lastLogin), "yyyy-MM-dd")}</h3>;
+        return (
+          <h3>
+            {staffs.lastLogin
+              ? new Date(staffs.lastLogin).toLocaleDateString()
+              : ""}
+          </h3>
+        );
       case "phone":
         return <h3>{staffs.phone ? staffs.phone : "no phone"}</h3>;
       case "address":
@@ -168,7 +173,11 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
         return <h3>{staffs.city ? staffs.city : "no city"}</h3>;
       case "birthdate":
         return (
-          <h3>{staffs.birthdate ? staffs.birthdate : "no dateofbirth"}</h3>
+          <h3>
+            {staffs.birthdate
+              ? new Date(staffs.birthdate).toLocaleDateString()
+              : ""}
+          </h3>
         );
       case "actions":
         return (
@@ -177,7 +186,7 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
               icon="prime:eye"
               className="text-xl hover:opacity-75"
               onClick={() => {
-                navigate(`/admin/employee/detail/${staffs._id}`);
+                navigate(`/admin/user/detail/${staffs._id}`);
               }}
             />
             <Icon
@@ -185,7 +194,7 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
               className="text-lg ml-2 hover:opacity-75"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/admin/employee/edit/${staffs._id}`);
+                navigate(`/admin/user/detail/${staffs._id}`);
               }}
             />
             <Icon
@@ -237,22 +246,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <SearchBox
-            value={filterValue}
-            clear={onClear}
-            changeValue={onSearchChange}
-          />
-
-          <div className="flex">
-            <button
-              onClick={addCEmployeeRoute}
-              className="font-bold mr-3 rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
-            >
-              Add
-            </button>
-          </div>
-        </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <h2 className="text-xl font-bold">Staffs</h2>

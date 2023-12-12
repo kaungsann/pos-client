@@ -5,9 +5,18 @@ import { BASE_URL } from "../../Api";
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import VendorList from "./VendorList";
+import FilterBox from "./FilterBox";
+import SearchCompo from "../../utils/SearchCompo";
 
 export default function VendorTemplate() {
   const [vendors, setVendors] = useState([]);
+  const [filteredKeywords, setFilteredKeywords] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    city: "",
+  });
+
   const token = useSelector((state) => state.IduniqueData);
 
   const CUSTOMER_API = {
@@ -34,9 +43,92 @@ export default function VendorTemplate() {
   useEffect(() => {
     fetchVendorData();
   }, [token]);
+
+  const handleFilterChange = (selected) => {
+    setFilteredKeywords((prevFilter) => ({
+      ...prevFilter,
+      ...selected,
+    }));
+  };
+  const filteredVendors = useMemo(
+    () =>
+      vendors.filter((customer) => {
+        const { name, phone, address, city } = filteredKeywords;
+
+        const isName = () => {
+          if (!name) {
+            return true;
+          }
+
+          if (customer.name) {
+            return customer.name.toLowerCase().includes(name.toLowerCase());
+          }
+
+          return false;
+        };
+        const isPhone = () => {
+          if (!phone) {
+            return true;
+          }
+          if (customer.phone) {
+            return customer.phone.includes(phone);
+          }
+
+          return false;
+        };
+        const isAddress = () => {
+          if (!address) {
+            return true;
+          }
+
+          if (customer.address) {
+            return customer.address
+              .toLowerCase()
+              .includes(address.toLowerCase());
+          }
+          return false;
+        };
+
+        const isCity = () => {
+          if (!city) {
+            return true;
+          }
+
+          if (customer.city) {
+            return customer.city.toLowerCase().includes(city.toLowerCase());
+          }
+          return false;
+        };
+
+        return (
+          customer.name.toLowerCase().includes(name.toLowerCase()) &&
+          isName() &&
+          isPhone() &&
+          isAddress() &&
+          isCity()
+        );
+      }),
+    [vendors, filteredKeywords]
+  );
   return (
     <>
-      <VendorList vendors={vendors} onDeleteSuccess={fetchVendorData} />
+      <div className="flex justify-between items-center my-3">
+        <SearchCompo
+          keyword={filteredKeywords.name}
+          onSearch={handleFilterChange}
+        />
+
+        <div className="flex">
+          <Link
+            to="/admin/partners/create"
+            className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          >
+            Add
+          </Link>
+          <FilterBox onFilter={handleFilterChange} />
+        </div>
+      </div>
+      <VendorList vendors={filteredVendors} onDeleteSuccess={fetchVendorData} />
     </>
   );
 }

@@ -6,6 +6,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Input,
   Button,
   DropdownTrigger,
   Dropdown,
@@ -16,22 +17,24 @@ import {
 
 import { statusOptions } from "../Category/data";
 import { capitalize } from "../Category/utils";
-import SearchBox from "../../utils/SearchBox";
-import ExcelExportButton from "../../ExcelExportButton";
-import ExcelImportButton from "../../ExcelImportButton";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../Api";
+
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import { Icon } from "@iconify/react";
 
-const INITIAL_VISIBLE_COLUMNS = ["product", "location", "quantity", "updateon"];
+const statusColorMap = {
+  active: "success",
+  paused: "danger",
+  vacation: "warning",
+};
+
+const INITIAL_VISIBLE_COLUMNS = ["product", "location", "onhand", "created"];
 
 const columns = [
-  { name: "Product", uid: "product", sortable: true },
+  { name: "Product", uid: "product" },
   { name: "Location", uid: "location", sortable: true },
-  { name: "Quantity", uid: "quantity", sortable: true },
-  { name: "UpdateOn", uid: "updateon", sortable: true },
+  { name: "OnHand", uid: "onhand", sortable: true },
+  { name: "Create", uid: "created" },
 ];
 
 export default function StockList({ stocks }) {
@@ -42,18 +45,11 @@ export default function StockList({ stocks }) {
   );
 
   const token = useSelector((state) => state.IduniqueData);
-  const navigate = useNavigate();
-
-  const STOCK_API = {
-    INDEX: BASE_URL + "/stock",
-    IMPORT: BASE_URL + "/stock/import-excel",
-    EXPORT: BASE_URL + "/stock/export-excel",
-  };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "Product",
+    column: "age",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -69,10 +65,10 @@ export default function StockList({ stocks }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredStocks = [...stocks];
+    let filteredStock = [...stocks];
 
     if (hasSearchFilter) {
-      filteredStocks = filteredStocks.filter((stk) =>
+      filteredStock = filteredStock.filter((stk) =>
         stk.product.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
@@ -80,12 +76,12 @@ export default function StockList({ stocks }) {
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredStocks = filteredStocks.filter((stk) =>
-        Array.from(statusFilter).includes(stk.product.name)
+      filteredStock = filteredStock.filter((stk) =>
+        Array.from(statusFilter).includes(stk.active)
       );
     }
 
-    return filteredStocks;
+    return filteredStock;
   }, [stocks, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
@@ -111,22 +107,15 @@ export default function StockList({ stocks }) {
     const cellValue = stocks[columnKey];
 
     switch (columnKey) {
-      case "updateon":
-        return <h3> {format(new Date(stocks.updatedAt), "yyyy-MM-dd")}</h3>;
       case "product":
-        return (
-          <h3>
-            {stocks.product && stocks.product.name
-              ? stocks.product.name
-              : "none"}
-          </h3>
-        );
+        return <h2>{stocks.product.name}</h2>;
+      case "created":
+        return <h2>{format(new Date(stocks.createdAt), "yyyy-MM-dd")}</h2>;
+
       case "location":
-        return (
-          <h3>{stocks.location ? stocks.location.name : "no have location"}</h3>
-        );
-      case "quantity":
-        return <h3>{stocks.onHand}</h3>;
+        return <h2>{stocks.location.name}</h2>;
+      case "onhand":
+        return <h2>{stocks.onHand}</h2>;
       default:
         return cellValue;
     }
@@ -165,36 +154,14 @@ export default function StockList({ stocks }) {
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <SearchBox
-            value={filterValue}
-            clear={onClear}
-            changeValue={onSearchChange}
-          />
-          <div className="flex">
-            <div>
-              <ExcelExportButton
-                token={token.accessToken}
-                apiEndpoint={STOCK_API.EXPORT}
-              />
-            </div>
-            <div className="mx-3">
-              <ExcelImportButton
-                token={token.accessToken}
-                apiEndpoint={STOCK_API.IMPORT}
-              />
-            </div>
-          </div>
-        </div>
+      <>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold">Stock</h2>
+            <h2 className="text-xl font-bold">Stocks</h2>
             <h3 className="text-default-400 text-small ml-4">
               Total {stocks.length}
             </h3>
           </div>
-
           <div className="flex">
             <label className="flex items-center text-default-400 text-small mr-4">
               Rows per page:
@@ -230,7 +197,7 @@ export default function StockList({ stocks }) {
             </Dropdown>
           </div>
         </div>
-      </div>
+      </>
     );
   }, [
     filterValue,
@@ -308,7 +275,7 @@ export default function StockList({ stocks }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No stocks found"} items={sortedItems}>
+        <TableBody emptyContent={"No users found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

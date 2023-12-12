@@ -27,6 +27,7 @@ import { BASE_URL, deleteMultiple } from "../../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import DeleteAlert from "../../utils/DeleteAlert";
+import FilterBox from "./FilterBox";
 
 const statusColorMap = {
   active: "success",
@@ -226,21 +227,6 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
   const topContent = React.useMemo(() => {
     return (
       <>
-        <div className="flex justify-between items-center">
-          <SearchBox
-            value={filterValue}
-            clear={onClear}
-            changeValue={onSearchChange}
-          />
-          <div className="flex">
-            <button
-              onClick={addCustomerRoute}
-              className="font-bold mr-3 rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
-            >
-              Add
-            </button>
-          </div>
-        </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <h2 className="text-xl font-bold">Customers</h2>

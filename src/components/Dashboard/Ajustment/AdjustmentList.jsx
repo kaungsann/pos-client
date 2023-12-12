@@ -17,11 +17,7 @@ import {
 
 import { statusOptions } from "../Category/data";
 import { capitalize } from "../Category/utils";
-import SearchBox from "../../utils/SearchBox";
-import ExcelExportButton from "../../ExcelExportButton";
-import ExcelImportButton from "../../ExcelImportButton";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../Api";
+
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import { Icon } from "@iconify/react";
@@ -56,13 +52,6 @@ export default function AdjustmentList({ adjustments }) {
   );
 
   const token = useSelector((state) => state.IduniqueData);
-  const navigate = useNavigate();
-
-  const ADJUSTMENT_API = {
-    INDEX: BASE_URL + "/inventory-adjustment",
-    IMPORT: BASE_URL + "/inventory-adjustment/import-excel",
-    EXPORT: BASE_URL + "/inventory-adjustment/export-excel",
-  };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -174,27 +163,6 @@ export default function AdjustmentList({ adjustments }) {
   const topContent = React.useMemo(() => {
     return (
       <>
-        <div className="flex justify-between items-center">
-          <SearchBox
-            value={filterValue}
-            clear={onClear}
-            changeValue={onSearchChange}
-          />
-          <div className="flex">
-            <div>
-              <ExcelExportButton
-                token={token.accessToken}
-                apiEndpoint={ADJUSTMENT_API.EXPORT}
-              />
-            </div>
-            <div className="ml-3">
-              <ExcelImportButton
-                token={token.accessToken}
-                apiEndpoint={ADJUSTMENT_API.IMPORT}
-              />
-            </div>
-          </div>
-        </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <h2 className="text-xl font-bold">Adjustment</h2>
