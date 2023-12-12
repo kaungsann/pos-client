@@ -4,21 +4,44 @@ import { getApi } from "../../Api";
 import { MdAddShoppingCart } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from '@iconify/react';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react";
+import FadeLoader from "react-spinners/FadeLoader";
 import { removeData } from "../../../redux/actions";
 
 export default function SaleOrderDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
   const [lines, setLines] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
+  const columns = [
+    { key: "name", label: "Name", align: "center" },
+    { key: "tax", label: "Tax", align: "center" },
+    { key: "qty", label: "Stock Qty", align: "center" },
+    { key: "unitPrice", label: "Unit Price", align: "center" },
+    { key: "subTotal", label: "Subtotal", align: "center" },
+  ];
+
+  const getProductName = (item) => {
+    const productName = item.product && item.product.name;
+    return productName || "N/A";
+  };
+
   const singlePurchaseOrder = async () => {
+    setLoading(true);
     let resData = await getApi(`/purchase/${id}`, token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    setDetails(resData.data);
+    if (resData.status) {
+      setLoading(false);
+      setDetails(resData.data);
+    } else {
+      setLoading(true);
+    }
   };
 
   const purchaselines = async () => {
@@ -42,122 +65,111 @@ export default function SaleOrderDetail() {
 
   return (
     <>
-      {detail && detail.length > 0 ? (
-        <div>
-          <div className="flex items-center justify-between">
-            <div className="flex justify-center">
-              <MdAddShoppingCart className="text-4xl font-bold text-slate-600" />
-              <h3 className="text-2xl text-slate-700 font-bold">
-                Purchase Order
-              </h3>
-            </div>
-            <Link to="/admin/purchase/all">
-              <button className="hover:opacity-75 lg:px-8 md:px-4 py-2 text-white bg-blue-600 rounded-md shadow-md border-2 border-blue-600 hover:opacity-75text-white">
-                Back
-              </button>
-            </Link>
-          </div>
 
-          <div className="w-full mx-auto flex justify-center cursor-pointer flex-col">
-            <h2 className="py-1.5 text-lg font-bold mt-2 bg-blue-600 text-white pl-4">
-              Customer Information
-            </h2>
-            <div className="flex justify-between">
-              <div className="w-2/4">
-                <div className="flex justify-between my-3 items-center">
-                  <h4 className="font-bold text-lg text-slate-500">Order-Date</h4>
-                  <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100">
-                    {new Date(detail[0].orderDate).toLocaleDateString()}
+      <div className="flex justify-between">
+        <div className="flex gap-2">
+          <Link
+            to="/admin/saleorders/all"
+            className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
+          >
+            Back
+          </Link>
+        </div>
+      </div>
+
+      {detail && detail.length > 0 ? (
+        <div className="container my-5">
+          <h2 className="lg:text-xl font-bold my-2">Purchase Information</h2>
+          <div className="container bg-white p-5 rounded-lg max-w-6xl">
+            <div className="grid grid-cols-2 max-w-3xl gap-10 my-10">
+              <div className="container space-y-8 font-semibold text-sm">
+                <div className="flex justify-between items-center">
+                  <h4>Order Date</h4>
+                  <h3 className="font-medium">
+                    {detail[0].orderDate
+                      ? new Date(detail[0].orderDate).toLocaleDateString()
+                      : ""}
                   </h3>
                 </div>
-                <div className="flex justify-between my-3 items-center">
-                  <h4 className="font-bold text-lg text-slate-500">
-                    Customer
-                  </h4>
-                  <h3 className="font-bold text-lg text-blue-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
-                    {detail[0].partner.name}
+                <div className="flex justify-between items-center">
+                  <h4>Customer</h4>
+                  <h3 className="font-medium">
+                    {detail[0].partner ? detail[0].partner.name : "none"}
                   </h3>
                 </div>
-                <div className="flex justify-between my-3 items-center">
-                  <h4 className="font-bold text-lg text-slate-500">Location</h4>
-                  <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
-                    {detail[0].location.name}
-                  </h3>
+                <div className="flex justify-between items-center">
+                  <h4>Location</h4>
+                  <h3 className="font-medium">{detail[0].location && detail[0].location.name}</h3>
                 </div>
-                <div className="flex justify-between my-3 items-center">
-                  <h4 className="font-bold text-lg text-slate-500">ModifiedDate</h4>
-                  <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
-                    {new Date(detail[0].updatedAt).toLocaleDateString()}
-                  </h3>
+                <div className="flex justify-between items-center">
+                  <h4>Updated on</h4>
+                  <h3 className="font-medium">{new Date(detail[0].updatedAt).toLocaleDateString()}</h3>
                 </div>
               </div>
-
-              <div className="w-2/4 justify-between">
-                <div className="flex justify-between my-3 items-center">
-                  <h4 className="font-bold text-lg text-slate-500">Tax Total</h4>
-                  <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
-                    {detail[0].taxTotal}
+              <div className="container space-y-8 font-semibold text-sm">
+                <div className="flex justify-between items-center">
+                  <h4>Tax Total</h4>
+                  <h3 className="font-medium">{detail[0].taxTotal}</h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>Total</h4>
+                  <h3 className="font-medium">
+                    {detail[0].total && detail[0].total}
                   </h3>
                 </div>
-                <div className="flex justify-between my-3 items-center">
-                  <h4 className="font-bold text-lg text-slate-500">Total</h4>
-                  <h3 className="font-bold text-lg text-slate-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
-                    {detail[0].total}
-                  </h3>
-                </div>
-                <div className="flex justify-between my-3 items-center">
-                  <h4 className="font-bold text-lg text-slate-500">State</h4>
-                  <h3 className="font-bold text-lg text-blue-600 w-2/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
+                <div className="flex justify-between items-center">
+                  <h4>State</h4>
+                  <h3 className="font-medium">
                     {detail[0].state}
                   </h3>
                 </div>
               </div>
             </div>
-            <h2 className="py-1.5 text-lg font-bold mt-4 bg-blue-600 text-white pl-4">
-              Ordered Products
+            <h2 className="py-1.5 text-lg font-bold mt-4 pb-5">
+              Order Products
             </h2>
-            <div className="w-full mb-6">
-              <table className="w-full">
-                <thead className="w-full">
-                  <tr className="">
-                    <th className="text-center">Name</th>
-                    <th className="py-2 text-center">Tax</th>
-                    <th className="py-2 text-center">Quantity</th>
-                    <th className="py-2 text-center">Unit Price</th>
-                    <th className="py-2">Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody className="w-full space-y-10">
-                  {lines && lines.length > 0 ? (
-                    lines.map((item) => (
-                      <tr
-                        key={item.orderId._id}
-                        className="odd:bg-white even:bg-slate-200 space-y-10  mb-8 w-full items-center cursor-pointer"
-                      >
-                        <td className="text-center">
-                          {item.product ? item.product.name : "no have name"}
-                        </td>
-                        <td className="text-center">{item.tax}</td>
-                        <td className="text-center">{item.qty}</td>
-                        <td className="text-center">{item.unitPrice}</td>
-                        <td className="text-center">{item.subTotal}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="7" className="text-center">
-                        No order lines available.
-                      </td>
-                    </tr>
+            <div className="w-full mb-6 ">
+              <Table isStriped aria-label="Order Lines Table" className="my-custom-table ">
+                <TableHeader columns={columns}>
+                  {(column) => (
+                    <TableColumn key={column.key} align={column.align} className="header-cell bg-blue-500 text-white">
+                      {column.label}
+                    </TableColumn>
                   )}
-                </tbody>
-              </table>
+                </TableHeader>
+                <TableBody items={lines || []}>
+                  {(item) => (
+                    <TableRow key={item.orderId._id} className="table-row ">
+                      {(columnKey) => (
+                        <TableCell
+                          key={columnKey}
+                          align={columns.find((col) => col.key === columnKey)?.align}
+                          className="table-cell"
+                        >
+                          {columnKey === "name" ? getProductName(item) : getKeyValue(item, columnKey)}
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
             </div>
           </div>
         </div>
       ) : (
-        "no have sale order"
+        <div className="flex items-center justify-center mt-40">
+          {loading && (
+            <FadeLoader
+              color={"#0284c7"}
+              loading={loading}
+              size={20}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          )}
+        </div>
       )}
+    
     </>
   );
 }
