@@ -31,24 +31,27 @@ const statusOptions = [
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
-  "orderdate",
+  "scheduledate",
   "name",
   "partner",
   "location",
   "state",
+  "total",
+  "orderref",
   "actions",
 ];
 
 const columns = [
-  { name: "ORDERDATE", uid: "orderdate", sortable: true },
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "PARTNER", uid: "partner", sortable: true },
-  { name: "LOCATION", uid: "location", sortable: true },
-  { name: "STATE", uid: "state" },
-  { name: "TOTAL PRODUCT", uid: "totalproduct" },
-  { name: "TAX TOTAL", uid: "taxtotal", sortable: true },
-  { name: "TOTAL", uid: "total" },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "Schedule-Date", uid: "scheduledate" },
+  { name: "Name", uid: "name" },
+  { name: "Partner", uid: "partner" },
+  { name: "Location", uid: "location" },
+  { name: "State", uid: "state" },
+  { name: "TotalProduct", uid: "totalproduct" },
+  { name: "TaxTotal", uid: "taxtotal", sortable: true },
+  { name: "OrderRef", uid: "orderref" },
+  { name: "Total", uid: "total", sortable: true },
+  { name: "Action", uid: "actions" },
 ];
 
 export default function SaleList({ sales }) {
@@ -64,16 +67,11 @@ export default function SaleList({ sales }) {
   const addPurchaseRoute = () => {
     navigate("/admin/purchase/create");
   };
-  const SALE_API = {
-    INDEX: BASE_URL + "/sale",
-    IMPORT: BASE_URL + "/sale/import-excel",
-    EXPORT: BASE_URL + "/sale/export-excel",
-  };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "Order Date",
+    column: "total",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -131,14 +129,16 @@ export default function SaleList({ sales }) {
     const cellValue = sales[columnKey];
 
     switch (columnKey) {
-      case "orderdate":
-        return <h3> {format(new Date(sales.orderDate), "yyyy-MM-dd")}</h3>;
+      case "scheduledate":
+        return <h3> {format(new Date(sales.scheduledDate), "yyyy-MM-dd")}</h3>;
       case "name":
         return <h3>{sales.user?.username}</h3>;
       case "partner":
         return <h3>{sales.partner?.name}</h3>;
       case "location":
         return <h3>{sales.location?.name}</h3>;
+      case "orderref":
+        return <h3>{sales.orderRef}</h3>;
       case "state":
         return (
           <div className="flex gap-4">
@@ -162,11 +162,11 @@ export default function SaleList({ sales }) {
       case "actions":
         return (
           <Icon
-            icon="mdi:eye-outline"
+            icon="prime:eye"
+            className="text-xl hover:opacity-75"
             onClick={() => {
               navigate(`/admin/saleorders/detail/${sales.id}`);
             }}
-            className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
           />
         );
       default:
@@ -208,55 +208,30 @@ export default function SaleList({ sales }) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <SearchBox
-            value={filterValue}
-            clear={onClear}
-            changeValue={onSearchChange}
-          />
-          <div className="flex gap-3">
-            <div>
-              <ExcelExportButton
-                token={token.accessToken}
-                apiEndpoint={SALE_API.EXPORT}
-              />
-            </div>
-            <div>
-              <ExcelImportButton
-                token={token.accessToken}
-                apiEndpoint={SALE_API.IMPORT}
-              />
-            </div>
-            <Dropdown>
-              <div>
-                <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-cyan-700 border-cyan-700 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-cyan-700 px-3 py-1.5">
-                    Status
-                  </button>
-                </DropdownTrigger>
-              </div>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <h2 className="text-xl font-bold">Sales</h2>
+            <h3 className="text-default-400 text-small ml-4">
+              Total {sales.length}
+            </h3>
+          </div>
 
+          <div className="flex items-center">
+            <label className="flex items-center text-default-400 text-small mr-4">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
             <Dropdown>
               <div>
                 <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
-                    Columns
-                  </button>
+                  <Icon icon="system-uicons:filtering" />
                 </DropdownTrigger>
               </div>
               <DropdownMenu
@@ -274,34 +249,7 @@ export default function SaleList({ sales }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
-
-            <button
-              onClick={addPurchaseRoute}
-              className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
-            >
-              Add New
-            </button>
           </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Sales</h2>
-            <h3 className="text-default-400 text-small ml-4">
-              Total {sales.length}
-            </h3>
-          </div>
-
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
         </div>
       </div>
     );

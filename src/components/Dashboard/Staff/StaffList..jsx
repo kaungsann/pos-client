@@ -25,6 +25,7 @@ import { BASE_URL, deleteMultiple } from "../../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import DeleteAlert from "../../utils/DeleteAlert";
+import ChangePassword from "../../utils/ChangePassword";
 
 const statusColorMap = {
   active: "success",
@@ -35,26 +36,33 @@ const statusColorMap = {
 let INITIAL_VISIBLE_COLUMNS = ["role", "name", "email", "lastlogin", "actions"];
 
 let columns = [
-  { name: "ROLE", uid: "role", sortable: true },
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "EMAIL", uid: "email", sortable: true },
-  { name: "LAST-LOGIN", uid: "lastlogin", sortable: true },
-  { name: "PHONE", uid: "phone" },
-  { name: "ADDRESS", uid: "address" },
-  { name: "GENDER", uid: "gender" },
-  { name: "CITY", uid: "city" },
-  { name: "DATEOFBIRTH", uid: "birthdate" },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "Role", uid: "role" },
+  { name: "Name", uid: "name", sortable: true },
+  { name: "Email", uid: "email" },
+  { name: "Last-Login", uid: "lastlogin" },
+  { name: "Phone", uid: "phone", sortable: true },
+  { name: "Address", uid: "address" },
+  { name: "Gender", uid: "gender" },
+  { name: "City", uid: "city" },
+  { name: "DateOfBirth", uid: "birthdate" },
+  { name: "Actions", uid: "actions" },
 ];
 
 export default function StaffList({ staffs, onDeleteSuccess }) {
-  console.log("staff is a", staffs);
   const [deleteBox, setDeleteBox] = React.useState(false);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
+
+  const [userId, setUserId] = React.useState(null);
+  const [show, setShow] = React.useState(false);
+
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
+
+  const closeShowBox = (text) => {
+    setShow(text);
+  };
 
   const PARTNER_API = {
     INDEX: BASE_URL + "/employee",
@@ -98,8 +106,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
     );
   }, [visibleColumns]);
 
-  console.log("table head is a", headerColumns);
-
   const filteredItems = React.useMemo(() => {
     let filteredStaff = [...staffs];
 
@@ -116,7 +122,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
         Array.from(statusFilter).includes(staff.status)
       );
     }
-    console.log("FILTERstaff is a", filteredStaff);
     return filteredStaff;
   }, [staffs, filterValue, statusFilter]);
 
@@ -142,9 +147,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
   const renderCell = React.useCallback((staffs, columnKey) => {
     const cellValue = staffs[columnKey];
 
-    console.log("cell value is a", cellValue);
-    console.log(" columnKey is a", columnKey);
-
     switch (columnKey) {
       case "role":
         // {staffs.role ? staffs.role.name : "none"}
@@ -154,7 +156,13 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
       case "email":
         return <h3>{staffs.email}</h3>;
       case "lastlogin":
-        return <h3>{format(new Date(staffs.lastLogin), "yyyy-MM-dd")}</h3>;
+        return (
+          <h3>
+            {staffs.lastLogin
+              ? new Date(staffs.lastLogin).toLocaleDateString()
+              : ""}
+          </h3>
+        );
       case "phone":
         return <h3>{staffs.phone ? staffs.phone : "no phone"}</h3>;
       case "address":
@@ -165,25 +173,37 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
         return <h3>{staffs.city ? staffs.city : "no city"}</h3>;
       case "birthdate":
         return (
-          <h3>{staffs.birthdate ? staffs.birthdate : "no dateofbirth"}</h3>
+          <h3>
+            {staffs.birthdate
+              ? new Date(staffs.birthdate).toLocaleDateString()
+              : ""}
+          </h3>
         );
       case "actions":
         return (
-          <div className="p-2 flex w-full justify-start">
+          <div className="p-2 flex w-full justify-start items-center cursor-pointer">
             <Icon
-              icon="mdi:eye-outline"
+              icon="prime:eye"
+              className="text-xl hover:opacity-75"
               onClick={() => {
-                navigate(`/admin/employee/detail/${staffs._id}`);
+                navigate(`/admin/user/detail/${staffs._id}`);
               }}
-              className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
             />
             <Icon
               icon="ep:edit"
+              className="text-lg ml-2 hover:opacity-75"
               onClick={(e) => {
                 e.stopPropagation();
-                navigate(`/admin/employee/edit/${staffs._id}`);
+                navigate(`/admin/user/detail/${staffs._id}`);
               }}
-              className="text-2xl mx-3 text-blue-800 font-bold hover:text-blue-500"
+            />
+            <Icon
+              onClick={() => {
+                setShow(true);
+                setUserId(staffs._id);
+              }}
+              className="text-lg ml-2 hover:opacity-75"
+              icon="solar:lock-password-unlocked-outline"
             />
           </div>
         );
@@ -226,20 +246,30 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <SearchBox
-            value={filterValue}
-            clear={onClear}
-            changeValue={onSearchChange}
-          />
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <h2 className="text-xl font-bold">Staffs</h2>
+            <h3 className="text-default-400 text-small ml-4">
+              Total {staffs.length}
+            </h3>
+          </div>
 
-          <div className="flex gap-3">
+          <div className="flex items-center">
+            <label className="flex items-center text-default-400 text-small">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
             <Dropdown>
-              <div>
+              <div className="mx-4">
                 <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
-                    Columns
-                  </button>
+                  <Icon icon="system-uicons:filtering" className="mx-4" />
                 </DropdownTrigger>
               </div>
               <DropdownMenu
@@ -257,39 +287,10 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
-
-            <button
-              onClick={addCEmployeeRoute}
-              className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
-            >
-              Add New
-            </button>
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">staffs</h2>
-            <h3 className="text-default-400 text-small ml-4">
-              Total {staffs.length}
-            </h3>
-          </div>
-
-          <div className="flex">
-            <label className="flex items-center text-default-400 text-small">
-              Rows per page:
-              <select
-                className="bg-transparent outline-none text-default-400 text-small"
-                onChange={onRowsPerPageChange}
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-              </select>
-            </label>
             {selectedKeys.size > 0 && (
               <button
                 onClick={() => setDeleteBox(true)}
-                className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
+                className="px-3 py-1 text-white bg-rose-500 rounded-md hover:opacity-75"
               >
                 Delete
               </button>
@@ -386,6 +387,8 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
           )}
         </TableBody>
       </Table>
+      {show && <ChangePassword id={userId} close={closeShowBox} />}
+
       {deleteBox && (
         <DeleteAlert
           cancel={() => {

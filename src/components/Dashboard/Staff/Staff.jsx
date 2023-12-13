@@ -208,6 +208,7 @@ export default function Staff() {
                         navigate(`/admin/user/edit/${usr._id}`);
                       }}
                     />
+
                     <Icon
                       onClick={() => {
                         setShow(true);

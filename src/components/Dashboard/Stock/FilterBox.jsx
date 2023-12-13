@@ -14,43 +14,41 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-const FilterBox = ({ categories, onFilter }) => {
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [price, setPrice] = useState("");
-  const [priceComparison, setPriceComparison] = useState("LESS");
+const FilterBox = ({ onFilter }) => {
+  const [location, setLocation] = useState("");
+  const [productName, setProductName] = useState("");
+  const [onhand, setOnHand] = useState("");
+  const [onHandComparison, setOnHandComparison] = useState("");
+
   const [isFilterActive, setIsFilterActive] = useState(false);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  console.log("location name is a", location);
+
   const handleFilterClick = () => {
     setIsFilterActive(!isFilterActive);
     onFilter({
-      category: selectedCategory,
-      startDate,
-      endDate,
-      price: {
-        value: price,
-        comparison: priceComparison,
+      name: productName,
+      location,
+      onhand: {
+        value: onhand,
+        comparison: onHandComparison,
       },
     });
   };
 
   const handleClearFiltersClick = () => {
     setIsFilterActive(!isFilterActive);
-    setSelectedCategory("");
-    setStartDate("");
-    setEndDate("");
-    setPrice("");
-    setPriceComparison("LESS");
+    setLocation("");
+    setOnHand("");
+    setProductName("");
     onFilter({
-      category: "",
-      startDate: "",
-      endDate: "",
-      price: {
+      name: "",
+      location: "",
+      onhand: {
         value: "",
-        comparison: "LESS",
+        comparison: "",
       },
     });
   };
@@ -76,62 +74,31 @@ const FilterBox = ({ categories, onFilter }) => {
                 Filter by
               </ModalHeader>
               <ModalBody>
-                <Select
-                  label="Category"
-                  placeholder="Select category"
-                  id="category"
-                  isClearable
-                  radius="sm"
-                  variant="bordered"
-                  items={categories}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                  <SelectItem key="" value="">
-                    All
-                  </SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </Select>
-
-                <div className="container flex flex-col">
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Date"
-                      type="date"
-                      variant="bordered"
-                      label="Expire Date From"
-                      labelPlacement="outside"
-                      id="startDate"
-                      value={startDate || ""}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      radius="sm"
-                    />
-                    <Input
-                      type="date"
-                      variant="bordered"
-                      label="To"
-                      placeholder="Date"
-                      labelPlacement="outside"
-                      id="endDate"
-                      value={endDate || ""}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      radius="sm"
-                    />
-                  </div>
+                <div className="flex justify-between">
+                  <Input
+                    type="text"
+                    label="Location"
+                    placeholder="Enter location name"
+                    labelPlacement="outside"
+                    className="ml-2"
+                    onChange={(e) => setLocation(e.target.value)}
+                    value={location}
+                    variant="bordered"
+                    radius="sm"
+                    size="md"
+                  />
                 </div>
-
                 <div className="container flex flex-col">
-                  <span className="font-semibold text-xs mx-2">Sale Price</span>
+                  <span className="font-semibold text-sm mx-2 mb-2">
+                    OnHand Quantity
+                  </span>
                   <div className="flex gap-2">
                     <Input
                       type="number"
                       variant="bordered"
                       id="price"
-                      onChange={(e) => setPrice(e.target.value)}
-                      value={price || ""}
+                      onChange={(e) => setOnHand(e.target.value)}
+                      value={onhand || ""}
                       radius="sm"
                       placeholder="Enter amount"
                       size="md"
@@ -141,9 +108,9 @@ const FilterBox = ({ categories, onFilter }) => {
                       radius="sm"
                       label="Comparison"
                       placeholder="Select comparison"
-                      id="priceComparison"
-                      onChange={(e) => setPriceComparison(e.target.value)}
-                      value={priceComparison}
+                      id="onHandComparison"
+                      onChange={(e) => setOnHandComparison(e.target.value)}
+                      value={onHandComparison}
                     >
                       <SelectItem value="LESS" key="LESS">
                         Less Than
@@ -176,7 +143,6 @@ const FilterBox = ({ categories, onFilter }) => {
 };
 
 FilterBox.propTypes = {
-  categories: PropTypes.array,
   onFilter: PropTypes.func,
 };
 

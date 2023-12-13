@@ -11,7 +11,7 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
-import { columns, statusOptions } from "./data";
+import { statusOptions } from "./data";
 import SearchBox from "./SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
@@ -26,6 +26,11 @@ const statusColorMap = {
   paused: "danger",
   vacation: "warning",
 };
+
+const columns = [
+  { name: "Name", uid: "name", sortable: true },
+  { name: "Actions", uid: "actions" },
+];
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "actions"];
 
@@ -53,7 +58,7 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "name",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -141,22 +146,21 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
       // );
       case "actions":
         return (
-          <div className="p-2 flex w-full justify-start">
+          <div className="p-2 flex w-full justify-start cursor-pointer">
             <Icon
-              icon="mdi:eye-outline"
+              icon="prime:eye"
+              className="text-xl hover:opacity-75"
               onClick={() => {
-                console.log("category eye is working");
                 navigate(`/admin/categorys/detail/${categorys.id}`);
               }}
-              className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
             />
             <Icon
               icon="ep:edit"
+              className="text-lg ml-2 hover:opacity-75"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/admin/categorys/edit/${categorys.id}`);
               }}
-              className="text-2xl mx-3 text-blue-800 font-bold hover:text-blue-500"
             />
           </div>
         );
@@ -198,15 +202,21 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+      <>
+        <div className="flex justify-between items-center">
           <SearchBox
             value={filterValue}
             clear={onClear}
             changeValue={onSearchChange}
           />
-          <div className="flex gap-3 items-center">
-            <div>
+          <div className="flex">
+            <button
+              onClick={addCategoryRoute}
+              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+            >
+              Add
+            </button>
+            <div className="mx-3">
               <ExcelExportButton
                 token={token.accessToken}
                 apiEndpoint={CATEGORY_API.EXPORT}
@@ -218,18 +228,11 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
                 apiEndpoint={CATEGORY_API.IMPORT}
               />
             </div>
-
-            <button
-              onClick={addCategoryRoute}
-              className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
-            >
-              Add New
-            </button>
           </div>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Category</h2>
+            <h2 className="text-xl font-bold">Category</h2>
             <h3 className="text-default-400 text-small ml-4">
               Total {categorys.length}
             </h3>
@@ -257,7 +260,7 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
             )}
           </div>
         </div>
-      </div>
+      </>
     );
   }, [
     filterValue,
@@ -308,7 +311,7 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
-  console.log("slelect key is a", selectedKeys.size);
+
   return (
     <>
       <Table
@@ -316,9 +319,6 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
-        // classNames={{
-        //   wrapper: "max-h-[382px]",
-        // }}
         selectedKeys={selectedKeys}
         selectionMode="multiple"
         sortDescriptor={sortDescriptor}

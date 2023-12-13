@@ -34,15 +34,16 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "email", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "email", "birthdate", "actions"];
 
 const columns = [
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "EMAIL", uid: "email", sortable: true },
-  { name: "ADDRESS", uid: "address", sortable: true },
-  { name: "CREATE-DATE", uid: "create", sortable: true },
-  { name: "CITY", uid: "city" },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "Name", uid: "name", sortable: true },
+  { name: "Email", uid: "email", sortable: true },
+  { name: "Address", uid: "address" },
+  { name: "DateOfBirth", uid: "birthdate" },
+  { name: "CreateDate", uid: "create" },
+  { name: "City", uid: "city" },
+  { name: "Actions", uid: "actions" },
 ];
 
 export default function EmployeeList({ employees, onDeleteSuccess }) {
@@ -144,6 +145,14 @@ export default function EmployeeList({ employees, onDeleteSuccess }) {
         return <h3>{employees.email ? employees.email : "none"}</h3>;
       case "phone":
         return <h3>{employees.phone ? employees.phone : "none"}</h3>;
+      case "birthdate":
+        return (
+          <h3>
+            {employees.birthdate
+              ? new Date(employees.birthdate).toLocaleDateString()
+              : ""}
+          </h3>
+        );
       case "city":
         return <h3>{employees.city ? employees.city : "none"}</h3>;
       case "address":
@@ -163,21 +172,21 @@ export default function EmployeeList({ employees, onDeleteSuccess }) {
         );
       case "actions":
         return (
-          <div className="p-2 flex w-full justify-start">
+          <div className="p-2 flex w-full justify-start items-center">
             <Icon
-              icon="mdi:eye-outline"
+              icon="prime:eye"
+              className="text-xl hover:opacity-75"
               onClick={() => {
                 navigate(`/admin/employee/detail/${employees.id}`);
               }}
-              className="text-2xl text-cyan-800 hover:cyan-500 font-bold"
             />
             <Icon
               icon="ep:edit"
+              className="text-lg ml-2 hover:opacity-75"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/admin/employee/edit/${employees.id}`);
               }}
-              className="text-2xl mx-3 text-blue-800 font-bold hover:text-blue-500"
             />
           </div>
         );
@@ -220,49 +229,9 @@ export default function EmployeeList({ employees, onDeleteSuccess }) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <SearchBox
-            value={filterValue}
-            clear={onClear}
-            changeValue={onSearchChange}
-          />
-
-          <div className="flex gap-3">
-            <Dropdown>
-              <div>
-                <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5">
-                    Columns
-                  </button>
-                </DropdownTrigger>
-              </div>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-
-            <button
-              onClick={addCEmployeeRoute}
-              className="text-white bg-blue-600 rounded-sm py-1.5 px-4 hover:opacity-75"
-            >
-              Add New
-            </button>
-          </div>
-        </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold my-2">Employees</h2>
+            <h2 className="text-xl font-bold">Employees</h2>
             <h3 className="text-default-400 text-small ml-4">
               Total {employees.length}
             </h3>
@@ -280,10 +249,31 @@ export default function EmployeeList({ employees, onDeleteSuccess }) {
                 <option value="15">15</option>
               </select>
             </label>
+            <Dropdown>
+              <div className="mx-4">
+                <DropdownTrigger className="hidden sm:flex">
+                  <Icon icon="system-uicons:filtering" className="mx-4" />
+                </DropdownTrigger>
+              </div>
+              <DropdownMenu
+                disallowEmptySelection
+                aria-label="Table Columns"
+                closeOnSelect={false}
+                selectedKeys={visibleColumns}
+                selectionMode="multiple"
+                onSelectionChange={setVisibleColumns}
+              >
+                {columns.map((column) => (
+                  <DropdownItem key={column.uid} className="capitalize">
+                    {capitalize(column.name)}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
             {selectedKeys.size > 0 && (
               <button
                 onClick={() => setDeleteBox(true)}
-                className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
+                className="ml-12 px-3 py-1 text-white bg-rose-500 rounded-md hover:opacity-75"
               >
                 Delete
               </button>
