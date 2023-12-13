@@ -73,7 +73,7 @@ export default function LocationEdit() {
         >
           Save
         </button>
-        <Link to="/admin/products/all">
+        <Link to="/admin/locations/all">
           <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
             Discard
           </button>

@@ -93,17 +93,17 @@ export default function PartnerEdit() {
         >
           Save
         </button>
-        <Link to="/admin/products/all">
+        <Link to="/admin/partners/all">
           <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
             Discard
           </button>
         </Link>
       </div>
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Product Edit</h2>
+        <h2 className="lg:text-xl font-bold my-2">Partner Edit</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           <form className="flex justify-between gap-10 p-5">
-            <div className="flex flex-wrap gap-8">
+            <div className="flex flex-wrap gap-8 items-center">
               <div className="w-60">
                 <Input
                   type="text"
@@ -113,7 +113,7 @@ export default function PartnerEdit() {
                   // color={isInvalid ? "danger" : "success"}
                   // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => handleSubmit(e)}
-                  placeholder="Enter product name..."
+                  placeholder="Enter partner name..."
                   labelPlacement="outside"
                 />
               </div>
@@ -140,21 +140,34 @@ export default function PartnerEdit() {
                   labelPlacement="outside"
                 />
               </div>
-              <Checkbox defaultSelected size="lg"
-                id="customer"
-                isSelected={isCustomer}
-                onChange={() => setIsCustomer(!isCustomer)}
-              >Customer</Checkbox>
-              <Checkbox defaultSelected size="lg"
-                id="customer"
-                isSelected={isCompany}
-                onChange={() => setIsCompany(!isCompany)}
-              >
-              Company</Checkbox>
-           
+              <div className="w-60 flex items-center mt-6">
+                <Checkbox defaultSelected size="md"
+                  id="customer"
+                  isSelected={isCustomer}
+                  onChange={() => setIsCustomer(!isCustomer)}
+                  className=""
+                >Customer</Checkbox>
+                <Checkbox defaultSelected size="md "
+                  id="customer"
+                  isSelected={isCompany}
+                  className="ml-3"
+                  onChange={() => setIsCompany(!isCompany)}
+                >
+                  Company</Checkbox>
+
+
+
+              </div>
+
+
+
             </div>
+
           </form>
+
+
         </div>
+
       </div>
     </>
   );
