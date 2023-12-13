@@ -10,7 +10,7 @@ import FilterBox from "./FilterBox";
 export default function StaffTemplate() {
   const [staff, setSaff] = useState([]);
   const [filteredKeywords, setFilteredKeywords] = useState({
-    username: "",
+    name: "",
     email: "",
     gender: "",
     city: "",
@@ -56,16 +56,16 @@ export default function StaffTemplate() {
   const filteredStaffs = useMemo(
     () =>
       staff.filter((stf) => {
-        const { username, phone, address, city, email, gender, birthdate } =
+        const { name, phone, address, city, email, gender, birthdate } =
           filteredKeywords;
 
         const isName = () => {
-          if (!username) {
+          if (!name) {
             return true;
           }
 
           if (stf.username) {
-            return stf.username.toLowerCase().includes(username.toLowerCase());
+            return stf.username.toLowerCase().includes(name.toLowerCase());
           }
 
           return false;
@@ -151,7 +151,7 @@ export default function StaffTemplate() {
     <>
       <div className="flex justify-between items-center my-3">
         <SearchCompo
-          keyword={filteredKeywords.username}
+          keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
         />
 

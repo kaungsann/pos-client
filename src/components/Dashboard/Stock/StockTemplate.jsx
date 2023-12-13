@@ -10,9 +10,15 @@ import FilterBox from "./FilterBox";
 
 export default function StockTemplate() {
   const [stocks, setStocks] = useState([]);
-  const [filteredKeywords, setFilteredKeywords] = useState({
-    location: "",
+
+  const COMPARISION = {
+    LESS: "LESS",
+    GREATER: "GREATER",
+  };
+
+  let [filteredKeywords, setFilteredKeywords] = useState({
     name: "",
+    location: "",
     onhand: {
       value: 0,
       comparison: "",
@@ -49,16 +55,17 @@ export default function StockTemplate() {
   }, [token]);
 
   const handleFilterChange = (selected) => {
-    console.log("selected items is", selected);
+    console.log("selected location name is a", selected);
     setFilteredKeywords((prevFilter) => ({
       ...prevFilter,
       ...selected,
     }));
   };
+
   const filteredStock = useMemo(
     () =>
       stocks.filter((stk) => {
-        const { location, product, onhand } = filteredKeywords;
+        const { name, location, onhand } = filteredKeywords;
 
         const isName = () => {
           if (!name) {
@@ -66,39 +73,41 @@ export default function StockTemplate() {
           }
 
           if (stk.product) {
-            return customer.product.name
-              .toLowerCase()
-              .includes(product.toLowerCase());
+            return stk.product.name.toLowerCase().includes(name.toLowerCase());
           }
 
           return false;
         };
+
         const isLocation = () => {
+          console.log("Filter:", location);
+
           if (!location) {
             return true;
           }
+
           if (stk.location) {
             return stk.location.name
               .toLowerCase()
               .includes(location.toLowerCase());
           }
-
-          return false;
         };
         const isOnHand = () => {
           if (!stk.onHand || !onhand.comparison) return true;
 
-          const QTY = stk.onHand;
+          const QTY = stk.onHand || 0;
 
           return (
-            (stk.comparison === COMPARISION.LESS && QTY < onhand.value) ||
-            (stk.comparison === COMPARISION.GREATER && QTY > onhand.value)
+            (onhand.comparison === COMPARISION.LESS && QTY < onhand.value) ||
+            (onhand.comparison === COMPARISION.GREATER && QTY > onhand.value)
           );
         };
-        return isLocation() && isOnHand() && isName();
+        return isOnHand() && isName() && isLocation();
       }),
     [stocks, filteredKeywords]
   );
+
+  console.log("stock filter is a", filteredStock);
 
   return (
     <div>

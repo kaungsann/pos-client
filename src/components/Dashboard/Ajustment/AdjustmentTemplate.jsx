@@ -44,7 +44,6 @@ export default function AdjustmentTemplate() {
   }, [token]);
 
   const handleFilterChange = (selected) => {
-    console.log("seleted is a", selected);
     setFilteredKeywords((prevFilter) => ({
       ...prevFilter,
       ...selected,
@@ -82,14 +81,14 @@ export default function AdjustmentTemplate() {
           return false;
         };
         const isBarCode = () => {
-          if (!locationName) {
+          if (!productBarcode) {
             return true;
           }
 
-          if (adjust.locationName) {
-            return adjust.locationName
+          if (adjust.productBarcode) {
+            return adjust.productBarcode
               .toLowerCase()
-              .includes(locationName.toLowerCase());
+              .includes(productBarcode.toLowerCase());
           }
           return false;
         };

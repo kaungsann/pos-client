@@ -40,17 +40,18 @@ const statusOptions = [
 ];
 
 const INITIAL_VISIBLE_COLUMNS = [
-  "orderdate",
+  "scheduledate",
   "name",
   "partner",
   "location",
   "state",
   "total",
+  "orderref",
   "actions",
 ];
 
 const columns = [
-  { name: "OrderDate", uid: "orderdate" },
+  { name: "Schedule-Date", uid: "scheduledate" },
   { name: "Name", uid: "name" },
   { name: "Partner", uid: "partner", sortable: true },
   { name: "Location", uid: "location", sortable: true },
@@ -58,6 +59,7 @@ const columns = [
   { name: "TotalProduct", uid: "totalproduct", sortable: true },
   { name: "TaxTotal", uid: "taxtotal", sortable: true },
   { name: "Total", uid: "total", sortable: true },
+  { name: "OrderRef", uid: "orderref" },
   { name: "Action", uid: "actions" },
 ];
 
@@ -73,15 +75,6 @@ export default function PurchaseList({ purchases, refresh }) {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-
-  const addPurchaseRoute = () => {
-    navigate("/admin/purchase/create");
-  };
-  const PURCHASE_API = {
-    INDEX: BASE_URL + "/purchase",
-    IMPORT: BASE_URL + "/purchase/import-excel",
-    EXPORT: BASE_URL + "/purchase/export-excel",
-  };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -145,14 +138,18 @@ export default function PurchaseList({ purchases, refresh }) {
     const cellValue = purchases[columnKey];
 
     switch (columnKey) {
-      case "orderdate":
-        return <h3> {format(new Date(purchases.orderDate), "yyyy-MM-dd")}</h3>;
+      case "scheduledate":
+        return (
+          <h3> {format(new Date(purchases.scheduledDate), "yyyy-MM-dd")}</h3>
+        );
       case "name":
         return <h3>{purchases.user?.username}</h3>;
       case "partner":
         return <h3>{purchases.partner?.name}</h3>;
       case "location":
         return <h3>{purchases.location?.name}</h3>;
+      case "orderref":
+        return <h3>{purchases.orderRef}</h3>;
       case "state":
         return (
           <div className="flex gap-4">
@@ -190,7 +187,7 @@ export default function PurchaseList({ purchases, refresh }) {
                   e.stopPropagation();
                   handleConfirm(purchases.id);
                 }}
-                className="px-4 py-2 ml-2 text-white text-sm text-bold bg-blue-700  rounded-md hover:opacity-75"
+                className="px-3 py-1 ml-2 text-white text-sm text-bold bg-blue-700  rounded-md hover:opacity-75"
               >
                 confirm
               </button>
@@ -236,56 +233,6 @@ export default function PurchaseList({ purchases, refresh }) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <SearchBox
-            value={filterValue}
-            clear={onClear}
-            changeValue={onSearchChange}
-          />
-          <div className="flex gap-3">
-            <button
-              onClick={addPurchaseRoute}
-              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
-            >
-              Add
-            </button>
-            <div>
-              <ExcelExportButton
-                token={token.accessToken}
-                apiEndpoint={PURCHASE_API.EXPORT}
-              />
-            </div>
-            <div>
-              <ExcelImportButton
-                token={token.accessToken}
-                apiEndpoint={PURCHASE_API.IMPORT}
-              />
-            </div>
-            <Dropdown>
-              <div>
-                <DropdownTrigger className="hidden sm:flex">
-                  <button className="font-bold rounded-sm shadow-sm flex items-center text-cyan-700 border-cyan-700 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-cyan-700 px-3 py-1.5">
-                    State
-                  </button>
-                </DropdownTrigger>
-              </div>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                onSelectionChange={setStatusFilter}
-              >
-                {statusOptions.map((state) => (
-                  <DropdownItem key={state.uid} className="capitalize">
-                    {capitalize(state.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <h2 className="text-xl font-bold">Purchases</h2>

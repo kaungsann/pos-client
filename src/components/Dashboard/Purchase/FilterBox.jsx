@@ -16,24 +16,29 @@ import { Icon } from "@iconify/react";
 
 const FilterBox = ({ onFilter }) => {
   const [location, setLocation] = useState("");
-  const [productName, setProductName] = useState("");
-  const [onhand, setOnHand] = useState("");
-  const [onHandComparison, setOnHandComparison] = useState("");
+  const [orderRef, setOrderRef] = useState("");
+  const [created, setCreated] = useState("");
+  const [state, setState] = useState("");
+  const [total, setTotal] = useState("");
+  const [totalComparison, setTotalComparison] = useState("");
 
   const [isFilterActive, setIsFilterActive] = useState(false);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  console.log("location name is a", location);
+  console.log("partner name is a");
 
   const handleFilterClick = () => {
     setIsFilterActive(!isFilterActive);
     onFilter({
-      name: productName,
+      name,
       location,
-      onhand: {
-        value: onhand,
-        comparison: onHandComparison,
+      orderRef,
+      created,
+      state,
+      total: {
+        value: total,
+        comparison: totalComparison,
       },
     });
   };
@@ -41,12 +46,19 @@ const FilterBox = ({ onFilter }) => {
   const handleClearFiltersClick = () => {
     setIsFilterActive(!isFilterActive);
     setLocation("");
-    setOnHand("");
-    setProductName("");
+    setOrderRef("");
+    setTotalComparison("");
+    setCreated("");
+    setState("");
+    setTotal("");
+
     onFilter({
       name: "",
       location: "",
-      onhand: {
+      orderRef: "",
+      created: "",
+      state: "",
+      total: {
         value: "",
         comparison: "",
       },
@@ -74,31 +86,69 @@ const FilterBox = ({ onFilter }) => {
                 Filter by
               </ModalHeader>
               <ModalBody>
-                <div className="flex justify-between">
-                  <Input
-                    type="text"
-                    label="Location"
-                    placeholder="Enter location name"
+                <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                  <Select
+                    label="Select State"
+                    placeholder="Select a state"
                     labelPlacement="outside"
-                    className="ml-2"
-                    onChange={(e) => setLocation(e.target.value)}
-                    value={location}
                     variant="bordered"
                     radius="sm"
                     size="md"
+                    onChange={(e) => setState(e.target.value)}
+                  >
+                    <SelectItem key="pending" value="pending">
+                      Pending
+                    </SelectItem>
+                    <SelectItem key="confirmed" value="confirmed">
+                      Comfirmed
+                    </SelectItem>
+                  </Select>
+                </div>
+                <div className="flex justify-between">
+                  <Input
+                    type="text"
+                    variant="bordered"
+                    radius="sm"
+                    size="md"
+                    label="location Name"
+                    placeholder="Enter loction name"
+                    labelPlacement="outside"
+                    className="ml-2"
+                    onChange={(e) => setLocation(e.target.value)}
+                  />
+                  <Input
+                    type="date"
+                    variant="bordered"
+                    radius="sm"
+                    size="md"
+                    label="Created-Date"
+                    placeholder="Enter created date"
+                    labelPlacement="outside"
+                    className="ml-2"
+                    onChange={(e) => setCreated(e.target.value)}
                   />
                 </div>
+                <Input
+                  type="text"
+                  label="OrderRef"
+                  variant="bordered"
+                  radius="sm"
+                  size="md"
+                  placeholder="Enter orderRef"
+                  labelPlacement="outside"
+                  className="ml-2"
+                  onChange={(e) => setOrderRef(e.target.value)}
+                />
+
                 <div className="container flex flex-col">
-                  <span className="font-semibold text-sm mx-2 mb-2">
-                    OnHand Quantity
-                  </span>
+                  <span className="font-semibold text-sm mx-2 mb-2">Total</span>
                   <div className="flex gap-2">
                     <Input
                       type="number"
                       variant="bordered"
-                      id="price"
-                      onChange={(e) => setOnHand(e.target.value)}
-                      value={onhand || ""}
+                      id="total"
+                      onChange={(e) => setTotal(e.target.value)}
+                      value={total || ""}
                       radius="sm"
                       placeholder="Enter amount"
                       size="md"
@@ -109,8 +159,8 @@ const FilterBox = ({ onFilter }) => {
                       label="Comparison"
                       placeholder="Select comparison"
                       id="onHandComparison"
-                      onChange={(e) => setOnHandComparison(e.target.value)}
-                      value={onHandComparison}
+                      onChange={(e) => setTotalComparison(e.target.value)}
+                      value={totalComparison}
                     >
                       <SelectItem value="LESS" key="LESS">
                         Less Than
