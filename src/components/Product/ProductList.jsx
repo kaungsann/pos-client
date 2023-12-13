@@ -48,20 +48,22 @@ const ProductList = ({ products }) => {
                     />
                   </TableCell>
                   <TableCell>{product.name}</TableCell>
-                  <TableCell>{product.ref ? product.ref : "none"}</TableCell>
+                  <TableCell>{product.ref ? product.ref : ""}</TableCell>
                   <TableCell>
-                    {product.expiredAt ? product.expiredAt : "none"}
+                    {product.expiredAt
+                      ? new Date(product.expiredAt).toISOString().split("T")[0]
+                      : ""}
                   </TableCell>
                   <TableCell>
                     {product.description
                       ? product.description.substring(0, 30)
-                      : "none"}
+                      : ""}
                   </TableCell>
                   <TableCell>
-                    {product.barcode ? product.barcode : "none"}
+                    {product.barcode ? product.barcode : ""}
                   </TableCell>
                   <TableCell>
-                    {product.salePrice ? product.salePrice : "none"}
+                    {product.salePrice ? product.salePrice : ""}
                   </TableCell>
 
                   <TableCell>

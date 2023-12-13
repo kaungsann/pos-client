@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../Api.js";
 import { useParams } from "react-router-dom";
 import { RiImageAddFill } from "react-icons/ri";
@@ -9,28 +9,32 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BoxImg from "../../assets/box.png";
 import { removeData } from "../../redux/actions";
-import { Input, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Progress, Select, SelectItem } from "@nextui-org/react";
 import axios from "axios";
 
 export default function ProductForm() {
   const [categories, setCatgs] = useState([]);
   const [isSelected, setIsSelected] = useState(false);
+  const [productImg, setProductImg] = useState(null);
+  const [selectFile, setSelectedFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const productDoc = {
     name: "",
     ref: "",
-    image: null,
     salePrice: 0,
     description: "",
     purchasePrice: 0,
     barcode: "",
-    category: "",
+    category: { name: "" },
     minStockQty: 0,
     marginProfit: 0,
     expiredAt: "",
     tax: 0,
   };
   const [product, setProduct] = useState(productDoc);
+  const [updateProduct, setUpdateProduct] = useState({});
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
@@ -42,14 +46,14 @@ export default function ProductForm() {
   const inputChangeHandler = (event) => {
     const { name, value } = event.target;
 
-    let newProduct = { ...product, [name]: value };
+    let newProduct = { [name]: value };
 
     if (name === "purchasePrice" || name === "marginProfit") {
       newProduct = {
         ...newProduct,
-        salePrice: parseFloat(newProduct.salePrice),
-        purchasePrice: parseFloat(newProduct.purchasePrice),
-        marginProfit: parseFloat(newProduct.marginProfit),
+        salePrice: parseFloat(product.salePrice),
+        purchasePrice: parseFloat(product.purchasePrice),
+        marginProfit: parseFloat(product.marginProfit),
       };
 
       newProduct.salePrice = Math.ceil(
@@ -58,16 +62,21 @@ export default function ProductForm() {
       );
     }
 
-    setProduct(newProduct);
+    setUpdateProduct({ ...updateProduct, ...newProduct });
+    setProduct({ ...product, ...newProduct });
   };
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const updateProductEdit = async () => {
       const formData = new FormData();
+      if (isSelected) {
+        formData.append("image", selectFile);
+      }
 
-      for (let key in product) {
-        formData.append(key, product[key]);
+      for (let key in updateProduct) {
+        formData.append(key, updateProduct[key]);
       }
 
       try {
@@ -81,14 +90,22 @@ export default function ProductForm() {
             },
           }
         );
-        if (data?.message == "Token Expire , Please Login Again") {
-          dipatch(removeData(null));
-        }
-        if (data.status) {
+
+        if (!data.status) {
+          if (data?.message == "Token Expire , Please Login Again") {
+            dipatch(removeData(null));
+          }
+          toast(data.message);
+        } else {
           navigate("/admin/products/all");
         }
       } catch (error) {
         console.error("Error fetching products:", error);
+        toast(error.message);
+      } finally {
+        setIsSelected(false);
+        setSelectedImage(null);
+        setIsLoading(false);
       }
     };
 
@@ -97,6 +114,7 @@ export default function ProductForm() {
 
   const handleFileInputChange = (event) => {
     const selectedFile = event.target.files[0];
+    setSelectedFile(selectedFile);
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -135,17 +153,21 @@ export default function ProductForm() {
       }
 
       // Change product format from API response to match upload format
-      const updateProduct = {
-        ...productDoc,
-        ...Object.fromEntries(
-          Object.entries(data.data[0]).filter(([key]) =>
-            Object.prototype.hasOwnProperty.call(productDoc, key)
-          )
-        ),
-      };
+      // const updateProduct = {
+      //   ...productDoc,
+      //   ...Object.fromEntries(
+      //     Object.entries(data.data[0]).filter(([key]) =>
+      //       Object.prototype.hasOwnProperty.call(productDoc, key)
+      //     )
+      //   ),
+      // };
+      // updateProduct.category = updateProduct.category._id;
 
-      (updateProduct.category = updateProduct.category._id),
-        setProduct({ ...product, ...updateProduct });
+      const productData = data.data[0];
+      const image = productData?.image;
+      if (image) setProductImg(image);
+      setProduct({ ...product, ...productData });
+      setUpdateProduct({ name: productData.name });
     };
 
     const fetchData = async () => {
@@ -164,35 +186,51 @@ export default function ProductForm() {
     <>
       <ToastContainer
         position="top-center"
-        autoClose={5000}
+        autoClose={4000}
         hideProgressBar
         newestOnTop={false}
         closeOnClick
+        className="text-black"
         rtl={false}
-        pauseOnFocusLoss
-        draggable
+        pauseOnFocusLoss={false}
+        draggable={false}
         pauseOnHover
         theme="light"
-        style={{ width: "450px" }}
       />
       <div className="flex gap-3 my-5">
-        <button
+        <Button
           type="submit"
-          className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          isDisabled={isLoading}
+          isLoading={isLoading}
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+            isLoading
+              ? ""
+              : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+          }`}
           onClick={onSubmitHandler}
         >
           Save
-        </button>
-        <Link to="/admin/products/all">
-          <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
-            Discard
-          </button>
-        </Link>
+        </Button>
+        <Button
+          isDisabled={isLoading}
+          isLoading={isLoading}
+          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+            isLoading
+              ? ""
+              : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
+          }`}
+          onClick={() => navigate("/admin/products/all")}
+        >
+          Discard
+        </Button>
       </div>
 
       <div className="container mt-2">
         <h2 className="lg:text-xl font-bold my-2">Product Edit</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          {isLoading && (
+            <Progress size="sm" isIndeterminate aria-label="Loading..." />
+          )}
           <form className="flex justify-between gap-10 p-5">
             <div>
               <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
@@ -202,9 +240,9 @@ export default function ProductForm() {
                     src={selectedImage}
                     className="absolute object-cover w-full h-full"
                   />
-                ) : product?.image ? (
+                ) : productImg ? (
                   <img
-                    src={product?.image}
+                    src={productImg}
                     alt={product.name}
                     className="absolute object-cover w-full h-full"
                   />
@@ -262,7 +300,11 @@ export default function ProductForm() {
                   label="Category"
                   name="category"
                   placeholder="Select an category"
-                  selectedKeys={product.category ? [product.category] : false}
+                  selectedKeys={
+                    product.category
+                      ? [product.category._id || product.category]
+                      : false
+                  }
                   onChange={(e) => inputChangeHandler(e)}
                   className="max-w-xs"
                 >
