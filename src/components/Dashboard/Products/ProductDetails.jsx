@@ -19,7 +19,11 @@ export default function ProductDetails() {
     salePrice: 0,
     purchasePrice: 0,
     barcode: "",
+    category: {
+      name: "",
+    },
     minStockQty: 0,
+    marginProfit: 0,
     expiredAt: null,
     tax: 0,
     active: true,
@@ -39,13 +43,13 @@ export default function ProductDetails() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data, message } = await axios.get(BASE_URL + `/product/${id}`, {
+        const { data } = await axios.get(BASE_URL + `/product/${id}`, {
           headers: {
             Authorization: `Bearer ${token.accessToken}`,
             "Content-Type": "application/json",
           },
         });
-        if (message == "Token Expire , Please Login Again") {
+        if (data?.message == "Token Expire , Please Login Again") {
           dipatch(removeData(null));
         }
         setProduct({ ...product, ...data.data[0] });
@@ -116,7 +120,7 @@ export default function ProductDetails() {
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>Category</h4>
-                  <h3 className="font-medium">{product.category}</h3>
+                  <h3 className="font-medium">{product.category.name}</h3>
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>Expired Date</h4>
@@ -150,7 +154,7 @@ export default function ProductDetails() {
                   <h3 className="font-medium">{product.ref}</h3>
                 </div>
                 <div className="flex justify-between items-center">
-                  <h4>BarCode</h4>
+                  <h4>Barcode</h4>
                   <h3 className="font-medium">{product.barcode}</h3>
                 </div>
               </div>

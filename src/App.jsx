@@ -58,6 +58,7 @@ import PartnerTemplate from "./components/Dashboard/Partner/PartnerTemplate";
 import EmployeeTemplate from "./components/Dashboard/Employee/EmployeeTemplate";
 import WareHouseTemplate from "./components/Dashboard/WareHouse/WareHouseTemplate";
 import StaffTemplate from "./components/Dashboard/Staff/StaffTemplate";
+import ProductForm from "./components/Product/ProductForm";
 
 function App() {
   return (
@@ -106,7 +107,7 @@ function App() {
             <Route path="products">
               <Route path="all" element={<ProductTemplate />} />
               <Route path="create" element={<ProductsCreate />} />
-              <Route path="edit/:id" element={<ProductsEdit />} />
+              <Route path="edit/:id" element={<ProductForm />} />
               <Route path="detail/:id" element={<ProductDetails />} />
             </Route>
             <Route path="categorys">
