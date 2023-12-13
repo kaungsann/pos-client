@@ -18,7 +18,6 @@ const FilterBox = ({ onFilter }) => {
   const [location, setLocation] = useState("");
   const [orderRef, setOrderRef] = useState("");
   const [created, setCreated] = useState("");
-  const [state, setState] = useState("");
   const [total, setTotal] = useState("");
   const [totalComparison, setTotalComparison] = useState("");
 
@@ -35,7 +34,6 @@ const FilterBox = ({ onFilter }) => {
       location,
       orderRef,
       created,
-      state,
       total: {
         value: total,
         comparison: totalComparison,
@@ -49,7 +47,6 @@ const FilterBox = ({ onFilter }) => {
     setOrderRef("");
     setTotalComparison("");
     setCreated("");
-    setState("");
     setTotal("");
 
     onFilter({
@@ -57,7 +54,6 @@ const FilterBox = ({ onFilter }) => {
       location: "",
       orderRef: "",
       created: "",
-      state: "",
       total: {
         value: "",
         comparison: "",
@@ -86,24 +82,6 @@ const FilterBox = ({ onFilter }) => {
                 Filter by
               </ModalHeader>
               <ModalBody>
-                <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                  <Select
-                    label="Select State"
-                    placeholder="Select a state"
-                    labelPlacement="outside"
-                    variant="bordered"
-                    radius="sm"
-                    size="md"
-                    onChange={(e) => setState(e.target.value)}
-                  >
-                    <SelectItem key="pending" value="pending">
-                      Pending
-                    </SelectItem>
-                    <SelectItem key="confirmed" value="confirmed">
-                      Comfirmed
-                    </SelectItem>
-                  </Select>
-                </div>
                 <div className="flex justify-between">
                   <Input
                     type="text"
@@ -121,7 +99,7 @@ const FilterBox = ({ onFilter }) => {
                     variant="bordered"
                     radius="sm"
                     size="md"
-                    label="Schedule-Date"
+                    label="Created-Date"
                     placeholder="Enter created date"
                     labelPlacement="outside"
                     className="ml-2"

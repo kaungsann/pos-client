@@ -97,14 +97,13 @@ const FilterBox = ({ categories, onFilter }) => {
                 </Select>
 
                 <div className="container flex flex-col">
-                  <span className="font-semibold text-xs mx-2">
-                    Expired Date
-                  </span>
                   <div className="flex gap-2">
                     <Input
                       placeholder="Date"
                       type="date"
                       variant="bordered"
+                      label="Expire Date From"
+                      labelPlacement="outside"
                       id="startDate"
                       value={startDate || ""}
                       onChange={(e) => setStartDate(e.target.value)}
@@ -113,6 +112,9 @@ const FilterBox = ({ categories, onFilter }) => {
                     <Input
                       type="date"
                       variant="bordered"
+                      label="To"
+                      placeholder="Date"
+                      labelPlacement="outside"
                       id="endDate"
                       value={endDate || ""}
                       onChange={(e) => setEndDate(e.target.value)}

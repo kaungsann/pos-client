@@ -49,7 +49,7 @@ export default function StockList({ stocks }) {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "onhand",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -109,13 +109,13 @@ export default function StockList({ stocks }) {
     switch (columnKey) {
       case "product":
         return <h2>{stocks.product.name}</h2>;
-      case "created":
-        return <h2>{format(new Date(stocks.createdAt), "yyyy-MM-dd")}</h2>;
-
-      case "location":
-        return <h2>{stocks.location.name}</h2>;
       case "onhand":
         return <h2>{stocks.onHand}</h2>;
+      case "created":
+        return <h2>{format(new Date(stocks.createdAt), "yyyy-MM-dd")}</h2>;
+      case "location":
+        return <h2>{stocks.location.name}</h2>;
+
       default:
         return cellValue;
     }

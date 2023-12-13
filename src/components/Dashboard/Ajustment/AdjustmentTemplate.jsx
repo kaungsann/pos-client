@@ -106,6 +106,7 @@ export default function AdjustmentTemplate() {
         <SearchBox
           keyword={filteredKeywords.productName}
           onSearch={handleFilterChange}
+          text="Search by product name..."
         />
 
         <div className="flex">
