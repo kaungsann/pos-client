@@ -24,15 +24,6 @@ import DeleteAlert from "../utils/DeleteAlert";
 import { capitalize } from "../utils/utils";
 import { format } from "date-fns";
 
-const INITIAL_VISIBLE_COLUMNS = [
-  "name",
-  "expiredate",
-  "tax",
-  "saleprice",
-  "minStockQty",
-  "actions",
-];
-
 const columns = [
   { name: "Name", uid: "name", sortable: true },
   { name: "Expired Date", uid: "expiredAt", sortable: true },
@@ -50,7 +41,7 @@ export default function ProductList({ products }) {
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(columns.map((column) => column.uid))
   );
 
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -111,60 +102,49 @@ export default function ProductList({ products }) {
     setPage(1);
   }, []);
 
-  const renderCell = React.useCallback((products, columnKey) => {
-    const cellValue = products[columnKey];
+  const renderCell = React.useCallback((product, columnKey) => {
+    const cellValue = product[columnKey];
 
-    switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{ radius: "full", size: "sm", src: products.image }}
-            name={cellValue}
-          >
-            {products.name}
-          </User>
-        );
-      case "ref":
-        return <h1>{products.ref}</h1>;
-      case "expiredAt":
-        return (
-          <h1 name={cellValue}>
-            {products.expiredAt
-              ? format(new Date(products.expiredAt), "yyyy-MM-dd")
-              : "None"}
-          </h1>
-        );
-      case "salePrice":
-        return <h1> {products.salePrice}</h1>;
-      case "purchasePrice":
-        return <h1>{products.purchasePrice}</h1>;
-      case "minStockQty":
-        return <h1>{products.minStockQty}</h1>;
-      case "barcode":
-        return <h1> {products.barcode}</h1>;
-      case "actions":
-        return (
-          <div className="p-2 flex w-full justify-start cursor-pointer">
-            <Icon
-              icon="prime:eye"
-              className="text-2xl hover:opacity-75"
-              onClick={() => {
-                navigate(`/admin/products/detail/${products.id}`);
-              }}
-            />
-            <Icon
-              icon="ep:edit"
-              className="text-2xl hover:opacity-75"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/admin/products/edit/${products.id}`);
-              }}
-            />
-          </div>
-        );
-      default:
-        return cellValue;
-    }
+    const renderers = {
+      name: () => (
+        <User
+          avatarProps={{ radius: "full", size: "sm", src: product.image }}
+          name={cellValue}
+        >
+          {product.name}
+        </User>
+      ),
+      expiredAt: () => (
+        <>
+          {product.expiredAt
+            ? format(new Date(product.expiredAt), "yyyy-MM-dd")
+            : "None"}
+        </>
+      ),
+      actions: () => (
+        <div className="p-2 flex w-full justify-start cursor-pointer">
+          <Icon
+            icon="prime:eye"
+            className="text-2xl hover:opacity-75"
+            onClick={() => {
+              navigate(`/admin/products/detail/${product.id}`);
+            }}
+          />
+          <Icon
+            icon="ep:edit"
+            className="text-2xl hover:opacity-75"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/admin/products/edit/${product.id}`);
+            }}
+          />
+        </div>
+      ),
+    };
+
+    const renderer = renderers[columnKey] || ((value) => value);
+
+    return renderer(cellValue);
   }, []);
 
   const topContent = React.useMemo(() => {
@@ -277,7 +257,7 @@ export default function ProductList({ products }) {
         topContent={topContent}
         topContentPlacement="outside"
         onSelectionChange={setSelectedKeys}
-        onSortChange={(descriptor)=> setSortDescriptor(descriptor)}
+        onSortChange={(descriptor) => setSortDescriptor(descriptor)}
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
