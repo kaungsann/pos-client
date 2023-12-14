@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-export default function SearchBox({ onClear, changeValue, value }) {
+export default function SearchBox({ onClear, changeValue, value, text }) {
   return (
     <div>
       <Input
@@ -13,7 +13,7 @@ export default function SearchBox({ onClear, changeValue, value }) {
           inputWrapper: ["shadow-sm h-[7px]"],
         }}
         startContent={<Icon icon="ic:sharp-search" />}
-        placeholder="Search by name..."
+        placeholder={text ? text : "Search by name..."}
         value={value}
         onClear={onClear}
         onValueChange={changeValue}

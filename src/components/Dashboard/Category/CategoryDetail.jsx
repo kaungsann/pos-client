@@ -38,7 +38,7 @@ export default function CategoryDetail() {
       <div className="flex justify-between">
         <div className="flex gap-2">
           <Link
-            to="/admin/products/all"
+            to="/admin/categorys/all"
             className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
           >
             Back
@@ -51,11 +51,8 @@ export default function CategoryDetail() {
           <h2 className="lg:text-xl font-bold my-2">Category Information</h2>
           <div className="container bg-white p-5 rounded-lg max-w-6xl">
             <div className="flex">
-           
               <div className="ml-auto">
-                <Link
-                  to={`/admin/products/edit/${id}`}
-                >
+                <Link to={`/admin/products/edit/${id}`}>
                   <Icon icon="ep:edit" className="text-xl" />
                 </Link>
               </div>
@@ -69,7 +66,7 @@ export default function CategoryDetail() {
                     {detail[0].name ? detail[0].name.toUpperCase() : ""}
                   </h3>
                 </div>
-           
+
                 <div className="flex justify-between items-center">
                   <h4>Created Date</h4>
                   <h3 className="font-medium">
@@ -78,22 +75,24 @@ export default function CategoryDetail() {
                       : ""}
                   </h3>
                 </div>
-             
-            
               </div>
               <div className="container space-y-8 font-semibold text-sm">
                 <div className="flex justify-between items-center">
                   <h4>Active</h4>
-                  <h3 className="font-medium">  {detail[0].active ? "Yes" : "No"}</h3>
+                  <h3 className="font-medium">
+                    {" "}
+                    {detail[0].active ? "Yes" : "No"}
+                  </h3>
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>Updated Date</h4>
-                  <h3 className="font-medium">{detail[0].updatedAt
-                    ? new Date(detail[0].updatedAt).toLocaleDateString()
-                    : ""}</h3>
+                  <h3 className="font-medium">
+                    {detail[0].updatedAt
+                      ? new Date(detail[0].updatedAt).toLocaleDateString()
+                      : ""}
+                  </h3>
                 </div>
               </div>
-          
             </div>
           </div>
         </div>

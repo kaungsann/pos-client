@@ -166,21 +166,22 @@ export default function ProductList({ products }) {
         return <h1> {products.barcode ? products.barcode : "none"}</h1>;
       case "actions":
         return (
-          <div className="p-2 flex w-full justify-start cursor-pointer">
+          <div className=" flex w-full justify-start cursor-pointer items-center h-full z-40">
             <Icon
-              icon="prime:eye"
-              className="text-xl hover:opacity-75"
               onClick={() => {
                 navigate(`/admin/products/detail/${products.id}`);
               }}
+              icon="fa-solid:eye"
+              className="text-2xl hover:text-blue-600 text-slate-500"
             />
+
             <Icon
-              icon="ep:edit"
-              className="text-lg ml-2 hover:opacity-75"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/admin/products/edit/${products.id}`);
               }}
+              icon="raphael:edit"
+              className="text-2xl ml-2 hover:text-blue-600 text-slate-500"
             />
           </div>
         );
@@ -352,7 +353,7 @@ export default function ProductList({ products }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Product found"} items={sortedItems}>
+        <TableBody emptyContent={"No Products found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
