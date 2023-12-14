@@ -122,7 +122,7 @@ export default function CustomerTemplate() {
 
         <div className="flex">
           <Link
-            to="/admin/customers/create"
+            to="/admin/partners/create"
             className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           >
             Add
