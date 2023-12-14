@@ -4,6 +4,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FormPostApi, sendJsonToApi } from "../../Api";
 import { useSelector } from "react-redux";
+import { Input, Select, SelectItem } from "@nextui-org/react";
+
 
 export default function EmployeeCreate() {
   const [name, setName] = useState("");
@@ -68,115 +70,74 @@ export default function EmployeeCreate() {
         pauseOnHover
         theme="light"
       />
-      <div className="flex">
+      <div className="flex gap-3 my-5">
         <button
+          type="submit"
+          className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           onClick={handleSubmit}
-          className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
         >
           Save
         </button>
         <Link to="/admin/employee/all">
-          <button className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2">
+          <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
             Discard
           </button>
         </Link>
       </div>
 
-      <div className="w-full mx-auto flex justify-center cursor-pointer flex-col">
-        <h2 className="py-1.5 text-lg font-bold mt-2 bg-blue-600 text-white pl-4">
-          Add New Employee
-        </h2>
+      
 
-        <div>
-          <div>
-            <form className="mt-4 flex flex-wrap gap-5">
-              <div className="w-80 my-2">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
-                  Name
-                </label>
-                <input
+      <div className="container mt-2">
+        <h2 className="lg:text-xl font-bold my-2">Employee Create</h2>
+        <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          <form className="flex justify-between gap-10 p-5">
+            <div className="flex flex-wrap gap-8">
+              <div className="w-60">
+                <Input
                   type="text"
-                  required
+                  label="Name"
+                  name="name"
+                  value={name}
+                  // color={isInvalid ? "danger" : "success"}
+                  // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Employee name"
-                  name="name"
+                  placeholder="Enter Employee name..."
+                  labelPlacement="outside"
                 />
               </div>
-              <div className="w-80 my-2">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  required
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="email"
+                  label="Email"
+                  value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Employee email"
-                  name="name"
+                  placeholder="Enter reference..."
+                  labelPlacement="outside"
                 />
               </div>
-              {/* <div className="w-80 my-2">
-                <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
-                  Employee Image
-                </label>
-                <input
-                  type="file"
-                  onChange={(e) => setFile(e.target.value)}
-                  className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Your Company Name"
-                  name="file"
-                />
-              </div> */}
-              <div className="w-80 my-2">
-                <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
-                  Phone
-                </label>
-                <input
-                  type="number"
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Employee phone number"
-                  name="addresss"
-                />
-              </div>
-              <div className="w-80 my-2">
-                <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
-                  Address
-                </label>
-                <input
+              <div className="w-60   relative">
+                <Input
                   type="text"
-                  onChange={(e) => setAddress(e.target.value)}
-                  className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Employee address"
+                  isDisabled
                   name="phone"
+                  label="Phone"
+                  value={phone}
+                  placeholder="Enter Phone..."
+                  labelPlacement="outside"
                 />
               </div>
-              <div className="w-80 my-2">
-                <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
-                  Date Of Birth
-                </label>
-                <input
+              <div className="w-60">
+                <span className="text-sm">DOB</span>
+                <Input
                   type="date"
+                  name="date"
+                  labelPlacement="outside"
+                  value={birthdate}
                   onChange={(e) => setBirthDate(e.target.value)}
-                  className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Employee date of birth"
-                  name="addresss"
                 />
               </div>
-              <div className="w-80 my-2">
-                <label className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600">
-                  City
-                </label>
-                <input
-                  type="text"
-                  onChange={(e) => setCity(e.target.value)}
-                  className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  placeholder="Enter Your Company Name"
-                  name="phone"
-                />
-              </div>
-              <div className="w-80 my-2">
+              <div className="w-60 my-2">
                 <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
                   Gender
                 </label>
@@ -186,8 +147,9 @@ export default function EmployeeCreate() {
                   required
                   name="gender"
                   className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+                  value={gender}
                 >
-                  <option disabled value selected>
+                  <option disabled value="">
                     Select an option
                   </option>
                   <option value="male">Male</option>
@@ -195,8 +157,8 @@ export default function EmployeeCreate() {
                   <option value="other">Other</option>
                 </select>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </>
