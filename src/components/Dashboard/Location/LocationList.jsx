@@ -220,7 +220,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
+          <div className="flex items-center ">
             <h2 className="text-xl font-bold">Location</h2>
             <h3 className="text-default-400 text-small ml-4">
               Total {locations.length}

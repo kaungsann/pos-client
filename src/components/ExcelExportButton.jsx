@@ -14,7 +14,6 @@ const ExcelExportButton = ({ token, apiEndpoint }) => {
       if (!response.status === 200) {
         throw new Error("Failed to fetch Excel file");
       }
-
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const a = document.createElement("a");
       a.href = url;

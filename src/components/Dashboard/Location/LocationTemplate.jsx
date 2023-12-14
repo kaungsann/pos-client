@@ -39,7 +39,12 @@ export default function LocationTemplate() {
   }, [token]);
   return (
     <>
-      <LocationList locations={locations} onDeleteSuccess={fetchLocationData} />
+      <div className="my-3">
+        <LocationList
+          locations={locations}
+          onDeleteSuccess={fetchLocationData}
+        />
+      </div>
     </>
   );
 }

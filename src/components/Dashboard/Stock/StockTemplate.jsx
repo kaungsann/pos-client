@@ -107,8 +107,6 @@ export default function StockTemplate() {
     [stocks, filteredKeywords]
   );
 
-  console.log("stock filter is a", filteredStock);
-
   return (
     <div>
       <div className="flex justify-between items-center my-3">
