@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { removeData } from "../../../redux/actions";
+import { Input, Select, SelectItem } from "@nextui-org/react";
 
 export default function LocationEdit() {
   let [name, setName] = useState("");
@@ -64,21 +65,20 @@ export default function LocationEdit() {
         theme="light"
         style={{ width: "450px" }}
       />
-      <div className="flex">
+      <div className="flex gap-3 my-5">
         <button
           type="submit"
-          className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
+          className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           onClick={handleChange}
         >
           Save
         </button>
         <Link to="/admin/locations/all">
-          <button className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2">
+          <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
             Discard
           </button>
         </Link>
       </div>
-
       <div className=" mx-auto mt-4">
         <div className="w-full mx-auto flex justify-center cursor-pointer flex-col">
           <h2 className="py-1.5 text-lg font-bold mt-2 bg-blue-600 text-white pl-4">
@@ -98,6 +98,28 @@ export default function LocationEdit() {
             />
           </div>
         </form>
+      </div>
+      <div className="container mt-2">
+        <h2 className="lg:text-xl font-bold my-2">Product Edit</h2>
+        <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          <form className="flex justify-between gap-10 p-5">
+            <div className="flex flex-wrap gap-8">
+              <div className="w-60">
+                <Input
+                  type="text"
+                  label="Name"
+                  name="name"
+                  value={name}
+                  // color={isInvalid ? "danger" : "success"}
+                  // errorMessage={isInvalid && "Please enter a valid email"}
+                  onChange={(e) => handleChange(e)}
+                  placeholder="Enter product name..."
+                  labelPlacement="outside"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );

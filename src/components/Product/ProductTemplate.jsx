@@ -118,6 +118,7 @@ const ProductTemplate = () => {
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
         />
+
         <div className="flex">
           <Link
             to="/admin/products/create"
@@ -126,6 +127,7 @@ const ProductTemplate = () => {
             Add
           </Link>
           <FilterBox categories={categories} onFilter={handleFilterChange} />
+
           <div className="ml-3">
             <ExcelExportButton
               token={token.accessToken}

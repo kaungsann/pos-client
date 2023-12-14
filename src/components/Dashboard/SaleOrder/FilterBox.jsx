@@ -14,43 +14,49 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-const FilterBox = ({ categories, onFilter }) => {
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [price, setPrice] = useState("");
-  const [priceComparison, setPriceComparison] = useState("LESS");
+const FilterBox = ({ onFilter }) => {
+  const [location, setLocation] = useState("");
+  const [orderRef, setOrderRef] = useState("");
+  const [created, setCreated] = useState("");
+  const [total, setTotal] = useState("");
+  const [totalComparison, setTotalComparison] = useState("");
+
   const [isFilterActive, setIsFilterActive] = useState(false);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  console.log("partner name is a");
+
   const handleFilterClick = () => {
     setIsFilterActive(!isFilterActive);
     onFilter({
-      category: selectedCategory,
-      startDate,
-      endDate,
-      price: {
-        value: price,
-        comparison: priceComparison,
+      name,
+      location,
+      orderRef,
+      created,
+      total: {
+        value: total,
+        comparison: totalComparison,
       },
     });
   };
 
   const handleClearFiltersClick = () => {
     setIsFilterActive(!isFilterActive);
-    setSelectedCategory("");
-    setStartDate("");
-    setEndDate("");
-    setPrice("");
-    setPriceComparison("LESS");
+    setLocation("");
+    setOrderRef("");
+    setTotalComparison("");
+    setCreated("");
+    setTotal("");
+
     onFilter({
-      category: "",
-      startDate: "",
-      endDate: "",
-      price: {
+      name: "",
+      location: "",
+      orderRef: "",
+      created: "",
+      total: {
         value: "",
-        comparison: "LESS",
+        comparison: "",
       },
     });
   };
@@ -76,62 +82,51 @@ const FilterBox = ({ categories, onFilter }) => {
                 Filter by
               </ModalHeader>
               <ModalBody>
-                <Select
-                  label="Category"
-                  placeholder="Select category"
-                  id="category"
-                  isClearable
-                  radius="sm"
-                  variant="bordered"
-                  items={categories}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                  <SelectItem key="" value="">
-                    All
-                  </SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </Select>
-
-                <div className="container flex flex-col">
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Date"
-                      type="date"
-                      variant="bordered"
-                      label="Expire Date From"
-                      labelPlacement="outside"
-                      id="startDate"
-                      value={startDate || ""}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      radius="sm"
-                    />
-                    <Input
-                      type="date"
-                      variant="bordered"
-                      label="To"
-                      placeholder="Date"
-                      labelPlacement="outside"
-                      id="endDate"
-                      value={endDate || ""}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      radius="sm"
-                    />
-                  </div>
+                <div className="flex justify-between">
+                  <Input
+                    type="text"
+                    variant="bordered"
+                    radius="sm"
+                    size="md"
+                    label="location Name"
+                    placeholder="Enter loction name"
+                    labelPlacement="outside"
+                    className="ml-2"
+                    onChange={(e) => setLocation(e.target.value)}
+                  />
+                  <Input
+                    type="date"
+                    variant="bordered"
+                    radius="sm"
+                    size="md"
+                    label="Created-Date"
+                    placeholder="Enter created date"
+                    labelPlacement="outside"
+                    className="ml-2"
+                    onChange={(e) => setCreated(e.target.value)}
+                  />
                 </div>
+                <Input
+                  type="text"
+                  label="OrderRef"
+                  variant="bordered"
+                  radius="sm"
+                  size="md"
+                  placeholder="Enter orderRef"
+                  labelPlacement="outside"
+                  className="ml-2"
+                  onChange={(e) => setOrderRef(e.target.value)}
+                />
 
                 <div className="container flex flex-col">
-                  <span className="font-semibold text-xs mx-2">Sale Price</span>
+                  <span className="font-semibold text-sm mx-2 mb-2">Total</span>
                   <div className="flex gap-2">
                     <Input
                       type="number"
                       variant="bordered"
-                      id="price"
-                      onChange={(e) => setPrice(e.target.value)}
-                      value={price || ""}
+                      id="total"
+                      onChange={(e) => setTotal(e.target.value)}
+                      value={total || ""}
                       radius="sm"
                       placeholder="Enter amount"
                       size="md"
@@ -141,9 +136,9 @@ const FilterBox = ({ categories, onFilter }) => {
                       radius="sm"
                       label="Comparison"
                       placeholder="Select comparison"
-                      id="priceComparison"
-                      onChange={(e) => setPriceComparison(e.target.value)}
-                      value={priceComparison}
+                      id="onHandComparison"
+                      onChange={(e) => setTotalComparison(e.target.value)}
+                      value={totalComparison}
                     >
                       <SelectItem value="LESS" key="LESS">
                         Less Than
@@ -176,7 +171,6 @@ const FilterBox = ({ categories, onFilter }) => {
 };
 
 FilterBox.propTypes = {
-  categories: PropTypes.array,
   onFilter: PropTypes.func,
 };
 

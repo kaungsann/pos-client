@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { getApi, PathData } from "../../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
+import { ToastContainer, toast } from "react-toastify";
+import { Input, Select, SelectItem, Checkbox } from "@nextui-org/react";
 
 export default function PartnerEdit() {
   const { id } = useParams();
@@ -70,95 +72,102 @@ export default function PartnerEdit() {
   }, []);
   return (
     <>
-      <div className="flex">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        style={{ width: "450px" }}
+      />
+      <div className="flex gap-3 my-5">
         <button
           type="submit"
-          className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
+          className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           onClick={handleSubmit}
         >
           Save
         </button>
         <Link to="/admin/partners/all">
-          <button className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2">
+          <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
             Discard
           </button>
         </Link>
       </div>
+      <div className="container mt-2">
+        <h2 className="lg:text-xl font-bold my-2">Partner Edit</h2>
+        <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          <form className="flex justify-between gap-10 p-5">
+            <div className="flex flex-wrap gap-8 items-center">
+              <div className="w-60">
+                <Input
+                  type="text"
+                  label="Name"
+                  name="name"
+                  value={name}
+                  // color={isInvalid ? "danger" : "success"}
+                  // errorMessage={isInvalid && "Please enter a valid email"}
+                  onChange={(e) => handleSubmit(e)}
+                  placeholder="Enter partner name..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="address"
+                  label="Address"
+                  value={contactAddress}
+                  onChange={(e) => handleSubmit(e.target.value)}
+                  placeholder="Enter reference..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  isDisabled
+                  name="phone"
+                  label="Phone"
+                  value={phone}
+                  onChange={(e) => handleSubmit(e.target.value)}
+                  placeholder="Enter barcode..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60 flex items-center mt-6">
+                <Checkbox defaultSelected size="md"
+                  id="customer"
+                  isSelected={isCustomer}
+                  onChange={() => setIsCustomer(!isCustomer)}
+                  className=""
+                >Customer</Checkbox>
+                <Checkbox defaultSelected size="md "
+                  id="customer"
+                  isSelected={isCompany}
+                  className="ml-3"
+                  onChange={() => setIsCompany(!isCompany)}
+                >
+                  Company</Checkbox>
 
-      <div className="w-full mx-auto mt-4">
-        <div className="w-full mx-auto flex justify-center cursor-pointer flex-col">
-          <h2 className="py-1.5 text-lg font-bold mt-2 bg-blue-600 text-white pl-4">
-            Edit Parnter information
-          </h2>
+
+
+              </div>
+
+
+
+            </div>
+
+          </form>
+
+
         </div>
-        <form onSubmit={handleSubmit} className="flex mt-3">
-          <div className="w-80">
-            <label className="text-md font-semibold">Name*</label>
-            <input
-              type="text"
-              value={name}
-              style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-              placeholder="Enter product name"
-            />
-          </div>
-          <div className="w-80 mx-2">
-            <label className="text-md font-semibold">Content Address*</label>
-            <input
-              type="text"
-              value={contactAddress}
-              style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setcontentAddress(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-              placeholder="Enter product description"
-            />
-          </div>
-          <div className="w-80 mx-2">
-            <label className="text-md font-semibold">City*</label>
-            <input
-              type="text"
-              value={city}
-              style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setCity(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-              placeholder="Enter product description"
-            />
-          </div>
-          <div className="w-80 mx-2">
-            <label className="text-md font-semibold">Phone*</label>
-            <input
-              type="text"
-              value={phone}
-              style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-              placeholder="Enter product description"
-            />
-          </div>
-          <div className="flex flex-col items-center">
-            <label className="text-md font-semibold">Customer*</label>
-            <input
-              type="checkbox"
-              id="customer"
-              className="w-6 h-6 text-xl my-5"
-              checked={isCustomer}
-              style={{ backgroundColor: "transparent" }}
-              onChange={() => setIsCustomer(!isCustomer)}
-            />
-          </div>
-          <div className="ml-3 flex flex-col items-center">
-            <label className="text-md font-semibold">Company*</label>
-            <input
-              type="checkbox"
-              id="customer"
-              style={{ backgroundColor: "transparent" }}
-              className="w-6 h-6 text-xl my-5"
-              checked={isCompany}
-              onChange={() => setIsCompany(!isCompany)}
-            />
-          </div>
-        </form>
+
       </div>
     </>
   );

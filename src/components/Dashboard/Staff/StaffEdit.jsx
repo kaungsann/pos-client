@@ -5,9 +5,8 @@ import { FormPathApi, getApi } from "../../Api";
 import { removeData } from "../../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ChangePassword from "../../utils/ChangePassword"
+import ChangePassword from "../../utils/ChangePassword";
 import { format } from "date-fns";
-
 
 export default function StaffEdit() {
   const { id } = useParams();
@@ -18,20 +17,20 @@ export default function StaffEdit() {
   const [city, setCity] = useState("");
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
-  const [password , setPassword] = useState("")
-  const [showBox , setShowBox] = useState(false)
+  const [password, setPassword] = useState("");
+  const [showBox, setShowBox] = useState(false);
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const getSingleStaff = async () => {
     const response = await getApi(`/user/${id}`, token.accessToken);
     if (response.status) {
       const formattedExpireDate = response.data[0].birthdate
-      ? new Date(response.data[0].birthdate).toISOString().split('T')[0]
-      : '';
+        ? new Date(response.data[0].birthdate).toISOString().split("T")[0]
+        : "";
       setBirth(formattedExpireDate);
       setName(response.data[0].username);
       setEmail(response.data[0].email);
@@ -71,7 +70,7 @@ export default function StaffEdit() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    console.log("uer is a" , resData)
+    console.log("uer is a", resData);
     if (resData.status) {
       navigate("/admin/user/all");
     } else {
@@ -87,7 +86,7 @@ export default function StaffEdit() {
   useEffect(() => {
     getSingleStaff();
   }, []);
-  
+
   return (
     <>
       <ToastContainer
@@ -273,25 +272,17 @@ export default function StaffEdit() {
               City
             </label>
             <div className="mt-2">
-              <select
+              <input
                 value={city}
-                id="city"
                 onChange={(e) => setCity(e.target.value)}
+                id="city"
                 name="city"
+                type="text"
+                required
                 className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              >
-                <option disabled value>
-                  Select an option
-                </option>
-                <option value="Yagon">Yagon</option>
-                <option value="Mandalay">Mandalay</option>
-                <option value="PyiOoLwin">PyiOoLwin</option>
-                <option value="Pago">Bago</option>
-              </select>
+              />
             </div>
           </div>
-
-
         </form>
         <button
           onClick={() => setShowBox(true)}
@@ -301,7 +292,7 @@ export default function StaffEdit() {
         </button>
       </div>
 
-       <div className="w-96 absolute top-32 left-0 right-0 z-50 mx-auto bg-white rounded-md shadow-md flex justify-center cursor-pointer">
+      <div className="w-96 absolute top-32 left-0 right-0 z-50 mx-auto bg-white rounded-md shadow-md flex justify-center cursor-pointer">
         {showBox && (
           <div className="w-72 my-3">
             <div className="flex justify-between">
@@ -311,8 +302,13 @@ export default function StaffEdit() {
               >
                 Password*
               </label>
-               <h3 onClick={() => setShowBox(false)} className="text-slate-600 font-semibold text-xl hover:text-slate-400">X</h3>
-             </div>
+              <h3
+                onClick={() => setShowBox(false)}
+                className="text-slate-600 font-semibold text-xl hover:text-slate-400"
+              >
+                X
+              </h3>
+            </div>
 
             <div className="mt-2">
               <input
@@ -327,7 +323,7 @@ export default function StaffEdit() {
               <button
                 onClick={handleSubmit}
                 className="w-72 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
+              >
                 Submit
               </button>
             </div>
