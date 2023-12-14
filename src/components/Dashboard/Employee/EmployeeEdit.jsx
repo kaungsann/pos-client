@@ -135,7 +135,7 @@ export default function EmployeeEdit() {
                   value={name}
                   // color={isInvalid ? "danger" : "success"}
                   // errorMessage={isInvalid && "Please enter a valid email"}
-                  onChange={(e) => handleSubmit(e)}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Enter  name..."
                   labelPlacement="outside"
                 />
@@ -146,7 +146,7 @@ export default function EmployeeEdit() {
                   name="email"
                   label="Email"
                   value={email}
-                  onChange={(e) => handleSubmit(e)}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter Email..."
                   labelPlacement="outside"
                 />
@@ -159,6 +159,7 @@ export default function EmployeeEdit() {
                   name="address"
                   label="Address"
                   value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                   placeholder="Enter Address..."
                   labelPlacement="outside"
                 />
@@ -174,7 +175,7 @@ export default function EmployeeEdit() {
                       ? new Date(birth).toISOString().split("T")[0]
                       : ""
                   }
-                  onChange={(e) => handleSubmit(e)}
+                  onChange={(e) => setBirth(e.target.value)}
                 />
               </div>
               <div className="w-60">
@@ -183,7 +184,7 @@ export default function EmployeeEdit() {
                   name="phone"
                   label="Phone"
                   value={phone}
-                  onChange={(e) => handleSubmit(e)}
+                  onChange={(e) => setPhone(e.target.value)}
                   placeholder="Enter Phone..."
                   labelPlacement="outside"
                 />
@@ -196,7 +197,7 @@ export default function EmployeeEdit() {
                   value={gender}
                   placeholder="Select an gender"
                   selectedKeys={gender ? [gender] : false}
-                  onChange={(e) => handleSubmit(e.target.value)}
+                  onChange={(e) => setGender(e.target.value)}
                   className="max-w-xs"
                 >
                   <SelectItem value="male" key="male">male</SelectItem>

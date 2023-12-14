@@ -35,7 +35,9 @@ export default function WareHouseTemplate() {
 
   return (
     <>
-      <WareHouseList warehouses={warehouse} />
+      <div className="my-3">
+        <WareHouseList warehouses={warehouse} />
+      </div>
     </>
   );
 }

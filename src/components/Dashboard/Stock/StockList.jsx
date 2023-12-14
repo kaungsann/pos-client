@@ -31,7 +31,7 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = ["product", "location", "onhand", "created"];
 
 const columns = [
-  { name: "Product", uid: "product" },
+  { name: "Product", uid: "product", sortable: true },
   { name: "Location", uid: "location", sortable: true },
   { name: "OnHand", uid: "onhand", sortable: true },
   { name: "Create", uid: "created" },
@@ -49,7 +49,7 @@ export default function StockList({ stocks }) {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "onhand",
+    column: "product",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);

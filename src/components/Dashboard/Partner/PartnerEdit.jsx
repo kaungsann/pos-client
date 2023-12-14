@@ -101,6 +101,7 @@ export default function PartnerEdit() {
       </div>
       <div className="container mt-2">
         <h2 className="lg:text-xl font-bold my-2">Partner Edit</h2>
+        <h2 className="lg:text-xl font-bold my-2">Partner Edit</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8 items-center">
@@ -113,7 +114,7 @@ export default function PartnerEdit() {
                   // color={isInvalid ? "danger" : "success"}
                   // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => handleSubmit(e)}
-                  placeholder="Enter partner name..."
+                  placeholder="Enter product name..."
                   labelPlacement="outside"
                 />
               </div>
@@ -123,7 +124,7 @@ export default function PartnerEdit() {
                   name="address"
                   label="Address"
                   value={contactAddress}
-                  onChange={(e) => handleSubmit(e.target.value)}
+                  onChange={(e) => setcontentAddress(e.target.value)}
                   placeholder="Enter reference..."
                   labelPlacement="outside"
                 />
@@ -135,7 +136,7 @@ export default function PartnerEdit() {
                   name="phone"
                   label="Phone"
                   value={phone}
-                  onChange={(e) => handleSubmit(e.target.value)}
+                  onChange={(e) => setPhone(e.target.value)}
                   placeholder="Enter barcode..."
                   labelPlacement="outside"
                 />

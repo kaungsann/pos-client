@@ -103,7 +103,7 @@ export default function CategoryEdit() {
                   value={name}
                   // color={isInvalid ? "danger" : "success"}
                   // errorMessage={isInvalid && "Please enter a valid email"}
-                  onChange={(e) => handleChange(e)}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Enter product name..."
                   labelPlacement="outside"
                 />

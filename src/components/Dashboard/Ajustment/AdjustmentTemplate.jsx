@@ -101,7 +101,7 @@ export default function AdjustmentTemplate() {
   console.log("adjustment is a", filteredAdjustment);
 
   return (
-    <div>
+    <div className="">
       <div className="flex justify-between items-center my-3">
         <SearchBox
           keyword={filteredKeywords.productName}
