@@ -131,12 +131,11 @@ export default function PartnerCreate() {
                   labelPlacement="outside"
                 />
               </div>
-              <Checkbox defaultSelected size="lg"
+              <Checkbox  size="lg"
                 id="customer"
                 onChange={handleCheckboxChange}
-                
               >Customer</Checkbox>
-              <Checkbox defaultSelected size="lg"
+              <Checkbox  size="lg"
                 id="company"
                 onChange={handleCheckboxChange}
               >
