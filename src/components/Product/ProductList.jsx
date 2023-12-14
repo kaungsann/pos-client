@@ -35,10 +35,10 @@ const INITIAL_VISIBLE_COLUMNS = [
 
 const columns = [
   { name: "Name", uid: "name", sortable: true },
-  { name: "Expired Date", uid: "expiredate", sortable: true },
+  { name: "Expired Date", uid: "expiredAt", sortable: true },
   { name: "Tax", uid: "tax", sortable: true },
-  { name: "Sale Price", uid: "saleprice", sortable: true },
-  { name: "Purchase Price", uid: "purchaseprice", sortable: true },
+  { name: "Sale Price", uid: "salePrice", sortable: true },
+  { name: "Purchase Price", uid: "purchasePrice", sortable: true },
   { name: "Min-Stock Qty", uid: "minStockQty", sortable: true },
   { name: "Ref", uid: "ref" },
   { name: "Barcode", uid: "barcode" },
@@ -84,9 +84,9 @@ export default function ProductList({ products }) {
   }, [visibleColumns]);
 
   const sortedItems = React.useMemo(() => {
-    return [...currentPageItems].sort((a, b) => {
-      const first = a[sortDescriptor.column];
-      const second = b[sortDescriptor.column];
+    return currentPageItems.sort((a, b) => {
+      const first = a[sortDescriptor.column] || "";
+      const second = b[sortDescriptor.column] || "";
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
@@ -126,7 +126,7 @@ export default function ProductList({ products }) {
         );
       case "ref":
         return <h1>{products.ref}</h1>;
-      case "expiredate":
+      case "expiredAt":
         return (
           <h1 name={cellValue}>
             {products.expiredAt
@@ -134,9 +134,9 @@ export default function ProductList({ products }) {
               : "None"}
           </h1>
         );
-      case "saleprice":
+      case "salePrice":
         return <h1> {products.salePrice}</h1>;
-      case "purchaseprice":
+      case "purchasePrice":
         return <h1>{products.purchasePrice}</h1>;
       case "minStockQty":
         return <h1>{products.minStockQty}</h1>;
@@ -277,7 +277,7 @@ export default function ProductList({ products }) {
         topContent={topContent}
         topContentPlacement="outside"
         onSelectionChange={setSelectedKeys}
-        onSortChange={setSortDescriptor}
+        onSortChange={(descriptor)=> setSortDescriptor(descriptor)}
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
