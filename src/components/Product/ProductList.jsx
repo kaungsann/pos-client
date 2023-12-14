@@ -53,7 +53,7 @@ export default function ProductList({ products }) {
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "name",
     direction: "ascending",
@@ -131,11 +131,11 @@ export default function ProductList({ products }) {
           <h1 name={cellValue}>
             {products.expiredAt
               ? format(new Date(products.expiredAt), "yyyy-MM-dd")
-              : "none"}
+              : "None"}
           </h1>
         );
       case "saleprice":
-        return <h1> {products.salePrice ? products.salePrice : "none"}</h1>;
+        return <h1> {products.salePrice}</h1>;
       case "purchaseprice":
         return <h1>{products.purchasePrice}</h1>;
       case "minStockQty":
@@ -147,14 +147,14 @@ export default function ProductList({ products }) {
           <div className="p-2 flex w-full justify-start cursor-pointer">
             <Icon
               icon="prime:eye"
-              className="text-xl hover:opacity-75"
+              className="text-2xl hover:opacity-75"
               onClick={() => {
                 navigate(`/admin/products/detail/${products.id}`);
               }}
             />
             <Icon
               icon="ep:edit"
-              className="text-lg ml-2 hover:opacity-75"
+              className="text-2xl hover:opacity-75"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/admin/products/edit/${products.id}`);
