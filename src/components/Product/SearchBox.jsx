@@ -23,6 +23,7 @@ const SearchBox = ({ keyword, onSearch }) => {
           placeholder="Search by name..."
           value={keyword}
           onChange={(e) => handleInputChange("name", e.target.value)}
+          onClear={() => handleInputChange("name", "")}
           startContent={<Icon icon="ic:sharp-search" />}
         />
       </div>

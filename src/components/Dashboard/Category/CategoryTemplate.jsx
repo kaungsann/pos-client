@@ -43,11 +43,13 @@ export default function CategoryTemplate() {
   }, [token]);
 
   return (
-    <div className="my-3">
-      <CategoryList
-        categorys={categorys}
-        onDeleteSuccess={handleDeleteSuccess}
-      />
-    </div>
+    <>
+      <div className="my-3">
+        <CategoryList
+          categorys={categorys}
+          onDeleteSuccess={handleDeleteSuccess}
+        />
+      </div>
+    </>
   );
 }
