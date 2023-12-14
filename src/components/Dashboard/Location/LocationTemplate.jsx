@@ -38,8 +38,8 @@ export default function LocationTemplate() {
     fetchLocationData();
   }, [token]);
   return (
-    <>
+    <div className="my-3">
       <LocationList locations={locations} onDeleteSuccess={fetchLocationData} />
-    </>
+    </div>
   );
 }

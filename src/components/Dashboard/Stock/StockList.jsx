@@ -32,7 +32,7 @@ const INITIAL_VISIBLE_COLUMNS = ["product", "location", "onhand", "created"];
 
 const columns = [
   { name: "Product", uid: "product" },
-  { name: "Location", uid: "location", sortable: true },
+  { name: "Location", uid: "location" },
   { name: "OnHand", uid: "onhand", sortable: true },
   { name: "Create", uid: "created" },
 ];
