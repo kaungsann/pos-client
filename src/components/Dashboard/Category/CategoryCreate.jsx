@@ -88,8 +88,8 @@ export default function CategoryCreate() {
                   value={name}
                   // color={isInvalid ? "danger" : "success"}
                   // errorMessage={isInvalid && "Please enter a valid email"}
-                  onChange={(e) => handleChange(e)}
-                  placeholder="Enter product name..."
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter category name..."
                   labelPlacement="outside"
                 />
               </div>

@@ -6,6 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
+import { Input, Select, SelectItem } from "@nextui-org/react";
+
 
 export default function LocationCreate() {
   let [name, setName] = useState("");
@@ -72,33 +74,27 @@ export default function LocationCreate() {
           </button>
         </Link>
       </div>
-
-      <h2 className="py-1.5 text-lg font-bold mt-6 bg-blue-600 text-white pl-4">
-        Create Location
-      </h2>
-
-      <div className="w-full">
-        <form onSubmit={handleChange} className="mt-3">
-          <div className="w-80">
-            <label
-              className={`text-md font-semibold ${
-                showNameError ? "text-red-600" : ""
-              }`}
-            >
-              Name*
-            </label>
-            <input
-              type="text"
-              style={{ backgroundColor: "transparent" }}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={`w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 ${
-                showNameError ? "border-red-600" : "border-slate-400"
-              }`}
-              placeholder="Enter Location name"
-            />
-          </div>
-        </form>
+      <div className="container mt-2">
+        <h2 className="lg:text-xl font-bold my-2">Location Create</h2>
+        <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          <form className="flex justify-between gap-10 p-5">
+            <div className="flex flex-wrap gap-8">
+              <div className="w-60">
+                <Input
+                  type="text"
+                  label="Name"
+                  name="name"
+                  value={name}
+                  // color={isInvalid ? "danger" : "success"}
+                  // errorMessage={isInvalid && "Please enter a valid email"}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter location name..."
+                  labelPlacement="outside"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );
