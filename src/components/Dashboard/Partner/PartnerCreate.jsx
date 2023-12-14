@@ -6,11 +6,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
+import { Input, Select, SelectItem, Checkbox } from "@nextui-org/react";
+
 
 export default function PartnerCreate() {
   const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
+  const [isCustomer, setIsCustomer] = useState(null);
+  const [isCompany, setIsCompany] = useState(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -73,110 +77,73 @@ export default function PartnerCreate() {
         theme="light"
         style={{ width: "450px" }}
       />
-      <div className="flex">
+      <div className="flex gap-3 my-5">
         <button
           type="submit"
-          className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
+          className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           onClick={handleSubmit}
         >
           Save
         </button>
         <Link to="/admin/partners/all">
-          <button className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2">
+          <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
             Discard
           </button>
         </Link>
       </div>
-
-      <div className="mt-2">
-        <div className="w-full mx-auto flex justify-center cursor-pointer flex-col">
-          <h2 className="py-1.5 text-lg font-bold mt-2 bg-blue-600 text-white pl-4">
-            Add New Partner
-          </h2>
+      <div className="container mt-2">
+        <h2 className="lg:text-xl font-bold my-2">Partner Create</h2>
+        <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          <form className="flex justify-between gap-10 p-5">
+            <div className="flex flex-wrap gap-8">
+              <div className="w-60">
+                <Input
+                  type="text"
+                  label="Product Name"
+                  name="name"
+                  value={formData.name}
+                  // color={isInvalid ? "danger" : "success"}
+                  // errorMessage={isInvalid && "Please enter a valid email"}
+                  onChange={handleInputChange}
+                  placeholder="Enter Partner name..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="address"
+                  label="Address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  placeholder="Enter reference..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="phone"
+                  label="Phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="Enter Phone..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <Checkbox defaultSelected size="lg"
+                id="customer"
+                onChange={handleCheckboxChange}
+                
+              >Customer</Checkbox>
+              <Checkbox defaultSelected size="lg"
+                id="company"
+                onChange={handleCheckboxChange}
+              >
+                Company</Checkbox>
+            </div>
+          </form>
         </div>
-
-        <form onSubmit={handleSubmit} className="flex mt-4">
-          <div className="w-80">
-            <label className={"text-md font-semibold"}>Name*</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              style={{ backgroundColor: "transparent" }}
-              onChange={handleInputChange}
-              className={
-                "w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-400"
-              }
-              placeholder="Enter partner name"
-            />
-          </div>
-          <div className="w-80 mx-2">
-            <label className={"text-md font-semibold"}>Content Address</label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              style={{ backgroundColor: "transparent" }}
-              onChange={handleInputChange}
-              className={
-                "w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-400"
-              }
-              placeholder="Enter product description"
-            />
-          </div>
-          <div className="w-80 mx-2">
-            <label className={"text-md font-semibold"}>City</label>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              style={{ backgroundColor: "transparent" }}
-              onChange={handleInputChange}
-              className={
-                "w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-400"
-              }
-              placeholder="Enter product description"
-            />
-          </div>
-          <div className="w-80 mx-2">
-            <label className={"text-md font-semibold"}>Phone</label>
-            <input
-              type="number"
-              name="phone"
-              value={formData.phone}
-              style={{ backgroundColor: "transparent" }}
-              onChange={handleInputChange}
-              className={
-                "w-full py-1 rounded-md border-b-2 bg-white focus:outline-none my-2 border-slate-400"
-              }
-              placeholder="Enter product description"
-            />
-          </div>
-          <div className="flex flex-col items-center">
-            <label className="text-md font-semibold">Customer</label>
-            <input
-              type="checkbox"
-              id="customer"
-              className="w-6 h-6 text-xl my-5"
-              name="isCustomer"
-              checked={formData.isCustomer}
-              style={{ backgroundColor: "transparent" }}
-              onChange={handleCheckboxChange}
-            />
-          </div>
-          <div className="ml-3 flex flex-col items-center">
-            <label className="text-md font-semibold">Company</label>
-            <input
-              type="checkbox"
-              id="customer"
-              className="w-6 h-6 text-xl my-5"
-              name="isCompany"
-              checked={formData.isCompany}
-              style={{ backgroundColor: "transparent" }}
-              onChange={handleCheckboxChange}
-            />
-          </div>
-        </form>
       </div>
     </>
   );
