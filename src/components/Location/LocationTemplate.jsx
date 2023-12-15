@@ -6,7 +6,8 @@ import SearchBox from "../Product/SearchBox";
 import ExcelExportButton from "../ExcelExportButton";
 import ExcelImportButton from "../ExcelImportButton";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@nextui-org/react";
 
 const LOCATION_API = {
   INDEX: BASE_URL + "/location",
@@ -21,6 +22,8 @@ const LocationTemplate = () => {
     name: "",
   });
   const token = useSelector((state) => state.IduniqueData);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -62,12 +65,13 @@ const LocationTemplate = () => {
           onSearch={handleFilterChange}
         />
         <div className="flex">
-          <Link
-            to="/admin/locations/create"
-            className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          <Button
+            size="sm"
+            onPress={() => navigate("/admin/locations/create")}
+            className="font-bold rounded-sm shadow-sm flex items-center bg-slate-50 text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           >
             Add
-          </Link>
+          </Button>
           <div className="ml-3">
             <ExcelExportButton
               token={token.accessToken}
