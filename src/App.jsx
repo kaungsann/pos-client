@@ -28,8 +28,6 @@ import PurchaseAll from "./components/Dashboard/Purchase/PurchaseAll";
 import PurchaseCreate from "./components/Dashboard/Purchase/PurchaseCreate";
 import PurchaseDetail from "./components/Dashboard/Purchase/PurchaseDetail";
 import PurchaseView from "./components/Dashboard/Purchase/PurchaseView";
-import Stock from "./components/Dashboard/Stock/Stock";
-import AdjustmentView from "./components/Dashboard/Ajustment/AjusmentView";
 import EmployeeAll from "./components/Dashboard/Employee/EmployeeAll";
 import EmployeeCreate from "./components/Dashboard/Employee/EmployeeCreate";
 import Staff from "./components/Dashboard/Staff/Staff";

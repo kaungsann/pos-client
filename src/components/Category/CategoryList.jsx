@@ -107,22 +107,30 @@ export default function CategoryList({ categories }) {
         </User>
       ),
       actions: () => (
-        <div className="p-2 flex w-full justify-start cursor-pointer">
-          <Icon
-            icon="prime:eye"
-            className="text-2xl hover:opacity-75"
-            onClick={() => {
-              navigate(`/admin/categorys/detail/${category.id}`);
-            }}
-          />
-          <Icon
-            icon="ep:edit"
-            className="text-2xl hover:opacity-75"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/admin/categorys/edit/${category.id}`);
-            }}
-          />
+        <div className="relative flex justify-start items-center gap-2">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly size="sm" variant="light">
+                <Icon icon="fluent:grid-dots-28-regular" />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem
+                onPress={() => {
+                  navigate(`/admin/categorys/detail/${category.id}`);
+                }}
+              >
+                View
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => {
+                  navigate(`/admin/categorys/detail/${category.id}`);
+                }}
+              >
+                Edit
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       ),
     };
