@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { FormPathApi, getApi } from "../../Api";
-import { removeData } from "../../../redux/actions";
+import { useNavigate, useParams } from "react-router-dom";
+import { FormPathApi, getApi } from "../Api";
+import { removeData } from "../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { format } from "date-fns";
 import { Input, Progress, Button, Select, SelectItem } from "@nextui-org/react";
 
 export default function EmployeeEdit() {
@@ -183,7 +182,7 @@ export default function EmployeeEdit() {
                 />
               </div>
               <div className="w-60">
-                <span className="text-sm">DOB</span>
+                <span className="text-sm">Date of Birth</span>
                 <Input
                   type="date"
                   name="dob"

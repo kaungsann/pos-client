@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FormPostApi, sendJsonToApi } from "../../Api";
+import { sendJsonToApi } from "../Api";
 import { useSelector } from "react-redux";
 import { Input, Progress, Button, Select, SelectItem } from "@nextui-org/react";
 
@@ -137,7 +137,7 @@ export default function EmployeeCreate() {
                 />
               </div>
               <div className="w-60">
-                <span className="text-sm">DOB</span>
+                <span className="text-sm">Date of Birth</span>
                 <Input
                   type="date"
                   name="birthdate"
