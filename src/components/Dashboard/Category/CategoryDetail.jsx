@@ -52,7 +52,7 @@ export default function CategoryDetail() {
           <div className="container bg-white p-5 rounded-lg max-w-6xl">
             <div className="flex">
               <div className="ml-auto">
-                <Link to={`/admin/products/edit/${id}`}>
+                <Link to={`/admin/categorys/edit/${id}`}>
                   <Icon icon="ep:edit" className="text-xl" />
                 </Link>
               </div>

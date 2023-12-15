@@ -45,21 +45,26 @@ export default function ProductForm() {
 
   const inputChangeHandler = (event) => {
     const { name, value } = event.target;
-
     let newProduct = { [name]: value };
 
     if (name === "purchasePrice" || name === "marginProfit") {
+      const { purchasePrice, marginProfit } = product;
+
       newProduct = {
         ...newProduct,
-        salePrice: parseFloat(product.salePrice),
-        purchasePrice: parseFloat(product.purchasePrice),
-        marginProfit: parseFloat(product.marginProfit),
+        salePrice:
+          name === "purchasePrice"
+            ? Math.ceil(
+                parseFloat(value) + parseFloat(value) * (marginProfit / 100)
+              )
+            : Math.ceil(
+                purchasePrice + purchasePrice * (parseFloat(value) / 100)
+              ),
+        purchasePrice:
+          name === "marginProfit" ? purchasePrice : parseFloat(value),
+        marginProfit:
+          name === "purchasePrice" ? marginProfit : parseFloat(value),
       };
-
-      newProduct.salePrice = Math.ceil(
-        newProduct.purchasePrice +
-          newProduct.purchasePrice * (newProduct.marginProfit / 100)
-      );
     }
 
     setUpdateProduct({ ...updateProduct, ...newProduct });

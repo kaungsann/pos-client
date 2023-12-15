@@ -106,7 +106,7 @@ function App() {
             </Route>
             <Route path="products">
               <Route path="all" element={<ProductTemplate />} />
-              <Route path="create" element={<ProductsCreate />} />
+              <Route path="create" element={<ProductForm />} />
               <Route path="edit/:id" element={<ProductForm />} />
               <Route path="detail/:id" element={<ProductDetails />} />
             </Route>

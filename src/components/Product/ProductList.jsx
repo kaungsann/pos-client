@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import {
   Table,
   TableHeader,
@@ -13,78 +14,58 @@ import {
   DropdownItem,
   User,
   Pagination,
-  Chip,
 } from "@nextui-org/react";
 
 import { useNavigate } from "react-router-dom";
-import { BASE_URL, deleteMultiple } from "../Api";
+import { deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import DeleteAlert from "../utils/DeleteAlert";
 import { capitalize } from "../utils/utils";
 import { format } from "date-fns";
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
-const INITIAL_VISIBLE_COLUMNS = [
-  "name",
-  "expiredate",
-  "tax",
-  "saleprice",
-  "minStockQty",
-  "actions",
-];
-
 const columns = [
   { name: "Name", uid: "name", sortable: true },
-  { name: "ExpireDate", uid: "expiredate", sortable: true },
+  { name: "Expired Date", uid: "expiredAt", sortable: true },
   { name: "Tax", uid: "tax", sortable: true },
-  { name: "SalePrice", uid: "saleprice", sortable: true },
-  { name: "PurchasePrice", uid: "purchaseprice", sortable: true },
-  { name: "StockQty", uid: "minStockQty", sortable: true },
+  { name: "Sale Price", uid: "salePrice", sortable: true },
+  { name: "Purchase Price", uid: "purchasePrice", sortable: true },
+  { name: "Min-Stock Qty", uid: "minStockQty", sortable: true },
   { name: "Ref", uid: "ref" },
-  { name: "BarCode", uid: "barcode" },
+  { name: "Barcode", uid: "barcode" },
   { name: "Actions", uid: "actions" },
 ];
 
 export default function ProductList({ products }) {
-  const [filterValue, setFilterValue] = React.useState("");
-  const [deleteBox, setDeleteBox] = useState(false);
+  const [showDeleteBox, setShowDeleteBox] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(columns.map((column) => column.uid))
   );
 
-  const token = useSelector((state) => state.IduniqueData);
-  const navigate = useNavigate();
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const [statusFilter, setStatusFilter] = React.useState("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "name",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
 
-  const hasSearchFilter = Boolean(filterValue);
+  const token = useSelector((state) => state.IduniqueData);
+  const navigate = useNavigate();
 
-  const deleteProducts = async () => {
-    const response = await deleteMultiple(
-      "/product",
-      {
-        productIds: [...selectedKeys],
-      },
-      token.accessToken
-    );
-    console.log(response);
-    if (response.status) {
-      setSelectedKeys([]);
-    }
-  };
+  const totalProducts = products.length;
+  const totalPages = Math.ceil(totalProducts / rowsPerPage);
+  const isFirstPage = page === 1;
+  const isLastPage = page === totalPages;
+
+  const currentPageItems = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return products.slice(start, end);
+  }, [page, products, rowsPerPage]);
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -94,131 +75,77 @@ export default function ProductList({ products }) {
     );
   }, [visibleColumns]);
 
-  const filteredItems = React.useMemo(() => {
-    let filteredProduct = [...products];
-
-    if (hasSearchFilter) {
-      filteredProduct = filteredProduct.filter((pd) =>
-        pd.name.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    }
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredProduct = filteredProduct.filter((pd) =>
-        Array.from(statusFilter).includes(pd.name)
-      );
-    }
-
-    return filteredProduct;
-  }, [products, filterValue, statusFilter]);
-
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
-
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems, rowsPerPage]);
-
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a, b) => {
-      const first = a[sortDescriptor.column];
-      const second = b[sortDescriptor.column];
+    return currentPageItems.sort((a, b) => {
+      const first = a[sortDescriptor.column] || "";
+      const second = b[sortDescriptor.column] || "";
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
-  }, [sortDescriptor, items]);
+  }, [sortDescriptor, currentPageItems]);
 
-  const renderCell = React.useCallback((products, columnKey) => {
-    const cellValue = products[columnKey];
-
-    switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{ radius: "full", size: "sm", src: products.image }}
-            name={cellValue}
-          >
-            {products.name}
-          </User>
-        );
-      case "ref":
-        return <h1>{products.ref}</h1>;
-      case "expiredate":
-        return (
-          <h1 name={cellValue}>
-            {products.expiredAt
-              ? format(new Date(products.expiredAt), "yyyy-MM-dd")
-              : "none"}
-          </h1>
-        );
-      case "saleprice":
-        return <h1> {products.salePrice ? products.salePrice : "none"}</h1>;
-      case "purchaseprice":
-        return <h1>{products.purchasePrice}</h1>;
-      case "minStockQty":
-        return <h1 minStockQty={cellValue}>{products.minStockQty}</h1>;
-      case "barcode":
-        return <h1> {products.barcode ? products.barcode : "none"}</h1>;
-      case "actions":
-        return (
-          <div className=" flex w-full justify-start cursor-pointer items-center h-full z-40">
-            <Icon
-              onClick={() => {
-                navigate(`/admin/products/detail/${products.id}`);
-              }}
-              icon="fa-solid:eye"
-              className="text-2xl hover:text-blue-600 text-slate-500"
-            />
-
-            <Icon
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/admin/products/edit/${products.id}`);
-              }}
-              icon="raphael:edit"
-              className="text-2xl ml-2 hover:text-blue-600 text-slate-500"
-            />
-          </div>
-        );
-      default:
-        return cellValue;
+  const deleteProducts = async () => {
+    const response = await deleteMultiple(
+      "/product",
+      {
+        productIds: [...selectedKeys],
+      },
+      token.accessToken
+    );
+    if (response.status) {
+      setSelectedKeys([]);
     }
-  }, []);
-
-  const onNextPage = React.useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = React.useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
+  };
 
   const onRowsPerPageChange = React.useCallback((e) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
   }, []);
 
-  const onSearchChange = React.useCallback((value) => {
-    if (value) {
-      setFilterValue(value);
-      setPage(1);
-    } else {
-      setFilterValue("");
-    }
-  }, []);
+  const renderCell = React.useCallback((product, columnKey) => {
+    const cellValue = product[columnKey];
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
+    const renderers = {
+      name: () => (
+        <User
+          avatarProps={{ radius: "full", size: "sm", src: product.image }}
+          name={cellValue}
+        >
+          {product.name}
+        </User>
+      ),
+      expiredAt: () => (
+        <>
+          {product.expiredAt
+            ? format(new Date(product.expiredAt), "yyyy-MM-dd")
+            : "None"}
+        </>
+      ),
+      actions: () => (
+        <div className="p-2 flex w-full justify-start cursor-pointer items-center">
+          <Icon
+            icon="fa-solid:eye"
+            className="text-2xl hover:text-blue-600 text-slate-500"
+            onClick={() => {
+              navigate(`/admin/products/detail/${product.id}`);
+            }}
+          />
+          <Icon
+            icon="raphael:edit"
+            className="text-2xl hover:text-blue-600 ml-2 text-slate-500"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/admin/products/edit/${product.id}`);
+            }}
+          />
+        </div>
+      ),
+    };
+
+    const renderer = renderers[columnKey] || ((value) => value);
+
+    return renderer(cellValue);
   }, []);
 
   const topContent = React.useMemo(() => {
@@ -267,7 +194,7 @@ export default function ProductList({ products }) {
             </Dropdown>
             {selectedKeys.size > 0 && (
               <button
-                onClick={() => setDeleteBox(true)}
+                onClick={() => setShowDeleteBox(true)}
                 className="px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
               >
                 Delete
@@ -277,16 +204,7 @@ export default function ProductList({ products }) {
         </div>
       </>
     );
-  }, [
-    filterValue,
-    statusFilter,
-    visibleColumns,
-    onRowsPerPageChange,
-    products,
-    onSearchChange,
-    hasSearchFilter,
-    selectedKeys,
-  ]);
+  }, [visibleColumns, onRowsPerPageChange, products, selectedKeys]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -294,7 +212,7 @@ export default function ProductList({ products }) {
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            : `${selectedKeys.size} of ${totalProducts} selected`}
         </span>
         <Pagination
           isCompact
@@ -302,30 +220,30 @@ export default function ProductList({ products }) {
           showShadow
           color="primary"
           page={page}
-          total={pages}
+          total={totalPages}
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
           <Button
-            isDisabled={pages === 1}
+            isDisabled={isFirstPage}
             size="sm"
             variant="flat"
-            onPress={onPreviousPage}
+            onPress={() => !isFirstPage && setPage(page - 1)}
           >
             Previous
           </Button>
           <Button
-            isDisabled={pages === 1}
+            isDisabled={isLastPage}
             size="sm"
             variant="flat"
-            onPress={onNextPage}
+            onPress={() => !isLastPage && setPage(page + 1)}
           >
             Next
           </Button>
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, totalProducts, page, isLastPage, isFirstPage, totalPages]);
 
   return (
     <>
@@ -340,7 +258,7 @@ export default function ProductList({ products }) {
         topContent={topContent}
         topContentPlacement="outside"
         onSelectionChange={setSelectedKeys}
-        onSortChange={setSortDescriptor}
+        onSortChange={(descriptor) => setSortDescriptor(descriptor)}
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
@@ -363,18 +281,22 @@ export default function ProductList({ products }) {
           )}
         </TableBody>
       </Table>
-      {deleteBox && (
+      {showDeleteBox && (
         <DeleteAlert
           cancel={() => {
-            setDeleteBox(false);
-            setSelectedKeys([]);
+            setShowDeleteBox(false);
+            setSelectedKeys(new Set([]));
           }}
           onDelete={() => {
             deleteProducts();
-            setDeleteBox(false);
+            setShowDeleteBox(false);
           }}
         />
       )}
     </>
   );
 }
+
+ProductList.propTypes = {
+  products: PropTypes.array,
+};
