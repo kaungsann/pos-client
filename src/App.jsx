@@ -2,23 +2,17 @@ import Login from "./components/Login";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard";
-import ProductsAll from "./components/Dashboard/Products/ProductsAll";
 import ProductsCreate from "./components/Dashboard/Products/ProductsCreate";
-import ProductsEdit from "./components/Dashboard/Products/ProductsEdit";
 import ProductDetails from "./components/Dashboard/Products/ProductDetails";
-import CategoryAll from "./components/Dashboard/Category/CategoryAll";
 import CategoryCreate from "./components/Category/CategoryCreate";
 import CategoryEdit from "./components/Category/CategoryEdit";
 import CategoryDetail from "./components/Category/CategoryDetail";
-import PartnerAll from "./components/Dashboard/Partner/PartnerAll";
 import PartnerCreate from "./components/Dashboard/Partner/PartnerCreate";
 import PartnerEdit from "./components/Dashboard/Partner/PartnerEdit";
 import PartnerDetail from "./components/Dashboard/Partner/PartnerDetail";
-import LocationAll from "./components/Dashboard/Location/LocationAll";
-import LocationCreate from "./components/Dashboard/Location/LocationCreate";
-import LocationEdit from "./components/Dashboard/Location/LocationEdit";
-import LocationDetail from "./components/Dashboard/Location/LocationDetail";
-import SaleOrderAll from "./components/Dashboard/SaleOrder/SaleOrderAll";
+import LocationCreate from "./components/Location/LocationCreate";
+import LocationEdit from "./components/Location/LocationEdit";
+import LocationDetail from "./components/Location/LocationDetail";
 import SaleOrderCreate from "./components/Dashboard/SaleOrder/SaleOrderCreate";
 import SaleOrderDetail from "./components/Dashboard/SaleOrder/SaleOrderDetail";
 import PosItems from "./components/Dashboard/POS/PosItems";
@@ -49,7 +43,6 @@ import ProductTemplate from "./components/Product/ProductTemplate";
 import CategoryTemplate from "./components/Category/CategoryTemplate";
 import StockTemplate from "./components/Dashboard/Stock/StockTemplate";
 import AdjustmentTemplate from "./components/Adjustment/AdjustmentTemplate";
-import LocationTemplate from "./components/Dashboard/Location/LocationTemplate";
 import PurchaseTemplate from "./components/Dashboard/Purchase/PurchaseTemplate";
 import SaleTemplate from "./components/Dashboard/SaleOrder/SaleTemplate";
 import CustomerTemplate from "./components/Dashboard/Customer/CustomerTemplate";
@@ -59,6 +52,7 @@ import EmployeeTemplate from "./components/Dashboard/Employee/EmployeeTemplate";
 import WareHouseTemplate from "./components/Dashboard/WareHouse/WareHouseTemplate";
 import StaffTemplate from "./components/Dashboard/Staff/StaffTemplate";
 import ProductForm from "./components/Product/ProductForm";
+import LocationTemplate from "./components/Location/LocationTemplate";
 
 function App() {
   return (
@@ -127,7 +121,7 @@ function App() {
               <Route path="vendors" element={<VendorTemplate />} />
             </Route>
             <Route path="locations">
-              <Route path="all" element={<LocationTemplate />} />
+              <Route path="all" element={<LocationTemplate/>} />
               <Route path="create" element={<LocationCreate />} />
               <Route path="edit/:id" element={<LocationEdit />} />
               <Route path="detail/:id" element={<LocationDetail />} />

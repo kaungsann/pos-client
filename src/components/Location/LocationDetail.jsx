@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
 import { Icon } from "@iconify/react";
 
-export default function CategoryDetail() {
+export default function LocationDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -14,9 +14,9 @@ export default function CategoryDetail() {
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const singleProducts = async () => {
+  const getLocationAPI = async () => {
     setLoading(true);
-    let resData = await getApi(`/category/${id}`, token.accessToken);
+    let resData = await getApi(`/location/${id}`, token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
@@ -29,7 +29,7 @@ export default function CategoryDetail() {
   };
 
   useEffect(() => {
-    singleProducts();
+    getLocationAPI();
   }, []);
 
   return (
@@ -37,7 +37,7 @@ export default function CategoryDetail() {
       <div className="flex justify-between">
         <div className="flex gap-2">
           <Link
-            to="/admin/categorys/all"
+            to="/admin/locations/all"
             className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
           >
             Back
@@ -47,11 +47,11 @@ export default function CategoryDetail() {
 
       {detail && detail.length > 0 ? (
         <div className="container my-5">
-          <h2 className="lg:text-xl font-bold my-2">Category Information</h2>
+          <h2 className="lg:text-xl font-bold my-2">Locations Information</h2>
           <div className="container bg-white p-5 rounded-lg max-w-6xl">
             <div className="flex">
               <div className="ml-auto">
-                <Link to={`/admin/categorys/edit/${id}`}>
+                <Link to={`/admin/locations/edit/${id}`}>
                   <Icon icon="ep:edit" className="text-xl" />
                 </Link>
               </div>
@@ -60,7 +60,7 @@ export default function CategoryDetail() {
             <div className="grid grid-cols-2 max-w-3xl gap-10">
               <div className="container space-y-8 font-semibold text-sm">
                 <div className="flex justify-between items-center">
-                  <h4>Category Name</h4>
+                  <h4>Location Name</h4>
                   <h3 className="font-medium">
                     {detail[0].name ? detail[0].name.toUpperCase() : ""}
                   </h3>

@@ -46,8 +46,8 @@ export default function CategoryList({ categories }) {
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
 
-  const totalProducts = categories.length;
-  const totalPages = Math.ceil(totalProducts / rowsPerPage);
+  const totalItems = categories.length;
+  const totalPages = Math.ceil(totalItems / rowsPerPage);
   const isFirstPage = page === 1;
   const isLastPage = page === totalPages;
 
@@ -196,7 +196,7 @@ export default function CategoryList({ categories }) {
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${totalProducts} selected`}
+            : `${selectedKeys.size} of ${totalItems} selected`}
         </span>
         <Pagination
           isCompact
@@ -227,7 +227,7 @@ export default function CategoryList({ categories }) {
         </div>
       </div>
     );
-  }, [selectedKeys, totalProducts, page, isLastPage, isFirstPage, totalPages]);
+  }, [selectedKeys, totalItems, page, isLastPage, isFirstPage, totalPages]);
 
   return (
     <>

@@ -9,16 +9,16 @@ import { removeData } from "../../redux/actions";
 import { Input } from "@nextui-org/react";
 import axios from "axios";
 
-export default function CategoryCreate() {
+export default function LocationCreate() {
   const [name, setName] = useState("");
   const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const createCategoryApi = async () => {
+  const createLocationApi = async () => {
     try {
       const { data } = await axios.post(
-        BASE_URL + "/category",
+        BASE_URL + "/location",
         { name },
         {
           headers: {
@@ -46,11 +46,11 @@ export default function CategoryCreate() {
     e.preventDefault();
     
     if (!name.trim()) {
-      toast("Please enter a category name.");
+      toast("Please enter a location name.");
       return;
     }
 
-    createCategoryApi();
+    createLocationApi();
   };
 
   const onChangeHandler = (e) => {
@@ -81,14 +81,14 @@ export default function CategoryCreate() {
         >
           Save
         </button>
-        <Link to="/admin/categorys/all">
+        <Link to="/admin/locations/all">
           <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
             Discard
           </button>
         </Link>
       </div>
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Add Category </h2>
+        <h2 className="lg:text-xl font-bold my-2">Add Location </h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
@@ -99,7 +99,7 @@ export default function CategoryCreate() {
                   name="name"
                   value={name}
                   onChange={onChangeHandler}
-                  placeholder="Enter category name..."
+                  placeholder="Enter location name..."
                   labelPlacement="outside"
                 />
               </div>

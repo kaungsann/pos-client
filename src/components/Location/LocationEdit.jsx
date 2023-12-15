@@ -1,62 +1,57 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { BASE_URL } from "../Api";
+import { getApi, PathData } from "../Api";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
 import { Input } from "@nextui-org/react";
-import axios from "axios";
 
-export default function CategoryCreate() {
-  const [name, setName] = useState("");
-  const navigate = useNavigate();
+export default function LocationEdit() {
+  let [name, setName] = useState("");
   const token = useSelector((state) => state.IduniqueData);
+  const navigate = useNavigate();
+  const { id } = useParams();
   const dipatch = useDispatch();
 
-  const createCategoryApi = async () => {
+  const getLocations = async () => {
     try {
-      const { data } = await axios.post(
-        BASE_URL + "/category",
-        { name },
-        {
-          headers: {
-            Authorization: `Bearer ${token.accessToken}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await getApi(`/location/${id}`, token.accessToken);
+      if (response.message == "Token Expire , Please Login Again") {
+        dipatch(removeData(null));
+      }
+      setName(response.data[0].name);
+    } catch (error) {
+      console.error("Error fetching location:", error);
+    }
+  };
 
-      if (!data.status) {
-        if (data?.message == "Token Expire , Please Login Again") {
-          dipatch(removeData(null));
-        }
-        toast(data.message);
+  const editCategoryApi = async () => {
+    const data = {};
+    if (name) {
+      data.name = name;
+    }
+    try {
+      let resData = await PathData(`/location/${id}`, data, token.accessToken);
+      if (resData.status) {
+        navigate("/admin/locations/all");
       } else {
-        navigate("/admin/categorys/all");
+        toast(resData.message);
       }
     } catch (error) {
-      console.error("Error creating category:", error);
-      toast(error.response.data.message);
+      console.error("Error creating location:", error);
     }
   };
 
-  const onSubmitHandler = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (!name.trim()) {
-      toast("Please enter a category name.");
-      return;
-    }
-
-    createCategoryApi();
+    editCategoryApi();
   };
 
-  const onChangeHandler = (e) => {
-    const value = e.target.value;
-    setName(value);
-  };
+  useEffect(() => {
+    getLocations();
+  }, []);
 
   return (
     <>
@@ -77,18 +72,19 @@ export default function CategoryCreate() {
         <button
           type="submit"
           className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
-          onClick={onSubmitHandler}
+          onClick={handleSubmit}
         >
           Save
         </button>
-        <Link to="/admin/categorys/all">
+        <Link to="/admin/locations/all">
           <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
             Discard
           </button>
         </Link>
       </div>
+
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Add Category </h2>
+        <h2 className="lg:text-xl font-bold my-2">Location Edit</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
@@ -98,8 +94,10 @@ export default function CategoryCreate() {
                   label="Name"
                   name="name"
                   value={name}
-                  onChange={onChangeHandler}
-                  placeholder="Enter category name..."
+                  // color={isInvalid ? "danger" : "success"}
+                  // errorMessage={isInvalid && "Please enter a valid email"}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter product name..."
                   labelPlacement="outside"
                 />
               </div>
