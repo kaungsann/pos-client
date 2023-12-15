@@ -99,12 +99,12 @@ export default function AdjustmentTemplate() {
   );
 
   return (
-    <div className="">
+    <>
       <div className="flex justify-between items-center my-3">
         <SearchBox
-          keyword={filteredKeywords.productName}
+          keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
-          text="Search by product name..."
+          text="Search by product name"
         />
 
         <div className="flex">
@@ -117,12 +117,13 @@ export default function AdjustmentTemplate() {
           </div>
 
           <ExcelImportButton
+            text="Stock"
             token={token.accessToken}
             apiEndpoint={ADJUSTMENT_API.IMPORT}
           />
         </div>
       </div>
       <AdjustmentList adjustments={filteredAdjustment} />
-    </div>
+    </>
   );
 }
