@@ -15,18 +15,9 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
-import { statusOptions } from "../Category/data";
-import { capitalize } from "../Category/utils";
-
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import { Icon } from "@iconify/react";
-
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
 
 const INITIAL_VISIBLE_COLUMNS = ["product", "location", "onhand", "created"];
 
@@ -73,8 +64,7 @@ export default function StockList({ stocks }) {
       );
     }
     if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
+      statusFilter !== "all"
     ) {
       filteredStock = filteredStock.filter((stk) =>
         Array.from(statusFilter).includes(stk.active)
@@ -189,8 +179,8 @@ export default function StockList({ stocks }) {
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
+                  <DropdownItem key={column.uid}>
+                    {column.name}
                   </DropdownItem>
                 ))}
               </DropdownMenu>

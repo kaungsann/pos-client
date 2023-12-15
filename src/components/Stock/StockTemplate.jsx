@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { BASE_URL } from "../../Api";
+import { BASE_URL } from "../Api";
 import StockList from "./StockList";
-import SearchCompo from "../../utils/SearchCompo";
-import ExcelExportButton from "../../ExcelExportButton";
-import ExcelImportButton from "../../ExcelImportButton";
+import SearchCompo from "../utils/SearchCompo";
+import ExcelExportButton from "../ExcelExportButton";
+import ExcelImportButton from "../ExcelImportButton";
 import FilterBox from "./FilterBox";
 
 export default function StockTemplate() {
