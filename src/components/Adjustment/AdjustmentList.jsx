@@ -24,9 +24,9 @@ import DeleteAlert from "../utils/DeleteAlert";
 import { format } from "date-fns";
 
 const columns = [
-  { name: "Product", uid: "productName" },
+  { name: "Product", uid: "productName", sortable: true},
   { name: "Location", uid: "locationName", sortable: true },
-  { name: "Date", uid: "updatedAt" },
+  { name: "Date", uid: "updatedAt", sortable: true},
   { name: "Barcode", uid: "productBarcode" },
   { name: "Quantity", uid: "quantity", sortable: true },
 ];
