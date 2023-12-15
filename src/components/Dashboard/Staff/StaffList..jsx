@@ -181,30 +181,39 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
         );
       case "actions":
         return (
-          <div className="p-2 flex w-full justify-start items-center cursor-pointer">
-            <Icon
-              icon="fa-solid:eye"
-              className="text-2xl hover:text-blue-600 text-slate-500"
-              onClick={() => {
-                navigate(`/admin/user/detail/${staffs._id}`);
-              }}
-            />
-            <Icon
-              icon="raphael:edit"
-              className="text-2xl ml-2 hover:text-blue-600 text-slate-500"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/admin/user/detail/${staffs._id}`);
-              }}
-            />
-            <Icon
-              onClick={() => {
-                setShow(true);
-                setUserId(staffs._id);
-              }}
-              icon="solar:lock-password-unlocked-outline"
-              className="text-2xl ml-2 hover:text-blue-600 text-slate-600"
-            />
+          <div className="relative flex justify-start items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  <Icon icon="fluent:grid-dots-28-regular" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  onPress={() => {
+                    navigate(`/admin/user/detail/${staffs._id}`);
+                  }}
+                >
+                  View
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => {
+                    navigate(`/admin/user/edit/${staffs._id}`);
+                  }}
+                >
+                  Edit
+                </DropdownItem>
+
+                <DropdownItem
+                  onPress={() => {
+                    setShow(true);
+                    setUserId(staffs._id);
+                  }}
+                >
+                  Password
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         );
       default:

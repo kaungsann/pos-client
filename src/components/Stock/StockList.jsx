@@ -15,37 +15,45 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
+import { capitalize } from "../utils/utils";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import { Icon } from "@iconify/react";
 
-const INITIAL_VISIBLE_COLUMNS = ["product", "location", "onhand", "created"];
+//const INITIAL_VISIBLE_COLUMNS = ["product", "location", "onhand", "created"];
 
 const columns = [
   { name: "Product", uid: "product", sortable: true },
   { name: "Location", uid: "location", sortable: true },
   { name: "OnHand", uid: "onhand", sortable: true },
-  { name: "Create", uid: "created" },
 ];
 
 export default function StockList({ stocks }) {
   const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
+
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(columns.map((column) => column.uid))
   );
 
-  const token = useSelector((state) => state.IduniqueData);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const [statusFilter, setStatusFilter] = React.useState("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "product",
+    column: "name",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
 
-  const hasSearchFilter = Boolean(filterValue);
+  const totalStocks = stocks.length;
+  const totalPages = Math.ceil(totalStocks / rowsPerPage);
+  const isFirstPage = page === 1;
+  const isLastPage = page === totalPages;
+
+  const currentPageItems = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return stocks.slice(start, end);
+  }, [page, stocks, rowsPerPage]);
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -55,91 +63,46 @@ export default function StockList({ stocks }) {
     );
   }, [visibleColumns]);
 
-  const filteredItems = React.useMemo(() => {
-    let filteredStock = [...stocks];
-
-    if (hasSearchFilter) {
-      filteredStock = filteredStock.filter((stk) =>
-        stk.product.name.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    }
-    if (
-      statusFilter !== "all"
-    ) {
-      filteredStock = filteredStock.filter((stk) =>
-        Array.from(statusFilter).includes(stk.active)
-      );
-    }
-
-    return filteredStock;
-  }, [stocks, filterValue, statusFilter]);
-
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
-
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems, rowsPerPage]);
-
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a, b) => {
-      const first = a[sortDescriptor.column];
-      const second = b[sortDescriptor.column];
+    return currentPageItems.sort((a, b) => {
+      const first = a[sortDescriptor.column] || "";
+      const second = b[sortDescriptor.column] || "";
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
-  }, [sortDescriptor, items]);
-
-  const renderCell = React.useCallback((stocks, columnKey) => {
-    const cellValue = stocks[columnKey];
-
-    switch (columnKey) {
-      case "product":
-        return <h2>{stocks.product.name}</h2>;
-      case "onhand":
-        return <h2>{stocks.onHand}</h2>;
-      case "created":
-        return <h2>{format(new Date(stocks.createdAt), "yyyy-MM-dd")}</h2>;
-      case "location":
-        return <h2>{stocks.location.name}</h2>;
-
-      default:
-        return cellValue;
-    }
-  }, []);
-
-  const onNextPage = React.useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = React.useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
+  }, [sortDescriptor, currentPageItems]);
 
   const onRowsPerPageChange = React.useCallback((e) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
   }, []);
 
-  const onSearchChange = React.useCallback((value) => {
-    if (value) {
-      setFilterValue(value);
-      setPage(1);
-    } else {
-      setFilterValue("");
-    }
-  }, []);
+  const renderCell = React.useCallback((stock, columnKey) => {
+    const cellValue = stock[columnKey];
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
+    const renderers = {
+      product: () => (
+        <>
+          <h3>{stock.product.name}</h3>
+        </>
+      ),
+
+      location: () => (
+        <>
+          <h3>{stock.location.name}</h3>
+        </>
+      ),
+      // onhand: () => (
+      //   <>
+      //     <h3>{stock.onHand}</h3>
+      //   </>
+      // ),
+    };
+
+    const renderer = renderers[columnKey] || ((value) => value);
+
+    return renderer(cellValue);
   }, []);
 
   const topContent = React.useMemo(() => {
@@ -179,8 +142,8 @@ export default function StockList({ stocks }) {
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid}>
-                    {column.name}
+                  <DropdownItem key={column.uid} className="capitalize">
+                    {capitalize(column.name)}
                   </DropdownItem>
                 ))}
               </DropdownMenu>
@@ -189,54 +152,41 @@ export default function StockList({ stocks }) {
         </div>
       </>
     );
-  }, [
-    filterValue,
-    statusFilter,
-    visibleColumns,
-    onRowsPerPageChange,
-    stocks.length,
-    onSearchChange,
-    hasSearchFilter,
-  ]);
+  }, [visibleColumns, onRowsPerPageChange, stocks]);
 
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
-        </span>
         <Pagination
           isCompact
           showControls
           showShadow
           color="primary"
           page={page}
-          total={pages}
+          total={totalPages}
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
           <Button
-            isDisabled={pages === 1}
+            isDisabled={isFirstPage}
             size="sm"
             variant="flat"
-            onPress={onPreviousPage}
+            onPress={() => !isFirstPage && setPage(page - 1)}
           >
             Previous
           </Button>
           <Button
-            isDisabled={pages === 1}
+            isDisabled={isLastPage}
             size="sm"
             variant="flat"
-            onPress={onNextPage}
+            onPress={() => !isLastPage && setPage(page + 1)}
           >
             Next
           </Button>
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [totalStocks, page, isLastPage, isFirstPage, totalPages]);
 
   return (
     <>
@@ -251,8 +201,7 @@ export default function StockList({ stocks }) {
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
-        onSelectionChange={setSelectedKeys}
-        onSortChange={setSortDescriptor}
+        onSortChange={(descriptor) => setSortDescriptor(descriptor)}
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
@@ -265,7 +214,7 @@ export default function StockList({ stocks }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No users found"} items={sortedItems}>
+        <TableBody emptyContent={"No Stocks found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

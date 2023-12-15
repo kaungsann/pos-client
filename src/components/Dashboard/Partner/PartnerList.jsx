@@ -165,22 +165,30 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
         );
       case "actions":
         return (
-          <div className="p-2 flex w-full justify-start">
-            <Icon
-              icon="fa-solid:eye"
-              className="text-2xl hover:text-blue-600 text-slate-500"
-              onClick={() => {
-                navigate(`/admin/partners/detail/${partners.id}`);
-              }}
-            />
-            <Icon
-              icon="raphael:edit"
-              className="text-2xl ml-2 hover:text-blue-600 text-slate-500"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/admin/partners/edit/${partners.id}`);
-              }}
-            />
+          <div className="relative flex justify-start items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  <Icon icon="fluent:grid-dots-28-regular" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  onPress={() => {
+                    navigate(`/admin/partners/detail/${partners.id}`);
+                  }}
+                >
+                  View
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => {
+                    navigate(`/admin/partners/edit/${partners.id}`);
+                  }}
+                >
+                  Edit
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         );
       default:

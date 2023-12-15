@@ -161,13 +161,24 @@ export default function SaleList({ sales }) {
         return <h3>{sales.total.toFixed(2)}</h3>;
       case "actions":
         return (
-          <Icon
-            icon="fa-solid:eye"
-            className="text-2xl hover:text-blue-600 text-slate-500"
-            onClick={() => {
-              navigate(`/admin/saleorders/detail/${sales.id}`);
-            }}
-          />
+          <div className="relative flex justify-start items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  <Icon icon="fluent:grid-dots-28-regular" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  onPress={() => {
+                    navigate(`/admin/saleorders/detail/${sales.id}`);
+                  }}
+                >
+                  View
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
         );
       default:
         return cellValue;

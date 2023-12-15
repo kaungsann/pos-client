@@ -182,13 +182,25 @@ export default function PurchaseList({ purchases, refresh }) {
       case "actions":
         return (
           <div className="flex justify-between items-center">
-            <Icon
-              icon="fa-solid:eye"
-              className="text-2xl hover:text-blue-600 text-slate-500"
-              onClick={() => {
-                navigate(`/admin/purchase/detail/${purchases.id}`);
-              }}
-            />
+            <div className="relative flex justify-start items-center gap-2">
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button isIconOnly size="sm" variant="light">
+                    <Icon icon="fluent:grid-dots-28-regular" />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu>
+                  <DropdownItem
+                    onPress={() => {
+                      navigate(`/admin/purchase/detail/${purchases.id}`);
+                    }}
+                  >
+                    View
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+
             {purchases.state === "pending" && (
               <button
                 onClick={(e) => {

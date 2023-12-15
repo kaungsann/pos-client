@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
-import { Icon } from '@iconify/react';
+import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 import FadeLoader from "react-spinners/FadeLoader";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react";
-
-
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  getKeyValue,
+} from "@nextui-org/react";
 
 export default function SaleOrderDetail() {
   const { id } = useParams();
@@ -28,7 +34,7 @@ export default function SaleOrderDetail() {
 
   const getProductName = (item) => {
     const productName = item.product && item.product.name;
-    return productName || "N/A"; 
+    return productName || "N/A";
   };
 
   const singleSaleOrder = async () => {
@@ -51,17 +57,19 @@ export default function SaleOrderDetail() {
       dipatch(removeData(null));
     }
     if (resData.status) {
-      let name = resData.data.filter((pid) => pid.orderId && pid.orderId._id === id);
-      console.log("sale lines iss single name is", name)
+      let name = resData.data.filter(
+        (pid) => pid.orderId && pid.orderId._id === id
+      );
+      console.log("sale lines iss single name is", name);
       setLines(name);
     }
   };
-  console.log("sale lines iss single", lines)
+  console.log("sale lines iss single", lines);
   useEffect(() => {
     saleLinesApi();
     singleSaleOrder();
   }, []);
-  console.log("detail lines iss single", detail)
+  console.log("detail lines iss single", detail);
 
   return (
     <>
@@ -79,16 +87,7 @@ export default function SaleOrderDetail() {
         <div className="container my-5">
           <h2 className="lg:text-xl font-bold my-2">Order Information</h2>
           <div className="container bg-white p-5 rounded-lg max-w-6xl">
-            <div className="flex">
-              <div className="ml-auto">
-                <Link
-                  to={`/admin/saleorders/edit/${id}`}
-                >
-                  <Icon icon="ep:edit" className="text-xl" />
-                </Link>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 max-w-3xl gap-10 my-10">
+            <div className="grid grid-cols-2 max-w-3xl gap-10">
               <div className="container space-y-8 font-semibold text-sm">
                 <div className="flex justify-between items-center">
                   <h4>Order Date</h4>
@@ -106,7 +105,9 @@ export default function SaleOrderDetail() {
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>Location</h4>
-                  <h3 className="font-medium">{detail[0].location && detail[0].location.name}</h3>
+                  <h3 className="font-medium">
+                    {detail[0].location && detail[0].location.name}
+                  </h3>
                 </div>
               </div>
               <div className="container space-y-8 font-semibold text-sm">
@@ -117,20 +118,16 @@ export default function SaleOrderDetail() {
                 <div className="flex justify-between items-center">
                   <h4>Total</h4>
                   <h3 className="font-medium">
-                    {detail[0].total && detail[0].total }
+                    {detail[0].total && detail[0].total}
                   </h3>
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>State</h4>
-                  <h3 className="font-medium">
-                    {detail[0].state}
-                  </h3>
+                  <h3 className="font-medium">{detail[0].state}</h3>
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>Note</h4>
-                  <h3 className="font-medium">
-                    {detail[0].note}
-                  </h3>
+                  <h3 className="font-medium">{detail[0].note}</h3>
                 </div>
               </div>
             </div>
@@ -138,10 +135,18 @@ export default function SaleOrderDetail() {
               Order Products
             </h2>
             <div className="w-full mb-6 ">
-              <Table isStriped aria-label="Order Lines Table" className="my-custom-table ">
+              <Table
+                isStriped
+                aria-label="Order Lines Table"
+                className="my-custom-table "
+              >
                 <TableHeader columns={columns}>
                   {(column) => (
-                    <TableColumn key={column.key} align={column.align} className="header-cell bg-blue-500 text-white">
+                    <TableColumn
+                      key={column.key}
+                      align={column.align}
+                      className="header-cell bg-blue-500 text-white"
+                    >
                       {column.label}
                     </TableColumn>
                   )}
@@ -152,10 +157,14 @@ export default function SaleOrderDetail() {
                       {(columnKey) => (
                         <TableCell
                           key={columnKey}
-                          align={columns.find((col) => col.key === columnKey)?.align}
+                          align={
+                            columns.find((col) => col.key === columnKey)?.align
+                          }
                           className="table-cell"
                         >
-                          {columnKey === "name" ? getProductName(item) : getKeyValue(item, columnKey)}
+                          {columnKey === "name"
+                            ? getProductName(item)
+                            : getKeyValue(item, columnKey)}
                         </TableCell>
                       )}
                     </TableRow>

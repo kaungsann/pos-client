@@ -172,22 +172,30 @@ export default function EmployeeList({ employees, onDeleteSuccess }) {
         );
       case "actions":
         return (
-          <div className="p-2 flex w-full justify-start items-center">
-            <Icon
-              icon="fa-solid:eye"
-              className="text-2xl hover:text-blue-600 text-slate-500"
-              onClick={() => {
-                navigate(`/admin/employee/detail/${employees.id}`);
-              }}
-            />
-            <Icon
-              icon="raphael:edit"
-              className="text-2xl ml-2 hover:text-blue-600 text-slate-500"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/admin/employee/edit/${employees.id}`);
-              }}
-            />
+          <div className="relative flex justify-start items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  <Icon icon="fluent:grid-dots-28-regular" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  onPress={() => {
+                    navigate(`/admin/employee/detail/${employees.id}`);
+                  }}
+                >
+                  View
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => {
+                    navigate(`/admin/employee/edit/${employees.id}`);
+                  }}
+                >
+                  Edit
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         );
       default:

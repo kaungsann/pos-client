@@ -7,7 +7,7 @@ import SearchCompo from "../../utils/SearchCompo";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
-import FilterBox from "../Customer/FilterBox";
+import FilterBox from "./FilterBox";
 import { Button } from "@nextui-org/react";
 
 export default function PartnerTemplate() {
@@ -20,6 +20,7 @@ export default function PartnerTemplate() {
     phone: "",
     address: "",
     city: "",
+    isCustomer: null,
   });
 
   const token = useSelector((state) => state.IduniqueData);
@@ -60,7 +61,7 @@ export default function PartnerTemplate() {
   const filteredPartners = useMemo(
     () =>
       partner.filter((customer) => {
-        const { name, phone, address, city } = filteredKeywords;
+        const { name, phone, address, city, isCustomer } = filteredKeywords;
 
         const isName = () => {
           if (!name) {
@@ -101,11 +102,12 @@ export default function PartnerTemplate() {
             return true;
           }
 
-          if (customer.city) {
+          if (customer.isCustomer) {
             return customer.city.toLowerCase().includes(city.toLowerCase());
           }
           return false;
         };
+        const customerValid = () => {};
 
         return (
           customer.name.toLowerCase().includes(name.toLowerCase()) &&
