@@ -2,8 +2,7 @@ import Login from "./components/Login";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./components/Dashboard/Dashboard";
-import ProductsCreate from "./components/Dashboard/Products/ProductsCreate";
-import ProductDetails from "./components/Dashboard/Products/ProductDetails";
+import ProductDetails from "./components/Product/ProductDetails";
 import CategoryCreate from "./components/Category/CategoryCreate";
 import CategoryEdit from "./components/Category/CategoryEdit";
 import CategoryDetail from "./components/Category/CategoryDetail";
@@ -51,6 +50,8 @@ import WareHouseTemplate from "./components/Dashboard/WareHouse/WareHouseTemplat
 import StaffTemplate from "./components/Dashboard/Staff/StaffTemplate";
 import ProductForm from "./components/Product/ProductForm";
 import LocationTemplate from "./components/Location/LocationTemplate";
+import ProductEditForm from "./components/Product/ProductEditForm";
+import ProductCreateForm from "./components/Product/ProductCreateForm";
 
 function App() {
   return (
@@ -98,8 +99,8 @@ function App() {
             </Route>
             <Route path="products">
               <Route path="all" element={<ProductTemplate />} />
-              <Route path="create" element={<ProductForm />} />
-              <Route path="edit/:id" element={<ProductForm />} />
+              <Route path="create" element={<ProductCreateForm />} />
+              <Route path="edit/:id" element={<ProductEditForm />} />
               <Route path="detail/:id" element={<ProductDetails />} />
             </Route>
             <Route path="categorys">

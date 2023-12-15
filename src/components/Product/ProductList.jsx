@@ -102,50 +102,61 @@ export default function ProductList({ products }) {
     setPage(1);
   }, []);
 
-  const renderCell = React.useCallback((product, columnKey) => {
-    const cellValue = product[columnKey];
+  const renderCell = React.useCallback(
+    (product, columnKey) => {
+      const cellValue = product[columnKey];
 
-    const renderers = {
-      name: () => (
-        <User
-          avatarProps={{ radius: "full", size: "sm", src: product.image }}
-          name={cellValue}
-        >
-          {product.name}
-        </User>
-      ),
-      expiredAt: () => (
-        <h1>
-          {product.expiredAt
-            ? format(new Date(product.expiredAt), "yyyy-MM-dd")
-            : "None"}
-        </h1>
-      ),
-      actions: () => (
-        <div className="p-2 flex w-full justify-start cursor-pointer items-center">
-          <Icon
-            icon="fa-solid:eye"
-            className="text-2xl hover:text-blue-600 text-slate-500"
-            onClick={() => {
-              navigate(`/admin/products/detail/${product.id}`);
-            }}
-          />
-          <Icon
-            icon="raphael:edit"
-            className="text-2xl hover:text-blue-600 ml-2 text-slate-500"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/admin/products/edit/${product.id}`);
-            }}
-          />
-        </div>
-      ),
-    };
+      const renderers = {
+        name: () => (
+          <User
+            avatarProps={{ radius: "full", size: "sm", src: product.image }}
+            name={cellValue}
+          >
+            {product.name}
+          </User>
+        ),
+        expiredAt: () => (
+          <h1>
+            {product.expiredAt
+              ? format(new Date(product.expiredAt), "yyyy-MM-dd")
+              : "None"}
+          </h1>
+        ),
+        actions: () => (
+          <div className="relative flex justify-start items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button isIconOnly size="sm" variant="light">
+                  <Icon icon="fluent:grid-dots-28-regular" />
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  onPress={() => {
+                    navigate(`/admin/products/edit/${product.id}`);
+                  }}
+                >
+                  View
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => {
+                    navigate(`/admin/products/edit/${product.id}`);
+                  }}
+                >
+                  Edit
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        ),
+      };
 
-    const renderer = renderers[columnKey] || ((value) => value);
+      const renderer = renderers[columnKey] || ((value) => value);
 
-    return renderer(cellValue);
-  }, [products]);
+      return renderer(cellValue);
+    },
+    [products]
+  );
 
   const topContent = React.useMemo(() => {
     return (
@@ -185,9 +196,7 @@ export default function ProductList({ products }) {
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid}>
-                    {column.name}
-                  </DropdownItem>
+                  <DropdownItem key={column.uid}>{column.name}</DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>

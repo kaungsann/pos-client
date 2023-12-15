@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { BASE_URL } from "../../Api";
-import BoxImg from "../../../assets/box.png";
+import { BASE_URL } from "../Api";
+import BoxImg from "../../assets/box.png";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeData } from "../../../redux/actions";
+import { removeData } from "../../redux/actions";
 import axios from "axios";
 
 export default function ProductDetails() {
