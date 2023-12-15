@@ -126,6 +126,12 @@ export default function SaleOrderDetail() {
                     {detail[0].state}
                   </h3>
                 </div>
+                <div className="flex justify-between items-center">
+                  <h4>Note</h4>
+                  <h3 className="font-medium">
+                    {detail[0].note}
+                  </h3>
+                </div>
               </div>
             </div>
             <h2 className="py-1.5 text-lg font-bold mt-4 pb-5">
