@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../Api";
 import StaffList from "./StaffList.";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
+import { Button } from "@nextui-org/react";
 
 export default function StaffTemplate() {
   const [staff, setSaff] = useState([]);
@@ -19,6 +20,8 @@ export default function StaffTemplate() {
     address: "",
     birthdate: "",
   });
+
+  const navigate = useNavigate();
 
   const token = useSelector((state) => state.IduniqueData);
 
@@ -156,12 +159,13 @@ export default function StaffTemplate() {
         />
 
         <div className="flex">
-          <Link
-            to="/admin/user/create"
-            className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/user/create")}
+            className="font-bold bg-zinc-50 rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           >
             Add
-          </Link>
+          </Button>
           <FilterBox onFilter={handleFilterChange} />
         </div>
       </div>

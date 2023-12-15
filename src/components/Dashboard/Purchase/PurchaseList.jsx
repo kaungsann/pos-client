@@ -152,13 +152,21 @@ export default function PurchaseList({ purchases, refresh }) {
         return <h3>{purchases.orderRef}</h3>;
       case "state":
         return (
-          <div className="flex gap-4">
+          <div className="flex gap-4 w-24">
             {purchases.state === "pending" ? (
-              <Chip color="danger" variant="bordered">
+              <Chip
+                color="danger"
+                variant="bordered"
+                className="bg-red-50 w-full"
+              >
                 {purchases.state}
               </Chip>
             ) : (
-              <Chip color="success" variant="bordered">
+              <Chip
+                color="success"
+                variant="bordered"
+                className="bg-green-50 px-2 w-full"
+              >
                 {purchases.state}
               </Chip>
             )}
@@ -168,15 +176,15 @@ export default function PurchaseList({ purchases, refresh }) {
       case "totalproduct":
         return <h3>{purchases.lines.length}</h3>;
       case "taxtotal":
-        return <h3>{purchases.taxTotal.toFixed(2)}</h3>;
+        return <h3>{purchases.taxTotal.toFixed()}</h3>;
       case "total":
-        return <h3>{purchases.total.toFixed(2)}</h3>;
+        return <h3>{purchases.total.toFixed()}</h3>;
       case "actions":
         return (
           <div className="flex justify-between items-center">
             <Icon
-              icon="prime:eye"
-              className="text-xl hover:opacity-75"
+              icon="fa-solid:eye"
+              className="text-2xl hover:text-blue-600 text-slate-500"
               onClick={() => {
                 navigate(`/admin/purchase/detail/${purchases.id}`);
               }}

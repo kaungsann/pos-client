@@ -6,15 +6,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import { Input, Select, SelectItem, Checkbox } from "@nextui-org/react";
-
+import { Input, Progress, Button, Checkbox } from "@nextui-org/react";
 
 export default function PartnerCreate() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
-  const [isCustomer, setIsCustomer] = useState(null);
-  const [isCompany, setIsCompany] = useState(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -35,6 +34,8 @@ export default function PartnerCreate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("formdata is", formData);
+    setIsLoading(true);
     try {
       const response = await sendJsonToApi(
         "/partner",
@@ -42,21 +43,16 @@ export default function PartnerCreate() {
         token.accessToken
       );
 
-      setFormData({
-        name: "",
-        contactAddress: "",
-        city: "",
-        phone: "",
-        isCustomer: false,
-        isCompany: false,
-      });
-
       if (response.message === "Token Expire , Please Login Again")
         dipatch(removeData(null));
-      else
-        response.status
-          ? navigate("/admin/partners/all")
-          : toast(response.message);
+
+      if (response.status) {
+        navigate("/admin/partners/all");
+        setIsLoading(false);
+      } else {
+        toast(response.message || "An error occurred");
+        setIsLoading(false);
+      }
     } catch (error) {
       console.error("Error creating partner:", error);
     }
@@ -78,22 +74,38 @@ export default function PartnerCreate() {
         style={{ width: "450px" }}
       />
       <div className="flex gap-3 my-5">
-        <button
+        <Button
           type="submit"
-          className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          isDisabled={isLoading}
+          isLoading={isLoading}
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+            isLoading
+              ? ""
+              : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+          }`}
           onClick={handleSubmit}
         >
           Save
-        </button>
-        <Link to="/admin/partners/all">
-          <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
-            Discard
-          </button>
-        </Link>
+        </Button>
+        <Button
+          isDisabled={isLoading}
+          isLoading={isLoading}
+          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+            isLoading
+              ? ""
+              : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
+          }`}
+          onClick={() => navigate("/admin/partners/all")}
+        >
+          Discard
+        </Button>
       </div>
       <div className="container mt-2">
         <h2 className="lg:text-xl font-bold my-2">Partner Create</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          {isLoading && (
+            <Progress size="sm" isIndeterminate aria-label="Loading..." />
+          )}
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
@@ -104,7 +116,7 @@ export default function PartnerCreate() {
                   value={formData.name}
                   // color={isInvalid ? "danger" : "success"}
                   // errorMessage={isInvalid && "Please enter a valid email"}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e)}
                   placeholder="Enter Partner name..."
                   labelPlacement="outside"
                 />
@@ -115,7 +127,7 @@ export default function PartnerCreate() {
                   name="address"
                   label="Address"
                   value={formData.address}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e)}
                   placeholder="Enter reference..."
                   labelPlacement="outside"
                 />
@@ -126,20 +138,30 @@ export default function PartnerCreate() {
                   name="phone"
                   label="Phone"
                   value={formData.phone}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e)}
                   placeholder="Enter Phone..."
                   labelPlacement="outside"
                 />
               </div>
-              <Checkbox  size="lg"
-                id="customer"
-                onChange={handleCheckboxChange}
-              >Customer</Checkbox>
-              <Checkbox  size="lg"
-                id="company"
-                onChange={handleCheckboxChange}
-              >
-                Company</Checkbox>
+              <div className="w-60 flex items-center mt-6">
+                <Checkbox
+                  size="lg"
+                  id="customer"
+                  name="isCustomer"
+                  onChange={(e) => handleCheckboxChange(e)}
+                >
+                  Customer
+                </Checkbox>
+                <Checkbox
+                  size="lg"
+                  id="company"
+                  name="isCompany"
+                  className="ml-3"
+                  onChange={(e) => handleCheckboxChange(e)}
+                >
+                  Company
+                </Checkbox>
+              </div>
             </div>
           </form>
         </div>

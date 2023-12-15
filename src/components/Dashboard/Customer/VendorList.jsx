@@ -163,15 +163,15 @@ export default function VendorList({ vendors, onDeleteSuccess }) {
         return (
           <div className="p-2 flex w-full justify-start">
             <Icon
-              icon="prime:eye"
-              className="text-xl hover:opacity-75"
+              icon="fa-solid:eye"
+              className="text-2xl hover:text-blue-600 text-slate-500"
               onClick={() => {
                 navigate(`/admin/partners/detail/${vendors.id}`);
               }}
             />
             <Icon
-              icon="ep:edit"
-              className="text-lg ml-2 hover:opacity-75"
+              icon="raphael:edit"
+              className="text-2xl ml-2 hover:text-blue-600 text-slate-500"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/admin/partners/edit/${vendors.id}`);

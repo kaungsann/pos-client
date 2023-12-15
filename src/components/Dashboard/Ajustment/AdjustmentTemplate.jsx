@@ -5,7 +5,6 @@ import { BASE_URL } from "../../Api";
 
 import AdjustmentList from "./AdjustmentList";
 import SearchBox from "./SearchBox";
-import { Link } from "react-router-dom";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
 import FilterBox from "./FilterBox";
@@ -98,8 +97,6 @@ export default function AdjustmentTemplate() {
     [adjustment, filteredKeywords]
   );
 
-  console.log("adjustment is a", filteredAdjustment);
-
   return (
     <div className="">
       <div className="flex justify-between items-center my-3">
@@ -121,6 +118,7 @@ export default function AdjustmentTemplate() {
           <ExcelImportButton
             token={token.accessToken}
             apiEndpoint={ADJUSTMENT_API.IMPORT}
+            text="Adjustment"
           />
         </div>
       </div>

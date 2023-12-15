@@ -146,22 +146,26 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
       // );
       case "actions":
         return (
-          <div className="p-2 flex w-full justify-start cursor-pointer">
+          <div className="p-2 flex w-full justify-start items-center z-40">
             <Icon
-              icon="prime:eye"
-              className="text-xl hover:opacity-75"
+              icon="fa-solid:eye"
+              className="text-2xl hover:text-blue-600 text-slate-500 cursor-pointer"
               onClick={() => {
                 navigate(`/admin/categorys/detail/${categorys.id}`);
               }}
             />
-            <Icon
-              icon="ep:edit"
-              className="text-lg ml-2 hover:opacity-75"
+            <div
+              className="px-2"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/admin/categorys/edit/${categorys.id}`);
               }}
-            />
+            >
+              <Icon
+                icon="raphael:edit"
+                className="text-2xl ml-2 hover:text-blue-600 text-slate-500 cursor-pointer"
+              />
+            </div>
           </div>
         );
       default:
@@ -210,12 +214,13 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
             changeValue={onSearchChange}
           />
           <div className="flex">
-            <button
+            <Button
+              size="sm"
               onClick={addCategoryRoute}
-              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+              className="font-bold rounded-sm shadow-sm flex items-center bg-zinc-50 text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
             >
               Add
-            </button>
+            </Button>
             <div className="mx-3">
               <ExcelExportButton
                 token={token.accessToken}
@@ -226,6 +231,7 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
               <ExcelImportButton
                 token={token.accessToken}
                 apiEndpoint={CATEGORY_API.IMPORT}
+                text="Category"
               />
             </div>
           </div>

@@ -67,7 +67,8 @@ const FilterBox = ({ onFilter }) => {
 
   return (
     <>
-      <button
+      <Button
+        size="sm"
         onClick={isFilterActive ? handleClearFiltersClick : onOpen}
         className={`rounded-sm ml-3 transition shadow-sm flex items-center ${
           isFilterActive
@@ -77,7 +78,7 @@ const FilterBox = ({ onFilter }) => {
       >
         <Icon icon="basil:filter-outline" className="text-lg" />
         {isFilterActive ? "Remove" : "Filter"}
-      </button>
+      </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
           {(onClose) => (

@@ -210,6 +210,7 @@ export default function WareHouseList({ warehouses }) {
             value={filterValue}
             clear={onClear}
             changeValue={onSearchChange}
+            text="Enter by partner name"
           />
         </div>
         <div className="flex justify-between items-center">

@@ -7,10 +7,13 @@ import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@nextui-org/react";
 
 export default function PurchaseTemplate() {
   const [purchases, setPurchases] = useState([]);
+
+  const navigate = useNavigate();
 
   const COMPARISION = {
     LESS: "LESS",
@@ -169,17 +172,18 @@ export default function PurchaseTemplate() {
       <div className="flex justify-between items-center my-3">
         <SearchCompo
           keyword={filteredKeywords.name}
-          text="Search by partner name..."
+          text="Search by purchase name..."
           onSearch={handleFilterChange}
         />
 
         <div className="flex">
-          <Link
-            to="/admin/purchase/create"
-            className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/purchase/create")}
+            className="font-bold rounded-sm shadow-sm bg-zinc-50 flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           >
             Add
-          </Link>
+          </Button>
           <FilterBox onFilter={handleFilterChange} />
           <div className="mx-3">
             <ExcelExportButton
@@ -191,6 +195,7 @@ export default function PurchaseTemplate() {
           <ExcelImportButton
             token={token.accessToken}
             apiEndpoint={PURCHASE_API.IMPORT}
+            text="Purchase"
           />
         </div>
       </div>
