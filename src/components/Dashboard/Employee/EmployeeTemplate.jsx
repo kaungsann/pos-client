@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../Api";
 import EmployeeList from "./EmployeeList";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FilterBox from "./FilterBox";
 import SearchBox from "./SearchBox";
 import SearchCompo from "../../utils/SearchCompo";
+import { Button } from "@nextui-org/react";
 
 export default function EmployeeTemplate() {
   const [employee, setEmployee] = useState([]);
@@ -19,7 +20,7 @@ export default function EmployeeTemplate() {
     address: "",
     birthdate: "",
   });
-
+  const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
 
   const EMPLOYEE_API = {
@@ -149,8 +150,6 @@ export default function EmployeeTemplate() {
     [employee, filteredKeywords]
   );
 
-  console.log("filter employee is a", employee);
-
   return (
     <>
       <div className="flex justify-between items-center my-3">
@@ -160,12 +159,13 @@ export default function EmployeeTemplate() {
         />
 
         <div className="flex">
-          <Link
-            to="/admin/partners/create"
-            className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/employee/create")}
+            className="font-bold rounded-sm shadow-sm flex items-center bg-zinc-50 text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           >
             Add
-          </Link>
+          </Button>
           <FilterBox onFilter={handleFilterChange} />
         </div>
       </div>

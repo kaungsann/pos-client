@@ -6,14 +6,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
   Button,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  Chip,
-  User,
   Pagination,
 } from "@nextui-org/react";
 
@@ -137,15 +130,15 @@ export default function LocationList({ locations, onDeleteSuccess }) {
         return (
           <div className="p-2 flex w-full justify-start items-center">
             <Icon
-              icon="prime:eye"
-              className="text-xl hover:opacity-75"
+              icon="fa-solid:eye"
+              className="text-2xl hover:text-blue-600 text-slate-500"
               onClick={() => {
                 navigate(`/admin/locations/detail/${locations.id}`);
               }}
             />
             <Icon
-              icon="ep:edit"
-              className="text-lg ml-2 hover:opacity-75"
+              icon="raphael:edit"
+              className="text-2xl ml-2 hover:text-blue-600 text-slate-500"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/admin/locations/edit/${locations.id}`);
@@ -199,12 +192,13 @@ export default function LocationList({ locations, onDeleteSuccess }) {
             changeValue={onSearchChange}
           />
           <div className="flex">
-            <button
+            <Button
+              size="sm"
               onClick={addLocationRoute}
-              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+              className="font-bold rounded-sm shadow-sm flex items-center bg-zinc-50 text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
             >
               Add
-            </button>
+            </Button>
             <div className="mx-3">
               <ExcelExportButton
                 token={token.accessToken}
@@ -213,6 +207,7 @@ export default function LocationList({ locations, onDeleteSuccess }) {
             </div>
             <div>
               <ExcelImportButton
+                text="Location"
                 token={token.accessToken}
                 apiEndpoint={LOCATION_API.IMPORT}
               />

@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 import { Input, Select, SelectItem } from "@nextui-org/react";
 
-
 export default function ProductsCreate() {
   const [cat, setCat] = useState([]);
   const [category, setGategory] = useState("");
@@ -145,7 +144,7 @@ export default function ProductsCreate() {
       setBar(newBarCode);
     } else {
       const newBarCode = generateRandomNumber(13);
-      setBar(newBarCode)
+      setBar(newBarCode);
     }
   };
 
@@ -161,11 +160,6 @@ export default function ProductsCreate() {
 
   return (
     <>
-    
-
-
-
-
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -274,12 +268,11 @@ export default function ProductsCreate() {
                   value={bar}
                   placeholder="Enter barcode..."
                   labelPlacement="outside"
-
                 />
 
                 <button
                   onClick={(e) => {
-                    e.preventDefault()
+                    e.preventDefault();
                     setIsManualGenerate(true);
                     generateBarCode();
                   }}
@@ -287,8 +280,6 @@ export default function ProductsCreate() {
                 >
                   generate
                 </button>
-
-
               </div>
               <div className="w-60">
                 <span className="text-sm">Expired Date</span>
@@ -393,8 +384,6 @@ export default function ProductsCreate() {
           </form>
         </div>
       </div>
-
-
     </>
   );
 }

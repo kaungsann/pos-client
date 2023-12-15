@@ -183,15 +183,15 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
         return (
           <div className="p-2 flex w-full justify-start items-center cursor-pointer">
             <Icon
-              icon="prime:eye"
-              className="text-xl hover:opacity-75"
+              icon="fa-solid:eye"
+              className="text-2xl hover:text-blue-600 text-slate-500"
               onClick={() => {
                 navigate(`/admin/user/detail/${staffs._id}`);
               }}
             />
             <Icon
-              icon="ep:edit"
-              className="text-lg ml-2 hover:opacity-75"
+              icon="raphael:edit"
+              className="text-2xl ml-2 hover:text-blue-600 text-slate-500"
               onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/admin/user/detail/${staffs._id}`);
@@ -202,8 +202,8 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
                 setShow(true);
                 setUserId(staffs._id);
               }}
-              className="text-lg ml-2 hover:opacity-75"
               icon="solar:lock-password-unlocked-outline"
+              className="text-2xl ml-2 hover:text-blue-600 text-slate-600"
             />
           </div>
         );

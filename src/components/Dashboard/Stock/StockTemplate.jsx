@@ -113,6 +113,7 @@ export default function StockTemplate() {
         <SearchCompo
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
+          text="Search by product name"
         />
 
         <div className="flex">
@@ -125,6 +126,7 @@ export default function StockTemplate() {
           </div>
 
           <ExcelImportButton
+            text="Stock"
             token={token.accessToken}
             apiEndpoint={STOCK_API.IMPORT}
           />

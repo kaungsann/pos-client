@@ -2,11 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../Api";
-import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import VendorList from "./VendorList";
 import FilterBox from "./FilterBox";
 import SearchCompo from "../../utils/SearchCompo";
+import { Button } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 
 export default function VendorTemplate() {
   const [vendors, setVendors] = useState([]);
@@ -16,6 +17,7 @@ export default function VendorTemplate() {
     address: "",
     city: "",
   });
+  const navigate = useNavigate();
 
   const token = useSelector((state) => state.IduniqueData);
 
@@ -119,12 +121,13 @@ export default function VendorTemplate() {
         />
 
         <div className="flex">
-          <Link
-            to="/admin/partners/create"
-            className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/partners/create")}
+            className="font-bold rounded-sm shadow-sm flex bg-zinc-50 items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           >
             Add
-          </Link>
+          </Button>
           <FilterBox onFilter={handleFilterChange} />
         </div>
       </div>

@@ -162,8 +162,8 @@ export default function SaleList({ sales }) {
       case "actions":
         return (
           <Icon
-            icon="prime:eye"
-            className="text-xl hover:opacity-75"
+            icon="fa-solid:eye"
+            className="text-2xl hover:text-blue-600 text-slate-500"
             onClick={() => {
               navigate(`/admin/saleorders/detail/${sales.id}`);
             }}

@@ -39,7 +39,7 @@ export default function EmployeeDetail() {
     <>
       <div className="flex justify-between items-center cursor-pointer">
         <Link
-          to="/admin/products/all"
+          to="/admin/employee/all"
           className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
         >
           Back
@@ -51,11 +51,8 @@ export default function EmployeeDetail() {
           <h2 className="lg:text-xl font-bold my-2">Employee Information</h2>
           <div className="container bg-white p-5 rounded-lg max-w-6xl ">
             <div className="flex">
-
               <div className="ml-auto">
-                <Link
-                  to={`/admin/employee/edit/${id}`}
-                >
+                <Link to={`/admin/employee/edit/${id}`}>
                   <Icon icon="ep:edit" className="text-xl" />
                 </Link>
               </div>
@@ -96,15 +93,19 @@ export default function EmployeeDetail() {
                   <h3 className="font-medium">
                     {detail[0].address
                       ? detail[0].address
-                      : "This user need to add address"}                  </h3>
+                      : "This user need to add address"}{" "}
+                  </h3>
                 </div>
               </div>
               <div className="container space-y-8 font-semibold text-sm">
                 <div className="flex justify-between items-center">
                   <h4>City</h4>
-                  <h3 className="font-medium"> {detail[0].city
-                    ? detail[0].city
-                    : "This user need to add city"}</h3>
+                  <h3 className="font-medium">
+                    {" "}
+                    {detail[0].city
+                      ? detail[0].city
+                      : "This user need to add city"}
+                  </h3>
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>Gender</h4>
@@ -112,11 +113,9 @@ export default function EmployeeDetail() {
                   <h3 className="font-medium ">
                     {detail[0].gender
                       ? detail[0].gender
-                      : "This user need to add city"}</h3>
+                      : "This user need to add city"}
+                  </h3>
                 </div>
-
-
-
               </div>
             </div>
           </div>

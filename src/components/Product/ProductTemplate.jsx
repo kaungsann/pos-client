@@ -7,7 +7,8 @@ import SearchBox from "./SearchBox";
 import ExcelExportButton from "../ExcelExportButton";
 import ExcelImportButton from "../ExcelImportButton";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@nextui-org/react";
 
 const COMPARISION = {
   LESS: "LESS",
@@ -23,6 +24,8 @@ const PRODUCT_API = {
 const ProductTemplate = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+
+  const navigate = useNavigate();
 
   const [filteredKeywords, setFilteredKeywords] = useState({
     name: "",
@@ -120,12 +123,14 @@ const ProductTemplate = () => {
         />
 
         <div className="flex">
-          <Link
-            to="/admin/products/create"
-            className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/products/create")}
+            className="font-bold rounded-sm shadow-sm flex items-center bg-slate-50 text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           >
             Add
-          </Link>
+          </Button>
+
           <FilterBox categories={categories} onFilter={handleFilterChange} />
 
           <div className="ml-3">
@@ -138,6 +143,7 @@ const ProductTemplate = () => {
             <ExcelImportButton
               token={token.accessToken}
               apiEndpoint={PRODUCT_API.IMPORT}
+              text="Product"
             />
           </div>
         </div>

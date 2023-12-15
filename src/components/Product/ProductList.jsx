@@ -44,6 +44,7 @@ export default function ProductList({ products }) {
   );
 
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "name",
     direction: "ascending",
@@ -121,17 +122,17 @@ export default function ProductList({ products }) {
         </h1>
       ),
       actions: () => (
-        <div className="p-2 flex w-full justify-start cursor-pointer">
+        <div className="p-2 flex w-full justify-start cursor-pointer items-center">
           <Icon
-            icon="prime:eye"
-            className="text-2xl hover:opacity-75"
+            icon="fa-solid:eye"
+            className="text-2xl hover:text-blue-600 text-slate-500"
             onClick={() => {
               navigate(`/admin/products/detail/${product.id}`);
             }}
           />
           <Icon
-            icon="ep:edit"
-            className="text-2xl hover:opacity-75"
+            icon="raphael:edit"
+            className="text-2xl hover:text-blue-600 ml-2 text-slate-500"
             onClick={(e) => {
               e.stopPropagation();
               navigate(`/admin/products/edit/${product.id}`);
@@ -269,7 +270,7 @@ export default function ProductList({ products }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Product found"} items={sortedItems}>
+        <TableBody emptyContent={"No Products found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

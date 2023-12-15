@@ -2,14 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../Api";
-import { Link } from "react-router-dom";
-import { Icon } from "@iconify/react";
 import CustomerList from "./CustomerList";
 import FilterBox from "./FilterBox";
 import SearchCompo from "../../utils/SearchCompo";
+import { Button } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 
 export default function CustomerTemplate() {
   const [customers, setCustomers] = useState([]);
+
+  const navigate = useNavigate();
 
   const [filteredKeywords, setFilteredKeywords] = useState({
     name: "",
@@ -121,12 +123,13 @@ export default function CustomerTemplate() {
         />
 
         <div className="flex">
-          <Link
-            to="/admin/customers/create"
-            className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/partners/create")}
+            className="font-bold rounded-sm shadow-sm flex items-center bg-zinc-50 text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           >
             Add
-          </Link>
+          </Button>
           <FilterBox onFilter={handleFilterChange} />
         </div>
       </div>

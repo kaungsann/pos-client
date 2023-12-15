@@ -42,8 +42,8 @@ export default function ProductsEdit() {
     //   format(new Date(resData.data[0].expiredAt), "MM/dd/yyyy")
     // );
     const formattedExpireDate = resData.data[0].expiredAt
-    ? new Date(resData.data[0].expiredAt).toISOString().split('T')[0]
-    : '';
+      ? new Date(resData.data[0].expiredAt).toISOString().split("T")[0]
+      : "";
     setExpiredate(formattedExpireDate);
     setRef(resData.data[0].ref);
     setName(resData.data[0].name);
@@ -61,7 +61,7 @@ export default function ProductsEdit() {
 
   const createProductApi = async () => {
     const formData = new FormData();
-    
+
     if (name) {
       formData.append("name", name);
     }
@@ -104,13 +104,11 @@ export default function ProductsEdit() {
       formData,
       token.accessToken
     );
-  
+
     if (resData.message === "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    console.log(" data is res roduct", resData);
     if (resData.status) {
-      console.log("edit res data is" , resData)
       navigate("/admin/products/all");
     } else {
       toast(resData.message);
@@ -210,7 +208,10 @@ export default function ProductsEdit() {
             <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
               <RiImageAddFill className=" text-slate-400 text-6xl" />
               {file ? (
-                <img src={selectedImage} className="absolute object-cover w-full h-full" />
+                <img
+                  src={selectedImage}
+                  className="absolute object-cover w-full h-full"
+                />
               ) : (
                 <img
                   src={image}
