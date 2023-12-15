@@ -120,7 +120,7 @@ function App() {
               <Route path="vendors" element={<VendorTemplate />} />
             </Route>
             <Route path="locations">
-              <Route path="all" element={<LocationTemplate/>} />
+              <Route path="all" element={<LocationTemplate />} />
               <Route path="create" element={<LocationCreate />} />
               <Route path="edit/:id" element={<LocationEdit />} />
               <Route path="detail/:id" element={<LocationDetail />} />

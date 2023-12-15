@@ -8,8 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
 import { removeData } from "../../../redux/actions";
 import { Input, Select, SelectItem } from "@nextui-org/react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react";
-
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  getKeyValue,
+} from "@nextui-org/react";
 
 export default function SaleOrderCreate() {
   const [product, setProduct] = useState([]);
@@ -20,7 +27,6 @@ export default function SaleOrderCreate() {
   const [state, setState] = useState("pending");
   const [note, setNote] = useState("");
   const [selectedOption, setSelectedOption] = React.useState("default");
-
 
   const [payment, setPayment] = useState(null);
   const [item, setItem] = useState(null);
@@ -52,7 +58,10 @@ export default function SaleOrderCreate() {
 
   const columns = [
     {
-      key: "image", label: "Image", align: "center", render: (line) => (
+      key: "image",
+      label: "Image",
+      align: "center",
+      render: (line) => (
         <TableCell align="center" className="table-cell">
           {line.product && line.product.image ? (
             <img
@@ -64,45 +73,63 @@ export default function SaleOrderCreate() {
             <div>No Image</div>
           )}
         </TableCell>
-      )
+      ),
     },
     {
-      key: "name", label: "Name", align: "center", render: (line) => (
+      key: "name",
+      label: "Name",
+      align: "center",
+      render: (line) => (
         <TableCell align="center" className="table-cell">
           {line.product.name}
         </TableCell>
-      )
+      ),
     },
     {
-      key: "tax", label: "Tax", align: "center", render: (line) => (
+      key: "tax",
+      label: "Tax",
+      align: "center",
+      render: (line) => (
         <TableCell align="center" className="table-cell">
           {line.tax.toFixed(2)}
         </TableCell>
-      )
+      ),
     },
     {
-      key: "qty", label: "Stock Qty", align: "center", render: (line) => (
+      key: "qty",
+      label: "Stock Qty",
+      align: "center",
+      render: (line) => (
         <TableCell align="center" className="table-cell">
           {line.qty}
         </TableCell>
-      )
+      ),
     },
     {
-      key: "unitPrice", label: "Unit Price", align: "center", render: (line) => (
+      key: "unitPrice",
+      label: "Unit Price",
+      align: "center",
+      render: (line) => (
         <TableCell align="center" className="table-cell">
           {line.unitPrice}
         </TableCell>
-      )
+      ),
     },
     {
-      key: "subTotal", label: "Subtotal", align: "center", render: (line) => (
+      key: "subTotal",
+      label: "Subtotal",
+      align: "center",
+      render: (line) => (
         <TableCell align="center" className="table-cell">
           {line.subTotal}
         </TableCell>
-      )
+      ),
     },
     {
-      key: "delete", label: "Delete", align: "center", render: (line, removeProduct) => (
+      key: "delete",
+      label: "Delete",
+      align: "center",
+      render: (line, removeProduct) => (
         <TableCell align="center" className="table-cell">
           <div className="text-center flex justify-center">
             <BsTrash
@@ -111,7 +138,7 @@ export default function SaleOrderCreate() {
             />
           </div>
         </TableCell>
-      )
+      ),
     },
   ];
 
@@ -179,7 +206,7 @@ export default function SaleOrderCreate() {
       if (resData.status) {
         toast(resData.message);
         navigate("/admin/purchase/all");
-      }else {
+      } else {
         toast(resData.message);
       }
     } catch (error) {
@@ -282,7 +309,7 @@ export default function SaleOrderCreate() {
         theme="light"
         style={{ width: "450px" }}
       />
-     
+
       <div className="flex gap-3 my-5">
         <button
           type="submit"
@@ -619,7 +646,6 @@ export default function SaleOrderCreate() {
         </div>
       </div> */}
 
-
       <div className="container mt-2">
         <h2 className="lg:text-xl font-bold my-2">Create Purchase Order</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
@@ -723,7 +749,10 @@ export default function SaleOrderCreate() {
             >
               Add
             </button>
-            <form onSubmit={handleAddProduct} className="flex mt-8 justify-between">
+            <form
+              onSubmit={handleAddProduct}
+              className="flex mt-8 justify-between"
+            >
               <div className="flex flex-wrap gap-8">
                 <div className="w-60">
                   <Select
@@ -732,7 +761,6 @@ export default function SaleOrderCreate() {
                     name="product"
                     value={pd}
                     placeholder="Select Product"
-
                     onChange={(e) => {
                       setPd(e.target.value);
                       const selectedProduct = product.find(
@@ -774,7 +802,6 @@ export default function SaleOrderCreate() {
                     name="tax"
                     value={(Tax * quantity) / 100}
                     onChange={(e) => setTax(e.target.value)}
-
                     placeholder="Tax"
                     labelPlacement="outside"
                   />
@@ -786,7 +813,6 @@ export default function SaleOrderCreate() {
                     name="subTotal"
                     value={unitPrice * quantity}
                     onChange={(e) => setTotalCost(e.target.value)}
-
                     placeholder="SubTotal"
                     labelPlacement="outside"
                   />
@@ -794,10 +820,18 @@ export default function SaleOrderCreate() {
               </div>
             </form>
             <div className="w-full mb-6">
-              <Table isStriped aria-label="Order Lines Table" className="my-custom-table">
+              <Table
+                isStriped
+                aria-label="Order Lines Table"
+                className="my-custom-table"
+              >
                 <TableHeader columns={columns}>
                   {(column) => (
-                    <TableColumn key={column.key} align={column.align} className="header-cell bg-blue-500 text-white">
+                    <TableColumn
+                      key={column.key}
+                      align={column.align}
+                      className="header-cell bg-blue-500 text-white"
+                    >
                       {column.label}
                     </TableColumn>
                   )}
@@ -807,7 +841,9 @@ export default function SaleOrderCreate() {
                     <TableRow key={line._d} className="table-row">
                       {columns.map((column) => (
                         <React.Fragment key={column.key}>
-                          {column.render ? column.render(line, removeProduct) : null}
+                          {column.render
+                            ? column.render(line, removeProduct)
+                            : null}
                         </React.Fragment>
                       ))}
                     </TableRow>
@@ -827,7 +863,6 @@ export default function SaleOrderCreate() {
                 </h1>
               </div>
             </div>
-
           </div>
         </div>
       </div>
