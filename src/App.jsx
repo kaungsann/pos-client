@@ -44,7 +44,7 @@ import PurchaseTemplate from "./components/Dashboard/Purchase/PurchaseTemplate";
 import SaleTemplate from "./components/Dashboard/SaleOrder/SaleTemplate";
 import CustomerTemplate from "./components/Dashboard/Customer/CustomerTemplate";
 import VendorTemplate from "./components/Dashboard/Customer/VendorTemplate";
-import PartnerTemplate from "./components/Dashboard/Partner/PartnerTemplate";
+import PartnerTemplate from "./components/Partner/PartnerTemplate";
 import EmployeeTemplate from "./components/Dashboard/Employee/EmployeeTemplate";
 import WareHouseTemplate from "./components/Dashboard/WareHouse/WareHouseTemplate";
 import StaffTemplate from "./components/Dashboard/Staff/StaffTemplate";

@@ -1,93 +1,288 @@
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Icon } from "@iconify/react";
-import { useNavigate } from "react-router-dom";
-import { Spinner } from "@nextui-org/react";
 import {
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Button,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  User,
+  Pagination,
 } from "@nextui-org/react";
 
-const PartnerList = ({ partners }) => {
-    const navigate = useNavigate();
+import { useNavigate } from "react-router-dom";
+import { deleteMultiple } from "../Api";
+import { useSelector } from "react-redux";
+import { Icon } from "@iconify/react";
+import DeleteAlert from "../utils/DeleteAlert";
+import { format } from "date-fns";
 
-    const editRoute = (id) => {
-        navigate(`/admin/partner/edit/${id}`);
+const columns = [
+  { name: "Name", uid: "name", sortable: true },
+  { name: "Phone", uid: "phone", sortable: true },
+  { name: "Address", uid: "address" },
+  { name: "Created At", uid: "createdAt" },
+  { name: "City", uid: "city" },
+  { name: "Company", uid: "isCompany" },
+  { name: "Customer", uid: "isCustomer" },
+  { name: "Actions", uid: "actions" },
+];
+export default function PartnerList({ partners }) {
+  const [showDeleteBox, setShowDeleteBox] = useState(false);
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
+
+  const [visibleColumns, setVisibleColumns] = React.useState(
+    new Set(columns.map((column) => column.uid))
+  );
+
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [sortDescriptor, setSortDescriptor] = React.useState({
+    column: "name",
+    direction: "ascending",
+  });
+  const [page, setPage] = React.useState(1);
+
+  const token = useSelector((state) => state.IduniqueData);
+  const navigate = useNavigate();
+
+  const totalItems = partners.length;
+  const totalPages = Math.ceil(totalItems / rowsPerPage);
+  const isFirstPage = page === 1;
+  const isLastPage = page === totalPages;
+
+  const currentPageItems = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return partners.slice(start, end);
+  }, [page, partners, rowsPerPage]);
+
+  const headerColumns = React.useMemo(() => {
+    if (visibleColumns === "all") return columns;
+
+    return columns.filter((column) =>
+      Array.from(visibleColumns).includes(column.uid)
+    );
+  }, [visibleColumns]);
+
+  const sortedItems = React.useMemo(() => {
+    return currentPageItems.sort((a, b) => {
+      const first = a[sortDescriptor.column] || "";
+      const second = b[sortDescriptor.column] || "";
+      const cmp = first < second ? -1 : first > second ? 1 : 0;
+
+      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+    });
+  }, [sortDescriptor, currentPageItems]);
+
+  const deletePartner = async () => {
+    const response = await deleteMultiple(
+      "/partner",
+      {
+        adjustmentId: [...selectedKeys],
+      },
+      token.accessToken
+    );
+    if (response.status) {
+      setSelectedKeys([]);
+    }
+  };
+
+  const onRowsPerPageChange = React.useCallback((e) => {
+    setRowsPerPage(Number(e.target.value));
+    setPage(1);
+  }, []);
+
+  const renderCell = React.useCallback((partner, columnKey) => {
+    const cellValue = partner[columnKey];
+
+    const renderers = {
+      name: () => (
+        <User
+          avatarProps={{ radius: "full", size: "sm", src: partner.image }}
+          name={cellValue}
+        >
+          {partner.name}
+        </User>
+      ),
+      createdAt: () => (
+        <h1>{format(new Date(partner.createdAt), "yyyy-MM-dd")}</h1>
+      ),
+      isCustomer: () => <h1>{partner.isCustomer ? "Yes" : "No"}</h1>,
+      isCompany: () => <h1>{partner.isCompany ? "Yes" : "No"}</h1>,
+      actions: () => (
+        <div className="p-2 flex w-full justify-start cursor-pointer">
+          <Icon
+            icon="prime:eye"
+            className="text-2xl hover:opacity-75"
+            onClick={() => {
+              navigate(`/admin/partners/detail/${partner.id}`);
+            }}
+          />
+        </div>
+      ),
     };
 
+    const renderer = renderers[columnKey] || ((value) => value);
+
+    return renderer(cellValue);
+  }, []);
+
+  const topContent = React.useMemo(() => {
     return (
-        <>
-            <div>
-                <h2 className="lg:text-xl font-bold my-2">partners</h2>
-                <Table aria-label="Example static collection table">
-                    <TableHeader>
-                        <TableColumn>Name</TableColumn>
-                        <TableColumn>Address</TableColumn>
-                        <TableColumn>City</TableColumn>
-                        <TableColumn>Phone</TableColumn>
-                        <TableColumn>Date</TableColumn>
-                        <TableColumn>Desc</TableColumn>
-                        <TableColumn>Company</TableColumn>
-                        <TableColumn>Action</TableColumn>
-                    </TableHeader>
-                    <TableBody>
-                        {partners ? (
-                            partners.map((partner) => (
-                                <TableRow key={partner.id} className="items-center">
-                                    <TableCell>{partner.name}</TableCell>
-                                    <TableCell>{partner.address}</TableCell>
-                                    <TableCell>{partner.phone ? partner.phone : "none"}</TableCell>
-                                    <TableCell>
-                                        {partner.date ? partner.date : "none"}
-                                    </TableCell>
-                                    <TableCell>
-                                        {partner.description
-                                            ? partner.description.substring(0, 30)
-                                            : "none"}
-                                    </TableCell>
-                                    <TableCell>
-                                        {partner.company ? partner.company : "none"}
-                                    </TableCell>
-                                    <TableCell>
-                                        {partner.salePrice ? partner.salePrice : "none"}
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center">
-                                            <Icon
-                                                icon="prime:eye"
-                                                onClick={() =>
-                                                    navigate(`/admin/partners/detail/${partner.id}`)
-                                                }
-                                                className="text-xl"
-                                            />
-                                            <Icon
-                                                icon="ep:edit"
-                                                className="text-lg ml-2"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    editRoute(partner.id);
-                                                }}
-                                            />
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        ) : (
-                            <Spinner />
-                        )}
-                    </TableBody>
-                </Table>
-                <Spinner className="text-center w-full mt-52" />
-            </div>
-        </>
+      <>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <h2 className="text-xl font-bold">Partners</h2>
+            <h3 className="text-default-400 text-small ml-4">
+              Total {partners.length}
+            </h3>
+          </div>
+
+          <div className="flex items-center">
+            <label className="flex items-center text-default-400 text-small">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </label>
+            <Dropdown>
+              <div className="mx-4">
+                <DropdownTrigger className="hidden sm:flex">
+                  <Icon icon="system-uicons:filtering" />
+                </DropdownTrigger>
+              </div>
+              <DropdownMenu
+                disallowEmptySelection
+                aria-label="Table Columns"
+                closeOnSelect={false}
+                selectedKeys={visibleColumns}
+                selectionMode="multiple"
+                onSelectionChange={setVisibleColumns}
+              >
+                {columns.map((column) => (
+                  <DropdownItem key={column.uid}>{column.name}</DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
+            {selectedKeys.size > 0 && (
+              <button
+                onClick={() => setShowDeleteBox(true)}
+                className="px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
+              >
+                Delete
+              </button>
+            )}
+          </div>
+        </div>
+      </>
     );
-};
+  }, [visibleColumns, onRowsPerPageChange, partners, selectedKeys]);
+
+  const bottomContent = React.useMemo(() => {
+    return (
+      <div className="py-2 px-2 flex justify-between items-center">
+        <span className="w-[30%] text-small text-default-400">
+          {selectedKeys === "all"
+            ? "All items selected"
+            : `${selectedKeys.size} of ${totalItems} selected`}
+        </span>
+        <Pagination
+          isCompact
+          showControls
+          showShadow
+          color="primary"
+          page={page}
+          total={totalPages}
+          onChange={setPage}
+        />
+        <div className="hidden sm:flex w-[30%] justify-end gap-2">
+          <Button
+            isDisabled={isFirstPage}
+            size="sm"
+            variant="flat"
+            onPress={() => !isFirstPage && setPage(page - 1)}
+          >
+            Previous
+          </Button>
+          <Button
+            isDisabled={isLastPage}
+            size="sm"
+            variant="flat"
+            onPress={() => !isLastPage && setPage(page + 1)}
+          >
+            Next
+          </Button>
+        </div>
+      </div>
+    );
+  }, [selectedKeys, totalItems, page, isLastPage, isFirstPage, totalPages]);
+
+  console.log("Hello",sortedItems);
+
+  return (
+    <>
+      <Table
+        aria-label="Example table with custom cells, pagination and sorting"
+        isHeaderSticky
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        selectedKeys={selectedKeys}
+        selectionMode="multiple"
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+        onSortChange={(descriptor) => setSortDescriptor(descriptor)}
+      >
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody emptyContent={"No records"} items={sortedItems}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      {showDeleteBox && (
+        <DeleteAlert
+          cancel={() => {
+            setShowDeleteBox(false);
+            setSelectedKeys(new Set([]));
+          }}
+          onDelete={() => {
+            deletePartner();
+            setShowDeleteBox(false);
+          }}
+        />
+      )}
+    </>
+  );
+}
 
 PartnerList.propTypes = {
-    partners: PropTypes.array,
+  partners: PropTypes.array,
 };
-
-export default PartnerList;
