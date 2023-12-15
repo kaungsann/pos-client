@@ -308,7 +308,7 @@ export default function SaleOrderCreate() {
       <div className="container mt-2">
         <h2 className="lg:text-xl font-bold my-2">Create Sale Order</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
-          <form className="flex justify-between flex-wrap gap-10 p-5">
+          <div className="flex justify-between flex-wrap gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="mt-1">
                 <div className="w-60">
@@ -417,6 +417,7 @@ export default function SaleOrderCreate() {
                   name="product"
                   value={pd}
                   placeholder="Select Product"
+                  
                   onChange={(e) => {
                     setPd(e.target.value);
                     const selectedProduct = product.find(
@@ -512,7 +513,7 @@ export default function SaleOrderCreate() {
               </div>
             </div>
 
-          </form>
+          </div>
         </div>
       </div>
     </>
