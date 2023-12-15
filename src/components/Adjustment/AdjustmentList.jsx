@@ -24,18 +24,14 @@ import DeleteAlert from "../utils/DeleteAlert";
 import { format } from "date-fns";
 
 const columns = [
-  { name: "Name", uid: "name", sortable: true },
-  { name: "Expired Date", uid: "expiredAt", sortable: true },
-  { name: "Tax", uid: "tax", sortable: true },
-  { name: "Sale Price", uid: "salePrice", sortable: true },
-  { name: "Purchase Price", uid: "purchasePrice", sortable: true },
-  { name: "Min-Stock Qty", uid: "minStockQty", sortable: true },
-  { name: "Ref", uid: "ref" },
-  { name: "Barcode", uid: "barcode" },
-  { name: "Actions", uid: "actions" },
+  { name: "Product", uid: "productName" },
+  { name: "Location", uid: "locationName", sortable: true },
+  { name: "Date", uid: "updatedAt" },
+  { name: "Barcode", uid: "productBarcode" },
+  { name: "Quantity", uid: "quantity", sortable: true },
 ];
 
-export default function ProductList({ products }) {
+export default function AdjustmentList({ adjustments }) {
   const [showDeleteBox, setShowDeleteBox] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
@@ -53,7 +49,7 @@ export default function ProductList({ products }) {
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
 
-  const totalProducts = products.length;
+  const totalProducts = adjustments.length;
   const totalPages = Math.ceil(totalProducts / rowsPerPage);
   const isFirstPage = page === 1;
   const isLastPage = page === totalPages;
@@ -62,8 +58,8 @@ export default function ProductList({ products }) {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return products.slice(start, end);
-  }, [page, products, rowsPerPage]);
+    return adjustments.slice(start, end);
+  }, [page, adjustments, rowsPerPage]);
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -85,9 +81,9 @@ export default function ProductList({ products }) {
 
   const deleteProducts = async () => {
     const response = await deleteMultiple(
-      "/product",
+      "/adjustment",
       {
-        productIds: [...selectedKeys],
+        adjustmentId: [...selectedKeys],
       },
       token.accessToken
     );
@@ -101,23 +97,21 @@ export default function ProductList({ products }) {
     setPage(1);
   }, []);
 
-  const renderCell = React.useCallback((product, columnKey) => {
-    const cellValue = product[columnKey];
+  const renderCell = React.useCallback((adjustment, columnKey) => {
+    const cellValue = adjustment[columnKey];
 
     const renderers = {
       name: () => (
         <User
-          avatarProps={{ radius: "full", size: "sm", src: product.image }}
+          avatarProps={{ radius: "full", size: "sm", src: adjustment.image }}
           name={cellValue}
         >
-          {product.name}
+          {adjustment.name}
         </User>
       ),
-      expiredAt: () => (
+      updatedAt: () => (
         <h1>
-          {product.expiredAt
-            ? format(new Date(product.expiredAt), "yyyy-MM-dd")
-            : "None"}
+          {format(new Date(adjustment.updatedAt), 'yyyy-MM-dd')}
         </h1>
       ),
       actions: () => (
@@ -126,15 +120,7 @@ export default function ProductList({ products }) {
             icon="prime:eye"
             className="text-2xl hover:opacity-75"
             onClick={() => {
-              navigate(`/admin/products/detail/${product.id}`);
-            }}
-          />
-          <Icon
-            icon="ep:edit"
-            className="text-2xl hover:opacity-75"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/admin/products/edit/${product.id}`);
+              navigate(`/admin/adjustments/detail/${adjustment.id}`);
             }}
           />
         </div>
@@ -144,16 +130,16 @@ export default function ProductList({ products }) {
     const renderer = renderers[columnKey] || ((value) => value);
 
     return renderer(cellValue);
-  }, [products]);
+  }, [adjustments]);
 
   const topContent = React.useMemo(() => {
     return (
       <>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold">Products</h2>
+            <h2 className="text-xl font-bold">Adjustments</h2>
             <h3 className="text-default-400 text-small ml-4">
-              Total {products.length}
+              Total {adjustments.length}
             </h3>
           </div>
 
@@ -202,7 +188,7 @@ export default function ProductList({ products }) {
         </div>
       </>
     );
-  }, [visibleColumns, onRowsPerPageChange, products, selectedKeys]);
+  }, [visibleColumns, onRowsPerPageChange, adjustments, selectedKeys]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -243,6 +229,8 @@ export default function ProductList({ products }) {
     );
   }, [selectedKeys, totalProducts, page, isLastPage, isFirstPage, totalPages]);
 
+  console.log(sortedItems);
+
   return (
     <>
       <Table
@@ -269,7 +257,7 @@ export default function ProductList({ products }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Product found"} items={sortedItems}>
+        <TableBody emptyContent={"No records"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -295,6 +283,6 @@ export default function ProductList({ products }) {
   );
 }
 
-ProductList.propTypes = {
-  products: PropTypes.array,
+AdjustmentList.propTypes = {
+  adjustments: PropTypes.array,
 };

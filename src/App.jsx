@@ -48,7 +48,7 @@ import SaleView from "./components/Dashboard/SaleOrder/SaleView";
 import ProductTemplate from "./components/Product/ProductTemplate";
 import CategoryTemplate from "./components/Category/CategoryTemplate";
 import StockTemplate from "./components/Dashboard/Stock/StockTemplate";
-import AdjustmentTemplate from "./components/Dashboard/Ajustment/AdjustmentTemplate";
+import AdjustmentTemplate from "./components/Adjustment/AdjustmentTemplate";
 import LocationTemplate from "./components/Dashboard/Location/LocationTemplate";
 import PurchaseTemplate from "./components/Dashboard/Purchase/PurchaseTemplate";
 import SaleTemplate from "./components/Dashboard/SaleOrder/SaleTemplate";
