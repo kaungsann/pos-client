@@ -6,6 +6,8 @@ import { TbEdit } from "react-icons/tb";
 import { getApi } from "../../Api";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
+import FadeLoader from "react-spinners/FadeLoader";
+
 
 export default function StaffDetail() {
   const { id } = useParams();
@@ -35,120 +37,110 @@ export default function StaffDetail() {
   }, []);
   return (
     <>
-      <div className="flex justify-between items-center cursor-pointer">
-        <Link to="/admin/user/all">
-          <button className="hover:opacity-75 lg:px-8 md:px-4 py-2 text-white bg-blue-600 rounded-sm shadow-md border-2 border-blue-600 hover:opacity-75text-white">
+    <div className="flex justify-between">
+        <div className="flex gap-2">
+          <Link
+            to="/admin/user/all"
+            className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
+          >
             Back
-          </button>
-        </Link>
-        <Link to={`/admin/user/edit/${id}`}>
-          <TbEdit className="text-4xl font-bold text-blue-700 hover:text-slate-700" />
-        </Link>
+          </Link>
+        </div>
       </div>
-
-      <h2 className="py-1.5 text-lg text-start font-bold mt-2 bg-blue-600 text-white pl-4">
-        User Information
-      </h2>
-
-      {detail.length > 0 && (
-        <>
-          <div className="w-40 h-36 my-3">
-            {detail[0].image ? (
-              <img src={detail[0].image} className="w-full h-full" />
-            ) : (
-              <Icon
-                icon="fluent:image-off-48-regular"
-                className="w-full h-full text-slate-400"
-              />
-            )}
-          </div>
-          <div className="flex justify-between">
-            <div className="w-2/4">
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Role</h4>
-                <h3 className="font-bold text-lg text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100">
-                  {detail[0].role ? detail[0].role.name : "]None"}
-                </h3>
-              </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Name</h4>
-                <h3 className="font-bold text-lg text-slate-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100">
-                  {detail[0].username}
-                </h3>
-              </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">
-                  Staff Email
-                </h4>
-                <h3 className="font-bold text-lg text-blue-600 w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ">
-                  {detail[0].email}
-                </h3>
-              </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Phone</h4>
-                <h3
-                  className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
-                    detail[0].phone ? "text-slate-600" : "text-red-400"
-                  }`}
-                >
-                  {detail[0].phone
-                    ? detail[0].phone
-                    : "This user need to add phone"}
-                </h3>
-              </div>
-            </div>
-            <div className="w-2/4 justify-between">
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Birthday</h4>
-                {detail[0].birthdate ? (
-                  <h3 className="font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md text-slate-600">
-                    {format(new Date(detail[0].birthdate), "yyyy-MM-dd")}
-                  </h3>
+      {detail && detail.length > 0 ? (
+        <div className="container my-5">
+          <h2 className="lg:text-xl font-bold my-2">Staff Information</h2>
+          <div className="container bg-white p-5 rounded-lg max-w-6xl">
+            <div className="flex">
+              <div className="w-40 h-36 my-3">
+                {detail[0].image ? (
+                  <img src={detail[0].image} className="w-full h-full" />
                 ) : (
-                  <h3 className="font-bold text-lg w-3/5 mr-20 pl-3 rounded-md bg-slate-100 text-red-400">
-                    This user needs to add a birthday
-                  </h3>
+                  <Icon
+                    icon="fluent:image-off-48-regular"
+                    className="w-full h-full text-slate-400"
+                  />
                 )}
               </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Address</h4>
-                <h3
-                  className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
-                    detail[0].address ? "text-slate-600" : "text-red-400"
-                  }`}
-                >
-                  {detail[0].address
-                    ? detail[0].address
-                    : "This user need to add address"}
-                </h3>
+              <div className="ml-auto">
+                <Link to={`/admin/user/edit/${id}`}>
+                  <Icon icon="ep:edit" className="text-xl" />
+                </Link>
               </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">City</h4>
-                <h3
-                  className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
-                    detail[0].city ? "text-slate-600" : "text-red-400"
-                  }`}
-                >
-                  {detail[0].city
-                    ? detail[0].city
-                    : "This user need to add city"}
-                </h3>
+         
+            </div>
+
+            <div className="grid grid-cols-2 max-w-3xl gap-10">
+              <div className="container space-y-8 font-semibold text-sm">
+                <div className="flex justify-between items-center">
+                  <h4>Role</h4>
+                  <h3 className="font-medium">
+                    {detail[0].role ? detail[0].role.name : "]None"}
+                  </h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>Name</h4>
+                  <h3 className="font-medium">
+                    {detail[0].username}
+                  </h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>Address</h4>
+                  <h3 className="font-medium">
+                    {detail[0].address
+                      ? detail[0].address
+                      : "This user need to add address"}
+                  </h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>Gender</h4>
+                  <h3 className="font-medium">
+                    {detail[0].gender
+                      ? detail[0].gender
+                      : "This user need to add Gender"}
+                  </h3>
+                </div>
               </div>
-              <div className="flex justify-between my-3 items-center">
-                <h4 className="font-bold text-lg text-slate-500">Gender</h4>
-                <h3
-                  className={`font-bold text-lg w-3/5 mr-20 pl-3 py-2 rounded-md bg-slate-100 ${
-                    detail[0].gender ? "text-slate-600" : "text-red-400"
-                  }`}
-                >
-                  {detail[0].gender
-                    ? detail[0].gender
-                    : "This user need to add city"}
-                </h3>
+              <div className="container space-y-8 font-semibold text-sm">
+                <div className="flex justify-between items-center">
+                  <h4>Email</h4>
+                  <h3 className="font-medium">
+                    {detail[0].email}
+                  </h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>DOB</h4>
+                  <h3 className="font-medium">
+                    {detail[0].birthdate
+                      ? detail[0].birthdate
+                      : "This user need to add Dob"}
+                  </h3>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h4>Phone</h4>
+                  <h3 className="font-medium">
+                    {detail[0].phone
+                      ? detail[0].phone
+                      : "This user need to add phone"}
+                  </h3>
+                </div>
+               
               </div>
             </div>
           </div>
-        </>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center mt-40">
+          {loading && (
+            <FadeLoader
+              color={"#0284c7"}
+              loading={loading}
+              size={20}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          )}
+        </div>
       )}
     </>
   );
