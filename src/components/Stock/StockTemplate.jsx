@@ -67,31 +67,6 @@ export default function StockTemplate() {
       stocks.filter((stk) => {
         const { name, location, onhand } = filteredKeywords;
 
-        const isName = () => {
-          if (!name) {
-            return true;
-          }
-
-          if (stk.product) {
-            return stk.product.name.toLowerCase().includes(name.toLowerCase());
-          }
-
-          return false;
-        };
-
-        const isLocation = () => {
-          console.log("Filter:", location);
-
-          if (!location) {
-            return true;
-          }
-
-          if (stk.location) {
-            return stk.location.name
-              .toLowerCase()
-              .includes(location.toLowerCase());
-          }
-        };
         const isOnHand = () => {
           if (!stk.onHand || !onhand.comparison) return true;
 
@@ -102,9 +77,14 @@ export default function StockTemplate() {
             (onhand.comparison === COMPARISION.GREATER && QTY > onhand.value)
           );
         };
-        return isOnHand() && isName() && isLocation();
+
+        return (
+          stk.product.name.toLowerCase().includes(name.toLowerCase()) &&
+          stk.location.name.toLowerCase().includes(location.toLowerCase()) &&
+          isOnHand()
+        );
       }),
-    [stocks, filteredKeywords]
+    [filteredKeywords, stocks]
   );
 
   return (

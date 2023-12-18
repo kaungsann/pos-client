@@ -24,8 +24,6 @@ const FilterBox = ({ onFilter }) => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  console.log("location name is a", location);
-
   const handleFilterClick = () => {
     setIsFilterActive(!isFilterActive);
     onFilter({
@@ -81,7 +79,6 @@ const FilterBox = ({ onFilter }) => {
                     label="Location"
                     placeholder="Enter location name"
                     labelPlacement="outside"
-                    className="ml-2"
                     onChange={(e) => setLocation(e.target.value)}
                     value={location}
                     variant="bordered"
@@ -90,8 +87,8 @@ const FilterBox = ({ onFilter }) => {
                   />
                 </div>
                 <div className="container flex flex-col">
-                  <span className="font-semibold text-sm mx-2 mb-2">
-                    OnHand Quantity
+                  <span className="text-sm mb-1">
+                    On-hand quantity
                   </span>
                   <div className="flex gap-2">
                     <Input

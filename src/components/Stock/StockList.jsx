@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   Table,
   TableHeader,
@@ -6,7 +7,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
   Button,
   DropdownTrigger,
   Dropdown,
@@ -16,21 +16,17 @@ import {
 } from "@nextui-org/react";
 
 import { capitalize } from "../utils/utils";
-import { useSelector } from "react-redux";
-import { format } from "date-fns";
 import { Icon } from "@iconify/react";
 
 //const INITIAL_VISIBLE_COLUMNS = ["product", "location", "onhand", "created"];
 
 const columns = [
-  { name: "Product", uid: "product", sortable: true },
-  { name: "Location", uid: "location", sortable: true },
-  { name: "OnHand", uid: "onhand", sortable: true },
+  { name: "Product", uid: "product" },
+  { name: "Location", uid: "location" },
+  { name: "OnHand", uid: "onHand", sortable: true },
 ];
 
 export default function StockList({ stocks }) {
-  const [filterValue, setFilterValue] = React.useState("");
-
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(columns.map((column) => column.uid))
   );
@@ -93,11 +89,11 @@ export default function StockList({ stocks }) {
           <h3>{stock.location.name}</h3>
         </>
       ),
-      // onhand: () => (
-      //   <>
-      //     <h3>{stock.onHand}</h3>
-      //   </>
-      // ),
+      onHand: () => (
+        <>
+          <h3>{stock.onHand}</h3>
+        </>
+      ),
     };
 
     const renderer = renderers[columnKey] || ((value) => value);
@@ -227,3 +223,7 @@ export default function StockList({ stocks }) {
     </>
   );
 }
+
+StockList.propTypes = {
+  stocks: PropTypes.array,
+};
