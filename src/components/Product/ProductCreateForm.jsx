@@ -49,6 +49,7 @@ export default function ProductCreateForm() {
 
     const newBarCode = generateRandomNumber(13);
     setProduct({ ...product, barcode: newBarCode });
+    setUpdateProduct({ ...updateProduct, barcode: newBarCode })
   };
 
   const inputChangeHandler = (event) => {
