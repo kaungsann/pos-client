@@ -8,6 +8,8 @@ import { IoLogOutSharp } from "react-icons/io5";
 import { TiBusinessCard } from "react-icons/ti";
 import DeleteAlert from "./DeleteAlert";
 import { format } from "date-fns";
+import { Input, Progress, Button, Select, SelectItem } from "@nextui-org/react";
+
 import {
   AiTwotoneEdit,
   AiOutlineUsergroupAdd,
@@ -60,7 +62,7 @@ export default function Profile() {
     setCity(response.data[0].city)
   };
 
-  console.log("single useris " , usr)
+  console.log("single useris ", usr)
 
   const EditUserApi = async () => {
     const formData = new FormData();
@@ -144,9 +146,8 @@ export default function Profile() {
         theme="light"
       />
       <div
-        className={`flex mb-8 cursor-pointer ${
-          userInfo.role && userInfo.role.name == "user" ? "mt-20 " : ""
-        }`}
+        className={`flex mb-8 cursor-pointer ${userInfo.role && userInfo.role.name == "user" ? "mt-20 " : ""
+          }`}
       >
         <div className="w-1/4 flex flex-col justify-items-center items-center p-4 bg-white shadow-md h-screen">
           <div className="relative">
@@ -165,26 +166,23 @@ export default function Profile() {
           </div>
           <div className="w-full mt-6">
             <div
-              className={`flex w-full py-2 items-center justify-start rounded-2xl ${
-                activeSection === "personal"
+              className={`flex w-full py-2 items-center justify-start rounded-2xl ${activeSection === "personal"
                   ? "bg-blue-100 font-bold"
                   : "text-slate-400"
-              }`}
+                }`}
               onClick={handlePersonalSectionClick}
             >
               <BiSolidUser
-                className={`text-2xl font-bold  mx-4 ${
-                  activeSection === "personal"
+                className={`text-2xl font-bold  mx-4 ${activeSection === "personal"
                     ? "text-blue-500"
                     : "text-slate-500"
-                }`}
+                  }`}
               />
               <h3
-                className={`text-lg ${
-                  activeSection === "personal"
+                className={`text-lg ${activeSection === "personal"
                     ? "text-slate-800 font-bold"
                     : "text-slate-500"
-                }`}
+                  }`}
               >
                 Personal Information
               </h3>
@@ -193,26 +191,23 @@ export default function Profile() {
             {userInfo.role && userInfo.role.name == "admin" && (
               <>
                 <div
-                  className={`flex py-2  mt-4 w-full items-center justify-start rounded-2xl ${
-                    activeSection === "company"
+                  className={`flex py-2  mt-4 w-full items-center justify-start rounded-2xl ${activeSection === "company"
                       ? "bg-blue-100 font-bold"
                       : "text-slate-400"
-                  }`}
+                    }`}
                   onClick={handleCompanyRegister}
                 >
                   <TiBusinessCard
-                    className={`text-2xl font-bold  mx-4 ${
-                      activeSection === "company"
+                    className={`text-2xl font-bold  mx-4 ${activeSection === "company"
                         ? "text-blue-500"
                         : "text-slate-500"
-                    }`}
+                      }`}
                   />
                   <h3
-                    className={`text-lg ${
-                      activeSection === "company"
+                    className={`text-lg ${activeSection === "company"
                         ? "text-slate-800 font-bold"
                         : "text-slate-500"
-                    }`}
+                      }`}
                   >
                     Company Information
                   </h3>
@@ -221,172 +216,151 @@ export default function Profile() {
             )}
 
             <div
-              className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
-                logout ? "bg-blue-100 font-bold" : "text-slate-400"
-              }}`}
+              className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${logout ? "bg-blue-100 font-bold" : "text-slate-400"
+                }}`}
               onClick={() => {
                 setLogout(true), setActiveSection(null);
               }}
             >
               <IoLogOutSharp
-                className={`text-2xl font-bold mx-4 ${
-                  logout ? "text-blue-500" : "text-slate-600"
-                }`}
+                className={`text-2xl font-bold mx-4 ${logout ? "text-blue-500" : "text-slate-600"
+                  }`}
               />
               <h3
-                className={`text-lg ${
-                  logout ? "text-slate-800 font-bold" : "text-slate-500"
-                }`}
+                className={`text-lg ${logout ? "text-slate-800 font-bold" : "text-slate-500"
+                  }`}
               >
                 Logout
               </h3>
             </div>
           </div>
         </div>
-
-        <div className="ml-6 w-3/4">
+        <div className="ml-6 w-3/4 bg-white">
           {activeSection === "personal" && (
+            
             <div>
-              <div className="flex justify-between w-full  text-slate-700 pb-6 border-b-2 border-b-slate-300">
+            
+              <div className="flex justify-between w-full p-5 text-slate-700 pb-6 border-b-2 border-b-slate-300">
                 <h3 className="text-2xl font-bold">Personal Information</h3>
-                  <button
-                    onClick={() => navigate("/admin/pos/all")}
-                    className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
-                  >
-                    Back
-                  </button>
+                <button
+                  onClick={() => handleSubmit}
+                  className="font-bold rounded-sm shadow-sm flex items-cente text-green-700 border-green-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 px-6 py-2"
+                >
+                  Save
+                </button>
+               
               </div>
-
-              <div className="mt-4">
-                <div className="flex ">
-                  <div className="flex">
-                    <label
-                      for="male"
-                      className="text-lg mr-3 font-semibold text-slate-600"
-                    >
-                      Male
-                    </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      id="male"
-                      value="male"
-                      className="w-6 h-8"
-                      checked={usr.gender === "male"}
-                      disabled={usr.gender === "female"}
-                    />
-                  </div>
-                  <div className="flex mx-6">
-                    <label
-                      for="female"
-                      className="text-lg mr-3 font-semibold text-slate-600"
-                    >
-                      Female
-                    </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      id="female"
-                      value="female"
-                      className="w-6 h-8"
-                      checked={usr.gender === "female"}
-                      disabled={usr.gender === "male"}
-                    />
-                  </div>
-                </div>
-
+              <div className="mt-4 p-5">
                 <div className="mt-4 flex flex-wrap justify-between">
                   <div className="flex w-full justify-between">
                     <div className="w-6/12">
-                      <label className="text-lg font-semibold text-slate-600">
-                        Name
-                      </label>
-                      <input
+                      <Input
                         type="text"
+                        label="Name"
+                        name="name"
                         value={name}
+                        // color={isInvalid ? "danger" : "success"}
+                        // errorMessage={isInvalid && "Please enter a valid email"}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
+                        placeholder="Enter  name..."
+                        labelPlacement="outside"
                       />
                     </div>
                     <div className="w-6/12 ml-2">
-                      <label className="text-lg font-semibold text-slate-600">
-                        Phone Number
-                      </label>
-                      <input
+                        <Input
                         type="text"
+                        label="Phone"
+                        name="phone"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
+                        placeholder="Enter  phone..."
+                        labelPlacement="outside"
                       />
                     </div>
                   </div>
-
-                  <div className="w-full mt-6">
-                    <label className="text-lg font-semibold text-slate-600">
-                      Email
-                    </label>
-                    <input
-                      type="text"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
-                    />
+                  <div className="flex w-full justify-between py-5">
+                    <div className="flex w-full justify-between">
+                      <div className="w-6/12">
+                        <Input
+                          type="text"
+                          label="City"
+                          name="city"
+                          value={city}
+                          onChange={(e) => setCity(e.target.value)}
+                          placeholder="Enter  City..."
+                          labelPlacement="outside"
+                        />
+                      </div>
+                      <div className="w-6/12 ml-2">
+                        <Input
+                          type="text"
+                          label="Email"
+                          name="email"
+                          value={name}
+                          // color={isInvalid ? "danger" : "success"}
+                          // errorMessage={isInvalid && "Please enter a valid email"}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Enter  Email..."
+                          labelPlacement="outside"
+                        />
+                      </div>
+                    </div>
                   </div>
-
                   <div className="flex w-full justify-between mt-6">
-                    <div className="w-6/12">
-                      <label className="text-lg font-semibold text-slate-600">
-                        Gender
-                      </label>
-                      <select
-                        value={gender}
-                        onChange={(e) => setGender(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
-                      >
-                        <option disabled value>
-                          Select an option
-                        </option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                      </select>
-                    </div>
-
-                    <div className="w-6/12 ml-2">
-                      <label className="text-lg font-semibold text-slate-600">
-                        Date Of Birth
-                      </label>
-                      <input
+                    <div className="w-6/12 ">
+                      <Input
                         type="text"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex w-full justify-between mt-6">
-                    <div className="w-6/12">
-                      <label className="text-lg font-semibold text-slate-600">
-                        City
-                      </label>
-                      <input
-                        type="text"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
-                      />
-                    </div>
-                    <div className="w-6/12 ml-2">
-                      <label className="text-lg font-semibold text-slate-600">
-                        Address
-                      </label>
-                      <input
-                        type="text"
+                        name="address"
+                        label="Address"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border-2 bg-white focus:outline-none my-3 text-slate-500 font-semibold text-xl"
+                        placeholder="Enter address..."
+                        labelPlacement="outside"
                       />
                     </div>
+                    <div className="w-6/12 ml-2">
+                      <Input
+                        type="date"
+                        name="dob"
+                        label="Date of Birth"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        placeholder="Enter Address..."
+                        labelPlacement="outside"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full mt-6 ">
+                    <Input
+                      type="text"
+                      name="city"
+                      label="City"
+                      color="white"
+                      className=""
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      placeholder="Enter City..."
+                      labelPlacement="outside"
+                    />
+                  </div>
+                  <div className="flex w-full justify-between mt-6 ">
+                    <Select
+                      labelPlacement="outside"
+                      label="Gender"
+                      name="gender"
+                      value={gender}
+                      placeholder="Select an gender"
+                      selectedKeys={gender ? [gender] : false}
+                      onChange={(e) => setGender(e.target.value)}
+                      className="max-w-xs "
+                    >
+                      <SelectItem value="male" key="male">
+                        male
+                      </SelectItem>
+                      <SelectItem value="female" key="female">
+                        female
+                      </SelectItem>
+                    </Select>
                   </div>
                 </div>
               </div>
@@ -398,7 +372,6 @@ export default function Profile() {
               {/* <BusinessRegister /> */}
             </>
           )}
-
           {activeSection === "EditInfo" && (
             <>
               <EditBusinessInfo />
