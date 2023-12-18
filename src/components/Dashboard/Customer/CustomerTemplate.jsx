@@ -123,13 +123,6 @@ export default function CustomerTemplate() {
         />
 
         <div className="flex">
-          <Button
-            size="sm"
-            onClick={() => navigate("/admin/partners/create")}
-            className="font-bold rounded-sm shadow-sm flex items-center bg-zinc-50 text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
-          >
-            Add
-          </Button>
           <FilterBox onFilter={handleFilterChange} />
         </div>
       </div>

@@ -17,15 +17,16 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import { statusOptions } from "../Category/data";
+import { users, statusOptions } from "../Category/data";
 import { capitalize } from "../Category/utils";
 import SearchBox from "../../utils/SearchBox";
+import ExcelExportButton from "../../ExcelExportButton";
+import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL, deleteMultiple } from "../../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import DeleteAlert from "../../utils/DeleteAlert";
-import ChangePassword from "../../utils/ChangePassword";
 
 const statusColorMap = {
   active: "success",
@@ -33,36 +34,25 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-let INITIAL_VISIBLE_COLUMNS = ["role", "name", "email", "lastlogin", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "email", "birthdate", "actions"];
 
-let columns = [
-  { name: "Role", uid: "role" },
+const columns = [
   { name: "Name", uid: "name", sortable: true },
-  { name: "Email", uid: "email" },
-  { name: "Last-Login", uid: "lastlogin" },
-  { name: "Phone", uid: "phone", sortable: true },
+  { name: "Email", uid: "email", sortable: true },
   { name: "Address", uid: "address" },
-  { name: "Gender", uid: "gender" },
-  { name: "City", uid: "city" },
   { name: "DateOfBirth", uid: "birthdate" },
+  { name: "CreateDate", uid: "create" },
+  { name: "City", uid: "city" },
   { name: "Actions", uid: "actions" },
 ];
 
-export default function StaffList({ staffs, onDeleteSuccess }) {
+export default function EmployeeList({ employees, onDeleteSuccess }) {
   const [deleteBox, setDeleteBox] = React.useState(false);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-
-  const [userId, setUserId] = React.useState(null);
-  const [show, setShow] = React.useState(false);
-
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-
-  const closeShowBox = (text) => {
-    setShow(text);
-  };
 
   const PARTNER_API = {
     INDEX: BASE_URL + "/employee",
@@ -107,23 +97,24 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredStaff = [...staffs];
+    let filteredEmployees = [...employees];
 
     if (hasSearchFilter) {
-      filteredStaff = filteredStaff.filter((staff) =>
-        staff.username.toLowerCase().includes(filterValue.toLowerCase())
+      filteredEmployees = filteredEmployees.filter((employee) =>
+        employee.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredStaff = filteredStaff.filter((staff) =>
-        Array.from(statusFilter).includes(staff.status)
+      filteredEmployees = filteredEmployees.filter((employee) =>
+        Array.from(statusFilter).includes(employee.status)
       );
     }
-    return filteredStaff;
-  }, [staffs, filterValue, statusFilter]);
+
+    return filteredEmployees;
+  }, [employees, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -144,40 +135,40 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((staffs, columnKey) => {
-    const cellValue = staffs[columnKey];
+  const renderCell = React.useCallback((employees, columnKey) => {
+    const cellValue = employees[columnKey];
 
     switch (columnKey) {
-      case "role":
-        // {staffs.role ? staffs.role.name : "none"}
-        return <User name={cellValue.name}>{cellValue.name}</User>;
       case "name":
-        return <h3>{staffs.username}</h3>;
+        return <User name={cellValue}>{employees.name}</User>;
       case "email":
-        return <h3>{staffs.email}</h3>;
-      case "lastlogin":
-        return (
-          <h3>
-            {staffs.lastLogin
-              ? new Date(staffs.lastLogin).toLocaleDateString()
-              : ""}
-          </h3>
-        );
+        return <h3>{employees.email ? employees.email : "none"}</h3>;
       case "phone":
-        return <h3>{staffs.phone ? staffs.phone : "no phone"}</h3>;
-      case "address":
-        return <h3>{staffs.address ? staffs.address : "no address"}</h3>;
-      case "gender":
-        return <h3>{staffs.gender ? staffs.gender : "no gender"}</h3>;
-      case "city":
-        return <h3>{staffs.city ? staffs.city : "no city"}</h3>;
+        return <h3>{employees.phone ? employees.phone : "none"}</h3>;
       case "birthdate":
         return (
           <h3>
-            {staffs.birthdate
-              ? new Date(staffs.birthdate).toLocaleDateString()
+            {employees.birthdate
+              ? new Date(employees.birthdate).toLocaleDateString()
               : ""}
           </h3>
+        );
+      case "city":
+        return <h3>{employees.city ? employees.city : "none"}</h3>;
+      case "address":
+        return <h3>{employees.address ? employees.address : "none"}</h3>;
+      case "create":
+        return <h3>{format(new Date(employees.createdAt), "yyyy-MM-dd")}</h3>;
+      case "status":
+        return (
+          <Chip
+            className="capitalize"
+            color={statusColorMap[employees.phone]}
+            size="sm"
+            variant="flat"
+          >
+            {cellValue}
+          </Chip>
         );
       case "actions":
         return (
@@ -191,26 +182,17 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
               <DropdownMenu>
                 <DropdownItem
                   onPress={() => {
-                    navigate(`/admin/user/detail/${staffs._id}`);
+                    navigate(`/admin/employee/detail/${employees.id}`);
                   }}
                 >
                   View
                 </DropdownItem>
                 <DropdownItem
                   onPress={() => {
-                    navigate(`/admin/user/edit/${staffs._id}`);
+                    navigate(`/admin/employee/edit/${employees.id}`);
                   }}
                 >
                   Edit
-                </DropdownItem>
-
-                <DropdownItem
-                  onPress={() => {
-                    setShow(true);
-                    setUserId(staffs._id);
-                  }}
-                >
-                  Password
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -257,13 +239,13 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold">Staffs</h2>
+            <h2 className="text-xl font-bold">Employees</h2>
             <h3 className="text-default-400 text-small ml-4">
-              Total {staffs.length}
+              Total {employees.length}
             </h3>
           </div>
 
-          <div className="flex items-center">
+          <div className="flex">
             <label className="flex items-center text-default-400 text-small">
               Rows per page:
               <select
@@ -299,7 +281,7 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
             {selectedKeys.size > 0 && (
               <button
                 onClick={() => setDeleteBox(true)}
-                className="px-3 py-1 text-white bg-rose-500 rounded-md hover:opacity-75"
+                className="ml-12 px-3 py-1 text-white bg-rose-500 rounded-md hover:opacity-75"
               >
                 Delete
               </button>
@@ -313,7 +295,7 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    staffs.length,
+    employees.length,
     onSearchChange,
     hasSearchFilter,
     selectedKeys,
@@ -357,6 +339,7 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+
   return (
     <>
       <Table
@@ -386,9 +369,9 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No staffs found"} items={sortedItems}>
+        <TableBody emptyContent={"No Employees found"} items={sortedItems}>
           {(item) => (
-            <TableRow key={item._id}>
+            <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
@@ -396,8 +379,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
           )}
         </TableBody>
       </Table>
-      {show && <ChangePassword id={userId} close={closeShowBox} />}
-
       {deleteBox && (
         <DeleteAlert
           cancel={() => {

@@ -107,22 +107,30 @@ export default function LocationList({ locations }) {
         </User>
       ),
       actions: () => (
-        <div className="p-2 flex w-full justify-start cursor-pointer">
-          <Icon
-            icon="prime:eye"
-            className="text-2xl hover:opacity-75"
-            onClick={() => {
-              navigate(`/admin/locations/detail/${location.id}`);
-            }}
-          />
-          <Icon
-            icon="ep:edit"
-            className="text-2xl hover:opacity-75"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/admin/locations/edit/${location.id}`);
-            }}
-          />
+        <div className="relative flex justify-start items-center gap-2">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly size="sm" variant="light">
+                <Icon icon="fluent:grid-dots-28-regular" />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem
+                onPress={() => {
+                  navigate(`/admin/locations/detail/${location.id}`);
+                }}
+              >
+                View
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => {
+                  navigate(`/admin/locations/edit/${location.id}`);
+                }}
+              >
+                Edit
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       ),
     };
