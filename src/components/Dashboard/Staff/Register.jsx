@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-
+import { Button, Input, Progress, Select, SelectItem } from "@nextui-org/react";
 import { FormPostApi } from "../../Api";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
 import { useSelector } from "react-redux";
-
-export default function () {
+ 
+export default function Register() {
   const [name, setname] = useState("");
   const [phone, setphone] = useState("");
   const [email, setemail] = useState("");
@@ -18,6 +18,8 @@ export default function () {
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const [loading, setLoading] = useState(false);
 
@@ -84,219 +86,133 @@ export default function () {
         pauseOnHover
         theme="light"
       />
-      <div className="flex min-h-full w-full flex-col">
-        <div className="mb-3 pb-6 border-b-2 border-b-slate-300 flex justify-between">
-          <h2 className="text-2xl font-bold text-slate-700 ">Create Account</h2>
-          <Link to="/admin/user/all">
-            <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
-              Back
-            </div>
-          </Link>
-        </div>
-        <form
-          onSubmit={registerUser}
-          className=" w-full flex flex-wrap items-center justify-between"
-          action="#"
-          method="POST"
-        >
-          <div className="w-72 my-3">
-            <label
-              htmlFor="name"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-            >
-              Name
-            </label>
-            <div className="mt-2">
-              <input
-                onChange={(e) => setname(e.target.value)}
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="email"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-            >
-              Email address
-            </label>
-            <div className="mt-2">
-              <input
-                onChange={(e) => setemail(e.target.value)}
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                required
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="city"
-              className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600"
-            >
-              Contact Address
-            </label>
-            <div className="mt-2">
-              <input
-                onChange={(e) => setAddress(e.target.value)}
-                id="address"
-                name="address"
-                type="address"
-                required
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="file-upload"
-              className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600"
-            >
-              Image Upload
-            </label>
-            <div className="mt-2">
-              <input
-                id="file-upload"
-                name="file-upload"
-                type="file"
-                required
-                onChange={fileChange}
-                className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="gender"
-              className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600"
-            >
-              Date Of Birth
-            </label>
-            <div className="mt-2">
-              <input
-                onChange={(e) => setBirth(e.target.value)}
-                id="birth"
-                name="birth"
-                type="date"
-                autocomplete="phone"
-                required
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="phone"
-              className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600"
-            >
-              Phone Number
-            </label>
-            <div className="mt-2">
-              <input
-                onChange={(e) => setphone(e.target.value)}
-                id="phone"
-                name="phone"
-                type="number"
-                required
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="gender"
-              className="mb-3 after:ml-0.5block text-lg font-semibold text-slate-600"
-            >
-              Gender
-            </label>
-            <div className="mt-2">
-              <select
-                onChange={(e) => setGender(e.target.value)}
-                id="gender"
-                required
-                name="gender"
-                className=" px-2 block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              >
-                <option disabled value selected>
-                  Select an option
-                </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="city"
-              className="mb-3 after:ml-0.5 block text-lg font-semibold text-slate-600"
-            >
-              City
-            </label>
-            <div className="mt-2">
-              <input
-                onChange={(e) => setCity(e.target.value)}
-                id="city"
-                name="city"
-                type="city"
-                required
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-              >
-                Password
-              </label>
-            </div>
-            <div className="mt-2">
-              <input
-                onChange={(e) => setpassword(e.target.value)}
-                id="password"
-                name="password"
-                type="text"
-                autocomplete="current-password"
-                required
-                className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-        </form>
+      <div className="flex gap-3 my-5">
         <button
+          type="submit"
+          className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           onClick={registerUser}
-          className="w-72 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          {loading && (
-            <MoonLoader
-              color={"#f0f7f6"}
-              loading={loading}
-              size={15}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-              className="mx-4"
-            />
-          )}
-          Create User
+          Save
         </button>
+        <Link to="/admin/user/all">
+          <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
+            Discard
+          </button>
+        </Link>
+      </div>
+      <div className="container mt-2">
+        <h2 className="lg:text-xl font-bold my-2">Staff Edit</h2>
+        <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          {isLoading && (
+            <Progress size="sm" isIndeterminate aria-label="Loading..." />
+          )}
+          <form className="flex justify-between gap-10 p-5">
+            <div className="flex flex-wrap gap-8">
+       
+              <div className="w-60">
+                <Input
+                  type="text"
+                  label="Name"
+                  name="name"
+                  value={name}
+                  // color={isInvalid ? "danger" : "success"}
+                  // errorMessage={isInvalid && "Please enter a valid email"}
+                  onChange={(e) => setname(e.target.value)}
+                  placeholder="Enter Staff name..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="email"
+                  label="Email"
+                  value={email}
+                  onChange={(e) => setemail(e.target.value)}
+                  placeholder="Enter Email..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="address"
+                  label="Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Enter Address..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <span className="text-sm">Date of Birth</span>
+                <Input
+                  type="date"
+                  name="dob"
+                  labelPlacement="outside"
+                  onChange={(e) => setBirth(e.target.value)}
+                  value={
+                    birth
+                      ? new Date(birth).toISOString().split("T")[0]
+                      : ""
+                  }
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="phone"
+                  label="Phone"
+                  value={phone}
+                  onChange={(e) => setphone(e.target.value)}
+                  placeholder="Enter Phone..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="city"
+                  label="City"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="Enter City..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="mt-1">
+                <div className="w-60">
+                  <Select
+                    labelPlacement="outside"
+                    label="Gender"
+                    name="gender"
+                    placeholder="Select Gender"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    className="max-w-xs"
+                  >
+                    {/* Replace dynamic data with fixed options */}
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other"></SelectItem>
+
+                  </Select>
+                </div>
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="password"
+                  label="Password"
+                  value={password}
+                  onChange={(e) => setpassword(e.target.value)}
+                  placeholder="Enter Password..."
+                  labelPlacement="outside"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
