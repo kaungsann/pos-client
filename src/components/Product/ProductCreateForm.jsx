@@ -93,17 +93,15 @@ export default function ProductCreateForm() {
         formData.append(key, updateProduct[key]);
       }
 
+      console.log("form data is", formData);
+
       try {
-        const { data } = await axios.post(
-          BASE_URL + `/product`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token.accessToken}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const { data } = await axios.post(BASE_URL + `/product`, formData, {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
         if (!data.status) {
           if (data?.message == "Token Expire , Please Login Again") {
@@ -140,7 +138,6 @@ export default function ProductCreateForm() {
       reader.readAsDataURL(selectedFile);
     }
   };
-
   useEffect(() => {
     const fetchCategories = async () => {
       const { data } = await axios.get(BASE_URL + `/category`, {
@@ -152,7 +149,9 @@ export default function ProductCreateForm() {
       if (data?.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
-      setCatgs(data.data);
+      const filteredCategory = data.data.filter((ct) => ct.active === true);
+
+      setCatgs(filteredCategory);
     };
 
     const fetchData = async () => {
@@ -303,7 +302,7 @@ export default function ProductCreateForm() {
                   labelPlacement="outside"
                   endContent={
                     <button
-                    type="button"
+                      type="button"
                       onClick={(e) => {
                         e.preventDefault();
                         generateBarCode();

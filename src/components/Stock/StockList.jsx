@@ -89,7 +89,7 @@ export default function StockList({ stocks }) {
           <h3>{stock.location.name}</h3>
         </>
       ),
-      onHand: () => (
+      onhand: () => (
         <>
           <h3>{stock.onHand}</h3>
         </>

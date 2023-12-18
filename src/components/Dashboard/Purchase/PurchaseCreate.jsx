@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
 import { removeData } from "../../../redux/actions";
 import { Input, Select, SelectItem } from "@nextui-org/react";
+
 import {
   Table,
   TableHeader,
@@ -15,7 +16,7 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  getKeyValue,
+  Divider,
 } from "@nextui-org/react";
 
 export default function SaleOrderCreate() {
@@ -55,92 +56,6 @@ export default function SaleOrderCreate() {
   const userData = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
-
-  const columns = [
-    {
-      key: "image",
-      label: "Image",
-      align: "center",
-      render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.product && line.product.image ? (
-            <img
-              src={line.product.image}
-              alt={line.product.name}
-              className="w-10 h-10 rounded-md shadow-md mx-auto"
-            />
-          ) : (
-            <div>No Image</div>
-          )}
-        </TableCell>
-      ),
-    },
-    {
-      key: "name",
-      label: "Name",
-      align: "center",
-      render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.product.name}
-        </TableCell>
-      ),
-    },
-    {
-      key: "tax",
-      label: "Tax",
-      align: "center",
-      render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.tax.toFixed(2)}
-        </TableCell>
-      ),
-    },
-    {
-      key: "qty",
-      label: "Stock Qty",
-      align: "center",
-      render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.qty}
-        </TableCell>
-      ),
-    },
-    {
-      key: "unitPrice",
-      label: "Unit Price",
-      align: "center",
-      render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.unitPrice}
-        </TableCell>
-      ),
-    },
-    {
-      key: "subTotal",
-      label: "Subtotal",
-      align: "center",
-      render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.subTotal}
-        </TableCell>
-      ),
-    },
-    {
-      key: "delete",
-      label: "Delete",
-      align: "center",
-      render: (line, removeProduct) => (
-        <TableCell align="center" className="table-cell">
-          <div className="text-center flex justify-center">
-            <BsTrash
-              className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
-              onClick={() => removeProduct(line.product.id)}
-            />
-          </div>
-        </TableCell>
-      ),
-    },
-  ];
 
   const createProductApi = async () => {
     if (saleOrderLines.length == 0) {
@@ -198,7 +113,7 @@ export default function SaleOrderCreate() {
     };
     try {
       let resData = await sendJsonToApi("/purchase", data, token.accessToken);
-      console.log("data is", resData);
+      console.log("data is puruchse ius a", resData);
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
@@ -294,6 +209,8 @@ export default function SaleOrderCreate() {
     getProduct();
   }, [saleOrderLines]);
 
+  let count = 0;
+
   return (
     <>
       <ToastContainer
@@ -324,327 +241,6 @@ export default function SaleOrderCreate() {
           </button>
         </Link>
       </div>
-
-      {/* <div className="mt-2">
-        <div className="w-full mx-auto flex justify-center cursor-pointer flex-col">
-          <h2 className="py-1.5 text-lg font-bold mt-2 bg-blue-600 text-white pl-4">
-            Create Purchase Order
-          </h2>
-        </div>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-wrap justify-between"
-        >
-          <div className="flex mt-8">
-            <label
-              className={`text-md font-semibold ${
-                showErrorPayment ? "text-red-600" : "border-slate-400"
-              }`}
-            >
-              Payment :
-            </label>
-            <select
-              id="payment"
-              style={{ backgroundColor: "transparent" }}
-              className={`border-b ml-3 outline-none w-36 ${
-                showErrorPayment ? "border-red-600" : "border-slate-400"
-              }`}
-              value={payment}
-              onChange={(e) => setPayment(e.target.value)}
-            >
-              <option value="default">Select an option</option>
-              <option value="BANK" className="py-2">
-                BANK
-              </option>
-              <option value="CASH" className="py-2">
-                CASH
-              </option>
-            </select>
-          </div>
-
-          <div className="flex mt-8">
-            <label
-              className={`text-md font-semibold ${
-                showErrorDate ? "text-red-600" : "border-slate-400"
-              }`}
-            >
-              Order Date :
-            </label>
-            <input
-              type="date"
-              style={{ backgroundColor: "transparent" }}
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className={`border-b ml-3 outline-none w-36 ${
-                showErrorDate ? "border-red-600" : "border-slate-400"
-              }`}
-              placeholder="Enter note"
-            />
-          </div>
-
-          <div className="flex mt-8">
-            <label
-              className={`text-md font-semibold ${
-                showErrorPartner ? "text-red-600" : ""
-              }`}
-            >
-              Partner :
-            </label>
-            <select
-              required
-              style={{ backgroundColor: "transparent" }}
-              id="ptid"
-              onChange={(e) => setPartner(e.target.value)}
-              className={`border-b ml-3 outline-none w-36 ${
-                showErrorPartner ? "border-red-600" : "border-slate-400"
-              }`}
-            >
-              <option disabled value selected>
-                Select an option
-              </option>
-              {part.length > 0 &&
-                part.map((pt) => (
-                  <option
-                    key={pt.id}
-                    value={pt.id}
-                    className="hover:bg-cyan-300 hover:font-bold"
-                  >
-                    {pt.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-
-          <div className="flex mt-8">
-            <label
-              className={`text-md font-semibold ${
-                showErrorLocation ? "text-red-600" : ""
-              }`}
-            >
-              Location :
-            </label>
-            <select
-              required
-              id="locid"
-              style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setLoca(e.target.value)}
-              className={`border-b ml-3 outline-none w-36 ${
-                showErrorLocation ? "border-red-600" : "border-slate-400"
-              }`}
-            >
-              <option disabled value selected>
-                Select an option
-              </option>
-              {location.length > 0 &&
-                location.map((ct) => (
-                  <option
-                    key={ct.id}
-                    value={ct.id}
-                    className="hover:bg-cyan-300 hover:font-bold"
-                  >
-                    {ct.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-
-          <div className="flex mt-8">
-            <label
-              className={`text-md font-semibold ${
-                showErrorState ? "text-red-600" : ""
-              }`}
-            >
-              State:
-            </label>
-
-            <select
-              id="payment"
-              style={{ backgroundColor: "transparent" }}
-              className={`border-b ml-3 outline-none w-36 ${
-                showErrorState ? "border-red-600" : "border-slate-400"
-              }`}
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-            >
-              <option value="default">Select an option</option>
-              <option value="pending" className="py-2" selected>
-                Pending
-              </option>
-           
-            </select>
-          </div>
-
-          <div className="flex mt-8">
-            <label
-              className={`text-md font-semibold ${
-                showErrorNote ? "text-red-600" : ""
-              }`}
-            >
-              Note :
-            </label>
-            <input
-              type="text"
-              value={note}
-              style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setNote(e.target.value)}
-              className={`border-b ml-3 outline-none w-36 ${
-                showErrorNote ? "border-red-600" : "border-slate-400"
-              }`}
-              placeholder="Enter note"
-            />
-          </div>
-        </form>
-      </div>
-      <div className="mt-10">
-        <div className="flex justify-between">
-          <h2 className="lg:text-2xl font-semibold">Add Items</h2>
-          <button
-            onClick={handleAddProduct}
-            className="px-8 py-2 text-white font-bold rounded-md shadow-md ml-6 border-2 border-blue-500 bg-blue-600 hover:opacity-75"
-          >
-            Add
-          </button>
-        </div>
-
-        <form onSubmit={handleAddProduct} className="flex mt-8 justify-between">
-          <div>
-            <label
-              className={`text-md font-semibold ${
-                showErrorProduct ? "text-red-600" : ""
-              }`}
-            >
-              Product:
-            </label>
-            <select
-              required
-              id="pdId"
-              style={{ backgroundColor: "transparent" }}
-              value={pd}
-              onChange={(e) => {
-                setPd(e.target.value);
-                const selectedProduct = product.find(
-                  (pt) => pt.id === e.target.value
-                );
-                if (selectedProduct) {
-                  setUnitPrice(selectedProduct.purchasePrice);
-                  setQuantity(1);
-                  setTax(selectedProduct.tax);
-                  setItem(selectedProduct);
-                }
-              }}
-              className={`border-b ml-3 outline-none w-36 ${
-                showErrorProduct ? "border-red-600" : "border-slate-400"
-              }`}
-            >
-              <option value="default">Select an products</option>
-              {product.length > 0 &&
-                product.map((pt) => (
-                  <option
-                    key={pt.id}
-                    value={pt.id}
-                    className="hover:bg-cyan-300 hover:font-bold"
-                  >
-                    {pt.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div>
-            <label
-              className={`text-md font-semibold ${
-                showErrorQuantity ? "text-red-600" : ""
-              }`}
-            >
-              Quantity:
-            </label>
-            <input
-              type="number"
-              value={quantity}
-              style={{ backgroundColor: "transparent" }}
-              className={`border-b ml-3 outline-none w-36 ${
-                showErrorQuantity ? "border-red-600" : "border-slate-400"
-              }`}
-              onChange={(e) => {
-                setQuantity(e.target.value);
-              }}
-            />
-          </div>
-          <div>
-            <label className="text-md font-semibold">Tax %: </label>
-            <input
-              type="number"
-              value={(Tax * quantity) / 100}
-              style={{ backgroundColor: "transparent" }}
-              className="ms-2 border-b border-slate-400 outline-none w-36"
-            />
-          </div>
-          <div>
-            <label className="text-md font-semibold">Unit Price:</label>
-            <input
-              type="number"
-              value={unitPrice}
-              style={{ backgroundColor: "transparent" }}
-              className="ms-2 border-b border-slate-400 outline-none w-36"
-            />
-          </div>
-          <div>
-            <label className="text-md font-semibold">SubTotal: </label>
-            <input
-              type="number"
-              style={{ backgroundColor: "transparent" }}
-              value={unitPrice * quantity}
-              className="ms-2 border-b border-slate-400 outline-none w-36"
-            />
-          </div>
-        </form>
-      </div>
-      <table className="w-full mt-8">
-        <thead>
-          <tr className="bg-blue-600 text-white">
-            <th className="lg:px-4 py-2 text-center">Photo</th>
-            <th className="lg:px-4 py-2 text-center">Tax %</th>
-            <th className="lg:px-4 py-2 text-center">Quantity</th>
-            <th className="lg:px-4 py-2 text-center">Unit Price</th>
-            <th className="lg:px-4 py-2 text-center">SubTotal</th>
-            <th className="lg:px-4 py-2 text-center">Remove</th>
-          </tr>
-        </thead>
-
-        <tbody className="w-full space-y-10 bg-slate-300">
-          {saleOrderLines.map((line) => (
-            <tr
-              key={line.id}
-              className="odd:bg-white even:bg-slate-200 space-y-10  mb-8 w-full items-center cursor-pointer"
-            >
-              <td className="lg:px-4 py-2 text-center">{line.product.name}</td>
-              <td className="lg:px-4 py-2 text-center">{line.tax.toFixed(2)}</td>
-              <td className="lg:px-4 py-2 text-center">{line.qty}</td>
-              <td className="lg:px-4 py-2 text-center">{line.unitPrice}</td>
-              <td className="lg:px-4 py-2 text-center">{line.subTotal}</td>
-              <td className="lg:px-4 py-2">
-                <div className="text-center flex justify-center">
-                  <BsTrash
-                    className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
-                    onClick={() => removeProduct(line.product.id)}
-                  />
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="flex flex-col">
-        <div className="flex mt-8 justify-self-end">
-          <h1 className="text-lg font-semibold">
-            TaxTotal : <span>{totalTax.toFixed(2) ?? 0}</span>
-          </h1>
-        </div>
-        <div className="flex mt-4 justify-self-end">
-          <h1 className="text-lg font-semibold">
-            Total : <span>{totalCost.toFixed(2) ?? 0}</span>
-          </h1>
-        </div>
-      </div> */}
 
       <div className="container mt-2">
         <h2 className="lg:text-xl font-bold my-2">Create Purchase Order</h2>
@@ -721,11 +317,14 @@ export default function SaleOrderCreate() {
                   name="state"
                   value={state}
                   placeholder="State"
+                  defaultSelectedKeys={["pending"]}
                   onChange={(e) => setState(e.target.value)}
                   className="max-w-xs"
                 >
                   {/* Replace dynamic data with fixed options */}
-                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem defaultSelectedKeys value="pending" key="pending">
+                    Pending
+                  </SelectItem>
                 </Select>
               </div>
               <div className="w-60">
@@ -742,17 +341,18 @@ export default function SaleOrderCreate() {
                 />
               </div>
             </div>
-            <span>Order Products</span>
-            <button
-              onClick={handleAddProduct}
-              className="px-8 py-2 text-white font-bold rounded-md shadow-md ml-6 border-2 border-blue-500 bg-blue-600 hover:opacity-75"
-            >
-              Add
-            </button>
-            <form
-              onSubmit={handleAddProduct}
-              className="flex mt-8 justify-between"
-            >
+            <Divider />
+            <div className="flex items-center w-full justify-between">
+              <h3 className="text-lg font-semibold">Order Products</h3>
+              <button
+                onClick={handleAddProduct}
+                className="px-8 py-2 text-white font-bold rounded-md shadow-md ml-6 border-2 border-blue-500 bg-blue-600 hover:opacity-75"
+              >
+                Add
+              </button>
+            </div>
+
+            <form onSubmit={handleAddProduct} className="flex justify-between">
               <div className="flex flex-wrap gap-8">
                 <div className="w-60">
                   <Select
@@ -820,34 +420,34 @@ export default function SaleOrderCreate() {
               </div>
             </form>
             <div className="w-full mb-6">
-              <Table
-                isStriped
-                aria-label="Order Lines Table"
-                className="my-custom-table"
-              >
-                <TableHeader columns={columns}>
-                  {(column) => (
-                    <TableColumn
-                      key={column.key}
-                      align={column.align}
-                      className="header-cell bg-blue-500 text-white"
-                    >
-                      {column.label}
-                    </TableColumn>
-                  )}
+              <Table removeWrapper aria-label="Example static collection table">
+                <TableHeader className="header-cell bg-blue-500 text-white">
+                  <TableColumn>Name</TableColumn>
+                  <TableColumn>Barcode</TableColumn>
+                  <TableColumn>Tax</TableColumn>
+                  <TableColumn>Stock QTY</TableColumn>
+                  <TableColumn>Unit Price</TableColumn>
+                  <TableColumn>SubTotal</TableColumn>
+                  <TableColumn>Delete</TableColumn>
                 </TableHeader>
-                <TableBody items={saleOrderLines || []}>
-                  {(line) => (
-                    <TableRow key={line._d} className="table-row">
-                      {columns.map((column) => (
-                        <React.Fragment key={column.key}>
-                          {column.render
-                            ? column.render(line, removeProduct)
-                            : null}
-                        </React.Fragment>
-                      ))}
+                <TableBody>
+                  {saleOrderLines.map((line) => (
+                    <TableRow key={count + 1}>
+                      <TableCell>{line.product.name}</TableCell>
+                      <TableCell>{line.product.barcode}</TableCell>
+                      <TableCell>{line.tax.toFixed(2)}</TableCell>
+                      <TableCell>{line.qty}</TableCell>
+                      <TableCell>{line.unitPrice}</TableCell>
+                      <TableCell>{line.subTotal}</TableCell>
+
+                      <TableCell>
+                        <BsTrash
+                          className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
+                          onClick={() => removeProduct(line.product.id)}
+                        />
+                      </TableCell>
                     </TableRow>
-                  )}
+                  ))}
                 </TableBody>
               </Table>
             </div>

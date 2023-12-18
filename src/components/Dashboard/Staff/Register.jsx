@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
 import { useSelector } from "react-redux";
- 
+
 export default function Register() {
   const [name, setname] = useState("");
   const [phone, setphone] = useState("");
@@ -19,7 +19,6 @@ export default function Register() {
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
 
   const [loading, setLoading] = useState(false);
 
@@ -108,7 +107,6 @@ export default function Register() {
           )}
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
-       
               <div className="w-60">
                 <Input
                   type="text"
@@ -152,9 +150,7 @@ export default function Register() {
                   labelPlacement="outside"
                   onChange={(e) => setBirth(e.target.value)}
                   value={
-                    birth
-                      ? new Date(birth).toISOString().split("T")[0]
-                      : ""
+                    birth ? new Date(birth).toISOString().split("T")[0] : ""
                   }
                 />
               </div>
@@ -195,7 +191,6 @@ export default function Register() {
                     <SelectItem value="male">Male</SelectItem>
                     <SelectItem value="female">Female</SelectItem>
                     <SelectItem value="other"></SelectItem>
-
                   </Select>
                 </div>
               </div>

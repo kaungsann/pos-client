@@ -20,7 +20,6 @@ export default function PartnerTemplate() {
     phone: "",
     address: "",
     city: "",
-    isCustomer: null,
   });
 
   const token = useSelector((state) => state.IduniqueData);
@@ -61,7 +60,7 @@ export default function PartnerTemplate() {
   const filteredPartners = useMemo(
     () =>
       partner.filter((customer) => {
-        const { name, phone, address, city, isCustomer } = filteredKeywords;
+        const { name, phone, address, city } = filteredKeywords;
 
         const isName = () => {
           if (!name) {
@@ -102,16 +101,15 @@ export default function PartnerTemplate() {
             return true;
           }
 
-          if (customer.isCustomer) {
+          if (customer.city) {
             return customer.city.toLowerCase().includes(city.toLowerCase());
           }
-          return false;
         };
-        const customerValid = () => {};
 
         return (
           customer.name.toLowerCase().includes(name.toLowerCase()) &&
           isName() &&
+          isCustomerValid() &&
           isPhone() &&
           isAddress() &&
           isCity()
@@ -119,6 +117,8 @@ export default function PartnerTemplate() {
       }),
     [partner, filteredKeywords]
   );
+
+  console.log("filter partner is a ", filteredPartners);
   return (
     <>
       <div className="flex justify-between items-center my-3">

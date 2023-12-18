@@ -7,6 +7,9 @@ import SearchBox from "./SearchBox";
 import ExcelExportButton from "../ExcelExportButton";
 import ExcelImportButton from "../ExcelImportButton";
 import PartnerList from "./PartnerList";
+import { Button } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
+import FilterBox from "../Dashboard/Partner/FilterBox";
 
 export default function AdjustmentTemplate() {
   const [partners, setPartners] = useState([]);
@@ -19,6 +22,7 @@ export default function AdjustmentTemplate() {
     isCompany: null,
   });
   const token = useSelector((state) => state.IduniqueData);
+  const navigate = useNavigate();
 
   const PARTNER_API = {
     INDEX: BASE_URL + "/partner",
@@ -54,14 +58,13 @@ export default function AdjustmentTemplate() {
   const filteredPartners = useMemo(
     () =>
       partners.filter((partner) => {
-        const { name, address, city, phone } =
-          filteredKeywords;
+        const { name, address, city, phone } = filteredKeywords;
 
         return (
           partner.name.toLowerCase().includes(name.toLowerCase()) &&
           partner.address.toLowerCase().includes(address.toLowerCase()) &&
-          partner.city.toLowerCase().includes(city.toLowerCase()) &&
-          partner.phone.toLowerCase().includes(phone.toLowerCase())
+          partner.city?.toLowerCase().includes(city.toLowerCase()) &&
+          partner.phone?.includes(phone)
         );
       }),
     [partners, filteredKeywords]
@@ -76,6 +79,15 @@ export default function AdjustmentTemplate() {
         />
 
         <div className="flex">
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/partners/create")}
+            className="font-bold rounded-sm shadow-sm flex bg-zinc-50 items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          >
+            Add
+          </Button>
+          <FilterBox onFilter={handleFilterChange} />
+
           <div className="mx-3">
             <ExcelExportButton
               token={token.accessToken}

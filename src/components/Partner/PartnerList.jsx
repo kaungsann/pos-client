@@ -117,14 +117,30 @@ export default function PartnerList({ partners }) {
       isCustomer: () => <h1>{partner.isCustomer ? "Yes" : "No"}</h1>,
       isCompany: () => <h1>{partner.isCompany ? "Yes" : "No"}</h1>,
       actions: () => (
-        <div className="p-2 flex w-full justify-start cursor-pointer">
-          <Icon
-            icon="prime:eye"
-            className="text-2xl hover:opacity-75"
-            onClick={() => {
-              navigate(`/admin/partners/detail/${partner.id}`);
-            }}
-          />
+        <div className="relative flex justify-start items-center gap-2">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly size="sm" variant="light">
+                <Icon icon="fluent:grid-dots-28-regular" />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem
+                onPress={() => {
+                  navigate(`/admin/partners/detail/${partner.id}`);
+                }}
+              >
+                View
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => {
+                  navigate(`/admin/partners/edit/${partner.id}`);
+                }}
+              >
+                Edit
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       ),
     };
@@ -229,7 +245,7 @@ export default function PartnerList({ partners }) {
     );
   }, [selectedKeys, totalItems, page, isLastPage, isFirstPage, totalPages]);
 
-  console.log("Hello",sortedItems);
+  console.log("Hello", sortedItems);
 
   return (
     <>

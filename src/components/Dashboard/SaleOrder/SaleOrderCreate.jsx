@@ -8,10 +8,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
 import { Input, Select, SelectItem } from "@nextui-org/react";
 import { removeData } from "../../../redux/actions";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react";
+import BoxImg from "../../../assets/box.png";
 
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Divider,
+} from "@nextui-org/react";
 
 export default function SaleOrderCreate() {
+  let count = 0;
   const [product, setProduct] = useState([]);
   const [location, setLocation] = useState([]);
   const [part, setPart] = useState([]);
@@ -22,7 +32,7 @@ export default function SaleOrderCreate() {
 
   const [payment, setPayment] = useState(null);
   const [item, setItem] = useState(null);
-  
+
   const handleDropdownItemClick = (key) => {
     setShowErrorPayment(false); // Reset error state on change
     setSelectedOption(key);
@@ -54,77 +64,10 @@ export default function SaleOrderCreate() {
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const columns = [
-    {
-      key: "image", label: "Image", align: "center", render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.product && line.product.image ? (
-            <img
-              src={line.product.image}
-              alt={line.product.name}
-              className="w-10 h-10 rounded-md shadow-md mx-auto"
-            />
-          ) : (
-            <div>No Image</div>
-          )}
-        </TableCell>
-      )
-    },
-    {
-      key: "name", label: "Name", align: "center", render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.product.name}
-        </TableCell>
-      )
-    },
-    {
-      key: "tax", label: "Tax", align: "center", render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.tax.toFixed(2)}
-        </TableCell>
-      )
-    },
-    {
-      key: "qty", label: "Stock Qty", align: "center", render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.qty}
-        </TableCell>
-      )
-    },
-    {
-      key: "unitPrice", label: "Unit Price", align: "center", render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.unitPrice}
-        </TableCell>
-      )
-    },
-    {
-      key: "subTotal", label: "Subtotal", align: "center", render: (line) => (
-        <TableCell align="center" className="table-cell">
-          {line.subTotal}
-        </TableCell>
-      )
-    },
-    {
-      key: "delete", label: "Delete", align: "center", render: (line, removeProduct) => (
-        <TableCell align="center" className="table-cell">
-          <div className="text-center flex justify-center">
-            <BsTrash
-              className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
-              onClick={() => removeProduct(line.product.id)}
-            />
-          </div>
-        </TableCell>
-      )
-    },
-  ];
-
-
-
   const createProductApi = async () => {
     if (saleOrderLines.length == 0) {
-      toast("you need to selecte the product")
-      return
+      toast("you need to selecte the product");
+      return;
     }
     if (date === "") {
       setShowErrorDate(true);
@@ -274,7 +217,6 @@ export default function SaleOrderCreate() {
     getProduct();
   }, [saleOrderLines]);
 
-
   return (
     <>
       <ToastContainer
@@ -373,20 +315,22 @@ export default function SaleOrderCreate() {
                   ))}
                 </Select>
               </div>
-              <div className="w-60">
+              {/* <div className="w-60">
                 <Select
                   labelPlacement="outside"
                   label="State"
                   name="state"
                   value={state}
                   placeholder="State"
+                  defaultSelectedKeys={["pending"]}
                   onChange={(e) => setState(e.target.value)}
                   className="max-w-xs"
                 >
-                  {/* Replace dynamic data with fixed options */}
-                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="pending" key="pending">
+                    Pending
+                  </SelectItem>
                 </Select>
-              </div>
+              </div> */}
               <div className="w-60">
                 <Input
                   type="text"
@@ -401,102 +345,113 @@ export default function SaleOrderCreate() {
                 />
               </div>
             </div>
-            <span>Order Products</span>
-            <button
-              onClick={handleAddProduct}
-              className="px-8 py-2 text-white font-bold rounded-md shadow-md ml-6 border-2 border-blue-500 bg-blue-600 hover:opacity-75"
-            >
-              Add
-            </button>
-            <form onSubmit={handleAddProduct} className="flex mt-8 justify-between">
-            <div className="flex flex-wrap gap-8">
-              <div className="w-60">
-                <Select
-                  labelPlacement="outside"
-                  label="Product"
-                  name="product"
-                  value={pd}
-                  placeholder="Select Product"
-                  
-                  onChange={(e) => {
-                    setPd(e.target.value);
-                    const selectedProduct = product.find(
-                      (pt) => pt.id === e.target.value
-                    );
-                    if (selectedProduct) {
-                      setUnitPrice(selectedProduct.salePrice);
-                      setQuantity(1);
-                      setTax(selectedProduct.tax);
-                      setItem(selectedProduct);
-                    }
-                  }}
-                  className="max-w-xs"
-                >
-                  {product.map((pt) => (
-                    <SelectItem key={pt.id} value={pt.id}>
-                      {pt.name}
-                    </SelectItem>
-                  ))}
-                </Select>
-              </div>
-              <div className="w-60">
-                <Input
-                  type="number"
-                  label="Qty"
-                  name="qty"
-                  value={quantity}
-                  onChange={(e) => {
-                    setQuantity(e.target.value);
-                  }}
-                  placeholder="Enter Qty..."
-                  labelPlacement="outside"
-                />
-              </div>
-              <div className="w-60">
-                <Input
-                  type="number"
-                  label="Tax"
-                  name="tax"
-                  value={(Tax * quantity) / 100}
-                  onChange={(e) => setTax(e.target.value)}
 
-                  placeholder="Tax"
-                  labelPlacement="outside"
-                />
-              </div>
-              <div className="w-60">
-                <Input
-                  type="number"
-                  label="SubTotal"
-                  name="subTotal"
-                  value={unitPrice * quantity}
-                    onChange={(e) => setTotalCost(e.target.value)}
-
-                  placeholder="SubTotal"
-                  labelPlacement="outside"
-                />
-              </div>
+            <Divider />
+            <div className="flex items-center w-full justify-between">
+              <h3 className="text-lg font-semibold">Order Products</h3>
+              <button
+                onClick={handleAddProduct}
+                className="px-8 py-2 text-white font-bold rounded-md shadow-md ml-6 border-2 border-blue-500 bg-blue-600 hover:opacity-75"
+              >
+                Add
+              </button>
             </div>
+
+            <form onSubmit={handleAddProduct} className="flex justify-between">
+              <div className="flex flex-wrap gap-8">
+                <div className="w-60">
+                  <Select
+                    labelPlacement="outside"
+                    label="Product"
+                    name="product"
+                    value={pd}
+                    placeholder="Select Product"
+                    onChange={(e) => {
+                      setPd(e.target.value);
+                      const selectedProduct = product.find(
+                        (pt) => pt.id === e.target.value
+                      );
+                      if (selectedProduct) {
+                        setUnitPrice(selectedProduct.salePrice);
+                        setQuantity(1);
+                        setTax(selectedProduct.tax);
+                        setItem(selectedProduct);
+                      }
+                    }}
+                    className="max-w-xs"
+                  >
+                    {product.map((pt) => (
+                      <SelectItem key={pt.id} value={pt.id}>
+                        {pt.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
+                <div className="w-60">
+                  <Input
+                    type="number"
+                    label="Qty"
+                    name="qty"
+                    value={quantity}
+                    onChange={(e) => {
+                      setQuantity(e.target.value);
+                    }}
+                    placeholder="Enter Qty..."
+                    labelPlacement="outside"
+                  />
+                </div>
+                <div className="w-60">
+                  <Input
+                    type="number"
+                    label="Tax"
+                    name="tax"
+                    value={(Tax * quantity) / 100}
+                    onChange={(e) => setTax(e.target.value)}
+                    placeholder="Tax"
+                    labelPlacement="outside"
+                  />
+                </div>
+                <div className="w-60">
+                  <Input
+                    type="number"
+                    label="SubTotal"
+                    name="subTotal"
+                    value={unitPrice * quantity}
+                    onChange={(e) => setTotalCost(e.target.value)}
+                    placeholder="SubTotal"
+                    labelPlacement="outside"
+                  />
+                </div>
+              </div>
             </form>
             <div className="w-full mb-6">
-              <Table isStriped aria-label="Order Lines Table" className="my-custom-table">
-                <TableHeader columns={columns}>
-                  {(column) => (
-                    <TableColumn key={column.key} align={column.align} className="header-cell bg-blue-500 text-white">
-                      {column.label}
-                    </TableColumn>
-                  )}
+              <Table removeWrapper aria-label="Example static collection table">
+                <TableHeader className="header-cell bg-blue-500 text-white">
+                  <TableColumn>Name</TableColumn>
+                  <TableColumn>Barcode</TableColumn>
+                  <TableColumn>Tax</TableColumn>
+                  <TableColumn>Stock QTY</TableColumn>
+                  <TableColumn>Unit Price</TableColumn>
+                  <TableColumn>SubTotal</TableColumn>
+                  <TableColumn>Delete</TableColumn>
                 </TableHeader>
-                <TableBody items={saleOrderLines || []}>
-                  {(line) => (
-                    <TableRow key={line._d} className="table-row">
-                      {columns.map((column) => (
-                        <React.Fragment key={column.key}>
-                          {column.render ? column.render(line, removeProduct) : null}
-                        </React.Fragment>
-                      ))}
+                <TableBody>
+                  {saleOrderLines.map((line) => (
+                    <TableRow key={count + 1}>
+                      <TableCell>{line.product.name}</TableCell>
+                      <TableCell>{line.product.barcode}</TableCell>
+                      <TableCell>{line.tax.toFixed(2)}</TableCell>
+                      <TableCell>{line.qty}</TableCell>
+                      <TableCell>{line.unitPrice}</TableCell>
+                      <TableCell>{line.subTotal}</TableCell>
+                      <TableCell>
+                        <BsTrash
+                          className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
+                          onClick={() => removeProduct(line.product.id)}
+                        />
+                      </TableCell>
                     </TableRow>
-                  )}
+                  ))}
                 </TableBody>
               </Table>
             </div>
@@ -512,7 +467,6 @@ export default function SaleOrderCreate() {
                 </h1>
               </div>
             </div>
-
           </div>
         </div>
       </div>

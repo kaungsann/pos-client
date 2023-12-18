@@ -37,12 +37,11 @@ export default function PartnerDetail() {
       <div className="flex justify-between">
         <div>
           <Link
-            to="/admin/products/all"
+            to="/admin/partners/all"
             className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
           >
             Back
           </Link>
-
         </div>
       </div>
 
@@ -51,11 +50,8 @@ export default function PartnerDetail() {
           <h2 className="lg:text-xl font-bold my-2">Partner Information</h2>
           <div className="container bg-white p-5 rounded-lg max-w-6xl ">
             <div className="flex">
-
               <div className="ml-auto">
-                <Link
-                  to={`/admin/partners/edit/${id}`}
-                >
+                <Link to={`/admin/partners/edit/${id}`}>
                   <Icon icon="ep:edit" className="text-xl" />
                 </Link>
               </div>
@@ -77,8 +73,11 @@ export default function PartnerDetail() {
                 <div className="flex justify-between items-center">
                   <h4>City </h4>
                   <h3 className="font-medium">
-                    {detail[0].city ? detail[0].city :
-                      <span className="text-red-500">NIL</span>}
+                    {detail[0].city ? (
+                      detail[0].city
+                    ) : (
+                      <span className="text-red-500">NIL</span>
+                    )}
                   </h3>
                 </div>
               </div>
@@ -86,21 +85,31 @@ export default function PartnerDetail() {
                 <div className="flex justify-between items-center">
                   <h4>Address</h4>
                   <h3 className="font-medium">
-                    {detail[0].address
-                      ? detail[0].address
-                      : <span className="text-red-500">NIL</span>}
+                    {detail[0].address ? (
+                      detail[0].address
+                    ) : (
+                      <span className="text-red-500">NIL</span>
+                    )}
                   </h3>
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>Is Company</h4>
-                  <h3 className={`font-medium ${detail[0].isCompany ? 'text-green-500' : 'text-red-500'}`}>
-                    {detail[0].isCompany ? 'YES' : 'NO'}
+                  <h3
+                    className={`font-medium ${
+                      detail[0].isCompany ? "text-green-500" : "text-red-500"
+                    }`}
+                  >
+                    {detail[0].isCompany ? "YES" : "NO"}
                   </h3>
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>Is Customer</h4>
-                  <h3 className={`font-medium ${detail[0].isCustomer ? 'text-green-500' : 'text-red-500'}`}>
-                    {detail[0].isCustomer ? 'YES' : 'NO'}
+                  <h3
+                    className={`font-medium ${
+                      detail[0].isCustomer ? "text-green-500" : "text-red-500"
+                    }`}
+                  >
+                    {detail[0].isCustomer ? "YES" : "NO"}
                   </h3>
                 </div>
               </div>

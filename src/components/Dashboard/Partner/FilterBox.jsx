@@ -19,7 +19,6 @@ const FilterBox = ({ onFilter }) => {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState(0);
   const [city, setCity] = useState("");
-  const [customer, setCustomer] = useState(false);
 
   const [isFilterActive, setIsFilterActive] = useState(false);
 
@@ -80,20 +79,6 @@ const FilterBox = ({ onFilter }) => {
                     onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
-
-                <Select
-                  label="Gender"
-                  placeholder="Select a gender"
-                  labelPlacement="outside"
-                  onChange={(e) => setGender(e.target.value)}
-                >
-                  <SelectItem value="male" key="male">
-                    Customer
-                  </SelectItem>
-                  <SelectItem value="female" key="female">
-                    Vendor
-                  </SelectItem>
-                </Select>
 
                 <div className="flex justify-between">
                   <Input
