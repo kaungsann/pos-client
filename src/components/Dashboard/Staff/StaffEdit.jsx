@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FormPathApi, getApi } from "../../Api";
@@ -7,6 +7,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ChangePassword from "../../utils/ChangePassword";
 import { format } from "date-fns";
+import { Button, Input, Progress, Select, SelectItem } from "@nextui-org/react";
+
 
 export default function StaffEdit() {
   const { id } = useParams();
@@ -19,11 +21,21 @@ export default function StaffEdit() {
   const [gender, setGender] = useState("");
   const [password, setPassword] = useState("");
   const [showBox, setShowBox] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+
+
+
+
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
+
+
   const navigate = useNavigate();
+
+
 
   const getSingleStaff = async () => {
     const response = await getApi(`/user/${id}`, token.accessToken);
@@ -91,7 +103,7 @@ export default function StaffEdit() {
     <>
       <ToastContainer
         position="top-center"
-        autoClose={5000}
+        autoClose={4000}
         hideProgressBar
         newestOnTop={false}
         closeOnClick
@@ -102,233 +114,207 @@ export default function StaffEdit() {
         theme="light"
         style={{ width: "450px" }}
       />
-      <div className="flex min-h-full w-full flex-col">
-        <div className="mb-3 pb-6 border-b-2 border-b-slate-300 flex justify-between">
-          <h2 className="text-2xl font-bold text-slate-700 ">
-            Edit User Information
-          </h2>
-          <Link to="/admin/user/all">
-            <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
-              Back
-            </div>
-          </Link>
-        </div>
-        <form
-          className=" w-full flex flex-wrap items-center justify-between"
-          action="#"
-          method="POST"
-        >
-          <div className="w-72 my-3">
-            <label
-              htmlFor="name"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-            >
-              Name
-            </label>
-            <div className="mt-2">
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="email"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-            >
-              Email address
-            </label>
-            <div className="mt-2">
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                required
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="city"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-            >
-              Contact Address
-            </label>
-            <div className="mt-2">
-              <input
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                id="address"
-                name="address"
-                type="address"
-                required
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="file-upload"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-            >
-              Image Upload
-            </label>
-            <div className="mt-2">
-              <input
-                id="file-upload"
-                name="file-upload"
-                type="file"
-                required
-                className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="gender"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-            >
-              Date Of Birth
-            </label>
-            <div className="mt-2">
-              <input
-                value={birth}
-                onChange={(e) => setBirth(e.target.value)}
-                id="birth"
-                name="birth"
-                type="date"
-                autocomplete="phone"
-                required
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="phone"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-            >
-              Phone Number
-            </label>
-            <div className="mt-2">
-              <input
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                id="phone"
-                name="phone"
-                type="phone"
-                required
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="gender"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-            >
-              Gender
-            </label>
-            <div className="mt-2">
-              <select
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-                id="gender"
-                required
-                name="gender"
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              >
-                <option disabled value>
-                  Select an option
-                </option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="w-72 my-3">
-            <label
-              htmlFor="city"
-              className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-            >
-              City
-            </label>
-            <div className="mt-2">
-              <input
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                id="city"
-                name="city"
-                type="text"
-                required
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-            </div>
-          </div>
-        </form>
-        <button
+      <div className="flex gap-3 my-5">
+        <Button
+          type="submit"
+          isDisabled={isLoading}
+          isLoading={isLoading}
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+            ? ""
+            : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+            }`}
           onClick={() => setShowBox(true)}
-          className="w-72 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Submit
-        </button>
+          Save
+        </Button>
+        <Button
+          isDisabled={isLoading}
+          isLoading={isLoading}
+          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+            ? ""
+            : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
+            }`}
+          onClick={() => navigate("/admin/user/all")}
+        >
+          Discard
+        </Button>
+        <div className="w-96 absolute top-32 left-0 right-0 z-50 mx-auto bg-white rounded-md shadow-md flex justify-center cursor-pointer">
+          {showBox && (
+            <div className="w-72 my-3">
+              <div className="flex justify-between">
+                <label
+                  htmlFor="phone"
+                  className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
+                >
+                  Password*
+                </label>
+                <h3
+                  onClick={() => setShowBox(false)}
+                  className="text-slate-600 font-semibold text-xl hover:text-slate-400"
+                >
+                  X
+                </h3>
+              </div>
+
+              <div className="mt-2">
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  placeholder="Enter the admin password"
+                  className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
+                />
+                <button
+                  onClick={handleSubmit}
+                  className="w-72 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+      <div className="container mt-2">
+        <h2 className="lg:text-xl font-bold my-2">Staff Edit</h2>
+        <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          {isLoading && (
+            <Progress size="sm" isIndeterminate aria-label="Loading..." />
+          )}
+          <form className="flex justify-between gap-10 p-5">
+            <div className="flex flex-wrap gap-8">
+              {/* <div>
+                <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
+                  <RiImageAddFill className=" text-slate-400 text-6xl" />
+                  {isSelected ? (
+                    <img
+                      src={selectedImage}
+                      className="absolute object-cover w-full h-full"
+                    />
+                  ) : image ? (
+                    <img
+                      src={productImg}
+                      alt={product.name}
+                      className="absolute object-cover w-full h-full"
+                    />
+                  ) : (
+                    <img
+                      src={BoxImg}
+                      className="absolute object-cover w-full h-full"
+                    />
+                  )}
+                </div>
+                <div
+                  onClick={() => {
+                    fileInputRef.current.click();
+                  }}
+                  className="w-36 cursor-pointer py-1.5 px-2 flex justify-center items-center hover:opacity-75 rounded-md shadow-md bg-blue-600 mt-3"
+                >
+                  <AiOutlinePlus className="text-xl text-white font-bold mr-1" />
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    ref={fileInputRef}
+                    onChange={handleFileInputChange}
+                  />
+                  <span className="text-white font-semibold text-md">Upload</span>
+                </div>
+              </div> */}
+              <div className="w-60">
+                <Input
+                  type="text"
+                  label="Name"
+                  name="name"
+                  value={name}
+                  // color={isInvalid ? "danger" : "success"}
+                  // errorMessage={isInvalid && "Please enter a valid email"}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter Staff name..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="email"
+                  label="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter reference..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="address"
+                  label="Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Enter Address..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <span className="text-sm">Date of Birth</span>
+                <Input
+                  type="date"
+                  name="dob"
+                  labelPlacement="outside"
+                  onChange={(e) => setBirth(e.target.value)}
+                  value={
+                    birth
+                      ? new Date(birth).toISOString().split("T")[0]
+                      : ""
+                  }
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="phone"
+                  label="Phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Enter Phone..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="city"
+                  label="City"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="Enter City..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="mt-1">
+                <div className="w-60">
+                  <Select
+                    labelPlacement="outside"
+                    label="Gender"
+                    name="gender"
+                    placeholder="Select Gender"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    className="max-w-xs"
+                  >
+                    {/* Replace dynamic data with fixed options */}
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other"></SelectItem>
 
-      <div className="w-96 absolute top-32 left-0 right-0 z-50 mx-auto bg-white rounded-md shadow-md flex justify-center cursor-pointer">
-        {showBox && (
-          <div className="w-72 my-3">
-            <div className="flex justify-between">
-              <label
-                htmlFor="phone"
-                className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-              >
-                Password*
-              </label>
-              <h3
-                onClick={() => setShowBox(false)}
-                className="text-slate-600 font-semibold text-xl hover:text-slate-400"
-              >
-                X
-              </h3>
+                  </Select>
+                </div>
+              </div>
             </div>
-
-            <div className="mt-2">
-              <input
-                onChange={(e) => setPassword(e.target.value)}
-                id="password"
-                name="password"
-                type="password"
-                required
-                placeholder="Enter the admin password"
-                className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-              />
-              <button
-                onClick={handleSubmit}
-                className="w-72 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        )}
+          </form>
+        </div>
       </div>
     </>
   );

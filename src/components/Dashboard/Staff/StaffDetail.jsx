@@ -47,6 +47,8 @@ export default function StaffDetail() {
           </Link>
         </div>
       </div>
+
+      
       {detail && detail.length > 0 ? (
         <div className="container my-5">
           <h2 className="lg:text-xl font-bold my-2">Staff Information</h2>
