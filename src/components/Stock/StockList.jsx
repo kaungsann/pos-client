@@ -93,11 +93,11 @@ export default function StockList({ stocks }) {
           <h3>{stock.location.name}</h3>
         </>
       ),
-      // onhand: () => (
-      //   <>
-      //     <h3>{stock.onHand}</h3>
-      //   </>
-      // ),
+      onhand: () => (
+        <>
+          <h3>{stock.onHand}</h3>
+        </>
+      ),
     };
 
     const renderer = renderers[columnKey] || ((value) => value);

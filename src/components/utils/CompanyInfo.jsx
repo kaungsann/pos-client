@@ -21,6 +21,7 @@ export default function CompanyInfo() {
       setInfo(response.data[0]);
     }
   };
+
   const handleDiscard = () => {
     setEdit(true);
   };
@@ -50,18 +51,18 @@ export default function CompanyInfo() {
           </div>
           <div>
             <img
-              src={info.image ? info.image : img}
+              src={img}
               className="w-60 h-40 rounded-md shadow-md mx-auto text-center mt-4"
             />
             <div>
               <h3 className="text-center text-slate-700 text-2xl font-semibold mt-6">
-                {info.name}
+                {info?.name ? info.name : ""}
               </h3>
               <h3 className="text-center text-slate-500 text-md font-semibold mt-2">
-                {info.email}
+                {info?.email ? info.email : ""}
               </h3>
               <h3 className="text-center text-slate-500 text-md font-semibold mt-2">
-                {info.phone}
+                {info?.phone ? info.phone : ""}
               </h3>
             </div>
           </div>

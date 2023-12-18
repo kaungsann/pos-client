@@ -53,6 +53,7 @@ export default function PartnerTemplate() {
   }, [token]);
 
   const handleFilterChange = (selected) => {
+    console.log("selected is filter customer", selected);
     setFilteredKeywords((prevFilter) => ({
       ...prevFilter,
       ...selected,
@@ -102,16 +103,31 @@ export default function PartnerTemplate() {
             return true;
           }
 
-          if (customer.isCustomer) {
+          if (customer.city) {
             return customer.city.toLowerCase().includes(city.toLowerCase());
           }
-          return false;
         };
-        const customerValid = () => {};
+        // const isCustomerValid = () => {
+        //   if (!isCus) {
+        //     return true;
+        //   }
+        //   if (customer.isCustomer) {
+        //     return customer.isCustomer === (isCus === true);
+        //   }
+        // };
+
+        const isCustomerValid = () => {
+          if (isCustomer === null) {
+            return true;
+          }
+
+          return customer.isCustomer === (isCustomer === true);
+        };
 
         return (
           customer.name.toLowerCase().includes(name.toLowerCase()) &&
           isName() &&
+          isCustomerValid() &&
           isPhone() &&
           isAddress() &&
           isCity()
@@ -119,6 +135,8 @@ export default function PartnerTemplate() {
       }),
     [partner, filteredKeywords]
   );
+
+  console.log("filter partner is a ", filteredPartners);
   return (
     <>
       <div className="flex justify-between items-center my-3">

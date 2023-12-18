@@ -19,7 +19,7 @@ const FilterBox = ({ onFilter }) => {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState(0);
   const [city, setCity] = useState("");
-  const [customer, setCustomer] = useState(false);
+  const [isCustomer, setIsCustomer] = useState(null);
 
   const [isFilterActive, setIsFilterActive] = useState(false);
 
@@ -32,6 +32,7 @@ const FilterBox = ({ onFilter }) => {
       address,
       phone,
       city,
+      isCustomer,
     });
   };
 
@@ -41,11 +42,13 @@ const FilterBox = ({ onFilter }) => {
     setAddress("");
     setPhone("");
     setCity("");
+    setIsCustomer(null);
     onFilter({
       name: "",
       address: "",
       phone: "",
       city: "",
+      isCustomer: "",
     });
   };
 
@@ -82,15 +85,15 @@ const FilterBox = ({ onFilter }) => {
                 </div>
 
                 <Select
-                  label="Gender"
-                  placeholder="Select a gender"
+                  label="Client"
+                  placeholder="Select a client"
                   labelPlacement="outside"
-                  onChange={(e) => setGender(e.target.value)}
+                  onChange={(e) => setIsCustomer(e.target.value)}
                 >
-                  <SelectItem value="male" key="male">
+                  <SelectItem value={true} key={true}>
                     Customer
                   </SelectItem>
-                  <SelectItem value="female" key="female">
+                  <SelectItem value={false} key={false}>
                     Vendor
                   </SelectItem>
                 </Select>

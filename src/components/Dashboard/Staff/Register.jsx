@@ -86,7 +86,7 @@ export default function () {
       />
       <div className="flex min-h-full w-full flex-col">
         <div className="mb-3 pb-6 border-b-2 border-b-slate-300 flex justify-between">
-          <h2 className="text-2xl font-bold text-slate-700 ">Create Account</h2>
+          <h2 className="text-2xl font-bold text-slate-700 ">Create Staff</h2>
           <Link to="/admin/user/all">
             <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
               Back

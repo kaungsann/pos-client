@@ -53,14 +53,14 @@ export default function Profile() {
     setUsr(response.data[0]);
     setName(response.data[0].username);
     setEmail(response.data[0].email);
-    setPhone(response.data[0].phone)
-    setDate(format(new Date(response.data[0].birthdate), "yyyy-MM-dd"))
-    setAddress(response.data[0].address)
-    setGender(response.data[0].gender)
-    setCity(response.data[0].city)
+    setPhone(response.data[0].phone);
+    setDate(format(new Date(response.data[0].birthdate), "yyyy-MM-dd"));
+    setAddress(response.data[0].address);
+    setGender(response.data[0].gender);
+    setCity(response.data[0].city);
   };
 
-  console.log("single useris " , usr)
+  console.log("single useris ", usr);
 
   const EditUserApi = async () => {
     const formData = new FormData();
@@ -159,9 +159,7 @@ export default function Profile() {
           </div>
           <div className="text-center">
             <h3 className="font-bold text-2xl mt-2">{usr.name}</h3>
-            <h3 className="font-semibold text-lg text-slate-500">
-              {name}
-            </h3>
+            <h3 className="font-semibold text-lg text-slate-500">{name}</h3>
           </div>
           <div className="w-full mt-6">
             <div
@@ -249,12 +247,12 @@ export default function Profile() {
             <div>
               <div className="flex justify-between w-full  text-slate-700 pb-6 border-b-2 border-b-slate-300">
                 <h3 className="text-2xl font-bold">Personal Information</h3>
-                  <button
-                    onClick={() => navigate("/admin/pos/all")}
-                    className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
-                  >
-                    Back
-                  </button>
+                <button
+                  onClick={() => navigate("/admin/pos/all")}
+                  className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
+                >
+                  Back
+                </button>
               </div>
 
               <div className="mt-4">
