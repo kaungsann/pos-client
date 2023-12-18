@@ -165,14 +165,12 @@ export default function PurchaseTemplate() {
     [purchases, filteredKeywords]
   );
 
-  console.log("purchase filter date is a ", purchases);
-
   return (
     <>
       <div className="flex justify-between items-center my-3">
         <SearchCompo
           keyword={filteredKeywords.name}
-          text="Search by purchase name..."
+          text="Search by partner name..."
           onSearch={handleFilterChange}
         />
 

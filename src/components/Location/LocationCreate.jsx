@@ -34,7 +34,7 @@ export default function LocationCreate() {
         }
         toast(data.message);
       } else {
-        navigate("/admin/categorys/all");
+        navigate("/admin/locations/all");
       }
     } catch (error) {
       console.error("Error creating category:", error);
@@ -44,7 +44,7 @@ export default function LocationCreate() {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    
+
     if (!name.trim()) {
       toast("Please enter a location name.");
       return;

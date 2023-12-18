@@ -73,7 +73,7 @@ export default function CategoryList({ categorys, onDeleteSuccess }) {
       },
       token.accessToken
     );
-    console.log(response);
+    console.log("delete category data", response);
     if (response.status) {
       setSelectedKeys([]);
       onDeleteSuccess();
