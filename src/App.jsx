@@ -51,6 +51,18 @@ import ProductForm from "./components/Product/ProductForm";
 import LocationTemplate from "./components/Location/LocationTemplate";
 import ProductEditForm from "./components/Product/ProductEditForm";
 import ProductCreateForm from "./components/Product/ProductCreateForm";
+import OpexTemplate from "./components/Dashboard/Opex/OpexTemplate";
+import OpexCreateForm from "./components/Dashboard/Opex/OpexCreateForm";
+import OpexDetail from "./components/Dashboard/Opex/OpexDetail";
+import FixedCostTemplate from "./components/Dashboard/FixedCost/FixedCostTemplate";
+import FixedCostCreateForm from "./components/Dashboard/FixedCost/FixedCostCreateForm";
+import FixedCostDetail from "./components/Dashboard/FixedCost/FixedCostDetail";
+import VariableCostTemplate from "./components/Dashboard/VariableCost/VariableCostTemplate";
+import VariableCostCreateForm from "./components/Dashboard/VariableCost/VariableCostCreateForm";
+import VariableCostDetail from "./components/Dashboard/VariableCost/VariableCostDetail";
+import WasteTemplate from "./components/Dashboard/Waste/WasteTemplate";
+import WasteCreateForm from "./components/Dashboard/Waste/WasteCreateForm";
+import WasteDetail from "./components/Dashboard/Waste/WasteDetail";
 
 function App() {
   return (
@@ -69,6 +81,28 @@ function App() {
             <Route path="warehouse" element={<WareHouseTemplate />} />
 
             <Route path="inventory/overview" element={<OverView />} />
+
+            <Route path="opex">
+              <Route path="all" element={<OpexTemplate />} />
+              <Route path="create" element={<OpexCreateForm />} />
+              <Route path="detail/:id" element={<OpexDetail />} />
+            </Route>
+            <Route path="fixed-cost">
+              <Route path="all" element={<FixedCostTemplate />} />
+              <Route path="create" element={<FixedCostCreateForm />} />
+              <Route path="detail/:id" element={<FixedCostDetail />} />
+            </Route>
+            <Route path="waste">
+              <Route path="all" element={<WasteTemplate />} />
+              <Route path="create" element={<WasteCreateForm />} />
+              <Route path="detail/:id" element={<WasteDetail />} />
+            </Route>
+            <Route path="variable-cost">
+              <Route path="all" element={<VariableCostTemplate />} />
+              <Route path="create" element={<VariableCostCreateForm />} />
+              <Route path="detail/:id" element={<VariableCostDetail />} />
+            </Route>
+
             <Route path="user">
               <Route path="all" element={<StaffTemplate />} />
               <Route path="create" element={<Register />} />

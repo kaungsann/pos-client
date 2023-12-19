@@ -133,7 +133,7 @@ export default function ProductList({ products }) {
               <DropdownMenu>
                 <DropdownItem
                   onPress={() => {
-                    navigate(`/admin/products/edit/${product.id}`);
+                    navigate(`/admin/products/detail/${product.id}`);
                   }}
                 >
                   View

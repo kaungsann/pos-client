@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Pos from "../../assets/logo.png";
-import { Link, Outlet, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { BiCategory } from "react-icons/bi";
 import { AiOutlineStock } from "react-icons/ai";
 import { HiOutlineAdjustments } from "react-icons/hi";
@@ -11,6 +17,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { removeData } from "../../redux/actions";
 import { getApi } from "../Api";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+} from "@nextui-org/react";
 
 export default function Admin() {
   const location = useLocation();
@@ -20,6 +33,8 @@ export default function Admin() {
   const user = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const singleUserApi = async () => {
     let resData = await getApi(`/user/${user._id}`, token.accessToken);
@@ -97,16 +112,45 @@ export default function Admin() {
               </>
             ) : null}
 
-            <Link to={`/admin/user/info/${user._id}`}>
-              <Icon
-                icon="ant-design:setting-outlined"
-                className={`text-4xl ml-3 rounded-full text-slate-400 p-1 shadow-md ${
-                  location.pathname === `/admin/user/info/${id}`
-                    ? "text-white bg-blue-500 font-extrabold"
-                    : ""
-                }}`}
-              />
-            </Link>
+            <Dropdown>
+              <DropdownTrigger>
+                <Icon
+                  icon="basil:invoice-outline"
+                  className={`text-4xl ml-3 rounded-full text-slate-400 p-1 shadow-md ${
+                    location.pathname === "/admin/opex/all" ||
+                    location.pathname === "/admin/opex/create" ||
+                    location.pathname === `/admin/opex/detail/${id}` ||
+                    location.pathname === "/admin/fixed-cost/all" ||
+                    location.pathname === "/admin/fixed-cost/create" ||
+                    location.pathname === `/admin/fixed-cost/detail/${id}` ||
+                    location.pathname === "/admin/variable-cost/all" ||
+                    location.pathname === "/admin/variable-cost/create" ||
+                    location.pathname === `/admin/variable-cost/detail/${id}` ||
+                    location.pathname === "/admin/waste/all" ||
+                    location.pathname === "/admin/waste/create" ||
+                    location.pathname === `/admin/waste/detail/${id}`
+                      ? "text-white bg-blue-500 font-extrabold"
+                      : ""
+                  }}`}
+                />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Action event example">
+                <DropdownItem onPress={() => navigate("/admin/opex/all")}>
+                  Opex
+                </DropdownItem>
+                <DropdownItem onPress={() => navigate("/admin/fixed-cost/all")}>
+                  Fixed Cost
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => navigate("/admin/variable-cost/all")}
+                >
+                  Variable Cost
+                </DropdownItem>
+                <DropdownItem onPress={() => navigate("/admin/waste/all")}>
+                  Waste
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
 
             <div className="flex items-center mx-3">
               {user && (
@@ -120,9 +164,27 @@ export default function Admin() {
                     }}
                   />
 
-                  <h3 className="font-semibold text-slate-500 text-xl ml-4">
-                    {user.username}
-                  </h3>
+                  <Dropdown>
+                    <DropdownTrigger>
+                      <div className="flex items-center">
+                        <h3 className="font-semibold text-slate-500 text-xl ml-4">
+                          {user.username}
+                        </h3>
+                        <Icon
+                          icon="iconamoon:arrow-down-2"
+                          className="text-2xl ml- 2 text-slate-400"
+                        />
+                      </div>
+                    </DropdownTrigger>
+                    <DropdownMenu aria-label="Static Actions">
+                      <DropdownItem
+                        key="new"
+                        onPress={() => navigate(`/admin/user/info/${user._id}`)}
+                      >
+                        Setting
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
                 </>
               )}
             </div>
