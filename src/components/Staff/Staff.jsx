@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { deleteMultiple, getApi } from "../../Api";
+import { deleteMultiple, getApi } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,9 +7,9 @@ import { BiSolidEdit } from "react-icons/bi";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
-import DeleteAlert from "../../utils/DeleteAlert";
+import DeleteAlert from "../utils/DeleteAlert";
 import { Icon } from "@iconify/react";
-import ChangePassword from "../../utils/ChangePassword";
+import ChangePassword from "../utils/ChangePassword";
 import ReactPaginate from "react-paginate";
 import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 

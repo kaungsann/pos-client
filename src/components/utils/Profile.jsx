@@ -17,13 +17,13 @@ import {
 } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Register from "../Dashboard/Staff/Register";
+import Register from "../Staff/Register";
 import user from "../../assets/user.jpeg";
 import BusinessRegister from "./BusinessRegister";
 import EditBusinessInfo from "./EditBusinessInfo";
-import Staff from "../Dashboard/Staff/Staff";
+import Staff from "../Staff/Staff";
 import CompanyInfo from "./CompanyInfo";
-import StaffDetail from "../Dashboard/Staff/StaffDetail";
+import StaffDetail from "../Staff/StaffDetail";
 
 export default function Profile() {
   const { id } = useParams();
@@ -246,14 +246,14 @@ export default function Profile() {
         <div className="ml-6 w-3/4 bg-white">
           {activeSection === "personal" && (
             <div>
-              <div className="flex justify-between w-full p-5 text-slate-700 pb-6 border-b-2 border-b-slate-300">
+              <div className="flex justify-between w-full p-5 text-slate-700 pb-6 border-b-2 px-4 border-b-slate-300">
                 <h3 className="text-2xl font-bold">Personal Information</h3>
-                <button
+                {/* <button
                   onClick={() => handleSubmit}
                   className="font-bold rounded-sm shadow-sm flex items-cente text-green-700 border-green-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 px-6 py-2"
                 >
                   Save
-                </button>
+                </button> */}
               </div>
               <div className="mt-4 p-5">
                 <div className="mt-4 flex flex-wrap justify-between">

@@ -17,21 +17,13 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import { statusOptions } from "../Category/data";
-import { capitalize } from "../Category/utils";
-import SearchBox from "../../utils/SearchBox";
+import SearchBox from "../utils/SearchBox";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL, deleteMultiple } from "../../Api";
+import { BASE_URL, deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
-import DeleteAlert from "../../utils/DeleteAlert";
-import ChangePassword from "../../utils/ChangePassword";
-
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
+import DeleteAlert from "../utils/DeleteAlert";
+import ChangePassword from "../utils/ChangePassword";
 
 let INITIAL_VISIBLE_COLUMNS = ["role", "name", "email", "lastlogin", "actions"];
 
@@ -291,7 +283,7 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
               >
                 {columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
+                    {column.name}
                   </DropdownItem>
                 ))}
               </DropdownMenu>

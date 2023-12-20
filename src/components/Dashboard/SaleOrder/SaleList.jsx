@@ -15,7 +15,6 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
-import { capitalize } from "../Category/utils";
 import SearchBox from "../../utils/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
@@ -130,7 +129,7 @@ export default function SaleList({ sales }) {
 
     switch (columnKey) {
       case "scheduledate":
-        return <h3> {format(new Date(sales.scheduledDate), "yyyy-MM-dd")}</h3>;
+        return <h3>{format(new Date(sales.scheduledDate), "yyyy-MM-dd")}</h3>;
       case "name":
         return <h3>{sales.user?.username}</h3>;
       case "partner":
@@ -255,7 +254,7 @@ export default function SaleList({ sales }) {
               >
                 {columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
+                    {column.name}
                   </DropdownItem>
                 ))}
               </DropdownMenu>

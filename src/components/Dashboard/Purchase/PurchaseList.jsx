@@ -17,7 +17,6 @@ import {
   Chip,
 } from "@nextui-org/react";
 
-import { capitalize } from "../Category/utils";
 import SearchBox from "../../utils/SearchBox";
 import ExcelExportButton from "../../ExcelExportButton";
 import ExcelImportButton from "../../ExcelImportButton";
@@ -289,7 +288,7 @@ export default function PurchaseList({ purchases, refresh }) {
               >
                 {columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
+                    {column.name}
                   </DropdownItem>
                 ))}
               </DropdownMenu>

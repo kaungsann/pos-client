@@ -1,24 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { BASE_URL } from "../../Api";
-import CustomerList from "./CustomerList";
+import { BASE_URL } from "../Api";
+import { Icon } from "@iconify/react";
+import VendorList from "./VendorList";
 import FilterBox from "./FilterBox";
-import SearchCompo from "../../utils/SearchCompo";
+import SearchCompo from "../utils/SearchCompo";
 import { Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 
-export default function CustomerTemplate() {
-  const [customers, setCustomers] = useState([]);
-
-  const navigate = useNavigate();
-
+export default function VendorTemplate() {
+  const [vendors, setVendors] = useState([]);
   const [filteredKeywords, setFilteredKeywords] = useState({
     name: "",
     phone: "",
     address: "",
     city: "",
   });
+  const navigate = useNavigate();
 
   const token = useSelector((state) => state.IduniqueData);
 
@@ -26,7 +25,7 @@ export default function CustomerTemplate() {
     INDEX: BASE_URL + "/partner",
   };
 
-  const fetchCustomerData = async () => {
+  const fetchVendorData = async () => {
     try {
       const response = await axios.get(CUSTOMER_API.INDEX, {
         headers: {
@@ -34,17 +33,17 @@ export default function CustomerTemplate() {
           "Content-Type": "application/json",
         },
       });
-      const filteredCustomers = response.data?.data.filter(
-        (ct) => ct.isCustomer === true && ct.active === true
+      const filteredvendors = response.data?.data.filter(
+        (ct) => ct.isCustomer === false && ct.active === true
       );
-      setCustomers(filteredCustomers);
+      setVendors(filteredvendors);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
 
   useEffect(() => {
-    fetchCustomerData();
+    fetchVendorData();
   }, [token]);
 
   const handleFilterChange = (selected) => {
@@ -53,9 +52,9 @@ export default function CustomerTemplate() {
       ...selected,
     }));
   };
-  const filteredCustomer = useMemo(
+  const filteredVendors = useMemo(
     () =>
-      customers.filter((customer) => {
+      vendors.filter((customer) => {
         const { name, phone, address, city } = filteredKeywords;
 
         const isName = () => {
@@ -111,9 +110,8 @@ export default function CustomerTemplate() {
           isCity()
         );
       }),
-    [customers, filteredKeywords]
+    [vendors, filteredKeywords]
   );
-
   return (
     <>
       <div className="flex justify-between items-center my-3">
@@ -126,10 +124,7 @@ export default function CustomerTemplate() {
           <FilterBox onFilter={handleFilterChange} />
         </div>
       </div>
-      <CustomerList
-        customers={filteredCustomer}
-        onDeleteSuccess={fetchCustomerData}
-      />
+      <VendorList vendors={filteredVendors} onDeleteSuccess={fetchVendorData} />
     </>
   );
 }

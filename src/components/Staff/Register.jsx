@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Input, Progress, Select, SelectItem } from "@nextui-org/react";
-import { FormPostApi } from "../../Api";
+import { FormPostApi } from "../Api";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -188,9 +188,13 @@ export default function Register() {
                     className="max-w-xs"
                   >
                     {/* Replace dynamic data with fixed options */}
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="other"></SelectItem>
+                    <SelectItem value="male" key="male">
+                      Male
+                    </SelectItem>
+                    <SelectItem value="female" key="female">
+                      Female
+                    </SelectItem>
+                    <SelectItem value="other" key="other"></SelectItem>
                   </Select>
                 </div>
               </div>

@@ -45,7 +45,7 @@ export default function VariableCostCreateForm() {
         dipatch(removeData(null));
 
       if (response.status) {
-        navigate("/admin/fixed-cost/all");
+        navigate("/admin/variable-cost/all");
         setIsLoading(false);
       } else {
         toast(response.message || "An error occurred");

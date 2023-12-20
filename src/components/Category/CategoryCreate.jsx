@@ -27,7 +27,7 @@ export default function CategoryCreate() {
           },
         }
       );
-
+      console.log("create data is", data);
       if (!data.status) {
         if (data?.message == "Token Expire , Please Login Again") {
           dipatch(removeData(null));
@@ -44,7 +44,7 @@ export default function CategoryCreate() {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    
+
     if (!name.trim()) {
       toast("Please enter a category name.");
       return;

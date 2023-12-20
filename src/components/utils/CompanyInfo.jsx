@@ -6,7 +6,7 @@ import EditBusinessInfo from "./EditBusinessInfo";
 
 import { getApi } from "../Api";
 
-import img from "../../../public/logo.png";
+import img from "../../../src/assets/text.jpeg";
 
 export default function CompanyInfo() {
   const [info, setInfo] = useState([]);
@@ -38,8 +38,8 @@ export default function CompanyInfo() {
     <>
       {edit ? (
         <div>
-          <div className="pb-6 border-b-2 border-b-slate-300 flex justify-between items-center">
-            <h3 className="text-2xl font-bold text-slate-700">
+          <div className="py-6 border-b-2 px-3 border-b-slate-300 flex justify-between items-center">
+            <h3 className="text-2xl font-bold text-slate-700 px-4">
               Company Information
             </h3>
             <BiSolidEdit
@@ -50,13 +50,10 @@ export default function CompanyInfo() {
             />
           </div>
           <div>
-            <img
-              src={img}
-              className="w-60 h-40 rounded-md shadow-md mx-auto text-center mt-4"
-            />
+            <img src={img} className="w-72 h-40  mx-auto text-center mt-4" />
             <div>
               <h3 className="text-center text-slate-700 text-2xl font-semibold mt-6">
-                {info?.name ? info.name : ""}
+                {info?.name ? info.name : "Ambitboud Technology"}
               </h3>
               <h3 className="text-center text-slate-500 text-md font-semibold mt-2">
                 {info?.email ? info.email : ""}

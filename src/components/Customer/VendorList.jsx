@@ -17,23 +17,14 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import { statusOptions } from "../Category/data";
-import { capitalize } from "../Category/utils";
-import SearchBox from "../../utils/SearchBox";
-import ExcelExportButton from "../../ExcelExportButton";
-import ExcelImportButton from "../../ExcelImportButton";
+import SearchBox from "../utils/SearchBox";
+import ExcelExportButton from "../ExcelExportButton";
+import ExcelImportButton from "../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL, deleteMultiple } from "../../Api";
+import { BASE_URL, deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
-import DeleteAlert from "../../utils/DeleteAlert";
-import FilterBox from "./FilterBox";
-
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
+import DeleteAlert from "../utils/DeleteAlert";
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "phone", "actions"];
 
@@ -43,11 +34,11 @@ const columns = [
   { name: "Address", uid: "address" },
   { name: "CreateDate", uid: "create" },
   { name: "City", uid: "city" },
-  { name: "Company", uid: "company" },
-  { name: "Actions", uid: "actions" },
+  { name: "Compay", uid: "company" },
+  { name: "Action", uid: "actions" },
 ];
 
-export default function CustomerList({ customers, onDeleteSuccess }) {
+export default function VendorList({ vendors, onDeleteSuccess }) {
   const [deleteBox, setDeleteBox] = React.useState(false);
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -57,14 +48,6 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-  const addCustomerRoute = () => {
-    navigate("/admin/partners/create");
-  };
-  const STOCK_API = {
-    INDEX: BASE_URL + "/stock",
-    IMPORT: BASE_URL + "/stock/import-excel",
-    EXPORT: BASE_URL + "/stock/export-excel",
-  };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -99,24 +82,24 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredCustomers = [...customers];
+    let filteredVendors = [...vendors];
 
     if (hasSearchFilter) {
-      filteredCustomers = filteredCustomers.filter((cus) =>
-        cus.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredVendors = filteredVendors.filter((ven) =>
+        ven.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredCustomers = filteredCustomers.filter((cus) =>
-        Array.from(statusFilter).includes(cus.status)
+      filteredVendors = filteredVendors.filter((ven) =>
+        Array.from(statusFilter).includes(ven.status)
       );
     }
 
-    return filteredCustomers;
-  }, [customers, filterValue, statusFilter]);
+    return filteredVendors;
+  }, [vendors, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -137,31 +120,31 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((customers, columnKey) => {
-    const cellValue = customers[columnKey];
+  const renderCell = React.useCallback((vendors, columnKey) => {
+    const cellValue = vendors[columnKey];
 
     switch (columnKey) {
       case "name":
-        return <User name={cellValue}>{customers.name}</User>;
+        return <User name={cellValue}>{vendors.name}</User>;
       case "email":
-        return <h3>{customers.email}</h3>;
+        return <h3>{vendors.email}</h3>;
       case "phone":
-        return <h3>{customers.phone ? customers.phone : "none"}</h3>;
+        return <h3>{vendors.phone ? vendors.phone : "none"}</h3>;
       case "city":
-        return <h3>{customers.city ? customers.city : "none"}</h3>;
+        return <h3>{vendors.city ? vendors.city : "none"}</h3>;
       case "address":
-        return <h3>{customers.address ? customers.address : "none"}</h3>;
+        return <h3>{vendors.address ? vendors.address : "none"}</h3>;
       case "company":
-        return <h3>{customers.isCompany ? "vendor" : "none"}</h3>;
+        return <h3>{vendors.isCompany ? "vendor" : "none"}</h3>;
       case "customer":
-        return <h3>{customers.isCompany ? "customer" : "none"}</h3>;
+        return <h3>{vendors.isCustomer ? "customer" : "none"}</h3>;
       case "create":
-        return <h3>{format(new Date(customers.createdAt), "yyyy-MM-dd")}</h3>;
+        return <h3>{format(new Date(vendors.createdAt), "yyyy-MM-dd")}</h3>;
       case "status":
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[customers.phone]}
+            color={statusColorMap[vendors.phone]}
             size="sm"
             variant="flat"
           >
@@ -180,14 +163,14 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
               <DropdownMenu>
                 <DropdownItem
                   onPress={() => {
-                    navigate(`/admin/partners/detail/${customers.id}`);
+                    navigate(`/admin/partners/detail/${vendors.id}`);
                   }}
                 >
                   View
                 </DropdownItem>
                 <DropdownItem
                   onPress={() => {
-                    navigate(`/admin/partners/edit/${customers.id}`);
+                    navigate(`/admin/partners/edit/${vendors.id}`);
                   }}
                 >
                   Edit
@@ -234,15 +217,16 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
 
   const topContent = React.useMemo(() => {
     return (
-      <>
+      <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <h2 className="text-xl font-bold">Customers</h2>
+            <h2 className="text-xl font-bold">Vendors</h2>
             <h3 className="text-default-400 text-small ml-4">
-              Total {customers.length}
+              Total {vendors.length}
             </h3>
           </div>
-          <div className="flex items-center ">
+
+          <div className="flex items-center">
             <label className="flex items-center text-default-400 text-small">
               Rows per page:
               <select
@@ -270,7 +254,7 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
               >
                 {columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
+                    {column.name}
                   </DropdownItem>
                 ))}
               </DropdownMenu>
@@ -278,21 +262,21 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
             {selectedKeys.size > 0 && (
               <button
                 onClick={() => setDeleteBox(true)}
-                className="px-3 py-1 text-white bg-rose-500 rounded-md hover:opacity-75"
+                className="ml-12 px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
               >
                 Delete
               </button>
             )}
           </div>
         </div>
-      </>
+      </div>
     );
   }, [
     filterValue,
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    customers.length,
+    vendors.length,
     onSearchChange,
     hasSearchFilter,
     selectedKeys,

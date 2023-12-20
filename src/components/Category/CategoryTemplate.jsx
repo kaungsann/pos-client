@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import CategoryList from "./CategoryList";
 import ExcelExportButton from "../ExcelExportButton";
 import ExcelImportButton from "../ExcelImportButton";
-import SearchBox from "../Product/SearchBox";
-
+import SearchCompo from "../utils/SearchCompo";
+import { Button } from "@nextui-org/react";
 
 export default function CategoryTemplate() {
   const [categorys, setCategorys] = useState([]);
@@ -59,18 +59,19 @@ export default function CategoryTemplate() {
   return (
     <>
       <div className="flex justify-between items-center my-3">
-        <SearchBox
+        <SearchCompo
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
         />
 
         <div className="flex">
-          <Link
-            to="/admin/categorys/create"
-            className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+          <Button
+            size="sm"
+            onClick={() => navigate("/admin/categorys/create")}
+            className="font-bold rounded-sm shadow-sm flex bg-zinc-50 items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
           >
             Add
-          </Link>
+          </Button>
           <div className="ml-3">
             <ExcelExportButton
               token={token.accessToken}

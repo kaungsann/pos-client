@@ -1,14 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { FormPathApi, getApi } from "../../Api";
-import { removeData } from "../../../redux/actions";
+import { FormPathApi, getApi } from "../Api";
+import { removeData } from "../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ChangePassword from "../../utils/ChangePassword";
+import ChangePassword from "../utils/ChangePassword";
 import { format } from "date-fns";
 import { Button, Input, Progress, Select, SelectItem } from "@nextui-org/react";
-
 
 export default function StaffEdit() {
   const { id } = useParams();
@@ -23,19 +22,10 @@ export default function StaffEdit() {
   const [showBox, setShowBox] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-
-
-
-
-
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-
-
   const navigate = useNavigate();
-
-
 
   const getSingleStaff = async () => {
     const response = await getApi(`/user/${id}`, token.accessToken);
@@ -119,10 +109,11 @@ export default function StaffEdit() {
           type="submit"
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
-            ? ""
-            : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-            }`}
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+            isLoading
+              ? ""
+              : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+          }`}
           onClick={() => setShowBox(true)}
         >
           Save
@@ -130,10 +121,11 @@ export default function StaffEdit() {
         <Button
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
-            ? ""
-            : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-            }`}
+          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+            isLoading
+              ? ""
+              : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
+          }`}
           onClick={() => navigate("/admin/user/all")}
         >
           Discard
@@ -265,9 +257,7 @@ export default function StaffEdit() {
                   labelPlacement="outside"
                   onChange={(e) => setBirth(e.target.value)}
                   value={
-                    birth
-                      ? new Date(birth).toISOString().split("T")[0]
-                      : ""
+                    birth ? new Date(birth).toISOString().split("T")[0] : ""
                   }
                 />
               </div>
@@ -308,7 +298,6 @@ export default function StaffEdit() {
                     <SelectItem value="male">Male</SelectItem>
                     <SelectItem value="female">Female</SelectItem>
                     <SelectItem value="other"></SelectItem>
-
                   </Select>
                 </div>
               </div>

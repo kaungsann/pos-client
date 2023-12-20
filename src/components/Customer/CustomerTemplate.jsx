@@ -4,76 +4,137 @@ import { BASE_URL } from "../Api";
 import CustomerList from "./CustomerList";
 import FilterBox from "./FilterBox";
 import SearchBox from "./SearchBox";
-import ExcelExportButton from "../ExcelExportButton";
-import ExcelImportButton from "../ExcelImportButton";
 import axios from "axios";
+import SearchCompo from "../utils/SearchCompo";
+import { useNavigate } from "react-router-dom";
 
 const CUSTOMER_API = {
+  INDEX: BASE_URL + "/partner",
+  IMPORT: BASE_URL + "/partner/import-excel",
+};
+
+export default function CustomerTemplate() {
+  const [customers, setCustomers] = useState([]);
+
+  const navigate = useNavigate();
+
+  const [filteredKeywords, setFilteredKeywords] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    city: "",
+  });
+
+  const token = useSelector((state) => state.IduniqueData);
+
+  const CUSTOMER_API = {
     INDEX: BASE_URL + "/partner",
-    IMPORT: BASE_URL + "/partner/import-excel",
-};
+  };
 
-const CustomerTemplate = () => {
-    const [customers, setPartners] = useState([]);
+  const fetchCustomerData = async () => {
+    try {
+      const response = await axios.get(CUSTOMER_API.INDEX, {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const filteredCustomers = response.data?.data.filter(
+        (ct) => ct.isCustomer === true && ct.active === true
+      );
+      setCustomers(filteredCustomers);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
-    const [filteredKeywords, setFilteredKeywords] = useState({
-        name: "",
-        phone: "",
-        company: "",
-    });
-    const token = useSelector((state) => state.IduniqueData);
+  useEffect(() => {
+    fetchCustomerData();
+  }, [token]);
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const response = await axios.get(CUSTOMER_API.INDEX, {
-                    headers: {
-                        Authorization: `Bearer ${token.accessToken}`,
-                        "Content-Type": "application/json",
-                    },
-                });
-                setPartners(response.data?.data);
-            } catch (error) {
-                console.error("Error fetching Customers:", error);
-            }
-        })();
-    }, [token]);
+  const handleFilterChange = (selected) => {
+    setFilteredKeywords((prevFilter) => ({
+      ...prevFilter,
+      ...selected,
+    }));
+  };
+  const filteredCustomer = useMemo(
+    () =>
+      customers.filter((customer) => {
+        const { name, phone, address, city } = filteredKeywords;
 
-    const handleFilterChange = (selected) => {
-        setFilteredKeywords((prevFilter) => ({
-            ...prevFilter,
-            ...selected,
-        }));
-    };
+        const isName = () => {
+          if (!name) {
+            return true;
+          }
 
-    const filteredCustomers = useMemo(
-        () =>
-            customers.filter((customer) => {
-                const { name, phone, company } = filteredKeywords;
-                return (
-                    customer.name.toLowerCase().includes(name.toLowerCase()) &&
-                    customer.phone.toLowerCase().includes(phone.toLowerCase()) &&
-                    customer.company == company
-                );
-            }),
-        [customers, filteredKeywords]
-    );
+          if (customer.name) {
+            return customer.name.toLowerCase().includes(name.toLowerCase());
+          }
 
-    return (
-        <>
-            <div className="flex justify-between items-center my-3">
-                <div className="container flex">
-                  
-                 
-                </div>
-                <SearchBox
-                    keyword={filteredKeywords.name}
-                    onSearch={handleFilterChange}
-                />
-            </div>
-            <CustomerList customers={customers} />
-        </>
-    );
-};
+          return false;
+        };
+        const isPhone = () => {
+          if (!phone) {
+            return true;
+          }
+          if (customer.phone) {
+            return customer.phone.includes(phone);
+          }
 
-export default CustomerTemplate;
+          return false;
+        };
+        const isAddress = () => {
+          if (!address) {
+            return true;
+          }
+
+          if (customer.address) {
+            return customer.address
+              .toLowerCase()
+              .includes(address.toLowerCase());
+          }
+          return false;
+        };
+
+        const isCity = () => {
+          if (!city) {
+            return true;
+          }
+
+          if (customer.city) {
+            return customer.city.toLowerCase().includes(city.toLowerCase());
+          }
+          return false;
+        };
+
+        return (
+          customer.name.toLowerCase().includes(name.toLowerCase()) &&
+          isName() &&
+          isPhone() &&
+          isAddress() &&
+          isCity()
+        );
+      }),
+    [customers, filteredKeywords]
+  );
+
+  return (
+    <>
+      <div className="flex justify-between items-center my-3">
+        <SearchCompo
+          keyword={filteredKeywords.name}
+          onSearch={handleFilterChange}
+        />
+
+        <div className="flex">
+          <FilterBox onFilter={handleFilterChange} />
+        </div>
+      </div>
+      <CustomerList
+        customers={filteredCustomer}
+        onDeleteSuccess={fetchCustomerData}
+      />
+    </>
+  );
+}

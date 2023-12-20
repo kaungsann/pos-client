@@ -6,7 +6,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
   Button,
   DropdownTrigger,
   Dropdown,
@@ -16,20 +15,12 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
-import { statusOptions } from "../Category/data";
-import { capitalize } from "../Category/utils";
-import SearchBox from "../Category/SearchBox";
+import SearchBox from "../../utils/SearchBox";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../Api";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
-
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
 
 let INITIAL_VISIBLE_COLUMNS = [
   "orderdate",
@@ -88,15 +79,6 @@ export default function WareHouseList({ warehouses }) {
     if (hasSearchFilter) {
       filteredWarehouse = filteredWarehouse.filter((wh) =>
         wh.partner.name.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    }
-
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredWarehouse = filteredWarehouse.filter((wh) =>
-        Array.from(statusFilter).includes(wh.status)
       );
     }
 
@@ -248,7 +230,7 @@ export default function WareHouseList({ warehouses }) {
               >
                 {columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
+                    {column.name}
                   </DropdownItem>
                 ))}
               </DropdownMenu>

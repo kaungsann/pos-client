@@ -31,7 +31,7 @@ export default function WareHouseTemplate() {
   useEffect(() => {
     fetchWareHouseData();
   }, [token]);
-  console.log("warehouse is a", warehouse);
+  console.log("FILTER warehouse is a", warehouse);
 
   return (
     <>

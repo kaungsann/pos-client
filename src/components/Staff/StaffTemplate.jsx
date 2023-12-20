@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { BASE_URL } from "../../Api";
-import StaffList from "./StaffList.";
+import { BASE_URL } from "../Api";
+
 import { Link, useNavigate } from "react-router-dom";
-import SearchCompo from "../../utils/SearchCompo";
+import SearchCompo from "../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import { Button } from "@nextui-org/react";
+import StaffList from "./StaffList";
 
 export default function StaffTemplate() {
   const [staff, setSaff] = useState([]);
@@ -149,6 +150,8 @@ export default function StaffTemplate() {
       }),
     [staff, filteredKeywords]
   );
+
+  console.log("filter staff is a ", filteredStaffs);
 
   return (
     <>
