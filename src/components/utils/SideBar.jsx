@@ -6,6 +6,7 @@ import pur from "../../assets/buy.png";
 import sal from "../../assets/sale.png";
 import customer from "../../assets/customer.png";
 import accountant from "../../assets/save.png";
+import loss from "../../assets/loss.png";
 import { useContext, createContext, useState } from "react";
 import {
   Popover,
@@ -57,7 +58,7 @@ export default function SideBar() {
                 setSkate(false);
                 setAccount(false);
               }}
-              className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+              className="p-1.5 my-2 rounded-lg bg-gray-50 hover:bg-gray-100"
             >
               {expanded ? (
                 <Icon
@@ -106,45 +107,38 @@ export default function SideBar() {
                       base: "p-1 rounded-sm",
                     }}
                   >
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/inventory/overview")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/inventory/overview")}
+                    >
+                      <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
                           OverView
                         </li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/products/all")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/products/all")}
+                    >
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Products</li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/categorys/all")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/categorys/all")}
+                    >
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Category</li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/stock/all")}
-                      >
+                    <ListboxItem onClick={() => navigate("/admin/stock/all")}>
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Stock</li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/adjustment/view")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/adjustment/view")}
+                    >
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Adjustment</li>
                       </div>
                     </ListboxItem>
@@ -331,29 +325,26 @@ export default function SideBar() {
                       base: "p-1 rounded-sm",
                     }}
                   >
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/purchase/view")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/purchase/view")}
+                    >
+                      <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
                           OverView
                         </li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/purchase/all")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/purchase/all")}
+                    >
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Purchase</li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/customers/vendors")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/customers/vendors")}
+                    >
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Vendors</li>
                       </div>
                     </ListboxItem>
@@ -467,29 +458,26 @@ export default function SideBar() {
                       base: "p-1 rounded-sm",
                     }}
                   >
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/saleorders/view")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/saleorders/view")}
+                    >
+                      <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start rounded-md`}>
                           OverView
                         </li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/saleorders/all")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/saleorders/all")}
+                    >
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Sale</li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/customers/all")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/customers/all")}
+                    >
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Customers</li>
                       </div>
                     </ListboxItem>
@@ -602,29 +590,24 @@ export default function SideBar() {
                       base: "p-1 rounded-sm",
                     }}
                   >
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/partners/all")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/partners/all")}
+                    >
+                      <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
                           Partner
                         </li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/employee/all")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/employee/all")}
+                    >
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Employee</li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/user/all")}
-                      >
+                    <ListboxItem onClick={() => navigate("/admin/user/all")}>
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Staff</li>
                       </div>
                     </ListboxItem>
@@ -748,37 +731,38 @@ export default function SideBar() {
                       base: "p-1 rounded-sm",
                     }}
                   >
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/opex/all")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/account/overview")}
+                    >
+                      <div className="flex justify-between">
+                        <li className={`my-1 ml-2 text-start  rounded-md`}>
+                          OverView
+                        </li>
+                      </div>
+                    </ListboxItem>
+                    <ListboxItem onClick={() => navigate("/admin/opex/all")}>
+                      <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
                           Opex
                         </li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/fixed-cost/all")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/fixed-cost/all")}
+                    >
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Fixed-Cost</li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/variable-cost/all")}
-                      >
+                    <ListboxItem
+                      onClick={() => navigate("/admin/variable-cost/all")}
+                    >
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Variable-Cost</li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem>
-                      <div
-                        className="flex justify-between"
-                        onClick={() => navigate("/admin/waste/all")}
-                      >
+                    <ListboxItem onClick={() => navigate("/admin/waste/all")}>
+                      <div className="flex justify-between">
                         <li className="my-1 text-start ml-2">Waste</li>
                       </div>
                     </ListboxItem>
@@ -800,6 +784,7 @@ export default function SideBar() {
                   onClick={() => setAccount(!account)}
                 >
                   <h4 className="font-semibold text-md">Accountant</h4>
+
                   <Icon
                     icon="iconamoon:arrow-down-2"
                     className="text-lg ml-2 text-gray-600"
@@ -813,6 +798,22 @@ export default function SideBar() {
               >
                 {account && (
                   <ul className="cursor-pointer mt-2">
+                    <li
+                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                        location.pathname === "/admin/accounting/overview"
+                          ? "text-white bg-slate-300 "
+                          : ""
+                      }}`}
+                      onClick={() => {
+                        navigate("/admin/account/overview"), clostHandleList();
+                      }}
+                    >
+                      <Icon
+                        icon="carbon:report"
+                        className="tet-slate-500 text-xl"
+                      />
+                      <span className="ml-3">OverView</span>
+                    </li>
                     <li
                       className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/opex/all" ||

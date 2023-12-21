@@ -89,23 +89,10 @@ export default function Admin() {
                   />
                 </Link>
 
-                <Link to="/admin/user/all">
-                  <PiUsersThree
-                    className={`text-3xl rounded-full p-1 mx-3 text-slate-500 shadow-md ${
-                      location.pathname === "/admin/user/all" ||
-                      location.pathname === "/admin/user/create" ||
-                      location.pathname === `/admin/user/detail/${id}` ||
-                      location.pathname === `/admin/user/edit/${id}`
-                        ? "text-white bg-blue-500 font-extrabold"
-                        : ""
-                    }}`}
-                  />
-                </Link>
-
                 <Link to="/admin/warehouse">
                   <Icon
                     icon="maki:warehouse"
-                    className={`text-3xl rounded-full p-1 shadow-md text-slate-400 font-bold ${
+                    className={`text-3xl rounded-full ml-3 p-1 shadow-md text-slate-400 font-bold ${
                       location.pathname === "/admin/warehouse" &&
                       "bg-blue-500 text-white"
                     }`}
@@ -114,47 +101,10 @@ export default function Admin() {
               </>
             ) : null}
 
-            <Dropdown>
-              <DropdownTrigger>
-                <Icon
-                  icon="basil:invoice-outline"
-                  className={`text-3xl ml-3 rounded-full text-slate-400 p-1 shadow-md ${
-                    location.pathname === "/admin/opex/all" ||
-                    location.pathname === "/admin/opex/create" ||
-                    location.pathname === `/admin/opex/detail/${id}` ||
-                    location.pathname === "/admin/fixed-cost/all" ||
-                    location.pathname === "/admin/fixed-cost/create" ||
-                    location.pathname === `/admin/fixed-cost/detail/${id}` ||
-                    location.pathname === "/admin/variable-cost/all" ||
-                    location.pathname === "/admin/variable-cost/create" ||
-                    location.pathname === `/admin/variable-cost/detail/${id}` ||
-                    location.pathname === "/admin/waste/all" ||
-                    location.pathname === "/admin/waste/create" ||
-                    location.pathname === `/admin/waste/detail/${id}`
-                      ? "text-white bg-blue-500 font-extrabold"
-                      : ""
-                  }}`}
-                />
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Action event example">
-                <DropdownItem onPress={() => navigate("/admin/opex/all")}>
-                  Opex
-                </DropdownItem>
-                <DropdownItem onPress={() => navigate("/admin/fixed-cost/all")}>
-                  Fixed Cost
-                </DropdownItem>
-                <DropdownItem
-                  onPress={() => navigate("/admin/variable-cost/all")}
-                >
-                  Variable Cost
-                </DropdownItem>
-                <DropdownItem onPress={() => navigate("/admin/waste/all")}>
-                  Waste
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-
-            <div className="flex items-center mx-3" onClick={() => navigate(`/admin/user/info/${user._id}`)}>
+            <div
+              className="flex items-center mx-3"
+              onClick={() => navigate(`/admin/user/info/${user._id}`)}
+            >
               {user && (
                 <>
                   <img

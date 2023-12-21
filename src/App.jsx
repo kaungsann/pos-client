@@ -61,6 +61,7 @@ import VariableCostDetail from "./components/Dashboard/VariableCost/VariableCost
 import WasteTemplate from "./components/Dashboard/Waste/WasteTemplate";
 import WasteCreateForm from "./components/Dashboard/Waste/WasteCreateForm";
 import WasteDetail from "./components/Dashboard/Waste/WasteDetail";
+import AccoutingOverView from "./components/Accounting/AccoutingOverView";
 
 function App() {
   return (
@@ -79,6 +80,7 @@ function App() {
             <Route path="warehouse" element={<WareHouseTemplate />} />
 
             <Route path="inventory/overview" element={<OverView />} />
+            <Route path="account/overview" element={<AccoutingOverView />} />
 
             <Route path="opex">
               <Route path="all" element={<OpexTemplate />} />
