@@ -10,21 +10,30 @@ export default function LocationDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const token = useSelector((state) => state.IduniqueData);
-  const dipatch = useDispatch();
+  const dispatch = useDispatch();
 
   const getLocationAPI = async () => {
     setLoading(true);
-    let resData = await getApi(`/location/${id}`, token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    if (resData.status) {
+
+    try {
+      let resData = await getApi(`/location/${id}`, token.accessToken);
+
+      if (resData.message === "Token Expire , Please Login Again") {
+        dispatch(removeData(null));
+      }
+
+      if (resData.status) {
+        setLoading(false);
+        setDetails(resData.data);
+      } else {
+        throw new Error("Data not found");
+      }
+    } catch (error) {
+      setError(error);
       setLoading(false);
-      setDetails(resData.data);
-    } else {
-      setLoading(true);
     }
   };
 
@@ -45,7 +54,13 @@ export default function LocationDetail() {
         </div>
       </div>
 
-      {detail && detail.length > 0 ? (
+      {error ? (
+        <div className="flex items-center justify-center mt-40 pb-10">
+          <p className="text-red-500 text-xl px-4 py-2 ">
+            Failed To Load Data
+          </p>
+        </div>
+      ) : detail && detail.length > 0 ? (
         <div className="container my-5">
           <h2 className="lg:text-xl font-bold my-2">Locations Information</h2>
           <div className="container bg-white p-5 rounded-lg max-w-6xl">
