@@ -22,7 +22,6 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Button,
 } from "@nextui-org/react";
 import SideBar from "../utils/SideBar";
 
@@ -31,10 +30,6 @@ export default function Admin() {
   const { id } = useParams();
   const [usr, setUsr] = useState(null);
   const [expand, setExpand] = useState(true);
-
-  const handleBar = () => {
-    setExpand(!expand);
-  };
 
   const user = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
@@ -203,9 +198,9 @@ export default function Admin() {
       user.role.name === "root" ? (
         <div className="w-full flex relative z-50">
           <div
-            className={`fixed top-0 shadow-md left-0 bottom-0 bg-white p-1 flex flex-col transform transition-transform duration-500 ease-in-out`}
+            className={`fixed top-0 shadow-md left-0 bottom-0 bg-white flex flex-col transform transition-transform duration-500 ease-in-out`}
           >
-            <SideBar handleSideBar={handleBar} />
+            <SideBar />
           </div>
         </div>
       ) : null}
