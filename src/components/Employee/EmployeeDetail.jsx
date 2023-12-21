@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { removeData } from "../../redux/actions";
 import FadeLoader from "react-spinners/FadeLoader";
-
 import { getApi } from "../Api";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
@@ -13,27 +12,36 @@ export default function EmployeeDetail() {
 
   const [detail, setDetails] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const token = useSelector((state) => state.IduniqueData);
-  const dipatch = useDispatch();
+  const dispatch = useDispatch();
 
   const singleEmployeeApi = async () => {
     setLoading(true);
-    let resData = await getApi(`/employee/${id}`, token.accessToken);
 
-    console.log("res data is", resData);
+    try {
+      let resData = await getApi(`/employee/${id}`, token.accessToken);
 
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    if (resData.status) {
-      setDetails(resData.data);
+      if (resData.message === "Token Expire , Please Login Again") {
+        dispatch(removeData(null));
+      }
+
+      if (resData.status) {
+        setDetails(resData.data);
+      } else {
+        throw new Error("Data not found");
+      }
+    } catch (error) {
+      setError(error);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     singleEmployeeApi();
   }, []);
+
   return (
     <>
       <div className="flex justify-between items-center cursor-pointer">
@@ -45,7 +53,13 @@ export default function EmployeeDetail() {
         </Link>
       </div>
 
-      {detail && detail.length > 0 ? (
+      {error ? (
+        <div className="flex items-center justify-center mt-40 pb-10">
+          <p className="text-red-500 text-xl px-4 py-2 ">
+            Failed To Load Data
+          </p>
+        </div>
+      ) : detail && detail.length > 0 ? (
         <div className="container">
           <h2 className="lg:text-xl font-bold my-2">Employee Information</h2>
           <div className="container bg-white p-5 rounded-lg max-w-6xl ">
@@ -74,9 +88,7 @@ export default function EmployeeDetail() {
                 <div className="flex justify-between items-center">
                   <h4>Phone</h4>
                   <h3 className="font-medium">
-                    {detail[0].phone
-                      ? detail[0].phone
-                      : ""}
+                    {detail[0].phone ? detail[0].phone : ""}
                   </h3>
                 </div>
                 <div className="flex justify-between items-center">
@@ -90,9 +102,7 @@ export default function EmployeeDetail() {
                 <div className="flex justify-between items-center">
                   <h4>Address</h4>
                   <h3 className="font-medium">
-                    {detail[0].address
-                      ? detail[0].address
-                      : ""}{" "}
+                    {detail[0].address ? detail[0].address : ""}
                   </h3>
                 </div>
               </div>
@@ -100,19 +110,13 @@ export default function EmployeeDetail() {
                 <div className="flex justify-between items-center">
                   <h4>City</h4>
                   <h3 className="font-medium">
-                    {" "}
-                    {detail[0].city
-                      ? detail[0].city
-                      : ""}
+                    {detail[0].city ? detail[0].city : ""}
                   </h3>
                 </div>
                 <div className="flex justify-between items-center">
                   <h4>Gender</h4>
-
-                  <h3 className="font-medium ">
-                    {detail[0].gender
-                      ? detail[0].gender
-                      : ""}
+                  <h3 className="font-medium">
+                    {detail[0].gender ? detail[0].gender : ""}
                   </h3>
                 </div>
               </div>
