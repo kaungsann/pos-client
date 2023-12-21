@@ -154,7 +154,7 @@ export default function Admin() {
               </DropdownMenu>
             </Dropdown>
 
-            <div className="flex items-center mx-3">
+            <div className="flex items-center mx-3" onClick={() => navigate(`/admin/user/info/${user._id}`)}>
               {user && (
                 <>
                   <img
@@ -166,27 +166,9 @@ export default function Admin() {
                     }}
                   />
 
-                  <Dropdown>
-                    <DropdownTrigger>
-                      <div className="flex items-center">
-                        <h3 className="font-semibold text-slate-500 text-md ml-2">
-                          {user.username}
-                        </h3>
-                        <Icon
-                          icon="iconamoon:arrow-down-2"
-                          className="text-2xl ml- 2 text-slate-400"
-                        />
-                      </div>
-                    </DropdownTrigger>
-                    <DropdownMenu aria-label="Static Actions">
-                      <DropdownItem
-                        key="new"
-                        onPress={() => navigate(`/admin/user/info/${user._id}`)}
-                      >
-                        Setting
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
+                  <h3 className="font-semibold text-slate-500 text-md ml-2">
+                    {user.username}
+                  </h3>
                 </>
               )}
             </div>
