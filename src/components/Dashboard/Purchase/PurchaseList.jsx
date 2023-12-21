@@ -260,7 +260,7 @@ export default function PurchaseList({ purchases, refresh }) {
             </h3>
           </div>
 
-          <div className="flex">
+          <div className="flex  items-center">
             <label className="flex items-center text-default-400 text-small mr-4">
               Rows per page:
               <select

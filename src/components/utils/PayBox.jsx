@@ -8,6 +8,8 @@ import { add } from "../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import img from "../../assets/product.svg";
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from "@nextui-org/react";
+
 import {
   itemRemove,
   removeAllItems,
@@ -82,7 +84,7 @@ export default function PayBox({ onContinueToPay }) {
               className="text-lg w-40 text-end hover:text-red-700 font-semibold"
               onClick={() => dispatch(removeAllItems())}
             >
-              Clear All
+              Clear
             </h3>
           </div>
           <div className="h-96 overflow-y-scroll my-3 custom-scrollbar">
@@ -179,19 +181,25 @@ export default function PayBox({ onContinueToPay }) {
                 {totalCost.toLocaleString("en-US")}MMK
               </h3>
             </div>
-            <button
-              className="mt-3 text-center text-white font-semibold rounded-md shadow-md py-3 bg-blue-600 w-full"
-              onClick={() => {
-                if (product.length > 0) {
-                  setPayment(!payment);
-                } else {
-                  setPayment(false);
-                  toast("You need to select a product");
-                }
-              }}
-            >
-              Continue To Pay
-            </button>
+            
+
+              <Button
+                className="w-full mt-5"
+                color="primary"
+                variant="solid"
+                onClick={() => {
+                  if (product.length > 0) {
+                    setPayment(!payment);
+                  } else {
+                    setPayment(false);
+                    toast("You need to select a product");
+                  }
+                }}
+              >
+                Continue To Pay
+              </Button>
+
+
           </div>
         </div>
       )}
