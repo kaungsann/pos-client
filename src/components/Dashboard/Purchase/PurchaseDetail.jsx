@@ -21,9 +21,10 @@ export default function SaleOrderDetail() {
   const [detail, setDetails] = useState(null);
   const [lines, setLines] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const token = useSelector((state) => state.IduniqueData);
-  const dipatch = useDispatch();
+  const dispatch = useDispatch();
 
   const columns = [
     { key: "name", label: "Name", align: "center" },
@@ -40,33 +41,47 @@ export default function SaleOrderDetail() {
 
   const singlePurchaseOrder = async () => {
     setLoading(true);
-    let resData = await getApi(`/purchase/${id}`, token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    if (resData.status) {
+
+    try {
+      let resData = await getApi(`/purchase/${id}`, token.accessToken);
+
+      if (resData.message === "Token Expire , Please Login Again") {
+        dispatch(removeData(null));
+      }
+
+      if (resData.status) {
+        setLoading(false);
+        setDetails(resData.data);
+      } else {
+        throw new Error("Data not found");
+      }
+    } catch (error) {
+      setError(error);
       setLoading(false);
-      setDetails(resData.data);
-    } else {
-      setLoading(true);
     }
   };
 
   const purchaselines = async () => {
-    let resData = await getApi("/purchaselines", token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    console.log("sale lines  single", resData.data);
-    if (resData.status) {
-      let name = resData.data.filter(
-        (pid) => pid.orderId && pid.orderId._id === id
-      );
-      setLines(name);
+    try {
+      let resData = await getApi("/purchaselines", token.accessToken);
+
+      if (resData.message === "Token Expire , Please Login Again") {
+        dispatch(removeData(null));
+      }
+
+      if (resData.status) {
+        let name = resData.data.filter(
+          (pid) => pid.orderId && pid.orderId._id === id
+        );
+        setLines(name);
+      } else {
+        throw new Error("Data not found");
+      }
+    } catch (error) {
+      setError(error);
+      setLoading(false);
     }
   };
-
-  console.log("sale lines iss single", lines);
 
   useEffect(() => {
     singlePurchaseOrder();
@@ -86,7 +101,13 @@ export default function SaleOrderDetail() {
         </div>
       </div>
 
-      {detail && detail.length > 0 ? (
+      {error ? (
+        <div className="flex items-center justify-center mt-40 pb-10">
+          <p className="text-red-500 text-xl px-4 py-2 ">
+            Failed To Load Data
+          </p>
+        </div>
+      ) : detail && detail.length > 0 ? (
         <div className="container my-5">
           <h2 className="lg:text-xl font-bold my-2">Purchase Information</h2>
           <div className="container bg-white p-5 rounded-lg max-w-6xl">
