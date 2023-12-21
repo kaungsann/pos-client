@@ -3,6 +3,8 @@ import logo from "../../../public/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useReactToPrint } from "react-to-print";
 import { removeAllItems } from "../../redux/actions";
+import { Button } from "@nextui-org/react";
+
 
 export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
   let user = useSelector((state) => state.loginData);
@@ -71,8 +73,12 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
             <h4 className="text-md font-bold text-black">Tax</h4>
             <h4 className="text-md font-bold text-black">{tax.toFixed(2)}</h4>
           </div>
+          {/* <div className="flex justify-between mx-6">
+            <h4 className="text-md font-bold text-black">Change</h4>
+            <h4 className="text-md font-bold text-black">{change}</h4>
+          </div> */}
           <div className="flex justify-between mx-6">
-            <h4 className="text-md font-bold text-black">Total Tax</h4>
+            <h4 className="text-md font-bold text-black">Sub Total</h4>
             <h4 className="text-md font-bold text-black">{total} mmk</h4>
           </div>
         </div>
@@ -87,23 +93,28 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
       </div>
 
       <div className="w-80 mx-auto mt-2 mb-4">
-        <button
+        <Button
+          className="w-full mb-2 mt-2"  
+          color="primary"
+          variant="solid"
           onClick={handlePrint}
-          className="w-full mt-2 font-bold py-2 text-white bg-blue-600 rounded-md shadow-md"
         >
           Print
-        </button>
+        </Button>
 
-        <button
-          className="w-full mt-2  font-bold py-2 text-white bg-cyan-500 rounded-md shadow-md"
+        <Button
+          className="w-full "
+          color="primary"
+          variant="solid"
           onClick={() => {
             change(false);
             dispatch(removeAllItems());
           }}
         >
           New Order
-        </button>
+        </Button>
       </div>
+
     </>
   );
 }
