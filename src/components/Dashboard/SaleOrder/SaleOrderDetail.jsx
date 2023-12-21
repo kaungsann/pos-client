@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 import { Icon } from "@iconify/react";
@@ -19,10 +19,11 @@ export default function SaleOrderDetail() {
   const { id } = useParams();
   const [lines, setLines] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [detail, setDetails] = useState(null);
+  const [error, setError] = useState(null);
+
   const token = useSelector((state) => state.IduniqueData);
-  const dipatch = useDispatch();
+  const dispatch = useDispatch();
 
   const columns = [
     { key: "name", label: "Name", align: "center" },
@@ -39,37 +40,52 @@ export default function SaleOrderDetail() {
 
   const singleSaleOrder = async () => {
     setLoading(true);
-    let resData = await getApi(`/sale/${id}`, token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    if (resData.status) {
+
+    try {
+      let resData = await getApi(`/sale/${id}`, token.accessToken);
+
+      if (resData.message === "Token Expire , Please Login Again") {
+        dispatch(removeData(null));
+      }
+
+      if (resData.status) {
+        setLoading(false);
+        setDetails(resData.data);
+      } else {
+        throw new Error("Data not found");
+      }
+    } catch (error) {
+      setError(error);
       setLoading(false);
-      setDetails(resData.data);
-    } else {
-      setLoading(true);
     }
   };
 
   const saleLinesApi = async () => {
-    let resData = await getApi("/salelines", token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    if (resData.status) {
-      let name = resData.data.filter(
-        (pid) => pid.orderId && pid.orderId._id === id
-      );
-      console.log("sale lines iss single name is", name);
-      setLines(name);
+    try {
+      let resData = await getApi("/salelines", token.accessToken);
+
+      if (resData.message === "Token Expire , Please Login Again") {
+        dispatch(removeData(null));
+      }
+
+      if (resData.status) {
+        let name = resData.data.filter(
+          (pid) => pid.orderId && pid.orderId._id === id
+        );
+        setLines(name);
+      } else {
+        throw new Error("Data not found");
+      }
+    } catch (error) {
+      setError(error);
+      setLoading(false);
     }
   };
-  console.log("sale lines iss single", lines);
+
   useEffect(() => {
     saleLinesApi();
     singleSaleOrder();
   }, []);
-  console.log("detail lines iss single", detail);
 
   return (
     <>
@@ -83,7 +99,13 @@ export default function SaleOrderDetail() {
           </Link>
         </div>
       </div>
-      {detail && detail.length > 0 ? (
+      {error ? (
+        <div className="flex items-center justify-center mt-40 pb-10">
+          <p className="text-red-500 text-xl px-4 py-2 ">
+            Failed To Load Data
+          </p>
+        </div>
+      ) : detail && detail.length > 0 ? (
         <div className="container my-5">
           <h2 className="lg:text-xl font-bold my-2">Order Information</h2>
           <div className="container bg-white p-5 rounded-lg max-w-6xl">
