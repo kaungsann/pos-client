@@ -62,22 +62,21 @@ export default function EmployeeCreate() {
         pauseOnHover
         theme="light"
       />
-    
 
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-
-        <h2 className="lg:text-xl font-bold">Employee Create</h2>
+          <h2 className="lg:text-xl font-bold">Employee Create</h2>
 
           <div className="flex gap-3">
             <Button
               type="submit"
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+                isLoading
                   ? ""
                   : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-                }`}
+              }`}
               onClick={handleSubmit}
             >
               Save
@@ -86,10 +85,11 @@ export default function EmployeeCreate() {
             <Button
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+                isLoading
                   ? ""
                   : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-                }`}
+              }`}
               onClick={() => navigate("/admin/employee/all")}
             >
               Discard
@@ -118,7 +118,8 @@ export default function EmployeeCreate() {
               </div>
               <div className="w-60">
                 <Input
-                  type="text"
+                  type="email"
+                  required
                   name="email"
                   label="Email"
                   value={formData.email}
@@ -130,7 +131,7 @@ export default function EmployeeCreate() {
               </div>
               <div className="w-60   relative">
                 <Input
-                  type="text"
+                  type="number"
                   name="phone"
                   label="Phone"
                   value={formData.phone}
@@ -148,6 +149,20 @@ export default function EmployeeCreate() {
                   value={formData.birthdate}
                   onChange={(e) => handleInputChange(e)}
                   // onChange={(e) => setBirthDate(e.target.value)}
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  label="address"
+                  name="address"
+                  value={formData.address}
+                  // color={isInvalid ? "danger" : "success"}
+                  // errorMessage={isInvalid && "Please enter a valid email"}
+                  // onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => handleInputChange(e)}
+                  placeholder="Enter address ..."
+                  labelPlacement="outside"
                 />
               </div>
               <div className="w-60">

@@ -227,10 +227,8 @@ export default function SaleOrderCreate() {
         style={{ width: "450px" }}
       />
 
-
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-
           <h2 className="lg:text-xl font-bold">Create Purchase Order</h2>
           <div className="flex gap-3">
             <button
@@ -349,7 +347,7 @@ export default function SaleOrderCreate() {
               <h3 className="text-lg font-semibold">Order Products</h3>
               <button
                 onClick={handleAddProduct}
-                className="px-8 py-2 text-white font-bold rounded-md shadow-md ml-6 border-2 border-blue-500 bg-blue-600 hover:opacity-75"
+                className="px-4 py-1 text-white font-bold rounded-md shadow-md ml-6 border-2 border-blue-500 bg-blue-600 hover:opacity-75"
               >
                 Add
               </button>

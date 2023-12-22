@@ -28,7 +28,7 @@ const columns = [
   { name: "Actions", uid: "actions" },
 ];
 
-export default function LocationList({ locations }) {
+export default function LocationList({ locations, refresh }) {
   const [showDeleteBox, setShowDeleteBox] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
@@ -80,12 +80,13 @@ export default function LocationList({ locations }) {
     const response = await deleteMultiple(
       "/location",
       {
-        categoryId: [...selectedKeys],
+        locationIds: [...selectedKeys],
       },
       token.accessToken
     );
     if (response.status) {
       setSelectedKeys([]);
+      refresh();
     }
   };
 

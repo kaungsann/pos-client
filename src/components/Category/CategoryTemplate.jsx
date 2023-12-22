@@ -43,8 +43,6 @@ export default function CategoryTemplate() {
           (ct) => ct.active === true
         );
 
-        console.log("categorys is a", filterActiveCategorys);
-
         setCategorys(filterActiveCategorys);
       } catch (error) {
         console.error("Error fetching categories:", error);
