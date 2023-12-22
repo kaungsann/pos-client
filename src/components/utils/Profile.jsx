@@ -52,11 +52,14 @@ export default function Profile() {
     if (response.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
+    const formattedBirthDate = response.data[0].birthdate
+      ? new Date(response.data[0].birthdate).toISOString().split("T")[0]
+      : "";
+    setDate(formattedBirthDate);
     setUsr(response.data[0]);
     setName(response.data[0].username);
     setEmail(response.data[0].email);
     setPhone(response.data[0].phone);
-    setDate(format(new Date(response.data[0].birthdate), "yyyy-MM-dd"));
     setAddress(response.data[0].address);
     setGender(response.data[0].gender);
     setCity(response.data[0].city);
@@ -74,7 +77,7 @@ export default function Profile() {
       formData.append("email", email);
     }
     if (address) {
-      formData.append("contactAddress", address);
+      formData.append("address", address);
     }
     if (phone) {
       formData.append("phone", phone);
@@ -83,7 +86,7 @@ export default function Profile() {
       formData.append("city", city);
     }
     if (date) {
-      formData.append("dateOfBirth", date);
+      formData.append("birthdate", date);
     }
     if (gender) {
       formData.append("gender", gender);
@@ -91,8 +94,13 @@ export default function Profile() {
     if (file) {
       formData.append("image", file);
     }
+    console.log("formdata is", formData);
+
+    console.log("data is formed", name, email, city, address);
 
     let resData = await FormPathApi(`/user/${id}`, formData, token);
+
+    console.log("res ddata is", resData);
 
     if (resData.con) {
       toast(resData.message);
@@ -248,12 +256,12 @@ export default function Profile() {
             <div>
               <div className="flex justify-between w-full p-5 text-slate-700 pb-6 border-b-2 px-4 border-b-slate-300">
                 <h3 className="text-2xl font-bold">Personal Information</h3>
-                {/* <button
-                  onClick={() => handleSubmit}
+                <button
+                  onClick={handleSubmit}
                   className="font-bold rounded-sm shadow-sm flex items-cente text-green-700 border-green-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-green-700 px-6 py-2"
                 >
                   Save
-                </button> */}
+                </button>
               </div>
               <div className="mt-4 p-5">
                 <div className="mt-4 flex flex-wrap justify-between">
@@ -271,14 +279,17 @@ export default function Profile() {
                         labelPlacement="outside"
                       />
                     </div>
+
                     <div className="w-6/12 ml-2">
                       <Input
                         type="text"
-                        label="Phone"
-                        name="phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Enter  phone..."
+                        label="Email"
+                        name="email"
+                        value={email}
+                        // color={isInvalid ? "danger" : "success"}
+                        // errorMessage={isInvalid && "Please enter a valid email"}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter  Email..."
                         labelPlacement="outside"
                       />
                     </div>
@@ -299,13 +310,11 @@ export default function Profile() {
                       <div className="w-6/12 ml-2">
                         <Input
                           type="text"
-                          label="Email"
-                          name="email"
-                          value={name}
-                          // color={isInvalid ? "danger" : "success"}
-                          // errorMessage={isInvalid && "Please enter a valid email"}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Enter  Email..."
+                          label="Phone"
+                          name="phone"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          placeholder="Enter  phone..."
                           labelPlacement="outside"
                         />
                       </div>
@@ -328,44 +337,35 @@ export default function Profile() {
                         type="date"
                         name="dob"
                         label="Date of Birth"
-                        value={date}
+                        value={
+                          date ? new Date(date).toISOString().split("T")[0] : ""
+                        }
                         onChange={(e) => setDate(e.target.value)}
                         placeholder="Enter Address..."
                         labelPlacement="outside"
                       />
                     </div>
                   </div>
-                  <div className="w-full mt-6 ">
-                    <Input
-                      type="text"
-                      name="city"
-                      label="City"
-                      color="white"
-                      className=""
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      placeholder="Enter City..."
-                      labelPlacement="outside"
-                    />
-                  </div>
-                  <div className="flex w-full justify-between mt-6 ">
-                    <Select
-                      labelPlacement="outside"
-                      label="Gender"
-                      name="gender"
-                      value={gender}
-                      placeholder="Select an gender"
-                      selectedKeys={gender ? [gender] : false}
-                      onChange={(e) => setGender(e.target.value)}
-                      className="max-w-xs "
-                    >
-                      <SelectItem value="male" key="male">
-                        male
-                      </SelectItem>
-                      <SelectItem value="female" key="female">
-                        female
-                      </SelectItem>
-                    </Select>
+
+                  <div className="flex w-full justify-between mt-6">
+                    <div className="w-6/12">
+                      <Select
+                        labelPlacement="outside"
+                        label="Gender"
+                        name="gender"
+                        value={gender}
+                        placeholder="Select an gender"
+                        selectedKeys={gender ? [gender] : false}
+                        onChange={(e) => setGender(e.target.value)}
+                      >
+                        <SelectItem value="male" key="male">
+                          male
+                        </SelectItem>
+                        <SelectItem value="female" key="female">
+                          female
+                        </SelectItem>
+                      </Select>
+                    </div>
                   </div>
                 </div>
               </div>

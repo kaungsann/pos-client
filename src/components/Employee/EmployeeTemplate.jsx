@@ -34,7 +34,10 @@ export default function EmployeeTemplate() {
           "Content-Type": "application/json",
         },
       });
-      setEmployee(response.data?.data);
+      const filterEmployeeActive = response.data?.data.filter(
+        (emp) => emp.active === true
+      );
+      setEmployee(filterEmployeeActive);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }

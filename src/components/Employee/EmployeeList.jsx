@@ -19,7 +19,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
-import { Icon } from "@iconify/react";  
+import { Icon } from "@iconify/react";
 import DeleteAlert from "../utils/DeleteAlert";
 import { format } from "date-fns";
 
@@ -27,14 +27,14 @@ const columns = [
   { name: "Name", uid: "name", sortable: true },
   { name: "Email", uid: "email" },
   { name: "Gender", uid: "gender" },
-  { name: "Date of Birth", uid: "birthdate"},
+  { name: "Date of Birth", uid: "birthdate" },
   { name: "Phone", uid: "phone" },
   { name: "Address", uid: "address" },
   { name: "City", uid: "city" },
   { name: "Action", uid: "actions" },
 ];
 
-export default function EmployeeList({ employees }) {
+export default function EmployeeList({ employees, onDeleteSuccess }) {
   const [showDeleteBox, setShowDeleteBox] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
@@ -93,6 +93,7 @@ export default function EmployeeList({ employees }) {
     );
     if (response.status) {
       setSelectedKeys([]);
+      onDeleteSuccess();
     }
   };
 

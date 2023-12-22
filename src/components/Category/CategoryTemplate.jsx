@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../Api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CategoryList from "./CategoryList";
 import ExcelExportButton from "../ExcelExportButton";
 import ExcelImportButton from "../ExcelImportButton";
@@ -12,7 +12,14 @@ import { Button } from "@nextui-org/react";
 export default function CategoryTemplate() {
   const [categorys, setCategorys] = useState([]);
   const [filteredKeywords, setFilteredKeywords] = useState({ name: "" });
+  const [refresh, setRefresh] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
+
+  const navigate = useNavigate();
+
+  const handleRefresh = () => {
+    setRefresh(!refresh);
+  };
 
   const CATEGORY_API = {
     INDEX: BASE_URL + "/category",
@@ -29,15 +36,20 @@ export default function CategoryTemplate() {
             "Content-Type": "application/json",
           },
         });
+        let filterActiveCategorys = response.data?.data.filter(
+          (ct) => ct.active === true
+        );
 
-        setCategorys(response.data?.data);
+        console.log("categorys is a", filterActiveCategorys);
+
+        setCategorys(filterActiveCategorys);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
 
     fetchCategoryData();
-  }, [token]);
+  }, [token, refresh]);
 
   const handleFilterChange = (selected) => {
     setFilteredKeywords((prevFilter) => ({
@@ -86,7 +98,7 @@ export default function CategoryTemplate() {
           </div>
         </div>
       </div>
-      <CategoryList categories={filteredCategory} />
+      <CategoryList categories={filteredCategory} refresh={handleRefresh} />
     </>
   );
 }

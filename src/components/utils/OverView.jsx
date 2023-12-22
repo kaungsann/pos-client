@@ -14,6 +14,14 @@ import {
   Legend,
 } from "recharts";
 import { format } from "date-fns";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Input,
+  Listbox,
+  ListboxItem,
+} from "@nextui-org/react";
 
 import FadeLoader from "react-spinners/FadeLoader";
 import { getApi } from "../Api";
@@ -68,6 +76,7 @@ export default function OverView() {
   const [orderSaleLines, setOrderSaleLines] = useState([]);
   const [popularSaleProducts, setPopularSaleProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [text, setText] = useState("Monthly");
 
   const todayDate = format(new Date(), "MM-dd-yyyy");
 
@@ -102,6 +111,7 @@ export default function OverView() {
     setYear("");
     setDay("");
     getTotals();
+    setText(`${StartDate}  to  ${endDate} `);
   };
 
   const getTotals = async () => {
@@ -156,8 +166,7 @@ export default function OverView() {
 
   useEffect(() => {
     getTotals();
-  }, [day , month , year , StartDate]);
-
+  }, [day, month, year, StartDate]);
 
   const orderList = Array.from(
     new Set(orderPurchaseLines.map((line) => line.orderId._id))
@@ -198,6 +207,106 @@ export default function OverView() {
   return (
     <>
       <div className="relative">
+        <div className="flex justify-end mb-3">
+          <div className="flex w-full justify-center">
+            <Popover
+              placement="bottom"
+              classNames={{
+                base: ["p-0 rounded-sm"],
+                content: ["p-0 mx-2 rounded-sm"],
+              }}
+            >
+              <PopoverTrigger>
+                <button className="flex items-center px-3 py-2 bg-white shadow-md rounded-sm">
+                  <Icon icon="uiw:date" className="text-slate-500 text-md" />
+                  <span className="text-sm ml-2">2023</span>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <Listbox>
+                  <ListboxItem
+                    className="rounded-none"
+                    onClick={() => {
+                      setMonth("");
+                      setYear("");
+                      setEndDate(todayDate); // Set end date to today
+                      setDay("7");
+                      getTotals();
+                      setText("Weekly");
+                    }}
+                  >
+                    Weekly
+                  </ListboxItem>
+                  <ListboxItem
+                    className="rounded-none"
+                    onClick={() => {
+                      setDay("");
+                      setYear("");
+                      setEndDate(todayDate); // Set end date to today
+                      setMonth("Monthly"); // Set month to "Monthly"
+                      getTotals();
+                      setText("Monthly");
+                    }}
+                  >
+                    Monthly
+                  </ListboxItem>
+                  <ListboxItem
+                    className="border-b-slate-300 border-b-2 rounded-sm"
+                    onClick={() => {
+                      setDay("");
+                      setMonth("");
+                      setEndDate(todayDate); // Set end date to today
+                      setYear("Yearly"); // Set year to "Yearly"
+                      getTotals();
+                      setText("Yearly");
+                    }}
+                  >
+                    Yearly
+                  </ListboxItem>
+
+                  <ListboxItem className="rounded-none">Last Month</ListboxItem>
+                  <ListboxItem className="rounded-none">
+                    Last Quarter
+                  </ListboxItem>
+                  <ListboxItem className="border-b-slate-300 border-b-2 rounded-none">
+                    Last Funancial Year
+                  </ListboxItem>
+                </Listbox>
+                <div className="flex items-center py-3">
+                  <div className="flex items-center mr-3">
+                    <span>From :</span>
+                    <input
+                      type="date"
+                      placeholder="Select date"
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="border-none ml-2"
+                    />
+                  </div>
+
+                  <div className="flex items-center">
+                    <span>To :</span>
+                    <input
+                      type="date"
+                      placeholder="Select date"
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="border-none ml-2"
+                    />
+                  </div>
+                  <button
+                    onClick={calculateDailyFilter}
+                    className="px-3 py-1 hover:opacity-70 rounded-md mx-3 text-white font-semibold bg-[#56488f]"
+                  >
+                    Apply
+                  </button>
+                </div>
+              </PopoverContent>
+            </Popover>
+
+            <div className="w-56 flex shadow-md justify-center px-3 mx-3 py-1.5 bg-white border-2 text-center rounded-sm">
+              <h4 className="text-slate-500  font-semibold">{text}</h4>
+            </div>
+          </div>
+        </div>
         <div className="flex">
           {/* Sale Order  */}
           <div className="w-3/5	bg-white p-4 border-2 rounded-lg shadow-md">
@@ -205,13 +314,6 @@ export default function OverView() {
               <h3 className="text-lg font-semibold text-slate-700">
                 Sales Overview
               </h3>
-              <div>
-                <Icon
-                  onClick={() => setShowFilter(true)}
-                  icon="icon-park-outline:filter"
-                  className="text-[#8b5cf6] hover:text-[#4f3b80] font-extrabold text-xl"
-                />
-              </div>
             </div>
             {/* Annula Sales */}
             <div className=" my-3 px-4 flex">
@@ -291,13 +393,6 @@ export default function OverView() {
               <h3 className="text-lg font-semibold text-slate-700">
                 Purchases Overview
               </h3>
-              <div>
-                <Icon
-                  onClick={() => setShowFilter(true)}
-                  icon="icon-park-outline:filter"
-                  className="text-[#8b5cf6] font-extrabold text-xl"
-                />
-              </div>
             </div>
             {/* Annula Purchase */}
             <div className=" my-3 px-4 flex">
@@ -370,44 +465,6 @@ export default function OverView() {
               </div>
             </div>
           </div>
-        </div>
-        <div className="flex justify-center my-6">
-          <button
-            onClick={() => {
-              setMonth("");
-              setYear("");
-              setEndDate(todayDate); // Set end date to today
-              setDay("7");
-              getTotals();
-            }}
-            className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
-          >
-            Weekly
-          </button>
-          <button
-            onClick={() => {
-              setDay("");
-              setYear("");
-              setEndDate(todayDate); // Set end date to today
-              setMonth("Monthly"); // Set month to "Monthly"
-              getTotals();
-            }}
-            className="font-bold mx-4 rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
-          >
-            Monthly
-          </button>
-          <button
-            onClick={() => {
-              setDay("");
-              setMonth("");
-              setEndDate(todayDate); // Set end date to today
-              setYear("Yearly"); // Set year to "Yearly"
-              getTotals();
-            }}
-            className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
-          >
-            Yearly
-          </button>
         </div>
         <div className="flex my-4">
           <div className="w-3/5 bg-white rounded-lg shadow-md p-4">
@@ -489,102 +546,6 @@ export default function OverView() {
             </ResponsiveContainer>
           </div>
         </div>
-        {ShowFilter && (
-          <div className="w-2/4 bg-white rounded-sm shadow-md absolute top-24 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="px-3 bg-slate-600 py-3 w-full flex justify-between items-center">
-              <h1 className="font-bold text-xl text-white">
-                Filter by Date & Months & Year
-              </h1>
-              {showFilterDateBox ? (
-                <IoMdArrowRoundBack
-                  onClick={() => setShowFilterDateBox(false)}
-                  className="text-white text-xl hover:text-slate-300"
-                />
-              ) : (
-                <IoMdArrowRoundForward
-                  onClick={() => setShowFilterDateBox(true)}
-                  className="text-white text-2xl hover:text-slate-300"
-                />
-              )}
-            </div>
-            {!showFilterDateBox ? (
-              <div className="mx-auto pb-4 bg-white">
-                <div className="flex w-3/5 mx-auto">
-                  <div className="flex flex-col items-center w-2/4">
-                    <label className="my-2 text-lg font-semibold text-slate-500">
-                      From
-                    </label>
-                    <input
-                      type="date"
-                      onChange={(e) => setStartDate(e.target.value)}
-                      className="p-3 bg-slate-100"
-                    />
-                  </div>
-                  <div className="flex flex-col items-center w-2/4">
-                    <label className="my-2 text-lg font-semibold text-slate-500">
-                      To
-                    </label>
-                    <input
-                      type="date"
-                      onChange={(e) => setEndDate(e.target.value)}
-                      className="p-3 bg-slate-100"
-                    />
-                  </div>
-                </div>
-                <div className="w-3/5 mx-auto my-4 flex justify-end">
-                  <button
-                    onClick={() => setShowFilter(false)}
-                    className="text-md py-2 px-4 bg-slate-200 rounded-sm hover:bg-slate-300"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={calculateDailyFilter}
-                    className="text-md py-2 px-6 bg-blue-600 rounded-sm text-white hover:bg-blue-700 ml-6"
-                  >
-                    Filter
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="mx-auto">
-                  <select
-                    required
-                    id="catid"
-                    style={{ backgroundColor: "transparent" }}
-                    onChange={handleFilterChange}
-                    className="block w-80 mx-auto custom-select rounded-md border-0 my-4 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-                  >
-                    <option disabled value selected>
-                      Select an option
-                    </option>
-                    <option value="7" className="py-4 px-4">
-                      Weekly
-                    </option>
-                    <option value="Monthly" className="py-4 px-4">
-                      Monthly
-                    </option>
-                    <option value="Yearly" className="py-4 px-4">
-                      Yearly
-                    </option>
-                  </select>
-                </div>
-                <div className="w-80 mx-auto my-4 flex justify-end">
-                  <button
-                    onClick={() => setShowFilter(false)}
-                    className="text-md py-2 px-4 bg-slate-200 rounded-sm hover:bg-slate-300"
-                  >
-                    Cancel
-                  </button>
-                  <button className="text-md py-2 px-6 bg-blue-600 rounded-sm text-white hover:bg-blue-700 ml-6">
-                    Filter
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        )}
       </div>
     </>
   );

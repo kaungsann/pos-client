@@ -38,7 +38,10 @@ export default function AdjustmentTemplate() {
           "Content-Type": "application/json",
         },
       });
-      setPartners(response.data?.data);
+      const filteredPartners = response.data?.data.filter(
+        (ct) => ct.active === true
+      );
+      setPartners(filteredPartners);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -102,7 +105,10 @@ export default function AdjustmentTemplate() {
           />
         </div>
       </div>
-      <PartnerList partners={filteredPartners} />
+      <PartnerList
+        partners={filteredPartners}
+        onDeleteSuccess={fetchPartnerData}
+      />
     </>
   );
 }

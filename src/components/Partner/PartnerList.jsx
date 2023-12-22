@@ -33,7 +33,7 @@ const columns = [
   { name: "Customer", uid: "isCustomer" },
   { name: "Actions", uid: "actions" },
 ];
-export default function PartnerList({ partners }) {
+export default function PartnerList({ partners, onDeleteSuccess }) {
   const [showDeleteBox, setShowDeleteBox] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
@@ -85,12 +85,13 @@ export default function PartnerList({ partners }) {
     const response = await deleteMultiple(
       "/partner",
       {
-        adjustmentId: [...selectedKeys],
+        partnerIds: [...selectedKeys],
       },
       token.accessToken
     );
     if (response.status) {
       setSelectedKeys([]);
+      onDeleteSuccess();
     }
   };
 

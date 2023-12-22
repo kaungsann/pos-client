@@ -35,7 +35,7 @@ const columns = [
   { name: "Actions", uid: "actions" },
 ];
 
-export default function ProductList({ products }) {
+export default function ProductList({ products, fetchProducts }) {
   const [showDeleteBox, setShowDeleteBox] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
@@ -94,6 +94,7 @@ export default function ProductList({ products }) {
     );
     if (response.status) {
       setSelectedKeys([]);
+      fetchProducts();
     }
   };
 

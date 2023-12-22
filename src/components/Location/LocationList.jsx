@@ -36,7 +36,7 @@ export default function LocationList({ locations }) {
     new Set(columns.map((column) => column.uid))
   );
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "name",
     direction: "ascending",

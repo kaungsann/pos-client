@@ -76,11 +76,11 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
 
   const hasSearchFilter = Boolean(filterValue);
 
-  const deleteCateogrys = async () => {
+  const deleteStaffs = async () => {
     const response = await deleteMultiple(
-      "/employee",
+      "/user",
       {
-        employeeIds: [...selectedKeys],
+        userIds: [...selectedKeys],
       },
       token.accessToken
     );
@@ -397,7 +397,7 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
             setSelectedKeys([]);
           }}
           onDelete={() => {
-            deleteCateogrys();
+            deleteStaffs();
             setDeleteBox(false);
           }}
         />

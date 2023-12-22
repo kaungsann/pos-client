@@ -24,9 +24,9 @@ import DeleteAlert from "../utils/DeleteAlert";
 import { format } from "date-fns";
 
 const columns = [
-  { name: "Product", uid: "productName", sortable: true},
+  { name: "Product", uid: "productName", sortable: true },
   { name: "Location", uid: "locationName", sortable: true },
-  { name: "Date", uid: "updatedAt", sortable: true},
+  { name: "Date", uid: "updatedAt", sortable: true },
   { name: "Barcode", uid: "productBarcode" },
   { name: "Quantity", uid: "quantity", sortable: true },
 ];
@@ -97,40 +97,41 @@ export default function AdjustmentList({ adjustments }) {
     setPage(1);
   }, []);
 
-  const renderCell = React.useCallback((adjustment, columnKey) => {
-    const cellValue = adjustment[columnKey];
+  const renderCell = React.useCallback(
+    (adjustment, columnKey) => {
+      const cellValue = adjustment[columnKey];
 
-    const renderers = {
-      name: () => (
-        <User
-          avatarProps={{ radius: "full", size: "sm", src: adjustment.image }}
-          name={cellValue}
-        >
-          {adjustment.name}
-        </User>
-      ),
-      updatedAt: () => (
-        <h1>
-          {format(new Date(adjustment.updatedAt), 'yyyy-MM-dd')}
-        </h1>
-      ),
-      actions: () => (
-        <div className="p-2 flex w-full justify-start cursor-pointer">
-          <Icon
-            icon="prime:eye"
-            className="text-2xl hover:opacity-75"
-            onClick={() => {
-              navigate(`/admin/adjustments/detail/${adjustment.id}`);
-            }}
-          />
-        </div>
-      ),
-    };
+      const renderers = {
+        name: () => (
+          <User
+            avatarProps={{ radius: "full", size: "sm", src: adjustment.image }}
+            name={cellValue}
+          >
+            {adjustment.name}
+          </User>
+        ),
+        updatedAt: () => (
+          <h1>{format(new Date(adjustment.updatedAt), "yyyy-MM-dd")}</h1>
+        ),
+        actions: () => (
+          <div className="p-2 flex w-full justify-start cursor-pointer">
+            <Icon
+              icon="prime:eye"
+              className="text-2xl hover:opacity-75"
+              onClick={() => {
+                navigate(`/admin/adjustments/detail/${adjustment.id}`);
+              }}
+            />
+          </div>
+        ),
+      };
 
-    const renderer = renderers[columnKey] || ((value) => value);
+      const renderer = renderers[columnKey] || ((value) => value);
 
-    return renderer(cellValue);
-  }, [adjustments]);
+      return renderer(cellValue);
+    },
+    [adjustments]
+  );
 
   const topContent = React.useMemo(() => {
     return (
@@ -170,9 +171,7 @@ export default function AdjustmentList({ adjustments }) {
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid}>
-                    {column.name}
-                  </DropdownItem>
+                  <DropdownItem key={column.uid}>{column.name}</DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>
@@ -238,12 +237,9 @@ export default function AdjustmentList({ adjustments }) {
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
-        selectedKeys={selectedKeys}
-        selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
-        onSelectionChange={setSelectedKeys}
         onSortChange={(descriptor) => setSortDescriptor(descriptor)}
       >
         <TableHeader columns={headerColumns}>
@@ -267,18 +263,6 @@ export default function AdjustmentList({ adjustments }) {
           )}
         </TableBody>
       </Table>
-      {showDeleteBox && (
-        <DeleteAlert
-          cancel={() => {
-            setShowDeleteBox(false);
-            setSelectedKeys(new Set([]));
-          }}
-          onDelete={() => {
-            deleteProducts();
-            setShowDeleteBox(false);
-          }}
-        />
-      )}
     </>
   );
 }

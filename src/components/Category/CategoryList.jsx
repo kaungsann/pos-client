@@ -28,7 +28,7 @@ const columns = [
   { name: "Actions", uid: "actions" },
 ];
 
-export default function CategoryList({ categories }) {
+export default function CategoryList({ categories, refresh }) {
   const [showDeleteBox, setShowDeleteBox] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
@@ -36,7 +36,7 @@ export default function CategoryList({ categories }) {
     new Set(columns.map((column) => column.uid))
   );
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "name",
     direction: "ascending",
@@ -76,16 +76,18 @@ export default function CategoryList({ categories }) {
     });
   }, [sortDescriptor, currentPageItems]);
 
-  const deleteProducts = async () => {
+  const deleteCategorys = async () => {
     const response = await deleteMultiple(
       "/category",
       {
-        categoryId: [...selectedKeys],
+        categoryIds: [...selectedKeys],
       },
       token.accessToken
     );
+    console.log;
     if (response.status) {
       setSelectedKeys([]);
+      refresh();
     }
   };
 
@@ -280,7 +282,7 @@ export default function CategoryList({ categories }) {
             setSelectedKeys(new Set([]));
           }}
           onDelete={() => {
-            deleteProducts();
+            deleteCategorys();
             setShowDeleteBox(false);
           }}
         />

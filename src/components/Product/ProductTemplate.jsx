@@ -24,6 +24,7 @@ const PRODUCT_API = {
 const ProductTemplate = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   const navigate = useNavigate();
 
@@ -39,6 +40,10 @@ const ProductTemplate = () => {
   });
   const token = useSelector((state) => state.IduniqueData);
 
+  const handleRefresh = () => {
+    setRefresh(!refresh);
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -48,12 +53,15 @@ const ProductTemplate = () => {
             "Content-Type": "application/json",
           },
         });
-        setProducts(response.data?.data);
+        let filterActiveProduct = response.data?.data.filter(
+          (pt) => pt.active === true
+        );
+        setProducts(filterActiveProduct);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     })();
-  }, [token]);
+  }, [token, refresh]);
 
   useEffect(() => {
     const uniqueCategories = [
@@ -148,7 +156,7 @@ const ProductTemplate = () => {
           </div>
         </div>
       </div>
-      <ProductList products={filteredProducts} />
+      <ProductList products={filteredProducts} fetchProducts={handleRefresh} />
     </>
   );
 };

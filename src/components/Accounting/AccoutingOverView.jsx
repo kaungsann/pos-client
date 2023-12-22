@@ -130,7 +130,7 @@ const AccoutingOverView = () => {
                 <div className="flex items-center mr-3">
                   <span>From :</span>
                   <input
-                    type="text"
+                    type="date"
                     placeholder="Select date"
                     className="border-none ml-2"
                   />
@@ -139,10 +139,10 @@ const AccoutingOverView = () => {
                 <div className="flex items-center">
                   <span>To :</span>
                   <input
-                    type="text"
+                    type="date"
                     placeholder="Select date"
                     className="border-none ml-2"
-                  />{" "}
+                  />
                 </div>
                 <button className="px-3 py-1 hover:opacity-70 rounded-md mx-3 text-white font-semibold bg-[#56488f]">
                   Apply

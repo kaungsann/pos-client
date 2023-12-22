@@ -74,10 +74,6 @@ export default function SideBar() {
             </button>
           </div>
 
-          {/* <SidebarContext.Provider value={{ expanded }}>
-            <ul className="flex-1 px-3">{children}</ul>
-          </SidebarContext.Provider> */}
-
           <div className="border-t flex p-3">
             <Popover
               placement="right"
@@ -89,14 +85,6 @@ export default function SideBar() {
               <PopoverTrigger>
                 <img src={invent} alt="" className="w-9 h-9 rounded-md" />
               </PopoverTrigger>
-
-              {/* <PopoverTrigger>
-                <img
-                  src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
-                  alt=""
-                  className="w-10 h-10 rounded-md"
-                />
-              </PopoverTrigger> */}
 
               <PopoverContent>
                 {expanded === false && (
