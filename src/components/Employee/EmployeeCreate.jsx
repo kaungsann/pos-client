@@ -62,37 +62,40 @@ export default function EmployeeCreate() {
         pauseOnHover
         theme="light"
       />
-      <div className="flex gap-3 my-5">
-        <Button
-          type="submit"
-          isDisabled={isLoading}
-          isLoading={isLoading}
-          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
-            isLoading
-              ? ""
-              : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-          }`}
-          onClick={handleSubmit}
-        >
-          Save
-        </Button>
-
-        <Button
-          isDisabled={isLoading}
-          isLoading={isLoading}
-          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
-            isLoading
-              ? ""
-              : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-          }`}
-          onClick={() => navigate("/admin/employee/all")}
-        >
-          Discard
-        </Button>
-      </div>
+    
 
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Employee Create</h2>
+        <div className="flex flex-row justify-between my-4 max-w-6xl">
+
+        <h2 className="lg:text-xl font-bold">Employee Create</h2>
+
+          <div className="flex gap-3">
+            <Button
+              type="submit"
+              isDisabled={isLoading}
+              isLoading={isLoading}
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+                  ? ""
+                  : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+                }`}
+              onClick={handleSubmit}
+            >
+              Save
+            </Button>
+
+            <Button
+              isDisabled={isLoading}
+              isLoading={isLoading}
+              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+                  ? ""
+                  : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
+                }`}
+              onClick={() => navigate("/admin/employee/all")}
+            >
+              Discard
+            </Button>
+          </div>
+        </div>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           {isLoading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />
