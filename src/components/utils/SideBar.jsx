@@ -83,7 +83,6 @@ export default function SideBar() {
             >
               <PopoverTrigger>
                 <img src={invent} alt="" className="w-9 h-9 rounded-md" />
-                
               </PopoverTrigger>
 
               <PopoverContent>
@@ -171,7 +170,7 @@ export default function SideBar() {
                 {inventory && (
                   <ul className="cursor-pointer mt-2 ml-2">
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/inventory/overview"
                           ? "text-white bg-slate-300 "
                           : ""
@@ -188,7 +187,7 @@ export default function SideBar() {
                       <h3 className="ml-3">OverView</h3>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/products/all" ||
                         location.pathname === "/admin/products/create" ||
                         location.pathname === `/admin/products/edit/${id}` ||
@@ -208,7 +207,7 @@ export default function SideBar() {
                       <h3 className="ml-3">Product</h3>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/categorys/all" ||
                         location.pathname === "/admin/categorys/create" ||
                         location.pathname === `/admin/categorys/edit/${id}` ||
@@ -228,7 +227,7 @@ export default function SideBar() {
                       <h3 className="ml-3">Category</h3>
                     </li>
                     <li
-                      className={`p-1 px-2 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-2 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/stock/all" ||
                         location.pathname === "/admin/stock/create" ||
                         location.pathname === `/admin/stock/edit/${id}` ||
@@ -248,7 +247,7 @@ export default function SideBar() {
                       <h3 className="ml-3">Stock</h3>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/adjustment/view"
                           ? "text-white bg-slate-300 "
                           : ""
@@ -265,7 +264,7 @@ export default function SideBar() {
                       <h3 className="ml-3">Adjustment</h3>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/locations/all" ||
                         location.pathname === "/admin/locations/create" ||
                         location.pathname === `/admin/locations/edit/${id}` ||
@@ -368,7 +367,7 @@ export default function SideBar() {
                 {purchase && (
                   <ul className="cursor-pointer mt-2">
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/purchase/view"
                           ? "text-white bg-slate-300 "
                           : ""
@@ -384,7 +383,7 @@ export default function SideBar() {
                       <span className="ml-3">OverView</span>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/purchase/all" ||
                         location.pathname === "/admin/purchase/create" ||
                         location.pathname === `/admin/purchase/detail/${id}`
@@ -402,7 +401,7 @@ export default function SideBar() {
                       <span className="ml-3"> Purchase</span>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center rounded-sm text-md hover:bg-slate-100 text-slate-500 ${
                         location.pathname === "/admin/customers/vendors" ||
                         location.pathname === `/admin/customers/detail/${id}`
                           ? "text-white bg-slate-300 "
@@ -501,7 +500,7 @@ export default function SideBar() {
                 {sale && (
                   <ul className="cursor-pointer mt-2">
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/saleorders/view"
                           ? "text-white bg-slate-300 "
                           : ""
@@ -517,7 +516,7 @@ export default function SideBar() {
                       <span className="ml-3">OverView</span>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex hover:bg-slate-100 items-center rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/saleorders/all" ||
                         location.pathname === "/admin/saleorders/create" ||
                         location.pathname === `/admin/saleorders/detail/${id}`
@@ -536,7 +535,7 @@ export default function SideBar() {
                       <span className="ml-3">SaleOrders</span>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/customers/all"
                           ? "text-white bg-slate-300 "
                           : ""
@@ -631,7 +630,7 @@ export default function SideBar() {
                 {skate && (
                   <ul className="cursor-pointer mt-2">
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center rounded-sm hover:bg-slate-100 text-md text-slate-500 ${
                         location.pathname === "/admin/partners/all" ||
                         location.pathname === "/admin/partners/create" ||
                         location.pathname === `/admin/partners/edit/${id}` ||
@@ -649,9 +648,8 @@ export default function SideBar() {
                       />
                       <span className="ml-3">Partner</span>
                     </li>
-
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/employee/all" ||
                         location.pathname === "/admin/employee/create" ||
                         location.pathname === `/admin/employee/edit/${id}` ||
@@ -670,7 +668,7 @@ export default function SideBar() {
                       <span className="ml-3">Employee</span>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/user/all" ||
                         location.pathname === "/admin/user/create" ||
                         location.pathname === `/admin/user/edit/${id}` ||
@@ -787,7 +785,7 @@ export default function SideBar() {
                 {account && (
                   <ul className="cursor-pointer mt-2">
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/accounting/overview"
                           ? "text-white bg-slate-300 "
                           : ""
@@ -803,7 +801,7 @@ export default function SideBar() {
                       <span className="ml-3">OverView</span>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/opex/all" ||
                         location.pathname === "/admin/opex/create" ||
                         location.pathname === `/admin/opex/edit/${id}` ||
@@ -822,7 +820,7 @@ export default function SideBar() {
                       <span className="ml-3">Opex</span>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/fixed-cost/all" ||
                         location.pathname === "/admin/fixed-cost/create" ||
                         location.pathname === `/admin/fixed-cost/edit/${id}` ||
@@ -841,7 +839,7 @@ export default function SideBar() {
                       <span className="ml-3">Fixed-Cost</span>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/variable-cost/all" ||
                         location.pathname === "/admin/variable-cost/create" ||
                         location.pathname ===
@@ -859,7 +857,7 @@ export default function SideBar() {
                       <span className="ml-3"> Variable-Cost</span>
                     </li>
                     <li
-                      className={`p-1 px-3 flex items-center rounded-sm text-md text-slate-500 ${
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/waste/all" ||
                         location.pathname === "/admin/waste/create" ||
                         location.pathname === `/admin/waste/edit/${id}` ||

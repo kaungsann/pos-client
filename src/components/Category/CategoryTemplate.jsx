@@ -8,13 +8,9 @@ import ExcelExportButton from "../ExcelExportButton";
 import ExcelImportButton from "../ExcelImportButton";
 import SearchCompo from "../utils/SearchCompo";
 import { Button } from "@nextui-org/react";
-import { useNavigate } from "react-router-dom";
-
-
 
 export default function CategoryTemplate() {
   const [categorys, setCategorys] = useState([]);
-  const navigate = useNavigate();
 
   const [filteredKeywords, setFilteredKeywords] = useState({ name: "" });
   const [refresh, setRefresh] = useState(false);
