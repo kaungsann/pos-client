@@ -126,7 +126,7 @@ export default function CategoryList({ categories, refresh }) {
               </DropdownItem>
               <DropdownItem
                 onPress={() => {
-                  navigate(`/admin/categorys/detail/${category.id}`);
+                  navigate(`/admin/categorys/edit/${category.id}`);
                 }}
               >
                 Edit

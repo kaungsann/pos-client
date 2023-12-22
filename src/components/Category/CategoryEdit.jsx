@@ -68,23 +68,27 @@ export default function CategoryEdit() {
         theme="light"
         style={{ width: "450px" }}
       />
-      <div className="flex gap-3 my-5">
-        <button
-          type="submit"
-          className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
-          onClick={handleSubmit}
-        >
-          Save
-        </button>
-        <Link to="/admin/categorys/all">
-          <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
-            Discard
-          </button>
-        </Link>
-      </div>
+     
 
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Category Edit</h2>
+        <div className="flex flex-row justify-between my-4 max-w-6xl">
+
+        <h2 className="lg:text-xl font-bold ">Category Edit</h2>
+          <div className="flex gap-3 ">
+            <button
+              type="submit"
+              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+              onClick={handleSubmit}
+            >
+              Save
+            </button>
+            <Link to="/admin/categorys/all">
+              <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
+                Discard
+              </button>
+            </Link>
+          </div>
+        </div>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
