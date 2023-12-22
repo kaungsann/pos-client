@@ -1,12 +1,11 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import logo from "../../assets/logo.png";
-import invent from "../../assets/checklists.png";
-import pur from "../../assets/buy.png";
-import sal from "../../assets/sale.png";
-import customer from "../../assets/customer.png";
-import accountant from "../../assets/save.png";
-import loss from "../../assets/loss.png";
+import invent from "../../assets/inv.png";
+import pur from "../../assets/buyy.png";
+import sal from "../../assets/sell.png";
+import customer from "../../assets/stakeholder.png";
+import accountant from "../../assets/accounting.png";
 import { useContext, createContext, useState } from "react";
 import {
   Popover,
@@ -84,6 +83,7 @@ export default function SideBar() {
             >
               <PopoverTrigger>
                 <img src={invent} alt="" className="w-9 h-9 rounded-md" />
+                
               </PopoverTrigger>
 
               <PopoverContent>
