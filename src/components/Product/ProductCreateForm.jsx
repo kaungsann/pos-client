@@ -49,7 +49,7 @@ export default function ProductCreateForm() {
 
     const newBarCode = generateRandomNumber(13);
     setProduct({ ...product, barcode: newBarCode });
-    setUpdateProduct({ ...updateProduct, barcode: newBarCode })
+    setUpdateProduct({ ...updateProduct, barcode: newBarCode });
   };
 
   const inputChangeHandler = (event) => {
@@ -180,21 +180,20 @@ export default function ProductCreateForm() {
         pauseOnHover
         theme="light"
       />
-      
 
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-
-        <h2 className="lg:text-xl font-bold ">Product Edit</h2>
+          <h2 className="lg:text-xl font-bold ">Product Create</h2>
           <div className="flex gap-3 ">
             <Button
               type="submit"
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+                isLoading
                   ? ""
                   : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-                }`}
+              }`}
               onClick={onSubmitHandler}
             >
               Save
@@ -202,10 +201,11 @@ export default function ProductCreateForm() {
             <Button
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+                isLoading
                   ? ""
                   : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-                }`}
+              }`}
               onClick={() => navigate("/admin/products/all")}
             >
               Discard

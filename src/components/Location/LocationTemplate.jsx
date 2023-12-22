@@ -17,11 +17,15 @@ const LOCATION_API = {
 
 const LocationTemplate = () => {
   const [locations, setLocations] = useState([]);
-
+  const [refresh, setRefresh] = useState(false);
   const [filteredKeywords, setFilteredKeywords] = useState({
     name: "",
   });
   const token = useSelector((state) => state.IduniqueData);
+
+  const handleRefresh = () => {
+    setRefresh(!refresh);
+  };
 
   const navigate = useNavigate();
 
@@ -34,12 +38,15 @@ const LocationTemplate = () => {
             "Content-Type": "application/json",
           },
         });
-        setLocations(response.data?.data);
+        let filterActiveLocations = response.data?.data.filter(
+          (ct) => ct.active === true
+        );
+        setLocations(filterActiveLocations);
       } catch (error) {
         console.error("Error fetching Users:", error);
       }
     })();
-  }, [token]);
+  }, [token, refresh]);
 
   const handleFilterChange = (selected) => {
     setFilteredKeywords((prevFilter) => ({
@@ -86,7 +93,7 @@ const LocationTemplate = () => {
           </div>
         </div>
       </div>
-      <LocationList locations={filteredLocations} />
+      <LocationList locations={filteredLocations} refresh={handleRefresh} />
     </>
   );
 };

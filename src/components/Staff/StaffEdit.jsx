@@ -104,20 +104,20 @@ export default function StaffEdit() {
         theme="light"
         style={{ width: "450px" }}
       />
-   
+
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-
-        <h2 className="lg:text-xl font-bold ">Staff Edit</h2>
+          <h2 className="lg:text-xl font-bold ">Staff Edit</h2>
           <div className="flex gap-3">
             <Button
               type="submit"
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+                isLoading
                   ? ""
                   : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-                }`}
+              }`}
               onClick={() => setShowBox(true)}
             >
               Save
@@ -125,10 +125,11 @@ export default function StaffEdit() {
             <Button
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+                isLoading
                   ? ""
                   : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-                }`}
+              }`}
               onClick={() => navigate("/admin/user/all")}
             >
               Discard
@@ -172,7 +173,6 @@ export default function StaffEdit() {
               )}
             </div>
           </div>
-
         </div>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           {isLoading && (
@@ -232,7 +232,7 @@ export default function StaffEdit() {
               </div>
               <div className="w-60">
                 <Input
-                  type="text"
+                  type="email"
                   name="email"
                   label="Email"
                   value={email}
@@ -266,7 +266,7 @@ export default function StaffEdit() {
               </div>
               <div className="w-60">
                 <Input
-                  type="text"
+                  type="number"
                   name="phone"
                   label="Phone"
                   value={phone}
@@ -292,15 +292,18 @@ export default function StaffEdit() {
                     labelPlacement="outside"
                     label="Gender"
                     name="gender"
-                    placeholder="Select Gender"
                     value={gender}
+                    placeholder="Select an gender"
+                    selectedKeys={gender ? [gender] : false}
                     onChange={(e) => setGender(e.target.value)}
                     className="max-w-xs"
                   >
-                    {/* Replace dynamic data with fixed options */}
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="other"></SelectItem>
+                    <SelectItem value="male" key="male">
+                      male
+                    </SelectItem>
+                    <SelectItem value="female" key="female">
+                      female
+                    </SelectItem>
                   </Select>
                 </div>
               </div>

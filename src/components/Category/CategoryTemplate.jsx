@@ -11,7 +11,6 @@ import { Button } from "@nextui-org/react";
 
 export default function CategoryTemplate() {
   const [categorys, setCategorys] = useState([]);
-
   const [filteredKeywords, setFilteredKeywords] = useState({ name: "" });
   const [refresh, setRefresh] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
@@ -40,8 +39,6 @@ export default function CategoryTemplate() {
         let filterActiveCategorys = response.data?.data.filter(
           (ct) => ct.active === true
         );
-
-        console.log("categorys is a", filterActiveCategorys);
 
         setCategorys(filterActiveCategorys);
       } catch (error) {

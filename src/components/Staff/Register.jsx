@@ -85,11 +85,10 @@ export default function Register() {
         pauseOnHover
         theme="light"
       />
-    
+
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-
-        <h2 className="lg:text-xl font-bold ">Staff Edit</h2>
+          <h2 className="lg:text-xl font-bold ">Staff Edit</h2>
           <div className="flex gap-3 ">
             <button
               type="submit"
@@ -126,7 +125,8 @@ export default function Register() {
               </div>
               <div className="w-60">
                 <Input
-                  type="text"
+                  type="email"
+                  required
                   name="email"
                   label="Email"
                   value={email}
@@ -160,7 +160,7 @@ export default function Register() {
               </div>
               <div className="w-60">
                 <Input
-                  type="text"
+                  type="number"
                   name="phone"
                   label="Phone"
                   value={phone}
