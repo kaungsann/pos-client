@@ -8,7 +8,6 @@ import ExcelExportButton from "../ExcelExportButton";
 import ExcelImportButton from "../ExcelImportButton";
 import SearchCompo from "../utils/SearchCompo";
 import { Button } from "@nextui-org/react";
-import { useNavigate } from "react-router-dom";
 
 
 export default function CategoryTemplate() {
@@ -20,7 +19,6 @@ export default function CategoryTemplate() {
   const navigate = useNavigate();
 
 
-  const navigate = useNavigate();
 
   const handleRefresh = () => {
     setRefresh(!refresh);
