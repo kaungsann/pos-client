@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
 import { Input, Select, SelectItem } from "@nextui-org/react";
 import { removeData } from "../../../redux/actions";
+
 import BoxImg from "../../../assets/box.png";
 
 import {
@@ -232,23 +233,31 @@ export default function SaleOrderCreate() {
         theme="light"
         style={{ width: "450px" }}
       />
-      <div className="flex gap-3 my-5">
-        <button
-          type="submit"
-          className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
-          onClick={handleSubmit}
-        >
-          Save
-        </button>
-        <Link to="/admin/saleOrders/all">
-          <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
-            Discard
-          </button>
-        </Link>
-      </div>
+     
 
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Create Sale Order</h2>
+        
+        <div className="flex flex-row justify-between my-5 max-w-6xl">
+          <h2 className="lg:text-xl font-bold">Create Sale Order</h2>
+
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+              onClick={handleSubmit}>
+              Save
+            </button>
+
+            <Link to="/admin/saleOrders/all">
+              <button className="rounded-sm shadow-sm flex items-center text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
+                Discard
+              </button>
+            </Link>
+          </div>
+        </div>
+        
+       
+        
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           <div className="flex justify-between flex-wrap gap-10 p-5">
             <div className="flex flex-wrap gap-8">
