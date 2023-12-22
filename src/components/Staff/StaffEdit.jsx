@@ -104,73 +104,76 @@ export default function StaffEdit() {
         theme="light"
         style={{ width: "450px" }}
       />
-      <div className="flex gap-3 my-5">
-        <Button
-          type="submit"
-          isDisabled={isLoading}
-          isLoading={isLoading}
-          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
-            isLoading
-              ? ""
-              : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-          }`}
-          onClick={() => setShowBox(true)}
-        >
-          Save
-        </Button>
-        <Button
-          isDisabled={isLoading}
-          isLoading={isLoading}
-          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
-            isLoading
-              ? ""
-              : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-          }`}
-          onClick={() => navigate("/admin/user/all")}
-        >
-          Discard
-        </Button>
-        <div className="w-96 absolute top-32 left-0 right-0 z-50 mx-auto bg-white rounded-md shadow-md flex justify-center cursor-pointer">
-          {showBox && (
-            <div className="w-72 my-3">
-              <div className="flex justify-between">
-                <label
-                  htmlFor="phone"
-                  className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
-                >
-                  Password*
-                </label>
-                <h3
-                  onClick={() => setShowBox(false)}
-                  className="text-slate-600 font-semibold text-xl hover:text-slate-400"
-                >
-                  X
-                </h3>
-              </div>
-
-              <div className="mt-2">
-                <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  placeholder="Enter the admin password"
-                  className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
-                />
-                <button
-                  onClick={handleSubmit}
-                  className="w-72 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Submit
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+   
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Staff Edit</h2>
+        <div className="flex flex-row justify-between my-4 max-w-6xl">
+
+        <h2 className="lg:text-xl font-bold ">Staff Edit</h2>
+          <div className="flex gap-3">
+            <Button
+              type="submit"
+              isDisabled={isLoading}
+              isLoading={isLoading}
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+                  ? ""
+                  : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+                }`}
+              onClick={() => setShowBox(true)}
+            >
+              Save
+            </Button>
+            <Button
+              isDisabled={isLoading}
+              isLoading={isLoading}
+              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+                  ? ""
+                  : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
+                }`}
+              onClick={() => navigate("/admin/user/all")}
+            >
+              Discard
+            </Button>
+            <div className="w-96 absolute top-32 left-0 right-0 z-50 mx-auto bg-white rounded-md shadow-md flex justify-center cursor-pointer">
+              {showBox && (
+                <div className="w-72 my-3">
+                  <div className="flex justify-between">
+                    <label
+                      htmlFor="phone"
+                      className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600"
+                    >
+                      Password*
+                    </label>
+                    <h3
+                      onClick={() => setShowBox(false)}
+                      className="text-slate-600 font-semibold text-xl hover:text-slate-400"
+                    >
+                      X
+                    </h3>
+                  </div>
+
+                  <div className="mt-2">
+                    <input
+                      onChange={(e) => setPassword(e.target.value)}
+                      id="password"
+                      name="password"
+                      type="password"
+                      required
+                      placeholder="Enter the admin password"
+                      className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
+                    />
+                    <button
+                      onClick={handleSubmit}
+                      className="w-72 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+        </div>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           {isLoading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />

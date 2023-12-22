@@ -75,10 +75,10 @@ export default function PartnerCreate() {
       />
     
       <div className="container mt-2">
-        <div className="flex flex-row justify-between my-5 max-w-6xl">
+        <div className="flex flex-row justify-between my-4 max-w-6xl">
 
-        <h2 className="lg:text-xl font-bold my-2">Partner Create</h2>
-          <div className="flex gap-3 my-5">
+        <h2 className="lg:text-xl font-bold ">Partner Create</h2>
+          <div className="flex gap-3 ">
             <Button
               type="submit"
               isDisabled={isLoading}

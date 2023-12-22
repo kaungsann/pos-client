@@ -229,10 +229,10 @@ export default function SaleOrderCreate() {
 
 
       <div className="container mt-2">
-        <div className="flex flex-row justify-between my-5 max-w-6xl">
+        <div className="flex flex-row justify-between my-4 max-w-6xl">
 
-        <h2 className="lg:text-xl font-bold my-2">Create Purchase Order</h2>
-          <div className="flex gap-3 my-5">
+          <h2 className="lg:text-xl font-bold">Create Purchase Order</h2>
+          <div className="flex gap-3">
             <button
               type="submit"
               className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
