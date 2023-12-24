@@ -1,97 +1,62 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Icon } from "@iconify/react";
+import { BASE_URL } from "../Api";
+import axios from "axios";
 
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-  Input,
   Listbox,
   ListboxItem,
+  Dropdown,
+  DropdownItem,
+  DropdownTrigger,
+  DropdownMenu,
 } from "@nextui-org/react";
 
-const tableData = [
-  { type: "Gross Sale", balance: 100 },
-  { type: "Purchase Cost", balance: 100 },
-  {
-    type: "Opex",
-    balance: 200,
-    subRows: [
-      { type: "Fuel", balance: 50 },
-      { type: "Salary", balance: 150 },
-    ],
-  },
-  {
-    type: "Fixed Cost",
-    balance: 200,
-    subRows: [
-      { type: "Rental", balance: 50 },
-      { type: "Loan", balance: 150 },
-    ],
-  },
-];
-
-const TableRow = ({ type, balance, subRows }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  return (
-    <>
-      <tr>
-        <td className="border px-4 py-2">
-          {type}
-          {subRows && (
-            <button
-              className="text-blue-500 cursor-pointer focus:outline-none"
-              onClick={() => setIsCollapsed(!isCollapsed)}
-            >
-              {isCollapsed ? (
-                <Icon icon="ep:arrow-up" />
-              ) : (
-                <Icon icon="ep:arrow-down" />
-              )}{" "}
-            </button>
-          )}
-        </td>
-        <td className="border px-4 py-2">{balance}</td>
-      </tr>
-      {!isCollapsed && subRows && (
-        <>
-          {subRows.map((row, index) => (
-            <tr key={index}>
-              <td className="border px-4 py-2">{row.type}</td>
-              <td className="border px-4 py-2">{row.balance}</td>
-            </tr>
-          ))}
-          <tr>
-            <td className="border px-4 py-2">Total</td>
-            <td className="border px-4 py-2">
-              {subRows.reduce((total, row) => total + row.balance, 0)}
-            </td>
-          </tr>
-        </>
-      )}
-    </>
-  );
-};
-
-const MainTable = ({ data }) => (
-  <table className="table-auto">
-    <tbody>
-      {data.map((row, index) => (
-        <TableRow key={index} {...row} />
-      ))}
-      <tr>
-        <td className="border px-4 py-2">Total Balance</td>
-        <td className="border px-4 py-2">
-          {data.reduce((total, row) => total + row.balance, 0)}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-);
+import { useSelector } from "react-redux";
 
 const AccoutingOverView = () => {
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set(["text"]));
+
+  console.log("selected keys is a", selectedKeys);
+
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  let [account, setAccount] = useState([]);
+  const token = useSelector((state) => state.IduniqueData);
+
+  const ACCOUNT_API = {
+    INDEX: BASE_URL + "/account/totals",
+  };
+
+  const selectedValue = React.useMemo(
+    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
+    [selectedKeys]
+  );
+
+  useEffect(() => {
+    const fetchAccountData = async () => {
+      try {
+        const response = await axios.get(ACCOUNT_API.INDEX, {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        setAccount(response.data?.data);
+      } catch (error) {
+        console.error("Error fetching account:", error);
+      }
+    };
+
+    fetchAccountData();
+  }, [token]);
+
+  let count = 0;
+
   return (
     <>
       <div className="flex items-center">
@@ -151,11 +116,27 @@ const AccoutingOverView = () => {
             </PopoverContent>
           </Popover>
 
-          <button className="flex px-3 mx-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-sm">
-            <Icon icon="carbon:filter" className="text-slate-500 text-xl" />
+          <Dropdown>
+            <DropdownTrigger>
+              <button className="flex px-3 mx-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-sm">
+                <Icon icon="carbon:filter" className="text-slate-500 text-xl" />
 
-            <span className="text-sm ml-2">Filter</span>
-          </button>
+                <span className="text-sm ml-2">Filter</span>
+              </button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Multiple selection example"
+              variant="flat"
+              selectionMode="multiple"
+              selectedKeys={selectedKeys}
+              onSelectionChange={setSelectedKeys}
+            >
+              {account.map((acc) => (
+                <DropdownItem key={acc.type}>{acc.type}</DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+
           <button className="flex px-3 mx-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-sm">
             <Icon
               icon="mdi:report-timeline"
@@ -165,22 +146,97 @@ const AccoutingOverView = () => {
           </button>
         </div>
       </div>
-      <div className="container mx-auto mt-8">
-        {/* <h1 className="text-xl font-bold mb-4">Statement Report</h1> */}
-        <MainTable data={tableData} />
+      <div className="w-2/4 mx-auto mt-20">
+        <table className="w-full bg-white rounded-sm shadow-md">
+          <tbody>
+            {account
+              .filter((acc) => !selectedKeys.has(acc.type))
+              .map((acc, index) => (
+                <div
+                  key={index}
+                  className="w-full px-4 py-1.5 border-b-gray-200 border-b-2"
+                >
+                  <tr className="flex justify-between items-center">
+                    <td className="text-slate-500 font-semibold items-center">
+                      {acc.type}
+                      {acc.subRow && acc.subRow.length > 0 && (
+                        <button
+                          className="text-blue-500 cursor-pointer focus:outline-none"
+                          onClick={() =>
+                            setExpandedIndex(
+                              expandedIndex === index ? null : index
+                            )
+                          }
+                        >
+                          {expandedIndex === index ? (
+                            <Icon
+                              icon="ep:arrow-up"
+                              className="text-md ml-3 font-bold"
+                            />
+                          ) : (
+                            <Icon
+                              icon="ep:arrow-down"
+                              className="text-md ml-3 font-bold"
+                            />
+                          )}
+                        </button>
+                      )}
+                    </td>
+
+                    <td className="text-slate-600 font-bold">{acc.balance}</td>
+                  </tr>
+                  {expandedIndex === index && (
+                    <tr className="w-full flex flex-col">
+                      <td className="w-full">
+                        {acc.subRow && acc.subRow.length > 0 && (
+                          <>
+                            {acc.subRow.map((sub, index) => (
+                              <div
+                                key={index}
+                                className="flex w-full justify-between my-2"
+                              >
+                                <h2 className="mx-6 text-slate-600">
+                                  {sub.type}
+                                </h2>
+                                <h2 className="mx-6 text-slate-600">
+                                  {sub.amount}
+                                </h2>
+                              </div>
+                            ))}
+                            <tr className="w-full flex justify-between bg-slate-400 text-white">
+                              <td className="px-4 py-2">Total</td>
+                              <td className="px-4 py-2">
+                                {/* Calculate the total outside of the subRow mapping */}
+                                {acc.subRow &&
+                                  acc.subRow.length > 0 &&
+                                  acc.subRow.reduce(
+                                    (total, row) => total + row.amount,
+                                    0
+                                  )}
+                              </td>
+                            </tr>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  )}
+                </div>
+              ))}
+            <div className="w-full flex justify-between">
+              <td className="border px-4 py-2 text-slate-600 font-semibold text-lg">
+                Total Balance
+              </td>
+              <td className="border px-4 py-2 text-slate-600 font-semibold text-lg">
+                {account
+                  .filter((acc) => !selectedKeys.has(acc.type))
+                  .reduce((total, row) => total + row.balance, 0)}
+              </td>
+            </div>
+          </tbody>
+        </table>
       </div>
     </>
   );
-};
-
-MainTable.propTypes = {
-  data: PropTypes.array,
-};
-
-TableRow.propTypes = {
-  type: PropTypes.string,
-  balance: PropTypes.number,
-  subRows: PropTypes.array,
 };
 
 export default AccoutingOverView;
