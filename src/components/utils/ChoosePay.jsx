@@ -8,8 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@nextui-org/react";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 
-
-
 export default function ChoosePay({ totalCost, change, tax, subTotal }) {
   const [display, setDisplay] = useState("");
   const [partner, setPartner] = useState([]);
@@ -18,14 +16,13 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
   const [text, setText] = useState(null);
   const [order, setOrder] = useState([]);
   const [name, setName] = useState("");
-  const [location, setLocation] = useState([])
-  const [Locate, setLocate] = useState("")
+  const [location, setLocation] = useState([]);
+  const [Locate, setLocate] = useState("");
 
   const orderData = useSelector((state) => state.orderData);
   const user = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
   const [isLoading, setIsLoading] = useState(false);
-
 
   const dispatch = useDispatch();
   dispatch(add(true));
@@ -81,7 +78,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
       try {
         let resData = await sendJsonToApi("/sale", data, token.accessToken);
         if (!resData.success) {
-          toast(resData.message);
+          toast.error(resData.message);
         }
 
         if (resData.status) {
@@ -105,7 +102,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
   useEffect(() => {
     getPartner();
-    getLocation()
+    getLocation();
   }, []);
 
   let pay = display - totalCost;
@@ -127,7 +124,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
           <ToastContainer
             position="top-center"
             autoClose={5000}
-            hideProgressBar
+            hideProgressBar={false}
             newestOnTop={false}
             closeOnClick
             rtl={false}
@@ -135,7 +132,6 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
             draggable
             pauseOnHover
             theme="light"
-            style={{ width: "450px" }}
           />
           <div className="flex justify-between w-full cursor-pointer">
             <h3 className="font-semibold text-lg"></h3>
@@ -143,10 +139,11 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               type="submit"
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
-                ? ""
-                : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-                }`}
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+                isLoading
+                  ? ""
+                  : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+              }`}
               onClick={() => change(false)}
             >
               Back
@@ -156,49 +153,51 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
             </h3> */}
           </div>
           <div className="mt-4 flex justify-start">
-          
             <button
               onClick={() => setText("CASH")}
-              className={`px-8 py-2 rounded-md mx-1 text-blue-700 border-blue-500 border-2 hover:opacity-75 bg-outline-none shadow-md ${text === "CASH" && "bg-cyan-700 text-white"
-                }`}
+              className={`px-8 py-2 rounded-md mx-1 text-blue-700 border-blue-500 border-2 hover:opacity-75 bg-outline-none shadow-md ${
+                text === "CASH" && "bg-cyan-700 text-white"
+              }`}
             >
               Cash
             </button>
-          
+
             <button
               onClick={() => setText("BANK")}
-              className={`px-8 py-2 rounded-md mx-1 text-blue-700 border-blue-500 border-2 hover:opacity-75 shadow-md bg-outline-none ${text === "BANK" && "bg-cyan-700 text-white"
-                }`}
+              className={`px-8 py-2 rounded-md mx-1 text-blue-700 border-blue-500 border-2 hover:opacity-75 shadow-md bg-outline-none ${
+                text === "BANK" && "bg-cyan-700 text-white"
+              }`}
             >
               Bank
             </button>
-            
           </div>
 
-            <div className="flex justify-between items-center">
-              <div className="mt-4">
-                <span className="text-lg font-semibold text-slate-600">Total Due</span>
-              </div>
-              <div className="text-lg font-bold">
-                {totalCost}
-              </div>
+          <div className="flex justify-between items-center">
+            <div className="mt-4">
+              <span className="text-lg font-semibold text-slate-600">
+                Total Due
+              </span>
             </div>
-            <div className="flex flex-col justify-between my-2">
-              <div className="flex justify-between">
-                <span className="text-lg font-semibold text-slate-600">Cash</span>
-                <span className="text-lg font-bold text-right">
-                  {display.length > 0 ? display : 0}
-                </span>
-              </div>
-              <div className="mt-2 flex justify-between">
-                <span className="text-lg font-semibold text-slate-600">Change</span>
-                <span className="text-lg font-bold text-right">
-                  {display.length > 0 ? (display - totalCost).toFixed(2) : 0}
-                </span>
-              </div>
+            <div className="text-lg font-bold">{totalCost}</div>
+          </div>
+          <div className="flex flex-col justify-between my-2">
+            <div className="flex justify-between">
+              <span className="text-lg font-semibold text-slate-600">Cash</span>
+              <span className="text-lg font-bold text-right">
+                {display.length > 0 ? display : 0}
+              </span>
             </div>
+            <div className="mt-2 flex justify-between">
+              <span className="text-lg font-semibold text-slate-600">
+                Change
+              </span>
+              <span className="text-lg font-bold text-right">
+                {display.length > 0 ? (display - totalCost).toFixed(2) : 0}
+              </span>
+            </div>
+          </div>
 
-            <div className=" justify-around grid grid-cols-2 gap-4">
+          <div className=" justify-around grid grid-cols-2 gap-4">
             <div>
               <Autocomplete
                 label="Customer"
@@ -323,16 +322,15 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               </div>
             </div>
           </div>
-         
-            <Button
-              className="w-full mt-5"
-              color="primary"
-              variant="solid"
-              onClick={createSaleOrder}
-            >
-              Validate
-            </Button>
 
+          <Button
+            className="w-full mt-5"
+            color="primary"
+            variant="solid"
+            onClick={createSaleOrder}
+          >
+            Validate
+          </Button>
         </div>
       )}
     </>

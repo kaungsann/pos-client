@@ -106,7 +106,16 @@ export default function Profile() {
       toast(resData.message);
       singleUser();
     } else {
-      toast(resData);
+      toast.error(resData.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 

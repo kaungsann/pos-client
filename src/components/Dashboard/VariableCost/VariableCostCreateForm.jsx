@@ -48,7 +48,7 @@ export default function VariableCostCreateForm() {
         navigate("/admin/variable-cost/all");
         setIsLoading(false);
       } else {
-        toast(response.message || "An error occurred");
+        toast.error(response.message || "An error occurred");
         setIsLoading(false);
       }
     } catch (error) {

@@ -20,7 +20,7 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #f9fafb;
 }
-.Toastify__toast {
+/* .Toastify__toast {
   background-color: #f4f4f5;
 }
 
@@ -28,7 +28,7 @@ body {
   text-align: center;
   color: #ef4444;
   font-size: 20px;
-}
+} */
 .page-item {
   padding: 5px 10px;
   border-radius: 8px;

@@ -61,7 +61,7 @@ export default function PartnerEdit() {
         navigate("/admin/partners/all");
       } else {
         setIsLoading(false);
-        toast(resData.message);
+        toast.error(resData.message);
       }
     } catch (error) {
       console.error("Error edit partner:", error);
@@ -80,7 +80,7 @@ export default function PartnerEdit() {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -88,7 +88,6 @@ export default function PartnerEdit() {
         draggable
         pauseOnHover
         theme="light"
-        style={{ width: "450px" }}
       />
 
       <div className="container mt-2">

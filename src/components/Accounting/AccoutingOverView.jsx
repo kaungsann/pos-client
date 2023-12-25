@@ -154,7 +154,7 @@ const AccoutingOverView = () => {
               .map((acc, index) => (
                 <div
                   key={index}
-                  className="w-full px-4 py-1.5 border-b-gray-200 border-b-2"
+                  className="w-full px-4 py-1.5 hover:bg-slate-100 border-b-gray-200 border-b-2"
                 >
                   <tr className="flex justify-between items-center">
                     <td className="text-slate-500 font-semibold items-center">

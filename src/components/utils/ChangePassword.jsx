@@ -26,7 +26,7 @@ export default function ChangePassword({ close, id }) {
         toast(resData.message);
         handleClose();
       } else {
-        toast(resData.message);
+        toast.error(resData.message);
       }
     } catch (error) {
       console.error("Error creating category:", error);
@@ -40,7 +40,7 @@ export default function ChangePassword({ close, id }) {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -48,7 +48,6 @@ export default function ChangePassword({ close, id }) {
         draggable
         pauseOnHover
         theme="light"
-        style={{ width: "450px" }}
       />
       {/* staff username in add label */}
 

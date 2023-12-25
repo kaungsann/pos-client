@@ -27,18 +27,21 @@ export default function CategoryCreate() {
           },
         }
       );
-      console.log("create data is", data);
+
       if (!data.status) {
-        if (data?.message == "Token Expire , Please Login Again") {
+        if (
+          (<datalist></datalist>)?.message ==
+          "Token Expire , Please Login Again"
+        ) {
           dipatch(removeData(null));
         }
-        toast(data.message);
+
+        toast.error(message);
       } else {
         navigate("/admin/categorys/all");
       }
     } catch (error) {
       console.error("Error creating category:", error);
-      toast(error.response.data.message);
     }
   };
 
@@ -46,7 +49,7 @@ export default function CategoryCreate() {
     e.preventDefault();
 
     if (!name.trim()) {
-      toast("Please enter a category name.");
+      toast.error("Please enter a category name.");
       return;
     }
 
@@ -63,7 +66,7 @@ export default function CategoryCreate() {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -71,12 +74,11 @@ export default function CategoryCreate() {
         draggable
         pauseOnHover
         theme="light"
-        style={{ width: "450px" }}
       />
-     
+
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-        <h2 className="lg:text-xl font-bold ">Add Category </h2>
+          <h2 className="lg:text-xl font-bold ">Add Category </h2>
           <div className="flex gap-3 ">
             <button
               type="submit"

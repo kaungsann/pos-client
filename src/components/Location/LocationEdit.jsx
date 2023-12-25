@@ -58,7 +58,7 @@ export default function LocationEdit() {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -66,14 +66,11 @@ export default function LocationEdit() {
         draggable
         pauseOnHover
         theme="light"
-        style={{ width: "450px" }}
       />
-    
 
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-
-        <h2 className="lg:text-xl font-bold">Location Edit</h2>
+          <h2 className="lg:text-xl font-bold">Location Edit</h2>
           <div className="flex gap-3 ">
             <button
               type="submit"

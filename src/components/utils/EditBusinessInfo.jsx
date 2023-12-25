@@ -32,7 +32,7 @@ export default function EditBusinessInfo({ reBack, updateInfo }) {
       setId(resData.data[0].id);
     }
   };
-  
+
   const handleDiscardClick = () => {
     reBack();
   };
@@ -75,7 +75,8 @@ export default function EditBusinessInfo({ reBack, updateInfo }) {
       updateInfo(response.data[0]);
     } else {
       setLoading(false);
-      toast(response.message);
+
+      toast.error(response.message);
     }
   };
 
@@ -87,7 +88,7 @@ export default function EditBusinessInfo({ reBack, updateInfo }) {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}

@@ -50,7 +50,7 @@ export default function PartnerCreate() {
         navigate("/admin/partners/all");
         setIsLoading(false);
       } else {
-        toast(response.message || "An error occurred");
+        toast.error(response.message);
         setIsLoading(false);
       }
     } catch (error) {
@@ -63,7 +63,7 @@ export default function PartnerCreate() {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -71,7 +71,6 @@ export default function PartnerCreate() {
         draggable
         pauseOnHover
         theme="light"
-        style={{ width: "450px" }}
       />
 
       <div className="container mt-2">
