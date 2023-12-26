@@ -173,7 +173,10 @@ export default function ProductEditForm() {
       const image = productData?.image;
       if (image) setProductImg(image);
       setProduct({ ...product, ...productData });
-      setUpdateProduct({ name: productData.name });
+      setUpdateProduct({
+        name: productData.name,
+        barcode: productData.barcode,
+      });
     };
 
     const fetchData = async () => {
