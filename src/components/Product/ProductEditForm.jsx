@@ -101,7 +101,6 @@ export default function ProductEditForm() {
             dipatch(removeData(null));
           }
           toast.warn(data.message);
-          BoxImg;
         } else {
           navigate("/admin/products/all");
         }
@@ -277,6 +276,7 @@ export default function ProductEditForm() {
                 <span className="text-white font-semibold text-md">Upload</span>
               </div>
             </div>
+
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
                 <Input

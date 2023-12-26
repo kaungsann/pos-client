@@ -11,6 +11,7 @@ import img from "../../../src/assets/logo.png";
 
 export default function CompanyInfo() {
   const [info, setInfo] = useState([]);
+  const [id, setId] = useState("");
   const [edit, setEdit] = useState(true);
 
   const token = useSelector((state) => state.IduniqueData);
@@ -20,6 +21,7 @@ export default function CompanyInfo() {
     console.log("company data is", response);
     if (response.status) {
       setInfo(response.data[0]);
+      setId(response.data[0].id);
     }
   };
 
@@ -33,7 +35,7 @@ export default function CompanyInfo() {
 
   useEffect(() => {
     getInfo();
-  }, [updateInfo]);
+  }, []);
 
   return (
     <>
@@ -50,16 +52,16 @@ export default function CompanyInfo() {
               }}
             />
           </div>
-          <h1>profiltvgsdfe</h1>
           <div className="w-2/5 mx-auto">
-            <img src={img} className="w-48 h-40  mx-auto text-center mt-4" />
+            <img
+              src={info.image}
+              className="w-48 h-40  mx-auto text-center mt-4"
+            />
             <div>
               <h3 className="text-center text-slate-700 text-2xl font-semibold mt-2">
                 {info?.name ? info.name : "Ambitboud Technology"}
               </h3>
-              <h3 className="text-center text-slate-600 text-md font-semibold mt-2">
-                ( Software Company )
-              </h3>
+
               <div className="flex items-center my-3">
                 <Icon icon="ion:home" className="text-xl text-blue-600" />
                 <h3 className="ml-3 text-md font-bold">
@@ -87,17 +89,24 @@ export default function CompanyInfo() {
                   {info?.phone ? info.phone : "01-364-3482"}
                 </h3>
               </div>
-              <div className="flex items-center my-3">
-                <Icon icon="mdi:web" className="text-xl text-blue-600" />
-                <h3 className="ml-3 text-md font-bold">
-                  {info?.website ? info.website : "www.ambitbound.com"}
-                </h3>
-              </div>
+
+              {info?.websit && (
+                <div className="flex items-center my-3">
+                  <Icon icon="mdi:web" className="text-xl text-blue-600" />
+                  <h3 className="ml-3 text-md font-bold">
+                    {info?.website ? info.website : "www.ambitbound.com"}
+                  </h3>
+                </div>
+              )}
             </div>
           </div>
         </div>
       ) : (
-        <EditBusinessInfo reBack={handleDiscard} updateInfo={updateInfo} />
+        <EditBusinessInfo
+          reBack={handleDiscard}
+          getInfo={getInfo}
+          companyId={id}
+        />
       )}
     </>
   );
