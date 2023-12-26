@@ -193,7 +193,7 @@ export default function EditBusinessInfo({ reBack, updateInfo }) {
               </button>
               <div
                 onClick={handleDiscardClick}
-                className="w-6/12 mt-8 ml-2 my-3 flex justify-center rounded-md focus:outline-none hover:text-white hover:bg-[#4338ca] px-3 py-1.5 text-sm font-semibold leading-6 border-2 border-[#4338ca] text-[#4338ca] shadow-sm"
+                className="w-6/12 mt-8 ml-2 my-3 flex justify-center rounded-md focus:outline-none hover:text-white hover:bg-blue-400 px-3 py-1.5 text-sm font-semibold leading-6 border-2  text-[#4338ca] shadow-sm"
               >
                 Discard
               </div>

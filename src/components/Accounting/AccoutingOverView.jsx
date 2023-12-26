@@ -183,7 +183,9 @@ const AccoutingOverView = () => {
                       )}
                     </td>
 
-                    <td className="text-slate-600 font-bold">{acc.balance}</td>
+                    <td className="text-slate-600 font-bold">
+                      {acc.balance.toFixed()}
+                    </td>
                   </tr>
                   {expandedIndex === index && (
                     <tr className="w-full flex flex-col">
@@ -199,7 +201,7 @@ const AccoutingOverView = () => {
                                   {sub.type}
                                 </h2>
                                 <h2 className="mx-6 text-slate-600">
-                                  {sub.amount}
+                                  {sub.amount.toFixed()}
                                 </h2>
                               </div>
                             ))}
@@ -229,7 +231,8 @@ const AccoutingOverView = () => {
               <td className="border px-4 py-2 text-slate-600 font-semibold text-lg">
                 {account
                   .filter((acc) => !selectedKeys.has(acc.type))
-                  .reduce((total, row) => total + row.balance, 0)}
+                  .reduce((total, row) => total + row.balance, 0)
+                  .toFixed()}
               </td>
             </div>
           </tbody>

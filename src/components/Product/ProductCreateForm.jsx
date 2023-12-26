@@ -278,7 +278,7 @@ export default function ProductCreateForm() {
                   labelPlacement="outside"
                   label="Category"
                   name="category"
-                  placeholder="Select an category"
+                  placeholder="Select category"
                   selectedKeys={
                     product.category
                       ? [product.category._id || product.category]
