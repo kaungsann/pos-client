@@ -50,6 +50,7 @@ export default function CompanyInfo() {
               }}
             />
           </div>
+          <h1>profiltvgsdfe</h1>
           <div className="w-2/5 mx-auto">
             <img src={img} className="w-48 h-40  mx-auto text-center mt-4" />
             <div>
