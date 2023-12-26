@@ -38,7 +38,16 @@ export default function EmployeeCreate() {
       navigate("/admin/employee/all");
     } else {
       setIsLoading(false);
-      toast(response.message);
+      toast.error(response.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 

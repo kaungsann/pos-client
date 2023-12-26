@@ -98,8 +98,8 @@ const FilterBox = ({ onFilter }) => {
                     variant="bordered"
                     radius="sm"
                     size="md"
-                    label="Created-Date"
-                    placeholder="Enter created date"
+                    label="Schedule-Date"
+                    placeholder="Enter schedule date"
                     labelPlacement="outside"
                     className="ml-2"
                     onChange={(e) => setCreated(e.target.value)}

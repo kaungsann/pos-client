@@ -32,7 +32,7 @@ export default function EditBusinessInfo({ reBack, updateInfo }) {
       setId(resData.data[0].id);
     }
   };
-  
+
   const handleDiscardClick = () => {
     reBack();
   };
@@ -75,7 +75,8 @@ export default function EditBusinessInfo({ reBack, updateInfo }) {
       updateInfo(response.data[0]);
     } else {
       setLoading(false);
-      toast(response.message);
+
+      toast.error(response.message);
     }
   };
 
@@ -87,7 +88,7 @@ export default function EditBusinessInfo({ reBack, updateInfo }) {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -192,7 +193,7 @@ export default function EditBusinessInfo({ reBack, updateInfo }) {
               </button>
               <div
                 onClick={handleDiscardClick}
-                className="w-6/12 mt-8 ml-2 my-3 flex justify-center rounded-md focus:outline-none hover:text-white hover:bg-[#4338ca] px-3 py-1.5 text-sm font-semibold leading-6 border-2 border-[#4338ca] text-[#4338ca] shadow-sm"
+                className="w-6/12 mt-8 ml-2 my-3 flex justify-center rounded-md focus:outline-none hover:text-white hover:bg-blue-400 px-3 py-1.5 text-sm font-semibold leading-6 border-2  text-[#4338ca] shadow-sm"
               >
                 Discard
               </div>

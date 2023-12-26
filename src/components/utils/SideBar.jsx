@@ -786,7 +786,7 @@ export default function SideBar() {
                   <ul className="cursor-pointer mt-2">
                     <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
-                        location.pathname === "/admin/accounting/overview"
+                        location.pathname === "/admin/account/overview"
                           ? "text-white bg-slate-300 "
                           : ""
                       }}`}

@@ -67,7 +67,7 @@ export default function Register() {
       navigate("/admin/user/all");
     } else {
       setLoading(false);
-      toast(response.message);
+      toast.error(response.message);
     }
   };
 

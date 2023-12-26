@@ -76,7 +76,7 @@ export default function StaffEdit() {
     if (resData.status) {
       navigate("/admin/user/all");
     } else {
-      toast(resData.message);
+      toast.error(resData.message);
     }
   };
 

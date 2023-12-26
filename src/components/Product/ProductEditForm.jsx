@@ -100,13 +100,14 @@ export default function ProductEditForm() {
           if (data?.message == "Token Expire , Please Login Again") {
             dipatch(removeData(null));
           }
-          toast(data.message);
+          toast.warn(data.message);
+          BoxImg;
         } else {
           navigate("/admin/products/all");
         }
       } catch (error) {
         console.error("Error fetching products:", error);
-        toast(error.message);
+        toast.error(error.message);
       } finally {
         setIsSelected(false);
         setSelectedImage(null);
@@ -191,14 +192,13 @@ export default function ProductEditForm() {
     <>
       <ToastContainer
         position="top-center"
-        autoClose={4000}
-        hideProgressBar
+        autoClose={5000}
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
-        className="text-black"
         rtl={false}
-        pauseOnFocusLoss={false}
-        draggable={false}
+        pauseOnFocusLoss
+        draggable
         pauseOnHover
         theme="light"
       />

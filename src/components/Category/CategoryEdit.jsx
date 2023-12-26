@@ -37,7 +37,16 @@ export default function CategoryEdit() {
       if (resData.status) {
         navigate("/admin/categorys/all");
       } else {
-        toast(resData.message);
+        toast.error(resData.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     } catch (error) {
       console.error("Error creating category:", error);
@@ -58,7 +67,7 @@ export default function CategoryEdit() {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -66,7 +75,6 @@ export default function CategoryEdit() {
         draggable
         pauseOnHover
         theme="light"
-        style={{ width: "450px" }}
       />
      
 

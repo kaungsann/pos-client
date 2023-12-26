@@ -9,7 +9,6 @@ import ExcelImportButton from "../ExcelImportButton";
 import SearchCompo from "../utils/SearchCompo";
 import { Button } from "@nextui-org/react";
 
-
 export default function CategoryTemplate() {
   const [categorys, setCategorys] = useState([]);
   const [filteredKeywords, setFilteredKeywords] = useState({ name: "" });
@@ -17,8 +16,6 @@ export default function CategoryTemplate() {
   const token = useSelector((state) => state.IduniqueData);
 
   const navigate = useNavigate();
-
-
 
   const handleRefresh = () => {
     setRefresh(!refresh);

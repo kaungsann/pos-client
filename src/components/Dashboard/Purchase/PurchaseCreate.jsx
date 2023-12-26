@@ -59,7 +59,7 @@ export default function SaleOrderCreate() {
 
   const createProductApi = async () => {
     if (saleOrderLines.length == 0) {
-      toast("you need to selecte the product");
+      toast.error("you need to selecte the product");
       return;
     }
     if (date === "") {
@@ -122,10 +122,19 @@ export default function SaleOrderCreate() {
         toast(resData.message);
         navigate("/admin/purchase/all");
       } else {
-        toast(resData.message);
+        toast.error(resData.message);
       }
     } catch (error) {
-      toast(resData.message);
+      toast.warn(error.message, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
   const handleSubmit = (e) => {
@@ -216,7 +225,7 @@ export default function SaleOrderCreate() {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -224,7 +233,6 @@ export default function SaleOrderCreate() {
         draggable
         pauseOnHover
         theme="light"
-        style={{ width: "450px" }}
       />
 
       <div className="container mt-2">

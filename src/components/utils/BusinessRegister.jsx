@@ -45,7 +45,8 @@ export default function BusinessRegister() {
       toast(response.message);
     } else {
       setLoading(false);
-      toast(response.message);
+      toast.error(response.message);
+      setI;
     }
   };
   return (

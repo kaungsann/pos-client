@@ -32,13 +32,13 @@ export default function LocationCreate() {
         if (data?.message == "Token Expire , Please Login Again") {
           dipatch(removeData(null));
         }
-        toast(data.message);
+        toast.error(data.message);
       } else {
         navigate("/admin/locations/all");
       }
     } catch (error) {
       console.error("Error creating category:", error);
-      toast(error.response.data.message);
+      toast.warn(error.response.data.message);
     }
   };
 
@@ -46,7 +46,7 @@ export default function LocationCreate() {
     e.preventDefault();
 
     if (!name.trim()) {
-      toast("Please enter a location name.");
+      toast.error("Please enter a location name.");
       return;
     }
 
@@ -63,7 +63,7 @@ export default function LocationCreate() {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -71,13 +71,11 @@ export default function LocationCreate() {
         draggable
         pauseOnHover
         theme="light"
-        style={{ width: "450px" }}
       />
-    
+
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-
-        <h2 className="lg:text-xl font-bold ">Add Location </h2>
+          <h2 className="lg:text-xl font-bold ">Add Location </h2>
           <div className="flex gap-3 ">
             <button
               type="submit"

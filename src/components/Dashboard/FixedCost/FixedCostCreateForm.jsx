@@ -48,7 +48,7 @@ export default function FixedCostCreateForm() {
         navigate("/admin/fixed-cost/all");
         setIsLoading(false);
       } else {
-        toast(response.message || "An error occurred");
+        toast.error(response.message || "An error occurred");
         setIsLoading(false);
       }
     } catch (error) {
