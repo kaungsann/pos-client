@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { BASE_URL } from "../Api";
 import axios from "axios";
-import { Button, Input, Progress, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Progress } from "@nextui-org/react";
 
 export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
   const CompanyDoc = {
@@ -187,7 +187,7 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
       </div>
 
       <div className="container my-6 mx-8">
-        <h2 className="text-sm font-bold text-slate-700 pb-3 border-b-2 border-b-slate-300">
+        <h2 className="text-sm font-bold text-slate-700">
           Edit Your Business Information
         </h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">

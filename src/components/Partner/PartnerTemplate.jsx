@@ -102,6 +102,7 @@ export default function AdjustmentTemplate() {
             text="Stock"
             token={token.accessToken}
             apiEndpoint={PARTNER_API.IMPORT}
+            ExcelLink="https://ambitbound-tech.s3.ap-southeast-1.amazonaws.com/template/partner_template.xlsx"
           />
         </div>
       </div>

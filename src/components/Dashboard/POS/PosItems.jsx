@@ -114,7 +114,7 @@ export default function PosItems() {
     <>
       <div
         className={`flex w-full ${
-          user.role && user.role.name == "user" && "mt-20"
+          user.role && user.role.name == "user" && "mt-2"
         }`}
       >
         <div className="lg:w-2/3 md:w-2/4 shadow-sm bg-white overflow-y-scroll custom-scrollbar h-screen">
@@ -130,7 +130,6 @@ export default function PosItems() {
                 className=" py-2 px-2 shadow-sm bg-slate-50 border-2 w-64 block rounded-md  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6"
                 placeholder="search products barcode"
               />
-              
             </div>
             <ul className="mt-4 flex flex-wrap cursor-pointer items-center max-w-3xl relative p-3">
               {currentPage > 1 && (
@@ -203,7 +202,7 @@ export default function PosItems() {
             )}
           </div>
         </div>
-        <div className=" p-3 h-screen w-1/3 bg-white rounded-sm shadow-md ml-2">
+        <div className="p-3 h-screen w-1/3 bg-white rounded-sm shadow-md ml-2">
           <PayBox />
         </div>
       </div>

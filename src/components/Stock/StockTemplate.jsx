@@ -105,11 +105,11 @@ export default function StockTemplate() {
             />
           </div>
 
-          <ExcelImportButton
+          {/* <ExcelImportButton
             text="Stock"
             token={token.accessToken}
             apiEndpoint={STOCK_API.IMPORT}
-          />
+          /> */}
         </div>
       </div>
       <StockList stocks={filteredStock} />

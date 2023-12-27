@@ -152,6 +152,7 @@ const ProductTemplate = () => {
               token={token.accessToken}
               apiEndpoint={PRODUCT_API.IMPORT}
               text="Product"
+              ExcelLink="https://ambitbound-tech.s3.ap-southeast-1.amazonaws.com/template/product_template.xlsx"
             />
           </div>
         </div>

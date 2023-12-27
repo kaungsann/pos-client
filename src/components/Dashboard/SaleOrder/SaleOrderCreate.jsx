@@ -156,39 +156,54 @@ export default function SaleOrderCreate() {
     );
     setPart(filteredPartners);
   };
-  const handleAddProduct = () => {
-    if (pd === null) {
-      setShowErrorProduct(true);
-    } else {
-      setShowErrorProduct(false);
-    }
-    if (quantity === 0) {
-      setShowErrorQuantity(true);
-    } else {
-      setShowErrorQuantity(false);
-    }
 
-    if (pd === null || quantity === 0) {
+  const handleAddProduct = () => {
+    if (pd === "" || parseInt(quantity) === 0 || quantity === "") {
+      setShowErrorProduct(true);
+      setShowErrorQuantity(true);
+      toast.error("you need to selecte the product and add quantity");
       return;
     }
-    const subTotal = unitPrice * quantity;
+
     const selectedProduct = product.find((pt) => pt.id === pd);
-    if (selectedProduct) {
-      const calculatedTax = selectedProduct.tax * quantity;
-      setTax(calculatedTax);
+    const existingProductIndex = saleOrderLines.findIndex(
+      (line) => line.product.id === pd
+    );
+
+    if (existingProductIndex !== -1) {
+      // Product already exists in the array, update the values
+      const updatedSaleOrderLines = [...saleOrderLines];
+      const existingLine = updatedSaleOrderLines[existingProductIndex];
+
+      // Calculate the updated quantity
+      const updatedQuantity = existingLine.qty + parseInt(quantity);
+
+      existingLine.qty = updatedQuantity;
+      existingLine.tax =
+        (selectedProduct.tax / 100) * updatedQuantity * unitPrice;
+      existingLine.unitPrice = unitPrice;
+      existingLine.subTotal = unitPrice * updatedQuantity;
+
+      setSaleOrderLines(updatedSaleOrderLines);
+    } else {
+      // Product doesn't exist in the array, add a new line
+      const subTotal = unitPrice * quantity;
+
+      const newSaleOrderLine = {
+        product: item,
+        qty: parseInt(quantity),
+        tax: (selectedProduct.tax / 100) * quantity * unitPrice,
+        unitPrice: unitPrice,
+        subTotal: subTotal,
+      };
+
+      setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
     }
 
-    const newSaleOrderLine = {
-      product: item,
-      qty: quantity,
-      tax: (selectedProduct.tax / 100) * quantity * unitPrice,
-      unitPrice: unitPrice,
-      subTotal: subTotal,
-    };
-
-    setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
-
+    // Reset input values
+    setPd(options[0]);
     setQuantity(0);
+    setTax(0);
     setUnitPrice(0);
   };
 
@@ -410,6 +425,7 @@ export default function SaleOrderCreate() {
                     type="number"
                     label="Tax"
                     name="tax"
+                    isDisabled
                     value={(Tax * quantity) / 100}
                     onChange={(e) => setTax(e.target.value)}
                     placeholder="Tax"
@@ -421,6 +437,7 @@ export default function SaleOrderCreate() {
                     type="number"
                     label="SubTotal"
                     name="subTotal"
+                    isDisabled
                     value={unitPrice * quantity}
                     onChange={(e) => setTotalCost(e.target.value)}
                     placeholder="SubTotal"

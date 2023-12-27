@@ -159,36 +159,87 @@ export default function SaleOrderCreate() {
     setPart(filteredPartners);
   };
 
-  const handleAddProduct = () => {
-    if (pd === null) {
-      setShowErrorProduct(true);
-    } else {
-      setShowErrorProduct(false);
-    }
-    if (quantity === 0) {
-      setShowErrorQuantity(true);
-    } else {
-      setShowErrorQuantity(false);
-    }
+  // const handleAddProduct = () => {
+  //   if (pd === null) {
+  //     setShowErrorProduct(true);
+  //   } else {
+  //     setShowErrorProduct(false);
+  //   }
+  //   if (quantity === 0) {
+  //     setShowErrorQuantity(true);
+  //   } else {
+  //     setShowErrorQuantity(false);
+  //   }
 
-    if (pd === null || quantity === 0) {
+  //   if (pd === null || quantity === 0) {
+  //     return;
+  //   }
+
+  //   const subTotal = unitPrice * quantity;
+  //   const selectedProduct = product.find((pt) => pt.id === pd);
+
+  //   const newSaleOrderLine = {
+  //     product: item,
+  //     qty: quantity,
+  //     tax: (selectedProduct.tax / 100) * quantity * unitPrice,
+  //     unitPrice: unitPrice,
+  //     subTotal: subTotal,
+  //   };
+
+  //   setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
+  //   setPd(new Set([options[0]]));
+  //   setQuantity(0);
+  //   setTax(0);
+  //   setUnitPrice(0);
+  // };
+
+  console.log("quanttity is a", quantity);
+
+  const handleAddProduct = () => {
+    if (pd === "" || parseInt(quantity) === 0 || quantity === "") {
+      setShowErrorProduct(true);
+      setShowErrorQuantity(true);
+      toast.error("you need to selecte the product and add quantity");
       return;
     }
 
-    const subTotal = unitPrice * quantity;
     const selectedProduct = product.find((pt) => pt.id === pd);
+    const existingProductIndex = saleOrderLines.findIndex(
+      (line) => line.product.id === pd
+    );
 
-    const newSaleOrderLine = {
-      product: item,
-      qty: quantity,
-      tax: (selectedProduct.tax / 100) * quantity * unitPrice,
-      unitPrice: unitPrice,
-      subTotal: subTotal,
-    };
+    if (existingProductIndex !== -1) {
+      // Product already exists in the array, update the values
+      const updatedSaleOrderLines = [...saleOrderLines];
+      const existingLine = updatedSaleOrderLines[existingProductIndex];
 
-    setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
+      // Calculate the updated quantity
+      const updatedQuantity = existingLine.qty + parseInt(quantity);
 
-    setPd("default");
+      existingLine.qty = updatedQuantity;
+      existingLine.tax =
+        (selectedProduct.tax / 100) * updatedQuantity * unitPrice;
+      existingLine.unitPrice = unitPrice;
+      existingLine.subTotal = unitPrice * updatedQuantity;
+
+      setSaleOrderLines(updatedSaleOrderLines);
+    } else {
+      // Product doesn't exist in the array, add a new line
+      const subTotal = unitPrice * quantity;
+
+      const newSaleOrderLine = {
+        product: item,
+        qty: parseInt(quantity),
+        tax: (selectedProduct.tax / 100) * quantity * unitPrice,
+        unitPrice: unitPrice,
+        subTotal: subTotal,
+      };
+
+      setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
+    }
+
+    // Reset input values
+    setPd(options[0]); // Assuming options is an array of product IDs
     setQuantity(0);
     setTax(0);
     setUnitPrice(0);
@@ -219,6 +270,9 @@ export default function SaleOrderCreate() {
   }, [saleOrderLines]);
 
   let count = 0;
+
+  console.log("product items is  a", item);
+  console.log("pd items is  a", pd);
 
   return (
     <>
@@ -409,6 +463,7 @@ export default function SaleOrderCreate() {
                     type="number"
                     label="Tax"
                     name="tax"
+                    isDisabled
                     value={(Tax * quantity) / 100}
                     onChange={(e) => setTax(e.target.value)}
                     placeholder="Tax"
@@ -420,6 +475,7 @@ export default function SaleOrderCreate() {
                     type="number"
                     label="SubTotal"
                     name="subTotal"
+                    isDisabled
                     value={unitPrice * quantity}
                     onChange={(e) => setTotalCost(e.target.value)}
                     placeholder="SubTotal"

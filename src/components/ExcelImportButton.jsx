@@ -11,8 +11,10 @@ import {
 import { Icon } from "@iconify/react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const ExcelImportButton = ({ token, apiEndpoint, text }) => {
+const ExcelImportButton = ({ token, apiEndpoint, text, ExcelLink }) => {
   const uploadRef = useRef(null);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [selectedFileName, setSelectedFileName] = useState(null);
@@ -30,6 +32,10 @@ const ExcelImportButton = ({ token, apiEndpoint, text }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      if (response.status) {
+        onClose();
+        setSelectedFileName(null);
+      }
 
       console.log("API Response:", response.data);
 
@@ -61,8 +67,24 @@ const ExcelImportButton = ({ token, apiEndpoint, text }) => {
     console.log("API submitted with data:", data);
   };
 
+  const handleFileImportClick = () => {
+    importRef.current.click();
+  };
+
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <input
         type="file"
         ref={uploadRef}
@@ -89,7 +111,8 @@ const ExcelImportButton = ({ token, apiEndpoint, text }) => {
               onClick={() => uploadRef.current.click()}
               onDragOver={handleDragOver}
               onDrop={handleDrop}
-              className="grid grid-cols-1 gap-2 place-content-center border-dotted hover:bg-zinc-100 border-4 bg-zinc-200 h-40">
+              className="grid grid-cols-1 gap-2 place-content-center border-dashed hover:bg-blue-100 border-2 rounded-sm border-slate-500 bg-blue-50 h-40"
+            >
               <Icon
                 icon="line-md:cloud-upload-loop"
                 className="text-6xl text-slate-500 mx-auto"
@@ -102,15 +125,22 @@ const ExcelImportButton = ({ token, apiEndpoint, text }) => {
             </div>
           </ModalBody>
           <ModalFooter>
-            <a className="text-blue-600 font-semibold underline underline-offset-1 cursor-pointer hover:opacity-70">
-              Download Template
-            </a>
-            <button
-              className="text-white font-semibold bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded ml-2"
-              onClick={() => handleFileChange(null, handleApiSubmit)}
-            >
-              Submit
-            </button>
+            <div className="flex w-full">
+              <a
+                href={ExcelLink}
+                download
+                className="w-3/6 flex justify-center rounded-sm shadow-sm items-center text-[#15803d] border-[#15803d] bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold px-3 py-1.5"
+              >
+                Download Template
+              </a>
+              <button
+                className="w-3/6 flex justify-center ml-3 font-bold text-center rounded-sm shadow-sm items-center border-blue-500 border-2 hover:opacity-75 text-sm text-white bg-blue-500 px-3 py-1.5"
+                //onClick={() => handleFileChange(null, handleApiSubmit)}
+                onClick={() => handleFileChange(uploadRef.current.files[0])}
+              >
+                Submit
+              </button>
+            </div>
           </ModalFooter>
         </ModalContent>
       </Modal>

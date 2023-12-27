@@ -101,6 +101,63 @@ export default function OverView() {
     return format(startDate, "MM-dd-yyyy");
   };
 
+  const calculateLastMonthDates = () => {
+    const today = new Date();
+    const lastMonthStartDate = new Date(
+      today.getFullYear(),
+      today.getMonth() - 1,
+      1
+    );
+    const lastMonthEndDate = new Date(today.getFullYear(), today.getMonth(), 0);
+
+    const formattedStartDate = format(lastMonthStartDate, "MM-dd-yyyy");
+    const formattedEndDate = format(lastMonthEndDate, "MM-dd-yyyy");
+
+    setText(`${formattedStartDate}  to  ${formattedEndDate} `);
+
+    return {
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+    };
+  };
+
+  const calculateLastFinancialYearDates = () => {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const lastFinancialYearStartDate = new Date(currentYear - 1, 3, 1); // Financial year starts on April 1
+    const lastFinancialYearEndDate = new Date(currentYear, 2, 31); // Financial year ends on March 31
+
+    const formattedStartDate = format(lastFinancialYearStartDate, "MM-dd-yyyy");
+    const formattedEndDate = format(lastFinancialYearEndDate, "MM-dd-yyyy");
+    setText(`${formattedStartDate}  to  ${formattedEndDate} `);
+
+    return {
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+    };
+  };
+
+  const calculateLastQuarterDates = () => {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const startMonth = currentMonth - (currentMonth % 3);
+    const lastQuarterStartDate = new Date(today.getFullYear(), startMonth, 1);
+    const lastQuarterEndDate = new Date(
+      today.getFullYear(),
+      currentMonth + 1,
+      0
+    );
+
+    const formattedStartDate = format(lastQuarterStartDate, "MM-dd-yyyy");
+    const formattedEndDate = format(lastQuarterEndDate, "MM-dd-yyyy");
+    setText(`${formattedStartDate}  to  ${formattedEndDate} `);
+
+    return {
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+    };
+  };
+
   const handleFilterChange = (e) => {
     setEndDate(todayDate);
     setFilter(e.target.value);
@@ -142,6 +199,10 @@ export default function OverView() {
       resData = await getApi(
         `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
         token.accessToken
+      );
+      console.log(
+        "api is a ",
+        `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
       );
     }
 
@@ -219,7 +280,9 @@ export default function OverView() {
               <PopoverTrigger>
                 <button className="flex items-center px-3 py-2 bg-white shadow-md rounded-sm">
                   <Icon icon="uiw:date" className="text-slate-500 text-md" />
-                  <span className="text-sm ml-2">2023</span>
+                  <span className="text-sm ml-2">
+                    {new Date().getFullYear()}
+                  </span>
                 </button>
               </PopoverTrigger>
               <PopoverContent>
@@ -263,13 +326,51 @@ export default function OverView() {
                   >
                     Yearly
                   </ListboxItem>
+                  <ListboxItem
+                    className="rounded-none"
+                    onClick={() => {
+                      const { startDate, endDate } = calculateLastMonthDates();
+                      setStartDate(startDate);
+                      setEndDate(endDate);
+                      setMonth("");
+                      setYear("");
+                      setDay("");
+                      setFilter(""); // Reset other filters if needed
 
-                  <ListboxItem className="rounded-none">Last Month</ListboxItem>
-                  <ListboxItem className="rounded-none">
+                      getTotals();
+                    }}
+                  >
+                    Last Month
+                  </ListboxItem>
+                  <ListboxItem
+                    className="rounded-none"
+                    onClick={() => {
+                      const { startDate, endDate } =
+                        calculateLastQuarterDates();
+                      setStartDate(startDate);
+                      setEndDate(endDate);
+                      setMonth("");
+                      setYear("");
+                      setDay("");
+
+                      getTotals();
+                    }}
+                  >
                     Last Quarter
                   </ListboxItem>
-                  <ListboxItem className="border-b-slate-300 border-b-2 rounded-none">
-                    Last Funancial Year
+                  <ListboxItem
+                    className="border-b-slate-300 border-b-2 rounded-none"
+                    onClick={() => {
+                      const { startDate, endDate } =
+                        calculateLastFinancialYearDates();
+                      setStartDate(startDate);
+                      setEndDate(endDate);
+                      setFilter(""); // Reset other filters if needed
+
+                      getTotals();
+                    }}
+                  >
+                    Last Financial Year
                   </ListboxItem>
                 </Listbox>
                 <div className="flex items-center py-3">
