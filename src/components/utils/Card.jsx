@@ -38,7 +38,7 @@ export default function Card({ product }) {
           {product.name.substring(0, 12)}
         </h3>
         <h2 className="font-bold text-blue-700 text-md">
-          {product.salePrice} MMK
+          {Math.ceil(product.salePrice)} MMK
         </h2>
       </div>
     </>

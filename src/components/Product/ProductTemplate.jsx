@@ -56,6 +56,7 @@ const ProductTemplate = () => {
         let filterActiveProduct = response.data?.data.filter(
           (pt) => pt.active === true
         );
+
         setProducts(filterActiveProduct);
       } catch (error) {
         console.error("Error fetching products:", error);

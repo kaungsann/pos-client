@@ -75,20 +75,19 @@ export default function Admin() {
           <span></span>
 
           <div className="flex w-2/5 justify-end lg:mr-[30px] md:mr-[80px] items-center px-3">
-            {(user.role && user.role.name === "admin") ||
-            user.role.name === "root" ? (
-              <>
-                <Link to="/admin/pos/all">
-                  <Icon
-                    icon="arcticons:jiopos-lite"
-                    className={`text-3xl rounded-full p-1 text-slate-500 shadow-md ${
-                      location.pathname === "/admin/pos/all"
-                        ? "text-white bg-blue-500 font-extrabold"
-                        : ""
-                    }}`}
-                  />
-                </Link>
-
+            <>
+              <Link to="/admin/pos/all">
+                <Icon
+                  icon="arcticons:jiopos-lite"
+                  className={`text-3xl rounded-full p-1 text-slate-500 shadow-md ${
+                    location.pathname === "/admin/pos/all"
+                      ? "text-white bg-blue-500 font-extrabold"
+                      : ""
+                  }}`}
+                />
+              </Link>
+              {(user.role && user.role.name === "admin") ||
+              user.role.name === "root" ? (
                 <Link to="/admin/warehouse">
                   <Icon
                     icon="maki:warehouse"
@@ -98,8 +97,8 @@ export default function Admin() {
                     }`}
                   />
                 </Link>
-              </>
-            ) : null}
+              ) : null}
+            </>
 
             <div
               className="flex items-center mx-3"

@@ -165,7 +165,7 @@ export default function Profile() {
       />
       <div
         className={`flex mb-8 cursor-pointer ${
-          userInfo.role && userInfo.role.name == "user" ? "mt-20 " : ""
+          userInfo.role && userInfo.role.name == "user" ? "mt-3" : ""
         }`}
       >
         <div className="w-1/4 flex flex-col justify-items-center items-center p-4 bg-white shadow-md h-screen">
