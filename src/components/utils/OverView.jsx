@@ -18,7 +18,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-  Input,
+  Button,
   Listbox,
   ListboxItem,
 } from "@nextui-org/react";
@@ -47,21 +47,6 @@ export default function OverView() {
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
-
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
 
   const [totalPurchaseAmount, setTotalPurchaseAmount] = useState(0);
   const [totalPurchaseOrders, setTotalPurchaseOrders] = useState(0);
@@ -190,7 +175,6 @@ export default function OverView() {
       // Default to daily (today)
       resData = await getApi(`/orders/totals`, token.accessToken);
     }
-
     if (startDate) {
       let formattedStartDate = format(new Date(startDate), "MM-dd-yyyy");
       let formattedEndDate = format(new Date(endDate), "MM-dd-yyyy");
@@ -227,6 +211,23 @@ export default function OverView() {
 
   useEffect(() => {
     getTotals();
+
+    //   try {
+    //     const response = await axios.get(
+    //       ACCOUNT_API.INDEX + `?startDate=${startDate}&endDate=${endDate}`,
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${token.accessToken}`,
+    //           "Content-Type": "application/json",
+    //         },
+    //       }
+    //     );
+    //     setAccount(response.data?.data);
+    //   } catch (error) {
+    //     console.error("Error fetching account:", error);
+    //   }
+    // };
+    // fetchAccountData();
   }, [day, month, year, StartDate]);
 
   const orderList = Array.from(
@@ -269,7 +270,7 @@ export default function OverView() {
     <>
       <div className="relative">
         <div className="flex justify-end mb-3">
-          <div className="flex w-full justify-center">
+          <div className="flex w-full justify-center items-center">
             <Popover
               placement="bottom"
               classNames={{
@@ -278,12 +279,16 @@ export default function OverView() {
               }}
             >
               <PopoverTrigger>
-                <button className="flex items-center px-3 py-2 bg-white shadow-md rounded-sm">
-                  <Icon icon="uiw:date" className="text-slate-500 text-md" />
+                <Button
+                  size="sm"
+                  className="rounded-sm ml-3 transition shadow-sm flex items-centertext-[#4338ca] border-[#4338ca] hover:bg-[#4338ca]
+                 border-2 hover:opacity-75 text-sm hover:text-white bg-white  font-bold px-3 py-1.5`"
+                >
+                  <Icon icon="uiw:date" className="text-md" />
                   <span className="text-sm ml-2">
                     {new Date().getFullYear()}
                   </span>
-                </button>
+                </Button>
               </PopoverTrigger>
               <PopoverContent>
                 <Listbox>
@@ -403,7 +408,7 @@ export default function OverView() {
               </PopoverContent>
             </Popover>
 
-            <div className="w-56 flex shadow-md justify-center px-3 mx-3 py-1.5 bg-white border-2 text-center rounded-sm">
+            <div className="w-56 flex shadow-sm justify-center px-3 mx-3 py-1 bg-white border-2 text-center rounded-sm">
               <h4 className="text-slate-500  font-semibold">{text}</h4>
             </div>
           </div>

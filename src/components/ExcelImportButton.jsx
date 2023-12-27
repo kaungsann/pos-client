@@ -14,7 +14,13 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ExcelImportButton = ({ token, apiEndpoint, text, ExcelLink }) => {
+const ExcelImportButton = ({
+  token,
+  apiEndpoint,
+  text,
+  ExcelLink,
+  fetchData,
+}) => {
   const uploadRef = useRef(null);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [selectedFileName, setSelectedFileName] = useState(null);
@@ -35,6 +41,10 @@ const ExcelImportButton = ({ token, apiEndpoint, text, ExcelLink }) => {
       if (response.status) {
         onClose();
         setSelectedFileName(null);
+        fetchData();
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
       }
 
       console.log("API Response:", response.data);
@@ -59,6 +69,8 @@ const ExcelImportButton = ({ token, apiEndpoint, text, ExcelLink }) => {
     if (file) {
       // Pass a callback to handleFileChange to call the API after file upload
       handleFileChange(file, handleApiSubmit);
+    } else {
+      toast.error("choose the file");
     }
   };
 

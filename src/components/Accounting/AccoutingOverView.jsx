@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useMemo } from "react";
 import PropTypes from "prop-types";
 import { Icon } from "@iconify/react";
 import { BASE_URL } from "../Api";
@@ -29,6 +29,7 @@ import {
   DropdownItem,
   DropdownTrigger,
   DropdownMenu,
+  Button,
 } from "@nextui-org/react";
 
 import { useSelector } from "react-redux";
@@ -36,7 +37,7 @@ import { useSelector } from "react-redux";
 const AccoutingOverView = () => {
   const [selectedKeys, setSelectedKeys] = React.useState(new Set(["text"]));
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState("This Month");
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -56,77 +57,69 @@ const AccoutingOverView = () => {
     [selectedKeys]
   );
 
-  const handleDateSelection = (option) => {
-    const currentDate = new Date();
+  const handleDateSelection = React.useCallback(
+    (option) => {
+      const currentDate = new Date();
 
-    console.log("today date is a", currentDate);
+      console.log("today date is a", currentDate);
 
-    switch (option) {
-      case "This Weekend":
-        const startOfWeekend = startOfWeek(currentDate, { weekStartsOn: 6 }); // Saturday
-        const endOfWeekend = endOfWeek(currentDate, { weekStartsOn: 6 }); // Sunday
-        setStartDate(format(startOfWeekend, "MM-dd-yyyy"));
-        setEndDate(format(endOfWeekend, "MM-dd-yyyy"));
-        setText("This Weekend");
-        break;
-      case "This Month":
-        setStartDate(format(startOfMonth(currentDate), "MM-dd-yyyy"));
-        setEndDate(format(endOfMonth(currentDate), "MM-dd-yyyy"));
-        // setText(format(addMonths(currentDate, -1), "MMMM"));
-        setText(format(currentDate, "MMMM"));
-        break;
-      case "This Year":
-        setStartDate(format(startOfYear(currentDate), "MM-dd-yyyy"));
-        setEndDate(format(endOfYear(currentDate), "MM-dd-yyyy"));
-        setText(new Date().getFullYear());
-        break;
+      switch (option) {
+        case "This Weekend":
+          const startOfWeekend = startOfWeek(currentDate, { weekStartsOn: 6 }); // Saturday
+          const endOfWeekend = endOfWeek(currentDate, { weekStartsOn: 6 }); // Sunday
+          setStartDate(format(startOfWeekend, "MM-dd-yyyy"));
+          setEndDate(format(endOfWeekend, "MM-dd-yyyy"));
+          setText("This Weekend");
+          break;
+        case "This Month":
+          setStartDate(format(startOfMonth(currentDate), "MM-dd-yyyy"));
+          setEndDate(format(endOfMonth(currentDate), "MM-dd-yyyy"));
+          // setText(format(addMonths(currentDate, -1), "MMMM"));
+          setText(format(currentDate, "MMMM"));
+          break;
+        case "This Year":
+          setStartDate(format(startOfYear(currentDate), "MM-dd-yyyy"));
+          setEndDate(format(endOfYear(currentDate), "MM-dd-yyyy"));
+          setText(new Date().getFullYear());
+          break;
 
-      case "Last Month":
-        const lastMonthStartDate = startOfMonth(subMonths(currentDate, 1));
-        const lastMonthEndDate = endOfMonth(subMonths(currentDate, 1));
-        setStartDate(format(lastMonthStartDate, "MM-dd-yyyy"));
-        setEndDate(format(lastMonthEndDate, "MM-dd-yyyy"));
-        setText(format(lastMonthStartDate, "MMMM"));
-        break;
+        case "Last Month":
+          const lastMonthStartDate = startOfMonth(subMonths(currentDate, 1));
+          const lastMonthEndDate = endOfMonth(subMonths(currentDate, 1));
+          setStartDate(format(lastMonthStartDate, "MM-dd-yyyy"));
+          setEndDate(format(lastMonthEndDate, "MM-dd-yyyy"));
+          setText(format(lastMonthStartDate, "MMMM"));
+          break;
 
-      case "Last Year":
-        const lastYearStartDate = startOfYear(subYears(currentDate, 1));
-        const lastYearEndDate = endOfYear(subYears(currentDate, 1));
-        setStartDate(format(lastYearStartDate, "MM-dd-yyyy"));
-        setEndDate(format(lastYearEndDate, "MM-dd-yyyy"));
-        setText(format(lastYearStartDate, "yyyy"));
-        break;
+        case "Last Year":
+          const lastYearStartDate = startOfYear(subYears(currentDate, 1));
+          const lastYearEndDate = endOfYear(subYears(currentDate, 1));
+          setStartDate(format(lastYearStartDate, "MM-dd-yyyy"));
+          setEndDate(format(lastYearEndDate, "MM-dd-yyyy"));
+          setText(format(lastYearStartDate, "yyyy"));
+          break;
 
-      case "Last Quarter":
-        const lastQuarterStartDate = startOfQuarter(
-          subQuarters(currentDate, 1)
-        );
-        const lastQuarterEndDate = endOfQuarter(subQuarters(currentDate, 1));
-        setStartDate(format(lastQuarterStartDate, "MM-dd-yyyy"));
-        setEndDate(format(lastQuarterEndDate, "MM-dd-yyyy"));
-        setText(
-          `${format(lastQuarterStartDate, "MMMM")} - ${format(
-            lastQuarterEndDate,
-            "MMMM"
-          )}`
-        );
-        break;
+        case "Last Quarter":
+          const lastQuarterStartDate = startOfQuarter(
+            subQuarters(currentDate, 1)
+          );
+          const lastQuarterEndDate = endOfQuarter(subQuarters(currentDate, 1));
+          setStartDate(format(lastQuarterStartDate, "MM-dd-yyyy"));
+          setEndDate(format(lastQuarterEndDate, "MM-dd-yyyy"));
+          setText(
+            `${format(lastQuarterStartDate, "MMMM")} - ${format(
+              lastQuarterEndDate,
+              "MMMM"
+            )}`
+          );
+          break;
 
-      default:
-        break;
-    }
-  };
-
-  console.log(
-    "api is a",
-    ACCOUNT_API.INDEX + `?startDate=${startDate}&endDate=${endDate}`
+        default:
+          break;
+      }
+    },
+    [startDate, endDate, setText]
   );
-
-  const handleApplyClick = () => {
-    console.log("Selected Start Date:", startDate);
-    console.log("Selected End Date:", endDate);
-    setText(`${startDate}  to  ${endDate} `);
-  };
 
   useEffect(() => {
     const fetchAccountData = async () => {
@@ -146,24 +139,24 @@ const AccoutingOverView = () => {
       }
     };
     fetchAccountData();
-  }, [token, handleDateSelection, handleApplyClick]);
+  }, [token, handleDateSelection]);
 
   let count = 0;
 
   return (
     <>
       <div className="flex items-center">
-        <h2 className="text-xl w-52 text-slate-600 font-semibold">
-          Statement Report
-        </h2>
-        <div className="flex w-full justify-center">
+        <div className="flex w-full justify-center items-center">
           <Dropdown>
             <DropdownTrigger>
-              <div className="flex px-4 mx-3 py-2 bg-slate-200 hover:bg-slate-300 rounded-sm">
-                <Icon icon="carbon:filter" className="text-slate-500 text-xl" />
-
-                <span className="text-sm ml-2">Filter</span>
-              </div>
+              <Button
+                size="sm"
+                className="rounded-sm ml-3 transition shadow-sm flex items-centertext-[#4338ca] border-[#4338ca] hover:bg-[#4338ca]
+                 border-2 hover:opacity-75 text-sm hover:text-white bg-white  font-bold px-3 py-1.5`"
+              >
+                <Icon icon="basil:filter-outline" className="text-lg" />
+                Filter
+              </Button>
             </DropdownTrigger>
             <DropdownMenu
               aria-label="Multiple selection example"
@@ -186,10 +179,15 @@ const AccoutingOverView = () => {
             }}
           >
             <PopoverTrigger>
-              <div className="flex px-4 mx-3 py-2 bg-slate-200 hover:bg-slate-300 rounded-sm">
-                <Icon icon="uiw:date" className="text-slate-500 text-md" />
+              <Button
+                size="sm"
+                className="rounded-sm ml-3 transition shadow-sm flex items-centertext-[#4338ca] border-[#4338ca] hover:bg-[#4338ca]
+                 border-2 hover:opacity-75 text-sm hover:text-white bg-white  font-bold px-3 py-1.5`"
+              >
+                <Icon icon="uiw:date" className="text-md" />
+
                 <span className="text-sm ml-2">{new Date().getFullYear()}</span>
-              </div>
+              </Button>
             </PopoverTrigger>
             <PopoverContent>
               <Listbox>
@@ -253,22 +251,19 @@ const AccoutingOverView = () => {
                     className="border-none ml-2"
                   />
                 </div>
-                <button
-                  onClick={handleApplyClick}
-                  className="px-3 py-1 hover:opacity-70 rounded-md mx-3 text-white font-semibold bg-[#56488f]"
-                >
-                  Apply
-                </button>
               </div>
             </PopoverContent>
           </Popover>
 
-          <div className="w-56 flex shadow-md justify-center px-3 mx-3 py-1.5 bg-white border-2 text-center rounded-sm">
+          <div className="w-56 flex shadow-sm justify-center px-3 mx-3 py-1 bg-white border-2 text-center rounded-sm">
             <h4 className="text-slate-500  font-semibold">{text}</h4>
           </div>
         </div>
       </div>
-      <div className="w-2/4 mx-auto mt-20">
+      <div className="w-2/4 mx-auto mt-12">
+        <h2 className="text-xl text-slate-600 font-semibold mb-4">
+          Statement Report
+        </h2>
         <table className="w-full bg-white rounded-sm shadow-md">
           <tbody>
             {account
@@ -317,7 +312,7 @@ const AccoutingOverView = () => {
                             {acc.subRow.map((sub, index) => (
                               <div
                                 key={index}
-                                className="flex w-full justify-between my-2"
+                                className="flex w-full justify-between my-2 hover:bg-blue-100 p-2 text-slate-500 font-semibold"
                               >
                                 <h2 className="mx-6 text-slate-600">
                                   {sub.type}
@@ -327,7 +322,7 @@ const AccoutingOverView = () => {
                                 </h2>
                               </div>
                             ))}
-                            <tr className="w-full flex justify-between bg-slate-400 text-white">
+                            <tr className="w-full flex justify-between bg-slate-200 text-slate-700 font-bold">
                               <td className="px-4 py-2">Total</td>
                               <td className="px-4 py-2">
                                 {/* Calculate the total outside of the subRow mapping */}
