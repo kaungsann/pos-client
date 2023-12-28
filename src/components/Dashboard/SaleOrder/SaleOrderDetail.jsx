@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +24,7 @@ export default function SaleOrderDetail() {
 
   const token = useSelector((state) => state.IduniqueData);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const columns = [
     { key: "name", label: "Name", align: "center" },
@@ -89,74 +90,86 @@ export default function SaleOrderDetail() {
 
   return (
     <>
-      <div className="flex justify-between">
-        <div className="flex gap-2">
-          <Link
-            to="/admin/saleorders/all"
-            className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
-          >
-            Back
-          </Link>
-        </div>
-      </div>
       {error ? (
         <div className="flex items-center justify-center mt-40 pb-10">
-          <p className="text-red-500 text-xl px-4 py-2 ">
-            Failed To Load Data
-          </p>
+          <p className="text-red-500 text-xl px-4 py-2 ">Failed To Load Data</p>
         </div>
       ) : detail && detail.length > 0 ? (
-        <div className="container my-5">
-          <h2 className="lg:text-xl font-bold my-2">Order Information</h2>
-          <div className="container bg-white p-5 rounded-lg max-w-6xl">
-            <div className="grid grid-cols-2 max-w-3xl gap-10">
-              <div className="container space-y-8 font-semibold text-sm">
-                <div className="flex justify-between items-center">
-                  <h4>Order Date</h4>
-                  <h3 className="font-medium">
-                    {detail[0].orderDate
-                      ? new Date(detail[0].orderDate).toLocaleDateString()
-                      : ""}
-                  </h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>Customer</h4>
-                  <h3 className="font-medium">
-                    {detail[0].partner ? detail[0].partner.name : "none"}
-                  </h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>Location</h4>
-                  <h3 className="font-medium">
-                    {detail[0].location && detail[0].location.name}
-                  </h3>
+        <div className="container cursor-pointer">
+          <div className="container bg-white p-5 rounded-md max-w-6xl">
+            <Icon
+              icon="cil:arrow-left"
+              className="text-slate-600 font-semibold text-xl mb-3 hover:text-slate-400"
+              onClick={() => navigate("/admin/saleorders/all")}
+            />
+            <div>
+              <div className="flex">
+                <h1 className="text-3xl font-bold text-slate-600">
+                  Sale Information
+                </h1>
+              </div>
+
+              <div className="my-4 flex p-4 items-center w-4/5 border-b-2">
+                <div className="flex justify-between w-full">
+                  <div>
+                    <div>
+                      <h4 className="text-md text-slate-500">Order-Date</h4>
+                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                        {detail[0].orderDate
+                          ? new Date(detail[0].orderDate).toLocaleDateString()
+                          : ""}
+                      </h2>
+                    </div>
+                    <div className="my-6">
+                      <h4 className="text-md text-slate-500">Updated-On</h4>
+                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                        {new Date(detail[0].updatedAt).toLocaleDateString()}
+                      </h2>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <h4 className="text-md text-slate-500">Customer</h4>
+                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                        {detail[0].partner ? detail[0].partner.name : "none"}
+                      </h2>
+                    </div>
+                    <div className="my-6">
+                      <h4 className="text-md text-slate-500">Location</h4>
+                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                        {detail[0].location && detail[0].location.name}
+                      </h2>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <h4 className="text-md text-slate-500">Tax-Total</h4>
+                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                        {detail[0].taxTotal}
+                      </h2>
+                    </div>
+                    <div className="my-6">
+                      <h4 className="text-md text-slate-500">Total</h4>
+                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                        {detail[0].total && detail[0].total}
+                      </h2>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-md text-slate-500">State</h4>
+                    <h2
+                      className={`font-semibold text-md mt-1 ${
+                        detail[0].state === "pending" && "text-red-500 "
+                      } ${detail[0].state === "confirmed" && "text-green-500"}`}
+                    >
+                      {detail[0].state}
+                    </h2>
+                  </div>
                 </div>
               </div>
-              <div className="container space-y-8 font-semibold text-sm">
-                <div className="flex justify-between items-center">
-                  <h4>Tax Total</h4>
-                  <h3 className="font-medium">{detail[0].taxTotal}</h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>Total</h4>
-                  <h3 className="font-medium">
-                    {detail[0].total && detail[0].total}
-                  </h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>State</h4>
-                  <h3 className="font-medium">{detail[0].state}</h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>Note</h4>
-                  <h3 className="font-medium">{detail[0].note}</h3>
-                </div>
-              </div>
-            </div>
-            <h2 className="py-1.5 text-lg font-bold mt-4 pb-5">
-              Order Products
-            </h2>
-            <div className="w-full mb-6 ">
+              <h2 className="text-xl font-bold text-slate-600">
+                Order Products
+              </h2>
               <Table
                 isStriped
                 aria-label="Order Lines Table"
@@ -175,7 +188,7 @@ export default function SaleOrderDetail() {
                 </TableHeader>
                 <TableBody items={lines || []}>
                   {(item) => (
-                    <TableRow key={item.orderId._id} className="table-row ">
+                    <TableRow key={item.orderId._id} className="table-row">
                       {(columnKey) => (
                         <TableCell
                           key={columnKey}
