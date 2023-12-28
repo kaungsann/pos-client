@@ -69,7 +69,7 @@ export default function StaffDetail() {
                   </span>
                 </div>
               </div>
-              <h3 className="text-md my-3 text-slate-500">Employee Staff</h3>
+              <h3 className="text-md my-3 text-slate-500">POS Staff</h3>
               <div className="my-6 flex justify-between items-center w-4/5">
                 <h1 className="text-xl font-bold text-slate-600">
                   Personal Data

@@ -84,6 +84,8 @@ export default function ProductEditForm() {
         formData.append(key, updateProduct[key]);
       }
 
+      console.log("form data in price is", formData);
+
       try {
         const { data } = await axios.patch(
           BASE_URL + `/product/${id}`,

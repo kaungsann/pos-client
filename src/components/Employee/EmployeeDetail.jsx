@@ -91,19 +91,19 @@ export default function EmployeeDetail() {
                     <div>
                       <h4 className="text-md text-slate-500">Full Name</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].name ? detail[0].name.toUpperCase() : ""}
+                        {detail[0].name ? detail[0].name.toUpperCase() : "None"}
                       </h2>
                     </div>
                     <div className="my-6">
                       <h4 className="text-md text-slate-500">Email</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].email ? detail[0].email : ""}
+                        {detail[0].email ? detail[0].email : "None"}
                       </h2>
                     </div>
                     <div>
                       <h4 className="text-md text-slate-500">Phone</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].phone ? detail[0].phone : ""}
+                        {detail[0].phone ? detail[0].phone : "None"}
                       </h2>
                     </div>
                   </div>
@@ -111,19 +111,23 @@ export default function EmployeeDetail() {
                     <div>
                       <h4 className="text-md text-slate-500">Employee-ID</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].employeeId ? detail[0].employeeId : ""}
+                        {detail[0].employeeId ? detail[0].employeeId : "None"}
                       </h2>
                     </div>
                     <div className="my-6">
                       <h4 className="text-md text-slate-500">Joing Date</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {format(new Date(detail[0].createdAt), "yyyy-MM-dd")}
+                        {detail[0].birthdate
+                          ? format(new Date(detail[0].createdAt), "yyyy-MM-dd")
+                          : "None"}
                       </h2>
                     </div>
                     <div>
                       <h4 className="text-md text-slate-500">Date Of Birth</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {format(new Date(detail[0].birthdate), "yyyy-MM-dd")}
+                        {detail[0].birthdate
+                          ? format(new Date(detail[0].birthdate), "yyyy-MM-dd")
+                          : "None"}
                       </h2>
                     </div>
                   </div>
@@ -131,21 +135,21 @@ export default function EmployeeDetail() {
                     <div>
                       <h4 className="text-md text-slate-500">City</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].city ? detail[0].city : ""}
+                        {detail[0].city ? detail[0].city : "None"}
                       </h2>
                     </div>
 
                     <div className="my-6">
                       <h4 className="text-md text-slate-500">Address</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].address ? detail[0].address : ""}
+                        {detail[0].address ? detail[0].address : "None"}
                       </h2>
                     </div>
 
                     <div>
                       <h4 className="text-md text-slate-500">Gender</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].gender ? detail[0].gender : ""}
+                        {detail[0].gender ? detail[0].gender : "None"}
                       </h2>
                     </div>
                   </div>
