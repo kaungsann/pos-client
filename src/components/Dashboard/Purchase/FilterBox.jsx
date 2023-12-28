@@ -89,7 +89,7 @@ const FilterBox = ({ onFilter }) => {
               <ModalBody>
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                   <Select
-                    label="Select State"
+                    label="Status"
                     placeholder="Select a state"
                     labelPlacement="outside"
                     variant="bordered"
@@ -105,16 +105,16 @@ const FilterBox = ({ onFilter }) => {
                     </SelectItem>
                   </Select>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between mt-2 mb-2">
                   <Input
                     type="text"
                     variant="bordered"
                     radius="sm"
                     size="md"
-                    label="location Name"
+                    label="Location"
                     placeholder="Enter loction name"
                     labelPlacement="outside"
-                    className="ml-2"
+                  
                     onChange={(e) => setLocation(e.target.value)}
                   />
                   <Input
@@ -122,7 +122,7 @@ const FilterBox = ({ onFilter }) => {
                     variant="bordered"
                     radius="sm"
                     size="md"
-                    label="Schedule-Date"
+                    label="Scheduled-Date"
                     placeholder="Enter created date"
                     labelPlacement="outside"
                     className="ml-2"
@@ -137,12 +137,11 @@ const FilterBox = ({ onFilter }) => {
                   size="md"
                   placeholder="Enter orderRef"
                   labelPlacement="outside"
-                  className="ml-2"
+               
                   onChange={(e) => setOrderRef(e.target.value)}
                 />
 
-                <div className="container flex flex-col">
-                  <span className="font-semibold text-sm mx-2 mb-2">Total</span>
+                <div className="container flex flex-col mt-2">
                   <div className="flex gap-2">
                     <Input
                       type="number"
@@ -151,8 +150,10 @@ const FilterBox = ({ onFilter }) => {
                       onChange={(e) => setTotal(e.target.value)}
                       value={total || ""}
                       radius="sm"
-                      placeholder="Enter amount"
+                      placeholder="Enter Amount"
                       size="md"
+                      labelPlacement="outside"
+                      label="Amount"
                     />
                     <Select
                       variant="bordered"
@@ -160,6 +161,7 @@ const FilterBox = ({ onFilter }) => {
                       label="Comparison"
                       placeholder="Select comparison"
                       id="onHandComparison"
+                      labelPlacement="outside"
                       onChange={(e) => setTotalComparison(e.target.value)}
                       value={totalComparison}
                     >
