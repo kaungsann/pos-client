@@ -13,23 +13,29 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDropzone } from "react-dropzone";
 
-const ExcelImportButton = ({
-  token,
-  apiEndpoint,
-  text,
-  ExcelLink,
-  fetchData,
-}) => {
+const ExcelImportButton = ({ token, apiEndpoint, onSuccess, templateLink }) => {
   const uploadRef = useRef(null);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [selectedFileName, setSelectedFileName] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
-  const handleFileChange = async (file, callback) => {
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      handleFileChange(file);
+    },
+  });
+
+  const handleFileChange = async (file) => {
     setSelectedFileName(file.name);
+    setSelectedFile(file);
+  };
 
+  const onSubmitHandler = async () => {
     const formData = new FormData();
-    formData.append("excel", file);
+    formData.append("excel", selectedFile);
 
     try {
       const response = await axios.post(apiEndpoint, formData, {
@@ -39,48 +45,18 @@ const ExcelImportButton = ({
         },
       });
       if (response.status) {
-        onClose();
         setSelectedFileName(null);
-        fetchData();
+        setSelectedFile(null);
+        onClose();
+        onSuccess();
         toast.success(response.message);
       } else {
         toast.error(response.message);
       }
-
       console.log("API Response:", response.data);
-
-      // Call the callback function after successful file upload
-      if (callback) {
-        callback(response.data);
-      }
     } catch (error) {
       console.error("Error uploading file:", error);
     }
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      // Pass a callback to handleFileChange to call the API after file upload
-      handleFileChange(file, handleApiSubmit);
-    } else {
-      toast.error("choose the file");
-    }
-  };
-
-  const handleApiSubmit = (data) => {
-    // Perform additional actions after successfully submitting the API
-    console.log("API submitted with data:", data);
-  };
-
-  const handleFileImportClick = () => {
-    importRef.current.click();
   };
 
   return (
@@ -97,12 +73,6 @@ const ExcelImportButton = ({
         pauseOnHover
         theme="light"
       />
-      <input
-        type="file"
-        ref={uploadRef}
-        style={{ display: "none" }}
-        onChange={(e) => handleFileChange(e.target.files[0], handleApiSubmit)}
-      />
       <div>
         <Button
           size="sm"
@@ -116,15 +86,21 @@ const ExcelImportButton = ({
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
-            Import {text} Excel
+            Import Excel
           </ModalHeader>
           <ModalBody>
             <div
               onClick={() => uploadRef.current.click()}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
+              {...getRootProps()}
               className="grid grid-cols-1 gap-2 place-content-center border-dashed hover:bg-blue-100 border-2 rounded-sm border-slate-500 bg-blue-50 h-40"
             >
+              <input
+                type="file"
+                ref={uploadRef}
+                style={{ display: "none" }}
+                {...getInputProps()}
+                onChange={(e) => handleFileChange(e.target.files[0])}
+              />
               <Icon
                 icon="line-md:cloud-upload-loop"
                 className="text-6xl text-slate-500 mx-auto"
@@ -139,16 +115,14 @@ const ExcelImportButton = ({
           <ModalFooter>
             <div className="flex w-full">
               <a
-                href={ExcelLink}
-                download
+                href={templateLink}
                 className="w-3/6 flex justify-center rounded-sm shadow-sm items-center text-[#15803d] border-[#15803d] bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold px-3 py-1.5"
               >
                 Download Template
               </a>
               <button
                 className="w-3/6 flex justify-center ml-3 font-bold text-center rounded-sm shadow-sm items-center border-blue-500 border-2 hover:opacity-75 text-sm text-white bg-blue-500 px-3 py-1.5"
-                //onClick={() => handleFileChange(null, handleApiSubmit)}
-                onClick={() => handleFileChange(uploadRef.current.files[0])}
+                onClick={() => onSubmitHandler()}
               >
                 Submit
               </button>
@@ -163,6 +137,8 @@ const ExcelImportButton = ({
 ExcelImportButton.propTypes = {
   token: PropTypes.string,
   apiEndpoint: PropTypes.string,
+  onSuccess: PropTypes.func,
+  templateLink: PropTypes.string,
 };
 
 export default ExcelImportButton;
