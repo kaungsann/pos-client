@@ -9,19 +9,26 @@ import axios from "axios";
 import { BASE_URL } from "../Api";
 
 import { format } from "date-fns";
-import { Input, Progress, Button, Select, SelectItem } from "@nextui-org/react";
-
 import {
-  AiTwotoneEdit,
-  AiOutlineUsergroupAdd,
-  AiOutlineUsergroupDelete,
-} from "react-icons/ai";
+  Input,
+  Progress,
+  Button,
+  Select,
+  SelectItem,
+  useDisclosure,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+} from "@nextui-org/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Icon } from "@iconify/react";
 
 function PersonalEdit() {
-  const AdminDoc = {
-    name: "",
+  const userDoc = {
+    username: "",
     phone: "",
     email: "",
     address: "",
@@ -31,7 +38,7 @@ function PersonalEdit() {
     gender: "",
   };
 
-  const [info, setInfo] = useState(AdminDoc);
+  const [info, setInfo] = useState(userDoc);
   const [updateInfo, setUpdateInfo] = useState({});
   const [adminImg, setAdminImg] = useState(null);
 
@@ -40,24 +47,35 @@ function PersonalEdit() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
   const fileInputRef = useRef(null);
   const { id } = useParams();
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
+  const navigate = useNavigate();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const inputChangeHandler = (event) => {
     const { name, value } = event.target;
     let newAdminInfo = { [name]: value };
 
     setUpdateInfo({ ...updateInfo, ...newAdminInfo });
-    setInfo({ ...info, ...newAdminInfo });
   };
 
-  const onSubmitHandler = (event) => {
-    event.preventDefault();
+  const onSubmitHandler = () => {
     setIsLoading(true);
-    const updateAdminInfoEdit = async () => {
+
+    // if (updateInfo.password !== info.password) {
+    //   toast.warn("Password is not correct");
+    //   setIsLoading(false);
+    //   return;
+    // }
+
+    const updateUserInfo = async () => {
       const formData = new FormData();
       if (isSelected) {
         formData.append("image", selectFile);
@@ -93,7 +111,7 @@ function PersonalEdit() {
       }
     };
 
-    updateAdminInfoEdit();
+    updateUserInfo();
   };
 
   const handleFileInputChange = (event) => {
@@ -112,32 +130,26 @@ function PersonalEdit() {
   };
 
   useEffect(() => {
-    const fetchAdminInfo = async () => {
-      const { data } = await axios.get(BASE_URL + `/user/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token.accessToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (data?.message == "Token Expire , Please Login Again") {
-        dipatch(removeData(null));
-      }
-
-      const adminData = data.data[0];
-
-      console.log("admin data is a", adminData);
-      const image = adminData?.image;
-      if (image) setAdminImg(image);
-      setInfo({ ...info, ...adminData });
-      setUpdateInfo({
-        name: adminData.name,
-        email: adminData.email,
-      });
-    };
-
     const fetchData = async () => {
       try {
-        await fetchAdminInfo();
+        const { data } = await axios.get(BASE_URL + `/user/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (data?.message == "Token Expire , Please Login Again") {
+          dipatch(removeData(null));
+        }
+
+        const adminData = data.data[0];
+        const image = adminData?.image;
+        if (image) setAdminImg(image);
+        setInfo({ ...info, ...adminData });
+        setUpdateInfo({
+          username: adminData.username,
+          email: adminData.email,
+        });
       } catch (error) {
         console.error("Error fetching admin info:", error);
       }
@@ -145,6 +157,9 @@ function PersonalEdit() {
 
     fetchData();
   }, []);
+
+  console.log("info is a", info);
+  console.log("update info is a", updateInfo);
 
   return (
     <div>
@@ -160,7 +175,7 @@ function PersonalEdit() {
               ? ""
               : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
           }`}
-          onClick={onSubmitHandler}
+          onPress={onOpen}
         >
           Save
         </Button>
@@ -207,8 +222,8 @@ function PersonalEdit() {
           <div className="w-60">
             <Input
               type="text"
-              label="UserName"
-              name="name"
+              label="Username"
+              name="username"
               value={info.username}
               onChange={(e) => inputChangeHandler(e)}
               placeholder="Enter product name..."
@@ -218,7 +233,7 @@ function PersonalEdit() {
           <div className="w-60">
             <Input
               type="email"
-              name="ref"
+              name="email"
               label="Email"
               value={info.email}
               onChange={(e) => inputChangeHandler(e)}
@@ -229,9 +244,9 @@ function PersonalEdit() {
           <div className="w-60">
             <Select
               labelPlacement="outside"
-              label="Category"
-              name="category"
-              placeholder="Select an category"
+              label="Gender"
+              name="gender"
+              placeholder="Select an gender"
               selectedKeys={info.gender ? [info.gender || "male"] : false}
               onChange={(e) => inputChangeHandler(e)}
               className="max-w-xs"
@@ -275,7 +290,7 @@ function PersonalEdit() {
               label="City"
               value={info.city}
               onChange={(e) => inputChangeHandler(e)}
-              placeholder="Enter description..."
+              placeholder="Enter city..."
               labelPlacement="outside"
             />
           </div>
@@ -286,13 +301,56 @@ function PersonalEdit() {
               name="address"
               label="address"
               value={info.address}
-              placeholder="address ..."
+              placeholder="Enter address..."
               labelPlacement="outside"
               onChange={(e) => inputChangeHandler(e)}
             />
           </div>
         </div>
       </form>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Confirm your password
+              </ModalHeader>
+              <ModalBody>
+                <Input
+                  label="Password"
+                  variant="bordered"
+                  name="password"
+                  placeholder="Enter your password"
+                  endContent={
+                    <button
+                      className="focus:outline-none"
+                      type="button"
+                      onClick={toggleVisibility}
+                    >
+                      {isVisible ? (
+                        <Icon icon="mdi:eye" />
+                      ) : (
+                        <Icon icon="mdi:eye-off" />
+                      )}
+                    </button>
+                  }
+                  type={isVisible ? "text" : "password"}
+                  className="max-w-xs"
+                  onChange={(e) => inputChangeHandler(e)}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={onSubmitHandler}>
+                  Submit
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }
