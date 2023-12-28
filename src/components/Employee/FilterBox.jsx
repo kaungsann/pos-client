@@ -87,6 +87,7 @@ const FilterBox = ({ onFilter }) => {
                     type="email"
                     variant="faded"
                     label="Email"
+                    labelPlacement="outside"
                     placeholder="example@gmail.com"
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -114,7 +115,6 @@ const FilterBox = ({ onFilter }) => {
                     label="DateOfBirth"
                     placeholder="enter birthdate"
                     labelPlacement="outside"
-                    className="ml-2"
                     onChange={(e) => setBirthDate(e.target.value)}
                   />
                 </div>
@@ -136,7 +136,7 @@ const FilterBox = ({ onFilter }) => {
 
                   <Input
                     type="text"
-                    label="address"
+                    label="Address"
                     placeholder="enter address"
                     labelPlacement="outside"
                     className="ml-2"

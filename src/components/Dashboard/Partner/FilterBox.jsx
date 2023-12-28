@@ -75,7 +75,8 @@ const FilterBox = ({ onFilter }) => {
                     type="text"
                     variant="faded"
                     label="Address"
-                    placeholder="Enter your address"
+                    labelPlacement="outside"
+                    placeholder="Enter Address"
                     onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
@@ -89,14 +90,14 @@ const FilterBox = ({ onFilter }) => {
                     onChange={(e) => setPhone(e.target.value)}
                     endContent={
                       <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">mmk</span>
+                        <span className="text-default-400 text-small"></span>
                       </div>
                     }
                   />
                   <Input
                     type="text"
                     label="City"
-                    placeholder="enter city"
+                    placeholder="Enter City"
                     labelPlacement="outside"
                     className="ml-2"
                     onChange={(e) => setCity(e.target.value)}
