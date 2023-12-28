@@ -39,7 +39,7 @@ export default function SideBar() {
 
   return (
     <>
-      <aside className="h-screen">
+      <aside className="overflow-y-scroll custom-scrollbar h-screen">
         <nav className="h-full flex flex-col bg-white border-r shadow-sm">
           <div className="px-4 pb-2 flex justify-between items-center">
             <img
