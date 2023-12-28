@@ -65,17 +65,17 @@ const FilterBox = ({ onFilter }) => {
                   <Input
                     type="text"
                     label="Product Barcode"
-                    placeholder="enter barcodes"
+                    placeholder="Enter barcode"
                     labelPlacement="outside"
                     className="ml-2"
                     onChange={(e) => setProductBarcode(e.target.value)}
                   />
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between mt-2">
                   <Input
                     type="text"
                     label="Location"
-                    placeholder="enter location name"
+                    placeholder="Enter location name"
                     labelPlacement="outside"
                     className="ml-2"
                     onChange={(e) => setLocationName(e.target.value)}
