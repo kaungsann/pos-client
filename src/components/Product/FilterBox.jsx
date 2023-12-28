@@ -85,6 +85,7 @@ const FilterBox = ({ categories, onFilter }) => {
                   radius="sm"
                   variant="bordered"
                   items={categories}
+                  labelPlacement="outside"
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
                   <SelectItem key="" value="">
@@ -97,7 +98,7 @@ const FilterBox = ({ categories, onFilter }) => {
                   ))}
                 </Select>
 
-                <div className="container flex flex-col">
+                <div className="container flex flex-col mt-2">
                   <div className="flex gap-2">
                     <Input
                       placeholder="Date"
@@ -124,12 +125,13 @@ const FilterBox = ({ categories, onFilter }) => {
                   </div>
                 </div>
 
-                <div className="container flex flex-col">
-                  <span className="font-semibold text-xs mx-2">Sale Price</span>
+                <div className="container flex flex-col mt-2">
                   <div className="flex gap-2">
                     <Input
                       type="number"
                       variant="bordered"
+                      label="Amount"
+                      labelPlacement="outside"
                       id="price"
                       onChange={(e) => setPrice(e.target.value)}
                       value={price || ""}
@@ -141,6 +143,7 @@ const FilterBox = ({ categories, onFilter }) => {
                       variant="bordered"
                       radius="sm"
                       label="Comparison"
+                      labelPlacement="outside"
                       placeholder="Select comparison"
                       id="priceComparison"
                       onChange={(e) => setPriceComparison(e.target.value)}
