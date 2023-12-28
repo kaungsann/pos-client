@@ -86,19 +86,19 @@ const FilterBox = ({ onFilter }) => {
                     size="md"
                   />
                 </div>
-                <div className="container flex flex-col">
-                  <span className="text-sm mb-1">
-                    On-hand quantity
-                  </span>
+                <div className="container flex flex-col mt-2">
+                
                   <div className="flex gap-2">
                     <Input
                       type="number"
                       variant="bordered"
                       id="price"
+                      label="On-Hand Quantity"
+                      labelPlacement="outside"
                       onChange={(e) => setOnHand(e.target.value)}
                       value={onhand || ""}
                       radius="sm"
-                      placeholder="Enter amount"
+                      placeholder="Enter on-hand quantity"
                       size="md"
                     />
                     <Select
@@ -106,6 +106,7 @@ const FilterBox = ({ onFilter }) => {
                       radius="sm"
                       label="Comparison"
                       placeholder="Select comparison"
+                      labelPlacement="outside"
                       id="onHandComparison"
                       onChange={(e) => setOnHandComparison(e.target.value)}
                       value={onHandComparison}

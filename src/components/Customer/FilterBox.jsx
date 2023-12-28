@@ -73,11 +73,12 @@ const FilterBox = ({ onFilter }) => {
                     type="text"
                     variant="faded"
                     label="Address"
-                    placeholder="Enter your address"
+                    placeholder="Enter Address"
+                    labelPlacement="outside"
                     onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between mt-2">
                   <Input
                     type="number"
                     label="Phone"
@@ -86,14 +87,14 @@ const FilterBox = ({ onFilter }) => {
                     onChange={(e) => setPhone(e.target.value)}
                     endContent={
                       <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-small">mmk</span>
+                     
                       </div>
                     }
                   />
                   <Input
                     type="text"
                     label="City"
-                    placeholder="enter city"
+                    placeholder="Enter City"
                     labelPlacement="outside"
                     className="ml-2"
                     onChange={(e) => setCity(e.target.value)}

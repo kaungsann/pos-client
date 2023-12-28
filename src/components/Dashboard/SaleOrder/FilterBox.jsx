@@ -87,10 +87,10 @@ const FilterBox = ({ onFilter }) => {
                     variant="bordered"
                     radius="sm"
                     size="md"
-                    label="location Name"
+                    label="Location"
                     placeholder="Enter loction name"
                     labelPlacement="outside"
-                    className="ml-2"
+                    
                     onChange={(e) => setLocation(e.target.value)}
                   />
                   <Input
@@ -98,7 +98,7 @@ const FilterBox = ({ onFilter }) => {
                     variant="bordered"
                     radius="sm"
                     size="md"
-                    label="Schedule-Date"
+                    label="Scheduled-Date"
                     placeholder="Enter schedule date"
                     labelPlacement="outside"
                     className="ml-2"
@@ -113,12 +113,11 @@ const FilterBox = ({ onFilter }) => {
                   size="md"
                   placeholder="Enter orderRef"
                   labelPlacement="outside"
-                  className="ml-2"
+                 
                   onChange={(e) => setOrderRef(e.target.value)}
                 />
 
-                <div className="container flex flex-col">
-                  <span className="font-semibold text-sm mx-2 mb-2">Total</span>
+                <div className="container flex flex-col mt-2">
                   <div className="flex gap-2">
                     <Input
                       type="number"
@@ -128,12 +127,15 @@ const FilterBox = ({ onFilter }) => {
                       value={total || ""}
                       radius="sm"
                       placeholder="Enter amount"
+                      label="Amount"
+                      labelPlacement="outside"
                       size="md"
                     />
                     <Select
                       variant="bordered"
                       radius="sm"
                       label="Comparison"
+                      labelPlacement="outside"
                       placeholder="Select comparison"
                       id="onHandComparison"
                       onChange={(e) => setTotalComparison(e.target.value)}
