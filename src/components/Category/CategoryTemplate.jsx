@@ -92,8 +92,8 @@ export default function CategoryTemplate() {
             <ExcelImportButton
               token={token.accessToken}
               apiEndpoint={CATEGORY_API.IMPORT}
-              fetchData={handleRefresh}
-              ExcelLink="https://ambitbound-tech.s3.ap-southeast-1.amazonaws.com/template/category_template.xlsx"
+              onSuccess={handleRefresh}
+              templateLink="https://ambitbound-tech.s3.ap-southeast-1.amazonaws.com/template/category_template.xlsx"
             />
           </div>
         </div>

@@ -89,8 +89,8 @@ const LocationTemplate = () => {
             <ExcelImportButton
               token={token.accessToken}
               apiEndpoint={LOCATION_API.IMPORT}
-              fetchData={handleRefresh}
-              ExcelLink="https://ambitbound-tech.s3.ap-southeast-1.amazonaws.com/template/location_template.xlsx"
+              onSuccess={handleRefresh}
+              templateLink="https://ambitbound-tech.s3.ap-southeast-1.amazonaws.com/template/location_template.xlsx"
             />
           </div>
         </div>

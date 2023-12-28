@@ -120,8 +120,8 @@ export default function AdjustmentTemplate() {
             text="Stock"
             token={token.accessToken}
             apiEndpoint={ADJUSTMENT_API.IMPORT}
-            fetchData={fetchStockData}
-            ExcelLink="https://ambitbound-tech.s3.ap-southeast-1.amazonaws.com/template/inventory-adjustment_template.xlsx"
+            onSuccess={fetchStockData}
+            templateLink="https://ambitbound-tech.s3.ap-southeast-1.amazonaws.com/template/inventory-adjustment_template.xlsx"
           />
         </div>
       </div>

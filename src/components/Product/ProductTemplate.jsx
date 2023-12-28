@@ -152,9 +152,9 @@ const ProductTemplate = () => {
             <ExcelImportButton
               token={token.accessToken}
               apiEndpoint={PRODUCT_API.IMPORT}
-              fetchData={handleRefresh}
+              onSuccess={handleRefresh}
               text="Product"
-              ExcelLink="https://ambitbound-tech.s3.ap-southeast-1.amazonaws.com/template/product_template.xlsx"
+              templateLink="https://ambitbound-tech.s3.ap-southeast-1.amazonaws.com/template/product_template.xlsx"
             />
           </div>
         </div>

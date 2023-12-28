@@ -255,7 +255,7 @@ function PersonalEdit() {
             />
           </div>
           <div className="w-60">
-            <span className="text-sm">BOD</span>
+            <span className="text-sm">DOB</span>
             <Input
               type="date"
               name="birthdate"

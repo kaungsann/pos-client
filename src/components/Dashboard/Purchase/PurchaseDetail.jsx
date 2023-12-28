@@ -106,7 +106,7 @@ export default function SaleOrderDetail() {
             />
             <div>
               <div className="flex">
-                <h1 className="text-3xl font-bold text-slate-600">
+                <h1 className="text-2xl font-bold text-slate-600">
                   Purchase Information
                 </h1>
               </div>
