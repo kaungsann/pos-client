@@ -90,7 +90,7 @@ const FilterBox = ({ onFilter }) => {
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                   <Select
                     label="Status"
-                    placeholder="Select a state"
+                    placeholder="Select Status"
                     labelPlacement="outside"
                     variant="bordered"
                     radius="sm"
@@ -112,7 +112,7 @@ const FilterBox = ({ onFilter }) => {
                     radius="sm"
                     size="md"
                     label="Location"
-                    placeholder="Enter loction name"
+                    placeholder="Enter Loction name"
                     labelPlacement="outside"
                   
                     onChange={(e) => setLocation(e.target.value)}
@@ -131,11 +131,11 @@ const FilterBox = ({ onFilter }) => {
                 </div>
                 <Input
                   type="text"
-                  label="OrderRef"
+                  label="Order Ref"
                   variant="bordered"
                   radius="sm"
                   size="md"
-                  placeholder="Enter orderRef"
+                  placeholder="Enter Order Ref"
                   labelPlacement="outside"
                
                   onChange={(e) => setOrderRef(e.target.value)}
@@ -159,7 +159,7 @@ const FilterBox = ({ onFilter }) => {
                       variant="bordered"
                       radius="sm"
                       label="Comparison"
-                      placeholder="Select comparison"
+                      placeholder="Select Comparison"
                       id="onHandComparison"
                       labelPlacement="outside"
                       onChange={(e) => setTotalComparison(e.target.value)}
