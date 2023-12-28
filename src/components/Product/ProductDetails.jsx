@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../Api";
 import BoxImg from "../../assets/box.png";
 import FadeLoader from "react-spinners/FadeLoader";
@@ -33,6 +33,7 @@ export default function ProductDetails() {
 
   const componentRef = useRef();
   const dipatch = useDispatch();
+  const navigate = useNavigate();
 
   const token = useSelector((state) => state.IduniqueData);
 
@@ -65,23 +66,6 @@ export default function ProductDetails() {
 
   return (
     <>
-      <div className="flex justify-between">
-        <div className="flex gap-2">
-          <Link
-            to="/admin/products/all"
-            className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
-          >
-            Back
-          </Link>
-          <button
-            onClick={handlePrint}
-            className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold px-3 py-1.5"
-          >
-            Print Barcode
-          </button>
-        </div>
-      </div>
-
       {loading ? (
         <div className="flex items-center justify-center mt-40">
           <FadeLoader
@@ -94,68 +78,130 @@ export default function ProductDetails() {
         </div>
       ) : (
         <div className="container my-5">
-          <h2 className="lg:text-xl font-bold my-2">Product Information</h2>
-          <div className="container bg-white p-5 rounded-lg max-w-6xl">
-            <div className="flex">
-              <img
-                src={product?.image ? product?.image : BoxImg}
-                className="w-42 h-36 my-4 rounded-md shadow-md"
-              />
-              <div className="mx-8" ref={componentRef}>
-                <h2>{product.name}</h2>
-                <Barcode value={product.barcode} />
-              </div>
-              <div className="ml-auto">
-                <Link to={`/admin/products/edit/${id}`}>
-                  <Icon icon="ep:edit" className="text-xl" />
-                </Link>
-              </div>
-            </div>
+          <div className="container cursor-pointer">
+            <div className="container bg-white p-5 rounded-md max-w-6xl">
+              <div>
+                <div className="flex justify-between items-center">
+                  <Icon
+                    icon="cil:arrow-left"
+                    className="text-slate-600 font-semibold text-xl mb-3 hover:text-slate-400"
+                    onClick={() => navigate("/admin/products/all")}
+                  />
+                  <button
+                    onClick={handlePrint}
+                    className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold px-3 py-1.5"
+                  >
+                    Print Barcode
+                  </button>
+                </div>
+                <div className="container bg-white p-5 rounded-lg max-w-6xl">
+                  <div className="my-6 flex justify-between items-center w-4/5">
+                    <h1 className="text-2xl font-bold text-slate-600">
+                      Product Information
+                    </h1>
 
-            <div className="grid grid-cols-2 max-w-3xl gap-10 my-10">
-              <div className="container space-y-8 font-semibold text-sm">
-                <div className="flex justify-between items-center">
-                  <h4>Name</h4>
-                  <h3 className="font-medium">{product.name}</h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>Category</h4>
-                  <h3 className="font-medium">{product.category.name}</h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>Expired Date</h4>
-                  <h3 className="font-medium">
-                    {product.expiredAt
-                      ? new Date(product.expiredAt).toLocaleDateString()
-                      : ""}
-                  </h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>Min-Stock Qty</h4>
-                  <h3 className="font-medium">{product.minStockQty}</h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>Description</h4>
-                  <h3 className="font-medium">{product.description}</h3>
-                </div>
-              </div>
-              <div className="container space-y-8 font-semibold text-sm">
-                <div className="flex justify-between items-center">
-                  <h4>Price</h4>
-                  <h3 className="font-medium">{product.salePrice}</h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>Tax</h4>
-                  <h3 className="font-medium">{product.tax}</h3>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <h4>Product Ref</h4>
-                  <h3 className="font-medium">{product.ref}</h3>
-                </div>
-                <div className="flex justify-between items-center">
-                  <h4>Barcode</h4>
-                  <h3 className="font-medium">{product.barcode}</h3>
+                    <Icon
+                      icon="mdi:edit"
+                      className="text-slate-500 text-2xl hover:opacity-70"
+                      onClick={() => navigate(`/admin/products/edit/${id}`)}
+                    />
+                  </div>
+                  <div className="flex">
+                    <img
+                      src={product?.image ? product?.image : BoxImg}
+                      className="w-42 h-36 my-4 rounded-md shadow-md"
+                    />
+                    <div className="mx-8" ref={componentRef}>
+                      <h2>{product.name}</h2>
+                      <Barcode value={product.barcode} />
+                    </div>
+                  </div>
+                  <div className="mb-4 flex p-4 items-center w-4/5">
+                    <div className="flex justify-between w-full">
+                      <div>
+                        <div>
+                          <h4 className="text-md text-slate-500">Name</h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.name}
+                          </h2>
+                        </div>
+                        <div className="my-6">
+                          <h4 className="text-md text-slate-500">Category</h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.category.name
+                              ? product.category.name
+                              : "None"}
+                          </h2>
+                        </div>
+                        <div>
+                          <h4 className="text-md text-slate-500">
+                            Expire-Date
+                          </h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.expiredAt
+                              ? new Date(product.expiredAt).toLocaleDateString()
+                              : "None"}
+                          </h2>
+                        </div>
+                      </div>
+                      <div>
+                        <div>
+                          <h4 className="text-md text-slate-500">
+                            Mininum Quantity
+                          </h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.minStockQty ? product.minStockQty : "None"}
+                          </h2>
+                        </div>
+                        <div className="my-6">
+                          <h4 className="text-md text-slate-500">Tax</h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.tax ? product.tax : "None"}
+                          </h2>
+                        </div>
+                        <div>
+                          <h4 className="text-md text-slate-500">
+                            Product-Ref
+                          </h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.ref ? product.ref : "None"}
+                          </h2>
+                        </div>
+                      </div>
+                      <div>
+                        <div>
+                          <h4 className="text-md text-slate-500">Barcode</h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.barcode ? product.barcode : ""}
+                          </h2>
+                        </div>
+                        <div className="my-6">
+                          <h4 className="text-md text-slate-500">Sale-Price</h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.salePrice ? product.salePrice : "None"}
+                          </h2>
+                        </div>
+                        <div>
+                          <h4 className="text-md text-slate-500">
+                            Purchase-Price
+                          </h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.purchasePrice
+                              ? product.purchasePrice
+                              : "None"}
+                          </h2>
+                        </div>
+                      </div>
+                      <div>
+                        <div>
+                          <h4 className="text-md text-slate-500">Profit</h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.marginProfit ? product.marginProfit : ""}
+                          </h2>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
