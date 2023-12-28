@@ -116,7 +116,6 @@ const FilterBox = ({ onFilter }) => {
                     size="md"
                     placeholder="Enter created date"
                     labelPlacement="outside"
-                    className="ml-2"
                     onChange={(e) => setDate(e.target.value)}
                   />
                 </div>
@@ -128,11 +127,10 @@ const FilterBox = ({ onFilter }) => {
                   label="Ref"
                   placeholder="Enter ref"
                   labelPlacement="outside"
-                  className="ml-2"
                   onChange={(e) => setRef(e.target.value)}
                 />
                 <div className="container flex flex-col">
-                  <span className="font-semibold text-sm mx-2 mb-2">
+                  <span className=" text-sm  mb-2">
                     Amount
                   </span>
                   <div className="flex gap-2">
