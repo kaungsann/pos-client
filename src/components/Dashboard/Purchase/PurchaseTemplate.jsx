@@ -190,11 +190,11 @@ export default function PurchaseTemplate() {
             />
           </div>
 
-          <ExcelImportButton
+          {/* <ExcelImportButton
             token={token.accessToken}
             apiEndpoint={PURCHASE_API.IMPORT}
             text="Purchase"
-          />
+          /> */}
         </div>
       </div>
       <PurchaseList purchases={filteredPurchase} refresh={fetchPurchaseData} />

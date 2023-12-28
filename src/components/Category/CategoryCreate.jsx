@@ -95,7 +95,10 @@ export default function CategoryCreate() {
           </div>
         </div>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
-          <form className="flex justify-between gap-10 p-5">
+          <form
+            className="flex justify-between gap-10 p-5"
+            onSubmit={onSubmitHandler}
+          >
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
                 <Input

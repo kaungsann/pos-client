@@ -236,7 +236,10 @@ const AccoutingOverView = () => {
                     type="date"
                     placeholder="Select date"
                     value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
+                    onChange={(e) => {
+                      setStartDate(e.target.value);
+                      setText(`${e.target.value} to ${endDate}`);
+                    }}
                     className="border-none ml-2"
                   />
                 </div>
@@ -247,7 +250,10 @@ const AccoutingOverView = () => {
                     type="date"
                     placeholder="Select date"
                     value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
+                    onChange={(e) => {
+                      setEndDate(e.target.value);
+                      setText(`${startDate} to ${e.target.value}`);
+                    }}
                     className="border-none ml-2"
                   />
                 </div>

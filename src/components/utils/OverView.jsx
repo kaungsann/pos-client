@@ -190,6 +190,8 @@ export default function OverView() {
       );
     }
 
+    console.log("resData is a overview", resData);
+
     if (resData.status) {
       setTotalPurchaseAmount(resData.data.purchases.totalAmountWithTax);
       setTotalPurchaseOrders(resData.data.purchases.totalOrders);
@@ -211,23 +213,6 @@ export default function OverView() {
 
   useEffect(() => {
     getTotals();
-
-    //   try {
-    //     const response = await axios.get(
-    //       ACCOUNT_API.INDEX + `?startDate=${startDate}&endDate=${endDate}`,
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${token.accessToken}`,
-    //           "Content-Type": "application/json",
-    //         },
-    //       }
-    //     );
-    //     setAccount(response.data?.data);
-    //   } catch (error) {
-    //     console.error("Error fetching account:", error);
-    //   }
-    // };
-    // fetchAccountData();
   }, [day, month, year, StartDate]);
 
   const orderList = Array.from(

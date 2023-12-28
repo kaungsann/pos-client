@@ -190,10 +190,10 @@ export default function SaleTemplate() {
             />
           </div>
 
-          <ExcelImportButton
+          {/* <ExcelImportButton
             token={token.accessToken}
             apiEndpoint={SALE_API.IMPORT}
-          />
+          /> */}
         </div>
       </div>
       <SaleList sales={filteredSale} />
