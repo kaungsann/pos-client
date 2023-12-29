@@ -78,7 +78,7 @@ export default function ProductDetails() {
         </div>
       ) : (
         <div className="container my-5">
-          <div className="container cursor-pointer">
+          <div className="container ">
             <div className="container bg-white p-5 rounded-md max-w-6xl">
               <div>
                 <div className="flex justify-between items-center">

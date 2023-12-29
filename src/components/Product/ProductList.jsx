@@ -163,12 +163,13 @@ export default function ProductList({ products, fetchProducts }) {
     return (
       <>
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold">Products</h2>
-            <h3 className="text-default-400 text-small ml-4">
+       <div className="flex items-end">
+            <h2 className="text-xl font-bold">Product</h2>
+            <h3 className="text-default-400 text-md pl-4">
               Total {products.length}
             </h3>
           </div>
+
 
           <div className="flex items-center">
             <label className="flex items-center text-default-400 text-small">

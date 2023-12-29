@@ -146,9 +146,10 @@ export default function CategoryList({ categories, refresh }) {
     return (
       <>
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold">Categories</h2>
-            <h3 className="text-default-400 text-small ml-4">
+        
+          <div className="flex items-end">
+            <h2 className="text-xl font-bold">Category</h2>
+            <h3 className="text-default-400 text-md pl-4">
               Total {categories.length}
             </h3>
           </div>
