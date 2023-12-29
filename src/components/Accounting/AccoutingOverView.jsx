@@ -271,8 +271,9 @@ const AccoutingOverView = () => {
         </h2>
         <table className="w-full bg-white rounded-sm shadow-md">
           <tbody>
-            {account
-              .filter((acc) => !selectedKeys.has(acc.type))
+            {['Gross Sale', 'Opex', 'Waste', 'Fixed Cost', 'Variable Cost', 'Purchase Cost']
+              .map((type) => account.find((acc) => acc.type === type))
+              .filter((acc) => acc && !selectedKeys.has(acc.type))
               .map((acc, index) => (
                 <div
                   key={index}
@@ -304,7 +305,6 @@ const AccoutingOverView = () => {
                         </button>
                       )}
                     </td>
-
                     <td className="text-slate-600 font-bold">
                       {acc.balance.toFixed()}
                     </td>
@@ -360,6 +360,7 @@ const AccoutingOverView = () => {
           </tbody>
         </table>
       </div>
+
     </>
   );
 };
