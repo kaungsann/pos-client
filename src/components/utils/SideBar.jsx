@@ -99,7 +99,7 @@ export default function SideBar() {
                     >
                       <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
-                          OverView
+                          Overview
                         </li>
                       </div>
                     </ListboxItem>
@@ -107,7 +107,7 @@ export default function SideBar() {
                       onClick={() => navigate("/admin/products/all")}
                     >
                       <div className="flex justify-between">
-                        <li className="my-1 text-start ml-2">Products</li>
+                        <li className="my-1 text-start ml-2">Product</li>
                       </div>
                     </ListboxItem>
                     <ListboxItem
@@ -317,7 +317,7 @@ export default function SideBar() {
                     >
                       <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
-                          OverView
+                          Overview
                         </li>
                       </div>
                     </ListboxItem>
@@ -332,7 +332,7 @@ export default function SideBar() {
                       onClick={() => navigate("/admin/customers/vendors")}
                     >
                       <div className="flex justify-between">
-                        <li className="my-1 text-start ml-2">Vendors</li>
+                        <li className="my-1 text-start ml-2">Vendor</li>
                       </div>
                     </ListboxItem>
                   </Listbox>
@@ -380,7 +380,7 @@ export default function SideBar() {
                         icon="uil:analytics"
                         className="text-slate-500 text-xl"
                       />
-                      <span className="ml-3">OverView</span>
+                      <span className="ml-3">Overview</span>
                     </li>
                     <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
@@ -450,7 +450,7 @@ export default function SideBar() {
                     >
                       <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start rounded-md`}>
-                          OverView
+                          Overview
                         </li>
                       </div>
                     </ListboxItem>
@@ -465,7 +465,7 @@ export default function SideBar() {
                       onClick={() => navigate("/admin/customers/all")}
                     >
                       <div className="flex justify-between">
-                        <li className="my-1 text-start ml-2">Customers</li>
+                        <li className="my-1 text-start ml-2">Customer</li>
                       </div>
                     </ListboxItem>
                   </Listbox>
@@ -513,7 +513,7 @@ export default function SideBar() {
                         icon="uil:analytics"
                         className="text-slate-500 text-xl"
                       />
-                      <span className="ml-3">OverView</span>
+                      <span className="ml-3">Overview</span>
                     </li>
                     <li
                       className={`p-1 px-3 flex hover:bg-slate-100 items-center rounded-sm text-md text-slate-500 ${
@@ -722,7 +722,7 @@ export default function SideBar() {
                     >
                       <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
-                          OverView
+                          Overview
                         </li>
                       </div>
                     </ListboxItem>
@@ -798,7 +798,7 @@ export default function SideBar() {
                         icon="carbon:report"
                         className="tet-slate-500 text-xl"
                       />
-                      <span className="ml-3">OverView</span>
+                      <span className="ml-3">Overview</span>
                     </li>
                     <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
