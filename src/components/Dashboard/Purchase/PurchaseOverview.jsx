@@ -180,7 +180,7 @@ export default function PurchaseOverview() {
 
   return (
     <>
-      <div className="px-8 w-full">
+      <div className="px-8 w-full bg-pink-50">
         <div className="w-full  flex justify-between">
           <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon

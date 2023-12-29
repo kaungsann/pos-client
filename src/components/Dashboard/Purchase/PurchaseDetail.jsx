@@ -97,13 +97,16 @@ export default function SaleOrderDetail() {
           <p className="text-red-500 text-xl px-4 py-2 ">Failed To Load Data</p>
         </div>
       ) : detail && detail.length > 0 ? (
-        <div className="container cursor-pointer">
-          <div className="container bg-white p-5 rounded-md max-w-6xl">
-            <Icon
-              icon="cil:arrow-left"
-              className="text-slate-600 font-semibold text-xl mb-3 hover:text-slate-400"
-              onClick={() => navigate("/admin/purchase/all")}
-            />
+        <div className="container">
+          <div className="container bg-white p-5 rounded-md max-w-6xl ">
+              <div className="flex gap-2 pb-2">
+                <Link
+                  to="/admin/purchase/all"
+                  className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
+                >
+                  Back
+                </Link>
+              </div>
             <div>
               <div className="flex">
                 <h1 className="text-2xl font-bold text-slate-600">
