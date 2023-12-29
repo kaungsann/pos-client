@@ -6,32 +6,21 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
   Button,
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  User,
   Pagination,
   Chip,
 } from "@nextui-org/react";
 
-import SearchBox from "../../utils/SearchBox";
-import ExcelExportButton from "../../ExcelExportButton";
-import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL, orderConfirmApi } from "../../Api";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
 import ConfrimBox from "../../utils/ConfrimBox";
-
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
 
 const statusOptions = [
   { name: "pending", uid: "pending" },
@@ -83,6 +72,10 @@ export default function PurchaseList({ purchases, refresh }) {
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
+  const totalLine = purchases.length;
+  const totalPages = Math.ceil(totalLine / rowsPerPage);
+  const isFirstPage = page === 1;
+  const isLastPage = page === totalPages;
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -113,8 +106,6 @@ export default function PurchaseList({ purchases, refresh }) {
 
     return filteredPurchase;
   }, [purchases, filterValue, statusFilter]);
-
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -218,18 +209,6 @@ export default function PurchaseList({ purchases, refresh }) {
     }
   }, []);
 
-  const onNextPage = React.useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = React.useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
-
   const onRowsPerPageChange = React.useCallback((e) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
@@ -242,11 +221,6 @@ export default function PurchaseList({ purchases, refresh }) {
     } else {
       setFilterValue("");
     }
-  }, []);
-
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
   }, []);
 
   const topContent = React.useMemo(() => {
@@ -313,7 +287,7 @@ export default function PurchaseList({ purchases, refresh }) {
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            : `${selectedKeys.size} of ${totalLine} selected`}
         </span>
         <Pagination
           isCompact
@@ -321,30 +295,30 @@ export default function PurchaseList({ purchases, refresh }) {
           showShadow
           color="primary"
           page={page}
-          total={pages}
+          total={totalPages}
           onChange={setPage}
         />
         <div className="hidden sm:flex w-[30%] justify-end gap-2">
           <Button
-            isDisabled={pages === 1}
+            isDisabled={isFirstPage}
             size="sm"
             variant="flat"
-            onPress={onPreviousPage}
+            onPress={() => !isFirstPage && setPage(page - 1)}
           >
             Previous
           </Button>
           <Button
-            isDisabled={pages === 1}
+            isDisabled={isLastPage}
             size="sm"
             variant="flat"
-            onPress={onNextPage}
+            onPress={() => !isLastPage && setPage(page + 1)}
           >
             Next
           </Button>
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, totalLine, page, isLastPage, isFirstPage, totalPages]);
 
   const handleConfirm = (id) => {
     setconfrimShowBox(true);
@@ -363,6 +337,7 @@ export default function PurchaseList({ purchases, refresh }) {
     setconfrimShowBox(false);
   };
 
+  console.log(totalLine, totalPages, page);
   return (
     <>
       <Table
@@ -399,7 +374,7 @@ export default function PurchaseList({ purchases, refresh }) {
           )}
         </TableBody>
       </Table>
-      <div className=" w-96 z-50 fixed top-40 bottom-0 left-0 right-0 mx-auto">
+      <div className="w-96 mx-auto">
         {confrimShowBox && (
           <ConfrimBox
             close={closeBox}
