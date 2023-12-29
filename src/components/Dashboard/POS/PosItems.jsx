@@ -128,7 +128,7 @@ export default function PosItems() {
                 autoFocus={true}
                 type="text"
                 className=" py-2 px-2 shadow-sm bg-slate-50 border-2 w-64 block rounded-md  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6"
-                placeholder="search products barcode"
+                placeholder="Search By Barcode"
               />
             </div>
             <ul className="mt-4 flex flex-wrap cursor-pointer items-center max-w-3xl relative p-3">
