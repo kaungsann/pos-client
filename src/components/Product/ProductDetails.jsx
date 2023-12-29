@@ -90,12 +90,25 @@ export default function ProductDetails() {
                         Back
                       </Link>
                     </div>
-                  <button
-                    onClick={handlePrint}
-                    className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold px-3 py-1.5"
-                  >
-                    Print Barcode
-                  </button>
+                    <div className="flex items-center">
+                      <div className="flex">
+                        <Link
+                          to={`/admin/products/edit/${id}`}
+                          className="font-bold rounded-sm shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-[#4338ca] px-3 py-1.5"
+                        >
+                          Edit
+                        </Link>
+                      </div>
+
+                      <button
+                        onClick={handlePrint}
+                        className="rounded-sm shadow-sm flex items-center text-[#15803d] border-[#15803d] bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold px-3 py-1.5 ml-2"
+                      >
+                        Print Barcode
+                      </button>
+                    </div>
+
+          
                 </div>
                 <div className="container bg-white p-5 rounded-lg max-w-6xl">
                   <div className="my-6 flex justify-between items-center w-4/5">
@@ -103,11 +116,7 @@ export default function ProductDetails() {
                       Product Information
                     </h1>
 
-                    <Icon
-                      icon="mdi:edit"
-                      className="text-slate-500 text-2xl hover:opacity-70"
-                      onClick={() => navigate(`/admin/products/edit/${id}`)}
-                    />
+                 
                   </div>
                   <div className="flex">
                     <img
