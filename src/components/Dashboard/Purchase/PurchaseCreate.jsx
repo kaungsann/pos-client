@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
 import { removeData } from "../../../redux/actions";
 import { Input, Select, SelectItem } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
 import {
   Table,
@@ -192,7 +193,6 @@ export default function SaleOrderCreate() {
   //   setUnitPrice(0);
   // };
 
-
   const handleAddProduct = () => {
     if (pd === "" || parseInt(quantity) === 0 || quantity === "") {
       setShowErrorProduct(true);
@@ -269,7 +269,6 @@ export default function SaleOrderCreate() {
 
   let count = 0;
 
- 
   return (
     <>
       <ToastContainer
@@ -403,10 +402,12 @@ export default function SaleOrderCreate() {
             <Divider />
             <div className="flex items-center w-full justify-between">
               <h3 className="text-lg font-semibold">Order Products</h3>
+
               <button
                 onClick={handleAddProduct}
-                className="px-4 py-1 text-white font-bold rounded-md shadow-md ml-6 border-2 border-blue-500 bg-blue-600 hover:opacity-75"
+                className="font-bold rounded-sm shadow-sm flex items-center bg-slate-50 text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
               >
+                <Icon icon="basil:plus-solid" className="text-lg" />
                 Add
               </button>
             </div>

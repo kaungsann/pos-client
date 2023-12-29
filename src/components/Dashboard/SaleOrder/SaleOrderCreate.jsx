@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
 import { Input, Select, SelectItem } from "@nextui-org/react";
 import { removeData } from "../../../redux/actions";
+import { Icon } from "@iconify/react";
 
 import BoxImg from "../../../assets/box.png";
 
@@ -208,7 +209,6 @@ export default function SaleOrderCreate() {
   };
 
   const removeProduct = (id) => {
-
     // Filter out the product with the specified id
     const updatedSaleOrderLines = saleOrderLines.filter(
       (line) => line.product.id !== id
@@ -370,8 +370,9 @@ export default function SaleOrderCreate() {
               <h3 className="text-lg font-semibold">Order Products</h3>
               <button
                 onClick={handleAddProduct}
-                className="px-8 py-2 text-white font-bold rounded-md shadow-md ml-6 border-2 border-blue-500 bg-blue-600 hover:opacity-75"
+                className="font-bold rounded-sm shadow-sm flex items-center bg-slate-50 text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
               >
+                <Icon icon="basil:plus-solid" className="text-lg" />
                 Add
               </button>
             </div>
