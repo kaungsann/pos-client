@@ -255,11 +255,12 @@ export default function VeriableCostList({ opexs, refresh }) {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
+  
+          <div className="flex items-end">
             <h2 className="text-xl font-bold">Variable-Cost</h2>
-            <span className="text-default-400 text-small ml-4">
+            <h3 className="text-default-400 text-md pl-4">
               Total {opexs.length}
-            </span>
+            </h3>
           </div>
 
           <div className="flex items-center">
