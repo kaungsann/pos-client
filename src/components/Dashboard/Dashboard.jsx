@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { removeData } from "../../redux/actions";
 import { getApi } from "../Api";
+
 import {
   Dropdown,
   DropdownTrigger,
@@ -24,12 +25,14 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import SideBar from "../utils/SideBar";
+import { useRefreshContext } from "../utils/RefreshProvider";
 
 export default function Admin() {
+  const { refresh } = useRefreshContext();
+
   const location = useLocation();
   const { id } = useParams();
-  const [usr, setUsr] = useState(null);
-  const [expand, setExpand] = useState(true);
+  const [usr, setUsr] = useState([]);
 
   const user = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
@@ -56,22 +59,6 @@ export default function Admin() {
     <>
       <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b-2 border-b-slate-200">
         <div className="flex items-center justify-between py-2 w-full  cursor-pointer">
-          {/* {(user.role && user.role.name === "admin") ||
-          user.role.name === "root" ? (
-            <Link to={"/admin/inventory/overview"}>
-              <img
-                src={Pos}
-                alt="pos"
-                className="w-16 h-14 rounded-full shadow-sm items-center ml-14"
-              />
-            </Link>
-          ) : (
-            <img
-              src={user.image ? user.image : Pos}
-              alt="pos"
-              className="w-16 h-14 rounded-full shadow-sm items-center ml-14"
-            />
-          )} */}
           <span></span>
 
           <div className="flex w-2/5 justify-end lg:mr-[30px] md:mr-[80px] items-center px-3">
@@ -102,12 +89,12 @@ export default function Admin() {
 
             <div
               className="flex items-center mx-3"
-              onClick={() => navigate(`/admin/user/info/${user._id}`)}
+              onClick={() => navigate(`/admin/user/info/${usr._id}`)}
             >
               {user && (
                 <>
                   <img
-                    src={user.image ? user.image : userIcons}
+                    src={usr.image ? usr.image : userIcons}
                     alt="User Icon"
                     className="w-12 h-10 rounded-full shadow-sm hover:opacity-75"
                     onError={(e) => {
@@ -116,7 +103,7 @@ export default function Admin() {
                   />
 
                   <h3 className="font-semibold text-slate-500 text-md ml-2">
-                    {user.username}
+                    {usr.username}
                   </h3>
                 </>
               )}

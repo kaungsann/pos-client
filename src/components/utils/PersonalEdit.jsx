@@ -25,6 +25,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Icon } from "@iconify/react";
+import { useRefreshContext } from "./RefreshProvider";
 
 function PersonalEdit() {
   const userDoc = {
@@ -37,6 +38,8 @@ function PersonalEdit() {
     birthdate: "",
     gender: "",
   };
+
+  const { refresh, setRefesh } = useRefreshContext();
 
   const [info, setInfo] = useState(userDoc);
   const [updateInfo, setUpdateInfo] = useState({});
@@ -100,7 +103,10 @@ function PersonalEdit() {
           }
           toast.warn(data.message);
         } else {
-          navigate("/admin/products/all");
+          setRefesh(true);
+          toast.success(data.message);
+          onOpenChange();
+          //navigate("/admin/products/all");
         }
       } catch (error) {
         console.error("Error fetching admin info:", error);
@@ -159,8 +165,6 @@ function PersonalEdit() {
     fetchData();
   }, []);
 
-
-
   return (
     <div>
       <div className="flex justify-between w-full mt-4 text-slate-700 pb-3 px-4">
@@ -170,10 +174,11 @@ function PersonalEdit() {
           type="submit"
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+            isLoading
               ? ""
               : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-            }`}
+          }`}
           onPress={onOpen}
         >
           Save
@@ -320,6 +325,7 @@ function PersonalEdit() {
                   variant="bordered"
                   name="password"
                   placeholder="Enter your password"
+                  labelPlacement="outside"
                   endContent={
                     <button
                       className="focus:outline-none"
@@ -334,12 +340,16 @@ function PersonalEdit() {
                     </button>
                   }
                   type={isVisible ? "text" : "password"}
-                  className="max-w-xs"
                   onChange={(e) => inputChangeHandler(e)}
                 />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={onClose}
+                  className="border-2 mx-2 px-3"
+                >
                   Close
                 </Button>
                 <Button color="primary" onPress={onSubmitHandler}>
