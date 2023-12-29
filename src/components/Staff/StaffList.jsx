@@ -29,10 +29,9 @@ let INITIAL_VISIBLE_COLUMNS = ["role", "name", "email", "lastlogin", "actions"];
 
 let columns = [
   { name: "Role", uid: "role" },
-  { name: "Name", uid: "name", sortable: true },
+  { name: "Name", uid: "username", sortable: true },
   { name: "Email", uid: "email" },
-  { name: "Last-Login", uid: "lastlogin" },
-  { name: "Phone", uid: "phone", sortable: true },
+  { name: "Phone", uid: "phone" },
   { name: "Address", uid: "address" },
   { name: "Gender", uid: "gender" },
   { name: "City", uid: "city" },
@@ -54,10 +53,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
 
   const closeShowBox = (text) => {
     setShow(text);
-  };
-
-  const PARTNER_API = {
-    INDEX: BASE_URL + "/employee",
   };
 
   const token = useSelector((state) => state.IduniqueData);
@@ -140,29 +135,16 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
     const cellValue = staffs[columnKey];
 
     switch (columnKey) {
-      case "role":
-        // {staffs.role ? staffs.role.name : "none"}
-        return <User name={cellValue.name}>{cellValue.name}</User>;
-      case "name":
-        return <h3>{staffs.username}</h3>;
-      case "email":
-        return <h3>{staffs.email}</h3>;
-      case "lastlogin":
+      case "username":
         return (
-          <h3>
-            {staffs.lastLogin
-              ? new Date(staffs.lastLogin).toLocaleDateString()
-              : ""}
-          </h3>
+          <User
+            name={cellValue}
+          >
+            {staffs.username}
+          </User>
         );
-      case "phone":
-        return <h3>{staffs.phone ? staffs.phone : "no phone"}</h3>;
-      case "address":
-        return <h3>{staffs.address ? staffs.address : "no address"}</h3>;
-      case "gender":
-        return <h3>{staffs.gender ? staffs.gender : "no gender"}</h3>;
-      case "city":
-        return <h3>{staffs.city ? staffs.city : "no city"}</h3>;
+      case "role":
+        return <h3>{staffs.role ? staffs.role.name : "none"}</h3>;
       case "birthdate":
         return (
           <h3>
@@ -349,6 +331,7 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  console.log(staffs);
   return (
     <>
       <Table
