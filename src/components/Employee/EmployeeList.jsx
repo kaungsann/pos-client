@@ -162,13 +162,12 @@ export default function EmployeeList({ employees, onDeleteSuccess }) {
     return (
       <>
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold">Employees</h2>
-            <h3 className="text-default-400 text-small ml-4">
+          <div className="flex items-end">
+            <h2 className="text-xl font-bold">Employee</h2>
+            <h3 className="text-default-400 text-md pl-4">
               Total {employees.length}
             </h3>
           </div>
-
           <div className="flex items-center">
             <label className="flex items-center text-default-400 text-small">
               Rows per page:

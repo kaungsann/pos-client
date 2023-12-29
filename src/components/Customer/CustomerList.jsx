@@ -226,9 +226,9 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
     return (
       <>
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold">Customers</h2>
-            <h3 className="text-default-400 text-small ml-4">
+          <div className="flex items-end">
+            <h2 className="text-xl font-bold">Customer</h2>
+            <h3 className="text-default-400 text-md pl-4">
               Total {customers.length}
             </h3>
           </div>
