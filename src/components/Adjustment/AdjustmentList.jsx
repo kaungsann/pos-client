@@ -228,7 +228,6 @@ export default function AdjustmentList({ adjustments }) {
     );
   }, [selectedKeys, totalProducts, page, isLastPage, isFirstPage, totalPages]);
 
-
   return (
     <>
       <Table

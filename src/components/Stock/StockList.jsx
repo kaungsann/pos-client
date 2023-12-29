@@ -27,6 +27,7 @@ const columns = [
 ];
 
 export default function StockList({ stocks }) {
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(columns.map((column) => column.uid))
   );
@@ -153,6 +154,11 @@ export default function StockList({ stocks }) {
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
+        <span className="w-[30%] text-small text-default-400">
+          {selectedKeys === "all"
+            ? "All items selected"
+            : `${selectedKeys.size} of ${totalStocks} selected`}
+        </span>
         <Pagination
           isCompact
           showControls
@@ -198,6 +204,7 @@ export default function StockList({ stocks }) {
         topContent={topContent}
         topContentPlacement="outside"
         onSortChange={(descriptor) => setSortDescriptor(descriptor)}
+        onSelectionChange={setSelectedKeys}
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
