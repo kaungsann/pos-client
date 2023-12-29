@@ -82,6 +82,13 @@ export default function LocationDetail() {
                 </div>
 
                 <div className="flex justify-between items-center">
+                  <h4>Short Name</h4>
+                  <h3 className="font-medium">
+                    {detail[0].code ? detail[0].code : ""}
+                  </h3>
+                </div>
+
+                <div className="flex justify-between items-center">
                   <h4>Created Date</h4>
                   <h3 className="font-medium">
                     {detail[0].createdAt
