@@ -154,7 +154,6 @@ function VariableCostTemplate() {
     [opex, filteredKeywords]
   );
 
-  ("filter opex is a", filteredVariableCost);
 
   return (
     <>

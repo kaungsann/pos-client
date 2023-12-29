@@ -118,7 +118,6 @@ export default function PartnerTemplate() {
     [partner, filteredKeywords]
   );
 
-  ("filter partner is a ", filteredPartners);
   return (
     <>
       <div className="flex justify-between items-center my-3">

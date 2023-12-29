@@ -93,7 +93,6 @@ export default function ProductCreateForm() {
         formData.append(key, updateProduct[key]);
       }
 
-      ("form data is", formData);
 
       try {
         const { data } = await axios.post(BASE_URL + `/product`, formData, {

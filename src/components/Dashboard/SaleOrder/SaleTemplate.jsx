@@ -87,7 +87,6 @@ export default function SaleTemplate() {
         };
 
         const isLocation = () => {
-          ("filter location isa", location);
           if (!location) {
             return true;
           }

@@ -34,7 +34,6 @@ export default function Warehouse() {
   const getWareHouuseApi = async () => {
     setLoading(true);
     const resData = await getApi("/orders", token.accessToken);
-    ("warehosue is", resData);
     if (resData.status) {
       setLoading(false);
       const filteredPending = resData.data.filter(
@@ -91,7 +90,6 @@ export default function Warehouse() {
       }
     );
     let resData = await response.json();
-    ("res data confirm is", response);
     toast(resData.message);
     getWareHouuseApi();
     setconfrimShowBox(false);

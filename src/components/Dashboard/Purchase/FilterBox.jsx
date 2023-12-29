@@ -26,7 +26,6 @@ const FilterBox = ({ onFilter }) => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  ("partner name is a");
 
   const handleFilterClick = () => {
     setIsFilterActive(!isFilterActive);

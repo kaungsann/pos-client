@@ -208,7 +208,6 @@ export default function SaleOrderCreate() {
   };
 
   const removeProduct = (id) => {
-    ("slae line is", id);
 
     // Filter out the product with the specified id
     const updatedSaleOrderLines = saleOrderLines.filter(

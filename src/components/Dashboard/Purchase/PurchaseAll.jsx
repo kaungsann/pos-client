@@ -111,7 +111,6 @@ export default function PurchaseAll() {
       `/purchase/${ConfirmOrderId}?state=confirmed`,
       token.accessToken
     );
-    (response);
     toast(response.message);
     PurchaseOrderApi();
     closeBox();

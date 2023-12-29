@@ -113,7 +113,6 @@ export default function SaleOrderAll() {
   };
 
   const handleConfirm = (id) => {
-    ("handle confim is", id)
     setconfrimShowBox(true);
     setConfirmOrderId(id)
   }
@@ -128,7 +127,6 @@ export default function SaleOrderAll() {
       }
     )
     let resData = await response.json();
-    ("res data confirm is", response)
     toast(resData.message)
     saleOrderApi()
     setconfrimShowBox(false);

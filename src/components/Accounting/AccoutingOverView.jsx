@@ -42,7 +42,6 @@ const AccoutingOverView = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  ("selected keys is a", selectedKeys);
 
   const [expandedIndex, setExpandedIndex] = useState(null);
   let [account, setAccount] = useState([]);

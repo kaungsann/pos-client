@@ -153,7 +153,6 @@ function WasteTemplate() {
     [opex, filteredKeywords]
   );
 
-  ("filter opex is a", filteredWaste);
 
   return (
     <>

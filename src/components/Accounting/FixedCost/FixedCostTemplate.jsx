@@ -154,7 +154,6 @@ function FixedCostTemplate() {
     [opex, filteredKeywords]
   );
 
-  ("filter opex is a", filteredFixedCost);
 
   return (
     <>

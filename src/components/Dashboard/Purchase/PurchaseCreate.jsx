@@ -113,7 +113,6 @@ export default function SaleOrderCreate() {
     };
     try {
       let resData = await sendJsonToApi("/purchase", data, token.accessToken);
-      ("data is puruchse ius a", resData);
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
@@ -193,7 +192,6 @@ export default function SaleOrderCreate() {
   //   setUnitPrice(0);
   // };
 
-  ("quanttity is a", quantity);
 
   const handleAddProduct = () => {
     if (pd === "" || parseInt(quantity) === 0 || quantity === "") {
@@ -271,9 +269,7 @@ export default function SaleOrderCreate() {
 
   let count = 0;
 
-  ("product items is  a", item);
-  ("pd items is  a", pd);
-
+ 
   return (
     <>
       <ToastContainer

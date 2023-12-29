@@ -34,7 +34,6 @@ export default function PartnerCreate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    ("formdata is", formData);
     setIsLoading(true);
     try {
       const response = await sendJsonToApi(

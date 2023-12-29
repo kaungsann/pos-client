@@ -32,7 +32,6 @@ export default function WasteCreateForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    ("formdata is", formData);
     setIsLoading(true);
     try {
       const response = await sendJsonToApi(

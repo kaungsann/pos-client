@@ -132,7 +132,6 @@ export default function StaffTemplate() {
 
           if (stf.birthdate) {
             const birthDatePart = stf.birthdate.split("T")[0];
-            ("change date type", birthdate);
             return birthDatePart === birthdate;
           }
           return false;
@@ -151,7 +150,6 @@ export default function StaffTemplate() {
     [staff, filteredKeywords]
   );
 
-  ("filter staff is a ", filteredStaffs);
 
   return (
     <>

@@ -81,7 +81,6 @@ export default function PartnerAll() {
       const downloadUrl = "https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/partner/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
-      ("res download is", response);
 
       if (response.ok) {
         const blob = await response.blob();

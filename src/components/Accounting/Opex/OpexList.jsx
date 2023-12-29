@@ -61,7 +61,6 @@ export default function OpexList({ opexs, refresh }) {
 
   // Use function references instead of invoking functions directly
   const changeConfirmOpex = async (id) => {
-    ("id isa ", id);
     const response = await orderConfirmApi(
       `/opex/${id}?state=approved`,
       token.accessToken

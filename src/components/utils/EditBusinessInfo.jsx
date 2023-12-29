@@ -30,7 +30,6 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
   const [selectFile, setSelectedFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  ("info is a", info);
 
   const { id } = useParams();
   const fileInputRef = useRef(null);
@@ -88,7 +87,6 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
             },
           }
         );
-        ("path data is a", data);
         if (!data.status) {
           if (data?.message == "Token Expire , Please Login Again") {
             dipatch(removeData(null));

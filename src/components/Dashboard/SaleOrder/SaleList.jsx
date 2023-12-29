@@ -312,7 +312,6 @@ export default function SaleList({ sales }) {
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-  ("items is purchase", items);
 
   return (
     <>

@@ -159,8 +159,7 @@ function PersonalEdit() {
     fetchData();
   }, []);
 
-  ("info is a", info);
-  ("update info is a", updateInfo);
+
 
   return (
     <div>

@@ -66,7 +66,6 @@ export default function Profile() {
     setCity(response.data[0].city);
   };
 
-  ("single useris ", usr);
 
   const EditUserApi = async () => {
     const formData = new FormData();
@@ -95,13 +94,10 @@ export default function Profile() {
     if (file) {
       formData.append("image", file);
     }
-    ("formdata is", formData);
 
-    ("data is formed", name, email, city, address);
 
     let resData = await FormPathApi(`/user/${id}`, formData, token);
 
-    ("res ddata is", resData);
 
     if (resData.con) {
       toast(resData.message);

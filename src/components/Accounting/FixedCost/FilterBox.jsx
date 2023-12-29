@@ -26,7 +26,7 @@ const FilterBox = ({ onFilter }) => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  ("date is a", date);
+ 
 
   const handleFilterClick = () => {
     setIsFilterActive(!isFilterActive);

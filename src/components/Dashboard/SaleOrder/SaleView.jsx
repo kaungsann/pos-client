@@ -104,7 +104,6 @@ export default function SaleView() {
       token.accessToken
     );
     if (resData.status) {
-      (resData.data);
       setTotalAmount(resData.data.sales.totalAmountWithTax);
       setTotalOrders(resData.data.sales.totalOrders);
       setTotalPerDay(resData.data.sales.totalsAmountPerDay);
@@ -134,7 +133,7 @@ export default function SaleView() {
     (orderId) => orderLines.find((line) => line.orderId._id === orderId).orderId
   );
 
-  (orderList);
+  
 
   useEffect(() => {
     // Count the quantity sold for each product

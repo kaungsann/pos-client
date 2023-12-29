@@ -154,7 +154,6 @@ function OpexTemplate() {
     [opex, filteredKeywords]
   );
 
-  ("filter opex is a", filteredOpex);
 
   return (
     <>

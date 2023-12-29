@@ -72,7 +72,6 @@ export default function StaffEdit() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    ("uer is a", resData);
     if (resData.status) {
       navigate("/admin/user/all");
     } else {

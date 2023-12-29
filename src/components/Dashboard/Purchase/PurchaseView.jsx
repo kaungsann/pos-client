@@ -45,9 +45,7 @@ export default function PurchaseView() {
       token.accessToken
     );
 
-    ("today order is a", resData.data);
     if (resData.status) {
-      (resData.data);
       setTotalAmount(resData.data.purchases.totalAmount);
       setTotalOrders(resData.data.purchases.totalOrders);
       setTotalPerDay(resData.data.purchases.totalsAmountPerDay);

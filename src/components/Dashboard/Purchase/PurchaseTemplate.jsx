@@ -87,7 +87,6 @@ export default function PurchaseTemplate() {
         };
 
         const isLocation = () => {
-          ("filter location isa", location);
           if (!location) {
             return true;
           }

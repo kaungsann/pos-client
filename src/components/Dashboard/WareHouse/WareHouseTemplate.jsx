@@ -22,7 +22,6 @@ export default function WareHouseTemplate() {
       });
 
       setWarehouse(response.data?.data);
-      ("warehouse is in template", warehouse);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -31,7 +30,6 @@ export default function WareHouseTemplate() {
   useEffect(() => {
     fetchWareHouseData();
   }, [token]);
-  ("FILTER warehouse is a", warehouse);
 
   return (
     <>

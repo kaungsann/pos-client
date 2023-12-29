@@ -246,7 +246,6 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
     );
   }, [selectedKeys, totalItems, page, isLastPage, isFirstPage, totalPages]);
 
-  ("Hello", sortedItems);
 
   return (
     <>
