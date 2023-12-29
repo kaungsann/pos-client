@@ -13,14 +13,14 @@ import { FaEye } from "react-icons/fa6";
 import { removeData } from "../../../redux/actions";
 import ConfrimBox from "../../utils/ConfrimBox";
 import ReactPaginate from "react-paginate";
-import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io"
+import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function PurchaseAll() {
   const [saleorders, setSaleOrders] = useState([]);
   const [searchItems, setSearchItems] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const itemsPerPage = 10; 
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
 
   const [showFilter, setShowFilter] = useState(false);
@@ -111,7 +111,6 @@ export default function PurchaseAll() {
       `/purchase/${ConfirmOrderId}?state=confirmed`,
       token.accessToken
     );
-    console.log(response);
     toast(response.message);
     PurchaseOrderApi();
     closeBox();
@@ -260,17 +259,16 @@ export default function PurchaseAll() {
                     </td>
                     <td className="lg:px-4 py-2 text-center">
                       <span
-                        className={`rounded-xl py-2 text-sm ${
-                          sale.state == "pending"
-                          ? " bg-orange-50 text-orange-700 px-6"
-                          : sale.state == "deliver"
-                          ? "bg-cyan-50 text-cyan-600 px-6"
-                          : sale.state == "arrived"
-                          ? "bg-blue-50 text-blue-600 px-6"
-                          : sale.state == "confirmed"
-                          ? "bg-green-50 text-green-700 px-4"
-                          : ""
-                        }`}
+                        className={`rounded-xl py-2 text-sm ${sale.state == "pending"
+                            ? " bg-orange-50 text-orange-700 px-6"
+                            : sale.state == "deliver"
+                              ? "bg-cyan-50 text-cyan-600 px-6"
+                              : sale.state == "arrived"
+                                ? "bg-blue-50 text-blue-600 px-6"
+                                : sale.state == "confirmed"
+                                  ? "bg-green-50 text-green-700 px-4"
+                                  : ""
+                          }`}
                       >
                         {sale.state}
                       </span>
@@ -326,9 +324,8 @@ export default function PurchaseAll() {
       {/* Filter Box */}
       {showFilter && (
         <div
-          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-50 transform transition-all ease-in-out duration-700 ${
-            showFilter ? "right-0" : "right-[-384px]"
-          }`}
+          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-50 transform transition-all ease-in-out duration-700 ${showFilter ? "right-0" : "right-[-384px]"
+            }`}
         >
           <div className="flex justify-between my-6 items-center">
             <h2 className="text-xl font-bold text-slate-700">
@@ -353,7 +350,7 @@ export default function PurchaseAll() {
             </div>
             <div className="my-3 flex flex-col">
               <label className="text-lg my-2 text-slate-600 font-semibold">
-                 Partner
+                Partner
               </label>
               <input
                 type="text"
@@ -415,7 +412,7 @@ export default function PurchaseAll() {
           forcePage={currentPage}
           renderOnZeroPageCount={null}
         />
-       </div>
+      </div>
     </div>
   );
 }

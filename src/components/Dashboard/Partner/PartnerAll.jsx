@@ -13,7 +13,7 @@ import { MdClear } from "react-icons/md";
 import { format } from "date-fns";
 import { removeData } from "../../../redux/actions";
 import ReactPaginate from "react-paginate";
-import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io";
+import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function PartnerAll() {
   const inputRef = useRef();
@@ -21,7 +21,7 @@ export default function PartnerAll() {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  const itemsPerPage = 10; 
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
 
   const [showFilter, setShowFilter] = useState(false);
@@ -54,8 +54,8 @@ export default function PartnerAll() {
     if (resData.status) {
       setLoading(false);
       const filteredPartners = resData.data.filter(
-        (partner) =>  partner.active === true
-     )
+        (partner) => partner.active === true
+      )
       setPartners(filteredPartners);
     } else {
       toast(resData.message);
@@ -81,7 +81,6 @@ export default function PartnerAll() {
       const downloadUrl = "https://80a2e3emcc.execute-api.ap-southeast-1.amazonaws.com/partner/export-excel";
 
       const response = await fetch(downloadUrl, requestOptions);
-      console.log("res download is", response);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -128,7 +127,7 @@ export default function PartnerAll() {
     setShowFilter(!showFilter);
   };
 
-  const filteredPartner = () =>  {
+  const filteredPartner = () => {
     const filterPartner = partners.filter((pt) => {
       //Filter by address
       if (
@@ -195,11 +194,11 @@ export default function PartnerAll() {
       token.accessToken
     );
 
-      toast("Selected partners deleted successfully.");
-      setSelectedItems([]);
-      setSelectAll(false);
-      getPartnersApi();
-    
+    toast("Selected partners deleted successfully.");
+    setSelectedItems([]);
+    setSelectAll(false);
+    getPartnersApi();
+
   };
   const handlePageClick = (selectedPage) => {
     setCurrentPage(selectedPage.selected);
@@ -208,7 +207,7 @@ export default function PartnerAll() {
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  const filteredCus = filteredPartner(); 
+  const filteredCus = filteredPartner();
   const pageCount = Math.ceil(filteredCus.length / itemsPerPage);
   const currentCustomers = filteredCus.slice(startIndex, endIndex);
 
@@ -342,11 +341,10 @@ export default function PartnerAll() {
                   <tr
                     key={partner.id}
                     onClick={() => toggleSelectItem(partner.id)}
-                    className={`${
-                      selectedItems.includes(partner.id)
+                    className={`${selectedItems.includes(partner.id)
                         ? "bg-[#60a5fa] text-white"
                         : "odd:bg-white even:bg-slate-200"
-                    }  mb-8 w-full items-center cursor-pointer hover:text-white hover:bg-[#60a5fa]`}
+                      }  mb-8 w-full items-center cursor-pointer hover:text-white hover:bg-[#60a5fa]`}
                   >
                     <td className="lg:px-4 py-2 text-center">
                       <input
@@ -419,9 +417,8 @@ export default function PartnerAll() {
       {/* Filter Box */}
       {showFilter && (
         <div
-          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-40 transform transition-all ease-in-out duration-700 ${
-            showFilter ? "right-0" : "right-[-384px]"
-          }`}
+          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-40 transform transition-all ease-in-out duration-700 ${showFilter ? "right-0" : "right-[-384px]"
+            }`}
         >
           <div className="flex justify-between my-6">
             <h2 className="text-xl font-bold text-slate-700">
@@ -497,16 +494,16 @@ export default function PartnerAll() {
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
-              <IoMdArrowRoundBack className="mr-2"/>
+              <IoMdArrowRoundBack className="mr-2" />
               {' '}
               Previous
             </div>
-          } 
+          }
           nextLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
               Next
               {' '}
-              <IoMdArrowRoundForward className="ml-2"/>
+              <IoMdArrowRoundForward className="ml-2" />
             </div>
           }
           forcePage={currentPage}
@@ -514,6 +511,6 @@ export default function PartnerAll() {
         />
       </div>
     </div>
-    
+
   );
 }

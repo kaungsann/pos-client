@@ -4,6 +4,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: whitesmoke;
+  height: auto;
   font-family: "Roboto", ital;
 }
 
@@ -20,8 +21,7 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #f9fafb;
 }
-.Toastify__toast {
-
+/* .Toastify__toast {
   background-color: #f4f4f5;
 }
 
@@ -29,8 +29,8 @@ body {
   text-align: center;
   color: #ef4444;
   font-size: 20px;
-}
-.page-item{
+} */
+.page-item {
   padding: 5px 10px;
   border-radius: 8px;
 }
@@ -53,4 +53,3 @@ body::-webkit-scrollbar-track {
 .custom-select {
   padding: 10px; /* Add your desired padding */
 }
-

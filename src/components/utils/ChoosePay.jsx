@@ -5,6 +5,8 @@ import { add } from "../../redux/actions";
 import { getApi, sendJsonToApi } from "../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 
 export default function ChoosePay({ totalCost, change, tax, subTotal }) {
   const [display, setDisplay] = useState("");
@@ -14,12 +16,13 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
   const [text, setText] = useState(null);
   const [order, setOrder] = useState([]);
   const [name, setName] = useState("");
-  const [location , setLocation] = useState([])
-  const [Locate , setLocate] = useState ("")
+  const [location, setLocation] = useState([]);
+  const [Locate, setLocate] = useState("");
 
   const orderData = useSelector((state) => state.orderData);
   const user = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   dispatch(add(true));
@@ -28,14 +31,14 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
     let resData = await getApi("/partner", token.accessToken);
 
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCustomer === true  &&  partner.active === true
+      (partner) => partner.isCustomer === true && partner.active === true
     );
     setPartner(filteredPartners);
     setName(resData.data[0].id);
   };
   const getLocation = async () => {
     let resData = await getApi("/location", token.accessToken);
-      
+
     const filteredLocations = resData.data.filter(
       (locate) => locate.active === true
     );
@@ -75,7 +78,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
       try {
         let resData = await sendJsonToApi("/sale", data, token.accessToken);
         if (!resData.success) {
-          toast(resData.message);
+          toast.error(resData.message);
         }
 
         if (resData.status) {
@@ -99,7 +102,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
   useEffect(() => {
     getPartner();
-    getLocation ()
+    getLocation();
   }, []);
 
   let pay = display - totalCost;
@@ -121,7 +124,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
           <ToastContainer
             position="top-center"
             autoClose={5000}
-            hideProgressBar
+            hideProgressBar={false}
             newestOnTop={false}
             closeOnClick
             rtl={false}
@@ -129,15 +132,27 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
             draggable
             pauseOnHover
             theme="light"
-            style={{ width: "450px" }}
           />
           <div className="flex justify-between w-full cursor-pointer">
-            <h3 className="font-semibold text-lg">Choose Payment</h3>
-            <h3 className="font-semibold text-lg" onClick={() => change(false)}>
+            <h3 className="font-semibold text-lg"></h3>
+            <Button
+              type="submit"
+              isDisabled={isLoading}
+              isLoading={isLoading}
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+                isLoading
+                  ? ""
+                  : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+              }`}
+              onClick={() => change(false)}
+            >
+              Back
+            </Button>
+            {/* <h3 className="font-semibold text-lg" onClick={() => change(false)}>
               Go Back
-            </h3>
+            </h3> */}
           </div>
-          <div className="mt-4 flex justify-center">
+          <div className="mt-4 flex justify-start">
             <button
               onClick={() => setText("CASH")}
               className={`px-8 py-2 rounded-md mx-1 text-blue-700 border-blue-500 border-2 hover:opacity-75 bg-outline-none shadow-md ${
@@ -146,6 +161,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
             >
               Cash
             </button>
+
             <button
               onClick={() => setText("BANK")}
               className={`px-8 py-2 rounded-md mx-1 text-blue-700 border-blue-500 border-2 hover:opacity-75 shadow-md bg-outline-none ${
@@ -155,81 +171,73 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               Bank
             </button>
           </div>
-          <div className="mt-4">
-            <span className="text-lg font-semibold text-slate-600">
-              Total Due
-            </span>
-            <span className="text-lg font-bold ml-4">{totalCost}</span>
-          </div>
-          <div className="flex flex-col justify-between my-2 ">
-            <div>
-              <span className="text-lg font-semibold text-slate-600">Cash</span>
-              <span className="text-lg font-bold ml-10">
-                {display.length > 0 ? display : 0} MMK
-              </span>
-            </div>
+
+          <div className="flex justify-between items-center">
             <div className="mt-4">
               <span className="text-lg font-semibold text-slate-600">
-                Charge
+                Total Due
               </span>
-              <span className="text-lg font-bold ml-4">
-                {display.length > 0 ? (display - totalCost).toFixed(2) : 0} MMK
+            </div>
+            <div className="text-lg font-bold">{totalCost}</div>
+          </div>
+          <div className="flex flex-col justify-between my-2">
+            <div className="flex justify-between">
+              <span className="text-lg font-semibold text-slate-600">Cash</span>
+              <span className="text-lg font-bold text-right">
+                {display.length > 0 ? display : 0}
+              </span>
+            </div>
+            <div className="mt-2 flex justify-between">
+              <span className="text-lg font-semibold text-slate-600">
+                Change
+              </span>
+              <span className="text-lg font-bold text-right">
+                {display.length > 0 ? (display - totalCost).toFixed(2) : 0}
               </span>
             </div>
           </div>
 
-           <div className="flex justify-around">
+          <div className=" justify-around grid grid-cols-2 gap-4">
             <div>
-              <h3 className="text-lg font-semibold text-slate-600 my-2">Customer</h3>
-              <select
-                required
-                id="nameId"
+              <Autocomplete
+                label="Customer"
+                placeholder="Names"
+                className="max-w-xs"
                 onChange={(e) => setName(e.target.value)}
-                // value={partner.length > 0 ? partner[0].name : name}
-                className="pl-2 py-1 border-2 hover:opacity-75 border-blue-500 rounded-md shadow-md"
               >
-                <option disabled value selected>
-                  Select an option
-                </option>
                 {partner.length > 0 &&
                   partner.map((pt) => (
-                    <option
+                    <AutocompleteItem
                       key={pt.id}
                       value={pt.id}
                       className="hover:bg-cyan-300 hover:font-bold"
                     >
                       {pt.name}
-                    </option>
+                    </AutocompleteItem>
                   ))}
-              </select>
+              </Autocomplete>
             </div>
 
-            <div className="">
-              <h3 className="text-lg font-semibold text-slate-600 my-2">Location</h3>
-              <select
-                required
-                id="nameId"
+            <div>
+              <Autocomplete
+                label="Location"
+                placeholder="Select an option"
+                className="max-w-xs"
                 onChange={(e) => setLocate(e.target.value)}
-                // value={partner.length > 0 ? partner[0].name : name}
-                className="pl-2 py-1 border-2 hover:opacity-75 border-blue-500 rounded-md shadow-md"
               >
-                <option disabled value selected>
-                  Select an option
-                </option>
                 {location.length > 0 &&
                   location.map((loc) => (
-                    <option
+                    <AutocompleteItem
                       key={loc.id}
                       value={loc.id}
                       className="hover:bg-cyan-300 hover:font-bold"
                     >
                       {loc.name}
-                    </option>
+                    </AutocompleteItem>
                   ))}
-              </select>
+              </Autocomplete>
             </div>
-            </div>
-
+          </div>
           <div className="calculator mt-8 flex justify-center">
             <div className="buttons  ">
               <div className="row">
@@ -314,12 +322,15 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               </div>
             </div>
           </div>
-          <button
-            className="mt-3 text-center text-white font-semibold rounded-md shadow-md py-3 bg-blue-600 w-full"
+
+          <Button
+            className="w-full mt-5"
+            color="primary"
+            variant="solid"
             onClick={createSaleOrder}
           >
             Validate
-          </button>
+          </Button>
         </div>
       )}
     </>

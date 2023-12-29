@@ -44,8 +44,8 @@ export default function PurchaseView() {
       `/orders/totals?startDate=${todayDate.toString()}`,
       token.accessToken
     );
+
     if (resData.status) {
-      console.log(resData.data);
       setTotalAmount(resData.data.purchases.totalAmount);
       setTotalOrders(resData.data.purchases.totalOrders);
       setTotalPerDay(resData.data.purchases.totalsAmountPerDay);
@@ -90,7 +90,9 @@ export default function PurchaseView() {
             />
 
             <div className="">
-              <h3 className="font-bold text-slate-600 text-xl">Total Cost <span className="text-sm">(Inc. Tax)</span></h3>
+              <h3 className="font-bold text-slate-600 text-xl">
+                Total Cost <span className="text-sm">(Inc. Tax)</span>
+              </h3>
               <h4 className="text-lg font-bold text-slate-600">
                 {totalAmount}
               </h4>
@@ -113,9 +115,7 @@ export default function PurchaseView() {
           <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon icon="fa:users" className="text-4xl text-[#8884d8]" />
             <div>
-              <h3 className="font-bold text-slate-600 text-xl">
-                Vendors
-              </h3>
+              <h3 className="font-bold text-slate-600 text-xl">Vendors</h3>
               <h4 className="text-lg font-bold text-slate-600">
                 {
                   new Set(

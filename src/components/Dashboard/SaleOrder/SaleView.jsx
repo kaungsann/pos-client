@@ -104,7 +104,6 @@ export default function SaleView() {
       token.accessToken
     );
     if (resData.status) {
-      console.log(resData.data);
       setTotalAmount(resData.data.sales.totalAmountWithTax);
       setTotalOrders(resData.data.sales.totalOrders);
       setTotalPerDay(resData.data.sales.totalsAmountPerDay);
@@ -134,7 +133,7 @@ export default function SaleView() {
     (orderId) => orderLines.find((line) => line.orderId._id === orderId).orderId
   );
 
-  console.log(orderList);
+  
 
   useEffect(() => {
     // Count the quantity sold for each product
@@ -334,15 +333,14 @@ export default function SaleView() {
                           {sal.location && sal.location.name}
                         </td>
                         <td
-                          className={`lg:px-4 py-2 text-center font-semibold ${
-                            sal.state == "pending"
+                          className={`lg:px-4 py-2 text-center font-semibold ${sal.state == "pending"
                               ? "text-red-400"
                               : sal.state == "deliver"
-                              ? "text-cyan-700"
-                              : sal.state == "confirmed"
-                              ? "text-green-600"
-                              : ""
-                          }`}
+                                ? "text-cyan-700"
+                                : sal.state == "confirmed"
+                                  ? "text-green-600"
+                                  : ""
+                            }`}
                         >
                           {sal.state && sal.state}
                         </td>

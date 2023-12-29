@@ -2,7 +2,7 @@ import React from "react";
 
 export default function DeleteAlert({ cancel, onDelete, catId, logout, text }) {
   return (
-    <div classNameName="absolute z-40 top-0">
+    <div classNameName="absolute z-50 top-0">
       <div
         className="relative z-10"
         aria-labelledby="modal-title"

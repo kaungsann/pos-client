@@ -109,18 +109,18 @@ export default function PosItems() {
     if (search) {
       handleBarcodeDetected(search);
     }
-  }, [search , user]);
+  }, [search, user]);
   return (
     <>
       <div
         className={`flex w-full ${
-          user.role && user.role.name == "user" && "mt-20"
+          user.role && user.role.name == "user" && "mt-2"
         }`}
       >
-        <div className="lg:w-2/3 md:w-2/4 shadow-sm bg-white overflow-y-scroll  custom-scrollbar h-screen">
+        <div className="lg:w-2/3 md:w-2/4 shadow-sm bg-white overflow-y-scroll custom-scrollbar h-screen">
           <div>
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold ml-2">Avaliable Items</h3>
+            <div className="flex justify-between items-center p-4">
+              <h3 className="font-semibold text-xl w-full">Avaliable Items</h3>
               <input
                 ref={searchInputRef}
                 value={search}
@@ -128,7 +128,7 @@ export default function PosItems() {
                 autoFocus={true}
                 type="text"
                 className=" py-2 px-2 shadow-sm bg-slate-50 border-2 w-64 block rounded-md  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6"
-                placeholder="search products barcode"
+                placeholder="Search By Barcode"
               />
             </div>
             <ul className="mt-4 flex flex-wrap cursor-pointer items-center max-w-3xl relative p-3">
@@ -202,7 +202,7 @@ export default function PosItems() {
             )}
           </div>
         </div>
-        <div className=" p-3 h-screen w-1/3 bg-white rounded-sm shadow-md ml-2">
+        <div className="p-3 h-screen w-1/3 bg-white rounded-sm shadow-md ml-2">
           <PayBox />
         </div>
       </div>

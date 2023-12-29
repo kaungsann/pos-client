@@ -34,7 +34,6 @@ export default function Warehouse() {
   const getWareHouuseApi = async () => {
     setLoading(true);
     const resData = await getApi("/orders", token.accessToken);
-    console.log("warehosue is", resData);
     if (resData.status) {
       setLoading(false);
       const filteredPending = resData.data.filter(
@@ -91,7 +90,6 @@ export default function Warehouse() {
       }
     );
     let resData = await response.json();
-    console.log("res data confirm is", response);
     toast(resData.message);
     getWareHouuseApi();
     setconfrimShowBox(false);
@@ -194,15 +192,14 @@ export default function Warehouse() {
                   </td>
                   <td className="lg:px-4 py-2 text-center">
                     <span
-                      className={`rounded-xl py-2 text-sm ${
-                        wh.state == "pending"
+                      className={`rounded-xl py-2 text-sm ${wh.state == "pending"
                           ? " bg-orange-50 text-orange-700 px-6"
                           : wh.state == "deliver"
-                          ? "bg-cyan-50 text-cyan-600 px-6"
-                          : wh.state == "arrived"
-                          ? "bg-green-50 text-green-700 px-4"
-                          : ""
-                      }`}
+                            ? "bg-cyan-50 text-cyan-600 px-6"
+                            : wh.state == "arrived"
+                              ? "bg-green-50 text-green-700 px-4"
+                              : ""
+                        }`}
                     >
                       {wh.state ? wh.state : "no state"}
                     </span>
@@ -212,13 +209,12 @@ export default function Warehouse() {
                   </td>
                   <td className="lg:px-4 py-2 text-center">
                     <span
-                      className={`rounded-xl py-2 text-sm ${
-                        wh.paymentStatus == "pending"
+                      className={`rounded-xl py-2 text-sm ${wh.paymentStatus == "pending"
                           ? "text-orange-700 px-6"
                           : wh.paymentStatus == "comfirm"
-                          ? " text-green-700 px-4"
-                          : ""
-                      }`}
+                            ? " text-green-700 px-4"
+                            : ""
+                        }`}
                     >
                       {wh.paymentStatus}
                     </span>
@@ -291,9 +287,8 @@ export default function Warehouse() {
       </div>
       {showFilter && (
         <div
-          className={`w-96 bg-slate-50 h-screen fixed top-0 right-0 p-4 z-50 transition-transform transform ${
-            showFilter ? "translate-x-0" : "-translate-x-full"
-          }ease-in-out duration-700`}
+          className={`w-96 bg-slate-50 h-screen fixed top-0 right-0 p-4 z-50 transition-transform transform ${showFilter ? "translate-x-0" : "-translate-x-full"
+            }ease-in-out duration-700`}
         >
           <div className="flex justify-between my-6">
             <h2 className="text-xl font-bold text-slate-700">

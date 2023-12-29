@@ -26,7 +26,7 @@ export default function ChangePassword({ close, id }) {
         toast(resData.message);
         handleClose();
       } else {
-        toast(resData.message);
+        toast.error(resData.message);
       }
     } catch (error) {
       console.error("Error creating category:", error);
@@ -40,7 +40,7 @@ export default function ChangePassword({ close, id }) {
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -48,7 +48,6 @@ export default function ChangePassword({ close, id }) {
         draggable
         pauseOnHover
         theme="light"
-        style={{ width: "450px" }}
       />
       {/* staff username in add label */}
 
@@ -59,7 +58,7 @@ export default function ChangePassword({ close, id }) {
           role="dialog"
           aria-modal="true"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity">
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity cursor-pointer">
             <div className="fixed inset-0 z-10 overflow-y-auto">
               <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                 <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm">
@@ -71,7 +70,7 @@ export default function ChangePassword({ close, id }) {
                             User Change Password
                           </label>
                           <span
-                            className="text-2xl text-slate-600 font-bold hover:opacity-75"
+                            className="text-2xl text-slate-600 hover:text-slate-400 font-bold hover:opacity-75"
                             onClick={handleClose}
                           >
                             X

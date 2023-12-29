@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { getApi, PathData } from "../../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
+import { ToastContainer, toast } from "react-toastify";
+import { Input, Progress, Button, Checkbox } from "@nextui-org/react";
 
 export default function PartnerEdit() {
   const { id } = useParams();
@@ -13,6 +15,8 @@ export default function PartnerEdit() {
   let [phone, setPhone] = useState("");
   const [isCustomer, setIsCustomer] = useState(null);
   const [isCompany, setIsCompany] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
@@ -53,9 +57,11 @@ export default function PartnerEdit() {
         dipatch(removeData(null));
       }
       if (resData.status) {
+        setIsLoading(false);
         navigate("/admin/partners/all");
       } else {
-        toast(resData.message);
+        setIsLoading(false);
+        toast.error(resData.message);
       }
     } catch (error) {
       console.error("Error edit partner:", error);
@@ -63,6 +69,7 @@ export default function PartnerEdit() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     editPartnerApi();
   };
   useEffect(() => {
@@ -70,95 +77,115 @@ export default function PartnerEdit() {
   }, []);
   return (
     <>
-      <div className="flex">
-        <button
-          type="submit"
-          className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2"
-          onClick={handleSubmit}
-        >
-          Save
-        </button>
-        <Link to="/admin/partners/all">
-          <button className="rounded-sm ml-3 transition shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-md hover:text-white hover:bg-[#4338ca] font-bold px-6 py-2">
-            Discard
-          </button>
-        </Link>
-      </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
 
-      <div className="w-full mx-auto mt-4">
-        <div className="w-full mx-auto flex justify-center cursor-pointer flex-col">
-          <h2 className="py-1.5 text-lg font-bold mt-2 bg-blue-600 text-white pl-4">
-            Edit Parnter information
-          </h2>
+      <div className="container mt-2">
+        <div className="flex flex-row justify-between my-4 max-w-6xl">
+          <h2 className="lg:text-xl font-bold ">Partner Edit</h2>
+          <div className="flex gap-3 ">
+            <Button
+              type="submit"
+              isDisabled={isLoading}
+              isLoading={isLoading}
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+                isLoading
+                  ? ""
+                  : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+              }`}
+              onClick={handleSubmit}
+            >
+              Save
+            </Button>
+
+            <Button
+              isDisabled={isLoading}
+              isLoading={isLoading}
+              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+                isLoading
+                  ? ""
+                  : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
+              }`}
+              onClick={() => navigate("/admin/partners/all")}
+            >
+              Discard
+            </Button>
+          </div>
         </div>
-        <form onSubmit={handleSubmit} className="flex mt-3">
-          <div className="w-80">
-            <label className="text-md font-semibold">Name*</label>
-            <input
-              type="text"
-              value={name}
-              style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-              placeholder="Enter product name"
-            />
-          </div>
-          <div className="w-80 mx-2">
-            <label className="text-md font-semibold">Content Address*</label>
-            <input
-              type="text"
-              value={contactAddress}
-              style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setcontentAddress(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-              placeholder="Enter product description"
-            />
-          </div>
-          <div className="w-80 mx-2">
-            <label className="text-md font-semibold">City*</label>
-            <input
-              type="text"
-              value={city}
-              style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setCity(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-              placeholder="Enter product description"
-            />
-          </div>
-          <div className="w-80 mx-2">
-            <label className="text-md font-semibold">Phone*</label>
-            <input
-              type="text"
-              value={phone}
-              style={{ backgroundColor: "transparent" }}
-              onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border-b-2 border-slate-400 bg-white focus:outline-none my-2"
-              placeholder="Enter product description"
-            />
-          </div>
-          <div className="flex flex-col items-center">
-            <label className="text-md font-semibold">Customer*</label>
-            <input
-              type="checkbox"
-              id="customer"
-              className="w-6 h-6 text-xl my-5"
-              checked={isCustomer}
-              style={{ backgroundColor: "transparent" }}
-              onChange={() => setIsCustomer(!isCustomer)}
-            />
-          </div>
-          <div className="ml-3 flex flex-col items-center">
-            <label className="text-md font-semibold">Company*</label>
-            <input
-              type="checkbox"
-              id="customer"
-              style={{ backgroundColor: "transparent" }}
-              className="w-6 h-6 text-xl my-5"
-              checked={isCompany}
-              onChange={() => setIsCompany(!isCompany)}
-            />
-          </div>
-        </form>
+        <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          {isLoading && (
+            <Progress size="sm" isIndeterminate aria-label="Loading..." />
+          )}
+          <form className="flex justify-between gap-10 p-5">
+            <div className="flex flex-wrap gap-8 items-center">
+              <div className="w-60">
+                <Input
+                  type="text"
+                  label="Name"
+                  name="name"
+                  value={name}
+                  // color={isInvalid ? "danger" : "success"}
+                  // errorMessage={isInvalid && "Please enter a valid email"}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter product name..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="address"
+                  label="Address"
+                  value={contactAddress}
+                  onChange={(e) => setcontentAddress(e.target.value)}
+                  placeholder="Enter reference..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="number"
+                  name="phone"
+                  label="Phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Enter barcode..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60 flex items-center mt-6">
+                <Checkbox
+                  size="md"
+                  id="customer"
+                  isSelected={isCustomer}
+                  onChange={() => setIsCustomer(!isCustomer)}
+                  className=""
+                >
+                  Customer
+                </Checkbox>
+                <Checkbox
+                  size="md "
+                  id="customer"
+                  isSelected={isCompany}
+                  className="ml-3"
+                  onChange={() => setIsCompany(!isCompany)}
+                >
+                  Company
+                </Checkbox>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );
