@@ -32,7 +32,7 @@ export default function StockList({ stocks }) {
     new Set(columns.map((column) => column.uid))
   );
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "name",
@@ -189,7 +189,6 @@ export default function StockList({ stocks }) {
       </div>
     );
   }, [totalStocks, page, isLastPage, isFirstPage, totalPages]);
-
   return (
     <>
       <Table
@@ -197,9 +196,6 @@ export default function StockList({ stocks }) {
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
-        classNames={{
-          wrapper: "max-h-[382px]",
-        }}
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"

@@ -202,13 +202,13 @@ export default function VeriableCostList({ opexs, refresh }) {
                     onClick={() => handleChangeConfirm(opexs.id)}
                     className="text-green-600"
                   >
-                    Confirme
+                    Confirm
                   </DropdownItem>
                   <DropdownItem
                     onClick={() => handleChangeReject(opexs.id)}
                     className="text-red-600"
                   >
-                    Rejecte
+                    Reject
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
@@ -255,7 +255,6 @@ export default function VeriableCostList({ opexs, refresh }) {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-  
           <div className="flex items-end">
             <h2 className="text-xl font-bold">Variable-Cost</h2>
             <h3 className="text-default-400 text-md pl-4">
