@@ -104,7 +104,7 @@ const FilterBox = ({ categories, onFilter }) => {
                       placeholder="Date"
                       type="date"
                       variant="bordered"
-                      label="Expire Date From"
+                      label="Expire Range"
                       labelPlacement="outside"
                       id="startDate"
                       value={startDate || ""}

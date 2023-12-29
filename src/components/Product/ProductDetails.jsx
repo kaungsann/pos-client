@@ -82,11 +82,14 @@ export default function ProductDetails() {
             <div className="container bg-white p-5 rounded-md max-w-6xl">
               <div>
                 <div className="flex justify-between items-center">
-                  <Icon
-                    icon="cil:arrow-left"
-                    className="text-slate-600 font-semibold text-xl mb-3 hover:text-slate-400"
-                    onClick={() => navigate("/admin/products/all")}
-                  />
+                    <div className="flex gap-2">
+                      <Link
+                        to="/admin/products/all"
+                        className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
+                      >
+                        Back
+                      </Link>
+                    </div>
                   <button
                     onClick={handlePrint}
                     className="rounded-sm shadow-sm flex items-center  text-[#15803d] border-[#15803d] bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-green-700 font-bold px-3 py-1.5"

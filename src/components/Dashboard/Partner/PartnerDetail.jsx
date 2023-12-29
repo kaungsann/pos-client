@@ -51,11 +51,14 @@ export default function PartnerDetail() {
       ) : detail && detail.length > 0 ? (
         <div className="container cursor-pointer">
           <div className="container bg-white p-5 rounded-md max-w-6xl">
-            <Icon
-              icon="cil:arrow-left"
-              className="text-slate-600 font-semibold text-xl mb-3 hover:text-slate-400"
-              onClick={() => navigate("/admin/partners/all")}
-            />
+              <div className="flex gap-2 pb-4">
+                <Link
+                  to="/admin/partners/all"
+                  className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
+                >
+                  Back
+                </Link>
+              </div>
             <div>
               <div className="flex">
                 <div className="flex">
