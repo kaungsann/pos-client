@@ -227,9 +227,9 @@ export default function PurchaseList({ purchases, refresh }) {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <h2 className="text-xl font-bold">Purchases</h2>
-            <h3 className="text-default-400 text-small ml-4">
+          <div className="flex items-end">
+            <h2 className="text-xl font-bold">Purchase Orders</h2>
+            <h3 className="text-default-400 text-md pl-4">
               Total {purchases.length}
             </h3>
           </div>
