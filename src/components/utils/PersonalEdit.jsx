@@ -64,6 +64,7 @@ function PersonalEdit() {
     let newAdminInfo = { [name]: value };
 
     setUpdateInfo({ ...updateInfo, ...newAdminInfo });
+    setInfo({ ...info, ...newAdminInfo });
   };
 
   const onSubmitHandler = () => {
