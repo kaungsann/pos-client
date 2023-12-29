@@ -10,6 +10,7 @@ import { Input } from "@nextui-org/react";
 
 export default function LocationEdit() {
   let [name, setName] = useState("");
+  const [code, setCode] = useState("");
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -22,16 +23,14 @@ export default function LocationEdit() {
         dipatch(removeData(null));
       }
       setName(response.data[0].name);
+      setCode(response.data[0].code);
     } catch (error) {
       console.error("Error fetching location:", error);
     }
   };
 
   const editCategoryApi = async () => {
-    const data = {};
-    if (name) {
-      data.name = name;
-    }
+    const data = { name, code };
     try {
       let resData = await PathData(`/location/${id}`, data, token.accessToken);
       if (resData.status) {
@@ -99,6 +98,17 @@ export default function LocationEdit() {
                   // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter product name..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  label="Short Name"
+                  name="code"
+                  value={code}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter short name..."
                   labelPlacement="outside"
                 />
               </div>

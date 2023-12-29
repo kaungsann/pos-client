@@ -11,6 +11,7 @@ import axios from "axios";
 
 export default function LocationCreate() {
   const [name, setName] = useState("");
+  const [code, setCode] = useState("");
   const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
@@ -19,7 +20,7 @@ export default function LocationCreate() {
     try {
       const { data } = await axios.post(
         BASE_URL + "/location",
-        { name },
+        { name, code },
         {
           headers: {
             Authorization: `Bearer ${token.accessToken}`,
@@ -50,12 +51,12 @@ export default function LocationCreate() {
       return;
     }
 
-    createLocationApi();
-  };
+    if (!code.trim()) {
+      toast.error("Please enter a short name.");
+      return;
+    }
 
-  const onChangeHandler = (e) => {
-    const value = e.target.value;
-    setName(value);
+    createLocationApi();
   };
 
   return (
@@ -100,8 +101,19 @@ export default function LocationCreate() {
                   label="Name"
                   name="name"
                   value={name}
-                  onChange={onChangeHandler}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Enter location name..."
+                  labelPlacement="outside"
+                />
+              </div>
+              <div className="w-60">
+                <Input
+                  type="text"
+                  label="Short Name"
+                  name="code"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  placeholder="Enter short name..."
                   labelPlacement="outside"
                 />
               </div>

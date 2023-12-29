@@ -25,6 +25,7 @@ import { capitalize } from "../utils/utils";
 
 const columns = [
   { name: "Name", uid: "name", sortable: true },
+  { name: "Short Name", uid: "code" },
   { name: "Actions", uid: "actions" },
 ];
 
