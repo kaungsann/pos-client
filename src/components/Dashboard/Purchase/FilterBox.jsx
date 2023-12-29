@@ -26,7 +26,7 @@ const FilterBox = ({ onFilter }) => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  console.log("partner name is a");
+  ("partner name is a");
 
   const handleFilterClick = () => {
     setIsFilterActive(!isFilterActive);
@@ -70,11 +70,10 @@ const FilterBox = ({ onFilter }) => {
       <Button
         size="sm"
         onClick={isFilterActive ? handleClearFiltersClick : onOpen}
-        className={`rounded-sm ml-3 transition shadow-sm flex items-center ${
-          isFilterActive
+        className={`rounded-sm ml-3 transition shadow-sm flex items-center ${isFilterActive
             ? "text-red-500 border-red-500 hover:bg-red-500"
             : "text-[#4338ca] border-[#4338ca] hover:bg-[#4338ca]"
-        } border-2 hover:opacity-75 text-sm hover:text-white bg-white  font-bold px-3 py-1.5`}
+          } border-2 hover:opacity-75 text-sm hover:text-white bg-white  font-bold px-3 py-1.5`}
       >
         <Icon icon="basil:filter-outline" className="text-lg" />
         {isFilterActive ? "Remove" : "Filter"}
@@ -114,7 +113,7 @@ const FilterBox = ({ onFilter }) => {
                     label="Location"
                     placeholder="Enter Loction name"
                     labelPlacement="outside"
-                  
+
                     onChange={(e) => setLocation(e.target.value)}
                   />
                   <Input
@@ -137,7 +136,7 @@ const FilterBox = ({ onFilter }) => {
                   size="md"
                   placeholder="Enter Order Ref"
                   labelPlacement="outside"
-               
+
                   onChange={(e) => setOrderRef(e.target.value)}
                 />
 

@@ -111,7 +111,7 @@ export default function PurchaseAll() {
       `/purchase/${ConfirmOrderId}?state=confirmed`,
       token.accessToken
     );
-    console.log(response);
+    (response);
     toast(response.message);
     PurchaseOrderApi();
     closeBox();
@@ -260,17 +260,16 @@ export default function PurchaseAll() {
                     </td>
                     <td className="lg:px-4 py-2 text-center">
                       <span
-                        className={`rounded-xl py-2 text-sm ${
-                          sale.state == "pending"
+                        className={`rounded-xl py-2 text-sm ${sale.state == "pending"
                             ? " bg-orange-50 text-orange-700 px-6"
                             : sale.state == "deliver"
-                            ? "bg-cyan-50 text-cyan-600 px-6"
-                            : sale.state == "arrived"
-                            ? "bg-blue-50 text-blue-600 px-6"
-                            : sale.state == "confirmed"
-                            ? "bg-green-50 text-green-700 px-4"
-                            : ""
-                        }`}
+                              ? "bg-cyan-50 text-cyan-600 px-6"
+                              : sale.state == "arrived"
+                                ? "bg-blue-50 text-blue-600 px-6"
+                                : sale.state == "confirmed"
+                                  ? "bg-green-50 text-green-700 px-4"
+                                  : ""
+                          }`}
                       >
                         {sale.state}
                       </span>
@@ -326,9 +325,8 @@ export default function PurchaseAll() {
       {/* Filter Box */}
       {showFilter && (
         <div
-          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-50 transform transition-all ease-in-out duration-700 ${
-            showFilter ? "right-0" : "right-[-384px]"
-          }`}
+          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-50 transform transition-all ease-in-out duration-700 ${showFilter ? "right-0" : "right-[-384px]"
+            }`}
         >
           <div className="flex justify-between my-6 items-center">
             <h2 className="text-xl font-bold text-slate-700">

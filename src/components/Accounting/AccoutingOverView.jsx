@@ -42,7 +42,7 @@ const AccoutingOverView = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  console.log("selected keys is a", selectedKeys);
+  ("selected keys is a", selectedKeys);
 
   const [expandedIndex, setExpandedIndex] = useState(null);
   let [account, setAccount] = useState([]);
@@ -61,7 +61,7 @@ const AccoutingOverView = () => {
     (option) => {
       const currentDate = new Date();
 
-      console.log("today date is a", currentDate);
+      ("today date is a", currentDate);
 
       switch (option) {
         case "This Weekend":

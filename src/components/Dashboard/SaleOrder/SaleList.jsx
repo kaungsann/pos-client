@@ -312,7 +312,7 @@ export default function SaleList({ sales }) {
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-  console.log("items is purchase", items);
+  ("items is purchase", items);
 
   return (
     <>

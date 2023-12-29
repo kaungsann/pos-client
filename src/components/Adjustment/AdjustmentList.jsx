@@ -228,7 +228,7 @@ export default function AdjustmentList({ adjustments }) {
     );
   }, [selectedKeys, totalProducts, page, isLastPage, isFirstPage, totalPages]);
 
-  console.log(sortedItems);
+  (sortedItems);
 
   return (
     <>

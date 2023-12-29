@@ -55,11 +55,11 @@ export default function ProductEditForm() {
         salePrice:
           name === "purchasePrice"
             ? Math.ceil(
-                parseFloat(value) + parseFloat(value) * (marginProfit / 100)
-              )
+              parseFloat(value) + parseFloat(value) * (marginProfit / 100)
+            )
             : Math.ceil(
-                purchasePrice + purchasePrice * (parseFloat(value) / 100)
-              ),
+              purchasePrice + purchasePrice * (parseFloat(value) / 100)
+            ),
         purchasePrice:
           name === "marginProfit" ? purchasePrice : parseFloat(value),
         marginProfit:
@@ -84,7 +84,7 @@ export default function ProductEditForm() {
         formData.append(key, updateProduct[key]);
       }
 
-      console.log("form data in price is", formData);
+      ("form data in price is", formData);
 
       try {
         const { data } = await axios.patch(
@@ -211,11 +211,10 @@ export default function ProductEditForm() {
           type="submit"
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
-            isLoading
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
               ? ""
               : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-          }`}
+            }`}
           onClick={onSubmitHandler}
         >
           Save
@@ -223,11 +222,10 @@ export default function ProductEditForm() {
         <Button
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
-            isLoading
+          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
               ? ""
               : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-          }`}
+            }`}
           onClick={() => navigate("/admin/products/all")}
         >
           Discard

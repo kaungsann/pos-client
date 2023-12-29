@@ -84,7 +84,7 @@ export default function CategoryList({ categories, refresh }) {
       },
       token.accessToken
     );
-    console.log;
+
     if (response.status) {
       setSelectedKeys([]);
       refresh();

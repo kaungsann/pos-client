@@ -158,8 +158,8 @@ function PersonalEdit() {
     fetchData();
   }, []);
 
-  console.log("info is a", info);
-  console.log("update info is a", updateInfo);
+  ("info is a", info);
+  ("update info is a", updateInfo);
 
   return (
     <div>
@@ -170,11 +170,10 @@ function PersonalEdit() {
           type="submit"
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
-            isLoading
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
               ? ""
               : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-          }`}
+            }`}
           onPress={onOpen}
         >
           Save

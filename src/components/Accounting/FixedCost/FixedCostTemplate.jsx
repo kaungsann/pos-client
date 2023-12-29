@@ -154,7 +154,7 @@ function FixedCostTemplate() {
     [opex, filteredKeywords]
   );
 
-  console.log("filter opex is a", filteredFixedCost);
+  ("filter opex is a", filteredFixedCost);
 
   return (
     <>

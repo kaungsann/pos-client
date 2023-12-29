@@ -154,7 +154,7 @@ function VariableCostTemplate() {
     [opex, filteredKeywords]
   );
 
-  console.log("filter opex is a", filteredVariableCost);
+  ("filter opex is a", filteredVariableCost);
 
   return (
     <>

@@ -118,7 +118,7 @@ export default function PartnerTemplate() {
     [partner, filteredKeywords]
   );
 
-  console.log("filter partner is a ", filteredPartners);
+  ("filter partner is a ", filteredPartners);
   return (
     <>
       <div className="flex justify-between items-center my-3">

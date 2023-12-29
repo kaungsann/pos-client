@@ -34,7 +34,7 @@ export default function PartnerCreate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("formdata is", formData);
+    ("formdata is", formData);
     setIsLoading(true);
     try {
       const response = await sendJsonToApi(
@@ -81,11 +81,10 @@ export default function PartnerCreate() {
               type="submit"
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
-                isLoading
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
                   ? ""
                   : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-              }`}
+                }`}
               onClick={handleSubmit}
             >
               Save
@@ -93,11 +92,10 @@ export default function PartnerCreate() {
             <Button
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
-                isLoading
+              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
                   ? ""
                   : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-              }`}
+                }`}
               onClick={() => navigate("/admin/partners/all")}
             >
               Discard

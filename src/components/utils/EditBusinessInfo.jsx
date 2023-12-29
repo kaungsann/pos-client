@@ -30,7 +30,7 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
   const [selectFile, setSelectedFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  console.log("info is a", info);
+  ("info is a", info);
 
   const { id } = useParams();
   const fileInputRef = useRef(null);
@@ -88,7 +88,7 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
             },
           }
         );
-        console.log("path data is a", data);
+        ("path data is a", data);
         if (!data.status) {
           if (data?.message == "Token Expire , Please Login Again") {
             dipatch(removeData(null));
@@ -163,11 +163,10 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
           type="submit"
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
-            isLoading
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
               ? ""
               : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-          }`}
+            }`}
           onClick={onSubmitHandler}
         >
           Save
@@ -175,11 +174,10 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
         <Button
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
-            isLoading
+          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
               ? ""
               : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-          }`}
+            }`}
           onClick={handleDiscardClick}
         >
           Discard

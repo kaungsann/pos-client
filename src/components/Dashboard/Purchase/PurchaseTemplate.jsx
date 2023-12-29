@@ -87,7 +87,7 @@ export default function PurchaseTemplate() {
         };
 
         const isLocation = () => {
-          console.log("filter location isa", location);
+          ("filter location isa", location);
           if (!location) {
             return true;
           }

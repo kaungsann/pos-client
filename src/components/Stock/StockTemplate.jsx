@@ -55,7 +55,7 @@ export default function StockTemplate() {
   }, [token]);
 
   const handleFilterChange = (selected) => {
-    console.log("selected location name is a", selected);
+    ("selected location name is a", selected);
     setFilteredKeywords((prevFilter) => ({
       ...prevFilter,
       ...selected,

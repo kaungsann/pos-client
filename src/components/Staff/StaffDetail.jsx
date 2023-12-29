@@ -23,7 +23,7 @@ export default function StaffDetail() {
     setLoading(true);
     let resData = await getApi(`/user/${id}`, token.accessToken);
 
-    console.log("res data staf user is ", resData);
+    ("res data staf user is ", resData);
 
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));

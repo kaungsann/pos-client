@@ -72,7 +72,7 @@ export default function StaffEdit() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    console.log("uer is a", resData);
+    ("uer is a", resData);
     if (resData.status) {
       navigate("/admin/user/all");
     } else {
@@ -113,11 +113,10 @@ export default function StaffEdit() {
               type="submit"
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
-                isLoading
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
                   ? ""
                   : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-              }`}
+                }`}
               onClick={() => setShowBox(true)}
             >
               Save
@@ -125,11 +124,10 @@ export default function StaffEdit() {
             <Button
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
-                isLoading
+              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
                   ? ""
                   : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-              }`}
+                }`}
               onClick={() => navigate("/admin/user/all")}
             >
               Discard

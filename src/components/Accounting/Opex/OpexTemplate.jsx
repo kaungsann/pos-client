@@ -154,7 +154,7 @@ function OpexTemplate() {
     [opex, filteredKeywords]
   );
 
-  console.log("filter opex is a", filteredOpex);
+  ("filter opex is a", filteredOpex);
 
   return (
     <>

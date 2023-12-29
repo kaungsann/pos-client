@@ -13,7 +13,7 @@ import { FiFilter } from "react-icons/fi";
 import { FaEye } from "react-icons/fa6";
 import ConfrimBox from "../../utils/ConfrimBox"
 import ReactPaginate from "react-paginate";
-import { IoMdArrowRoundForward , IoMdArrowRoundBack} from "react-icons/io"
+import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io"
 
 
 export default function SaleOrderAll() {
@@ -21,7 +21,7 @@ export default function SaleOrderAll() {
   const [searchItems, setSearchItems] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const itemsPerPage = 10; 
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
 
   const [showFilter, setShowFilter] = useState(false);
@@ -31,8 +31,8 @@ export default function SaleOrderAll() {
   const [filterStaff, setFilterStaff] = useState("");
   const [filterLocation, setFilterLocation] = useState("");
 
-  const [confrimShowBox , setconfrimShowBox] = useState(false)
-  const [ConfirmOrderId  , setConfirmOrderId] = useState(null)
+  const [confrimShowBox, setconfrimShowBox] = useState(false)
+  const [ConfirmOrderId, setConfirmOrderId] = useState(null)
 
   const navigate = useNavigate();
   const inputRef = useRef();
@@ -77,7 +77,7 @@ export default function SaleOrderAll() {
     setShowFilter(!showFilter);
   };
 
-  const filterSaleOrdered = ( ) => {
+  const filterSaleOrdered = () => {
     const filterSaleOrder = saleorders.filter((sale) => {
       //Filter by date
       if (filterDate && !sale.orderDate.includes(filterDate)) {
@@ -91,7 +91,7 @@ export default function SaleOrderAll() {
       ) {
         return false;
       }
-  
+
       // Filter by location
       if (
         filterLocation &&
@@ -113,25 +113,25 @@ export default function SaleOrderAll() {
   };
 
   const handleConfirm = (id) => {
-    console.log("handle confim is" , id)
+    ("handle confim is", id)
     setconfrimShowBox(true);
     setConfirmOrderId(id)
   }
 
-  const changeConfirmOrder = async() => {
-       const response = await fetch(`https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/sale/${ConfirmOrderId}?state=confirmed`,
-       {
+  const changeConfirmOrder = async () => {
+    const response = await fetch(`https://x1czilrsii.execute-api.ap-southeast-1.amazonaws.com/sale/${ConfirmOrderId}?state=confirmed`,
+      {
         method: "PATCH",
         headers: {
           authorization: `Bearer ${token.accessToken}`,
         },
-       }
+      }
     )
     let resData = await response.json();
-      console.log("res data confirm is" ,response )
-        toast(resData.message)
-        saleOrderApi()
-        setconfrimShowBox(false);
+    ("res data confirm is", response)
+    toast(resData.message)
+    saleOrderApi()
+    setconfrimShowBox(false);
   }
 
   const closeBox = () => {
@@ -267,26 +267,24 @@ export default function SaleOrderAll() {
                     <td
                       className="lg:px-4 py-2 text-center"
                     >
-                     <span className={`rounded-xl py-2 text-sm  ${
-                        sale.state == "pending"
-                        ? " bg-orange-50 text-orange-700 px-6"
-                        : sale.state == "deliver"
-                        ? "bg-cyan-50 text-cyan-700 px-6"
-                        : sale.state == "arrived"
-                        ? "bg-blue-50 text-blue-700 px-6"
-                        : sale.state == "confirmed"
-                        ? "bg-green-50 text-green-700 px-4"
-                        : ""
-                      }`}>{sale.state ? sale.state : "no state"}</span>
-                   
+                      <span className={`rounded-xl py-2 text-sm  ${sale.state == "pending"
+                          ? " bg-orange-50 text-orange-700 px-6"
+                          : sale.state == "deliver"
+                            ? "bg-cyan-50 text-cyan-700 px-6"
+                            : sale.state == "arrived"
+                              ? "bg-blue-50 text-blue-700 px-6"
+                              : sale.state == "confirmed"
+                                ? "bg-green-50 text-green-700 px-4"
+                                : ""
+                        }`}>{sale.state ? sale.state : "no state"}</span>
+
                     </td>
                     <td className="lg:px-4 py-2 text-center overflow-hidden whitespace-nowrap">
                       {sale.lines.length}
                     </td>
                     <td
-                      className={`lg:px-4 py-2 text-center ${
-                        sale.active ? "text-green-600" : "text-red-600"
-                      }`}
+                      className={`lg:px-4 py-2 text-center ${sale.active ? "text-green-600" : "text-red-600"
+                        }`}
                     >
                       {sale.active ? "Yes" : "No"}
                     </td>
@@ -306,7 +304,7 @@ export default function SaleOrderAll() {
                       onClick={() => {
                         handleConfirm(sale.id);
                       }}>
-                       {sale.state === "pending" &&  <button className="px-4 py-2 ml-2 text-white text-sm text-bold bg-blue-700 rounded-md hover:opacity-75">confirm</button> }
+                      {sale.state === "pending" && <button className="px-4 py-2 ml-2 text-white text-sm text-bold bg-blue-700 rounded-md hover:opacity-75">confirm</button>}
                     </td>
                   </tr>
                 ))
@@ -325,18 +323,17 @@ export default function SaleOrderAll() {
             )}
           </tbody>
           <div className=" w-96 z-50 fixed top-40 bottom-0 left-0 right-0  mx-auto">
-              {
-               confrimShowBox  && <ConfrimBox close={closeBox} comfirmHandle={changeConfirmOrder}/>
-              }
+            {
+              confrimShowBox && <ConfrimBox close={closeBox} comfirmHandle={changeConfirmOrder} />
+            }
           </div>
         </table>
       </div>
       {/* Filter Box */}
       {showFilter && (
         <div
-          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-50 transform transition-all ease-in-out duration-700 ${
-            showFilter ? "right-0" : "right-[-384px]"
-          }`}
+          className={`w-96 filter-box bg-slate-50 h-screen  fixed  top-0  p-4 z-50 transform transition-all ease-in-out duration-700 ${showFilter ? "right-0" : "right-[-384px]"
+            }`}
         >
           <div className="flex justify-between my-6 items-center">
             <h2 className="text-xl font-bold text-slate-700">
@@ -408,16 +405,16 @@ export default function SaleOrderAll() {
           pageCount={pageCount}
           previousLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 border-b-gray-300 bg-white">
-              <IoMdArrowRoundBack className="mr-2"/>
+              <IoMdArrowRoundBack className="mr-2" />
               {' '}
               Previous
             </div>
-          } 
+          }
           nextLabel={
             <div className="flex items-center text-slate-700 border-2 px-2 py-1 bg-white border-b-gray-300">
               Next
               {' '}
-              <IoMdArrowRoundForward className="ml-2"/>
+              <IoMdArrowRoundForward className="ml-2" />
             </div>
           }
           forcePage={currentPage}

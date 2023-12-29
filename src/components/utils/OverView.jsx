@@ -184,13 +184,13 @@ export default function OverView() {
         `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
         token.accessToken
       );
-      console.log(
+      (
         "api is a ",
         `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`
       );
     }
 
-    console.log("resData is a overview", resData);
+    ("resData is a overview", resData);
 
     if (resData.status) {
       setTotalPurchaseAmount(resData.data.purchases.totalAmountWithTax);

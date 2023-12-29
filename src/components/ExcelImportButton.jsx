@@ -53,7 +53,7 @@ const ExcelImportButton = ({ token, apiEndpoint, onSuccess, templateLink }) => {
       } else {
         toast.error(response.message);
       }
-      console.log("API Response:", response.data);
+      ("API Response:", response.data);
     } catch (error) {
       console.error("Error uploading file:", error);
     }

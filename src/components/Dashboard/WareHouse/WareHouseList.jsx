@@ -288,7 +288,7 @@ export default function WareHouseList({ warehouses }) {
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-  console.log("warehouse items", items);
+  ("warehouse items", items);
 
   return (
     <>

@@ -45,9 +45,9 @@ export default function PurchaseView() {
       token.accessToken
     );
 
-    console.log("today order is a", resData.data);
+    ("today order is a", resData.data);
     if (resData.status) {
-      console.log(resData.data);
+      (resData.data);
       setTotalAmount(resData.data.purchases.totalAmount);
       setTotalOrders(resData.data.purchases.totalOrders);
       setTotalPerDay(resData.data.purchases.totalsAmountPerDay);
@@ -271,15 +271,14 @@ export default function PurchaseView() {
                           {sal.location && sal.location.name}
                         </td>
                         <td
-                          className={`lg:px-4 py-2 text-center font-semibold ${
-                            sal.state == "pending"
+                          className={`lg:px-4 py-2 text-center font-semibold ${sal.state == "pending"
                               ? "text-red-400"
                               : sal.state == "deliver"
-                              ? "text-cyan-700"
-                              : sal.state == "confirmed"
-                              ? "text-green-600"
-                              : ""
-                          }`}
+                                ? "text-cyan-700"
+                                : sal.state == "confirmed"
+                                  ? "text-green-600"
+                                  : ""
+                            }`}
                         >
                           {sal.state && sal.state}
                         </td>
