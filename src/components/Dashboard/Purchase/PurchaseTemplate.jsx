@@ -38,7 +38,7 @@ export default function PurchaseTemplate() {
   const PURCHASE_API = {
     INDEX: BASE_URL + "/purchase",
     IMPORT: BASE_URL + "/purchase/import-excel",
-    EXPORT: BASE_URL + "/purchase/export-excel",
+    EXPORT: BASE_URL + "/purchaselines/export-excel",
   };
 
   const fetchPurchaseData = async () => {

@@ -38,7 +38,7 @@ export default function SaleTemplate() {
   const SALE_API = {
     INDEX: BASE_URL + "/sale",
     IMPORT: BASE_URL + "/sale/import-excel",
-    EXPORT: BASE_URL + "/sale/export-excel",
+    EXPORT: BASE_URL + "/purchaselines/export-excel",
   };
 
   const fetchSaleData = async () => {
