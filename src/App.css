@@ -1,11 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,300&display=swap");
 
-body {
+body,
+html {
   margin: 0;
   padding: 0;
+}
+
+body {
   background-color: whitesmoke;
-  height: auto;
   font-family: "Roboto", ital;
+  height: 100vh;
 }
 
 @media print {
@@ -21,15 +25,7 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #f9fafb;
 }
-/* .Toastify__toast {
-  background-color: #f4f4f5;
-}
 
-.Toastify__toast-body {
-  text-align: center;
-  color: #ef4444;
-  font-size: 20px;
-} */
 .page-item {
   padding: 5px 10px;
   border-radius: 8px;

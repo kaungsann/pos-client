@@ -43,7 +43,7 @@ export default function ProductList({ products, fetchProducts }) {
     new Set(columns.map((column) => column.uid))
   );
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "name",
@@ -123,6 +123,9 @@ export default function ProductList({ products, fetchProducts }) {
               : "None"}
           </h1>
         ),
+        salePrice: () => (
+          <h1>{product.salePrice ? product.salePrice.toFixed() : "None"}</h1>
+        ),
         actions: () => (
           <div className="relative flex justify-start items-center gap-2">
             <Dropdown>
@@ -163,13 +166,12 @@ export default function ProductList({ products, fetchProducts }) {
     return (
       <>
         <div className="flex justify-between items-center">
-       <div className="flex items-end">
+          <div className="flex items-end">
             <h2 className="text-xl font-bold">Product</h2>
             <h3 className="text-default-400 text-md pl-4">
               Total {products.length}
             </h3>
           </div>
-
 
           <div className="flex items-center">
             <label className="flex items-center text-default-400 text-small">
@@ -266,6 +268,9 @@ export default function ProductList({ products, fetchProducts }) {
         selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
+        classNames={{
+          wrapper: "max-h-[382px]",
+        }}
         topContentPlacement="outside"
         onSelectionChange={setSelectedKeys}
         onSortChange={(descriptor) => setSortDescriptor(descriptor)}

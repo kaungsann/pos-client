@@ -184,17 +184,17 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
         </Button>
       </div>
 
-      <div className="container my-6 mx-8">
-        <h2 className="text-sm font-bold text-slate-700">
+      <div className="container my-6 mx-8 w-4/5">
+        <h2 className="text-2xl font-bold text-slate-700 bordder-b-slate-400 pb-4 border-b-2">
           Edit Your Business Information
         </h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           {isLoading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />
           )}
-          <form className="flex justify-between gap-10 p-5">
+          <form className="flex justify-between gap-10">
             <div>
-              <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
+              <div className="relative w-48 h-44 mt-4 flex justify-center items-center  bg-white border-2 rounded-md shadow-md">
                 {isSelected ? (
                   <img
                     src={selectedImage}
@@ -214,7 +214,7 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
                 onClick={() => {
                   fileInputRef.current.click();
                 }}
-                className="w-36 cursor-pointer py-1.5 px-2 flex justify-center items-center hover:opacity-75 rounded-md shadow-md bg-blue-600 mt-3"
+                className="w-48 cursor-pointer py-1.5 px-2 flex justify-center items-center hover:opacity-75 rounded-md shadow-md bg-blue-600 mt-3"
               >
                 <AiOutlinePlus className="text-xl text-white font-bold mr-1" />
                 <input

@@ -34,19 +34,11 @@ export default function CategoryEdit() {
     }
     try {
       let resData = await PathData(`/category/${id}`, data, token.accessToken);
+
       if (resData.status) {
         navigate("/admin/categorys/all");
       } else {
-        toast.error(resData.message, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        alert(resData.message);
       }
     } catch (error) {
       console.error("Error creating category:", error);
@@ -76,12 +68,9 @@ export default function CategoryEdit() {
         pauseOnHover
         theme="light"
       />
-     
-
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-
-        <h2 className="lg:text-xl font-bold ">Category Edit</h2>
+          <h2 className="lg:text-xl font-bold ">Category edit</h2>
           <div className="flex gap-3 ">
             <button
               type="submit"

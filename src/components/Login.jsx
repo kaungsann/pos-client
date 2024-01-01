@@ -76,9 +76,9 @@ export default function Login() {
           pauseOnHover
           theme="light"
         />
-        <div className="flex min-h-full flex-col justify-center px-6 lg:px-8 mt-8">
+        <div className="flex min-h-full flex-col justify-center px-6 lg:px-8">
           <div className="sm:mx-auto sm:w-full">
-            <img className="mx-auto w-96" src={logo} />
+            <img className="mx-auto w-96 mt-8" src={logo} />
             <h2 className="mt-12 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Sign in to your account
             </h2>

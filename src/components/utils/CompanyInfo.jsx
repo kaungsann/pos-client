@@ -58,15 +58,13 @@ export default function CompanyInfo() {
             />
             <div>
               <h3 className="text-center text-slate-700 text-2xl font-semibold mt-2">
-                {info?.name ? info.name : "Ambitboud Technology"}
+                {info?.name ? info.name : ""}
               </h3>
 
               <div className="flex items-center my-3">
                 <Icon icon="ion:home" className="text-xl text-blue-600" />
                 <h3 className="ml-3 text-md font-bold">
-                  {info?.address
-                    ? info.address
-                    : "Yangon , Insein Township, MyoThit 8 ward, YarKyaw Street"}
+                  {info?.address ? info.address : ""}
                 </h3>
               </div>
               <div className="flex items-center my-3">
@@ -75,7 +73,7 @@ export default function CompanyInfo() {
                   className="text-xl text-blue-600"
                 />
                 <h3 className="ml-3 text-md font-bold">
-                  {info?.email ? info.email : "dev@ambitboundtech.com"}
+                  {info?.email ? info.email : ""}
                 </h3>
               </div>
 
@@ -85,18 +83,9 @@ export default function CompanyInfo() {
                   className="text-xl text-blue-600"
                 />
                 <h3 className="ml-3 text-md font-bold">
-                  {info?.phone ? info.phone : "01-364-3482"}
+                  {info?.phone ? info.phone : ""}
                 </h3>
               </div>
-
-              {info?.websit && (
-                <div className="flex items-center my-3">
-                  <Icon icon="mdi:web" className="text-xl text-blue-600" />
-                  <h3 className="ml-3 text-md font-bold">
-                    {info?.website ? info.website : "www.ambitbound.com"}
-                  </h3>
-                </div>
-              )}
             </div>
           </div>
         </div>

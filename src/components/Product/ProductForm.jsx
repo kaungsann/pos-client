@@ -270,6 +270,7 @@ export default function ProductForm() {
                   style={{ display: "none" }}
                   ref={fileInputRef}
                   onChange={handleFileInputChange}
+                  onChange={(e) => inputChangeHandler(e)}
                 />
                 <span className="text-white font-semibold text-md">Upload</span>
               </div>

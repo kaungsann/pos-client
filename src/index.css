@@ -1,3 +1,9 @@
+body {
+  background-color: whitesmoke;
+  font-family: "Roboto", ital;
+  height: 100vh;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind base;

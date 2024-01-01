@@ -64,11 +64,11 @@ export default function ProductCreateForm() {
         salePrice:
           name === "purchasePrice"
             ? Math.ceil(
-              parseFloat(value) + parseFloat(value) * (marginProfit / 100)
-            )
+                parseFloat(value) + parseFloat(value) * (marginProfit / 100)
+              )
             : Math.ceil(
-              purchasePrice + purchasePrice * (parseFloat(value) / 100)
-            ),
+                purchasePrice + purchasePrice * (parseFloat(value) / 100)
+              ),
         purchasePrice:
           name === "marginProfit" ? purchasePrice : parseFloat(value),
         marginProfit:
@@ -93,7 +93,6 @@ export default function ProductCreateForm() {
         formData.append(key, updateProduct[key]);
       }
 
-
       try {
         const { data } = await axios.post(BASE_URL + `/product`, formData, {
           headers: {
@@ -107,12 +106,11 @@ export default function ProductCreateForm() {
             dipatch(removeData(null));
           }
 
-          toast.warn(error.message);
+          toast.error(message);
         } else {
           navigate("/admin/products/all");
         }
       } catch (error) {
-        console.error("Error fetching products:", error);
         toast.error(error.message);
       } finally {
         setIsSelected(false);
@@ -188,10 +186,11 @@ export default function ProductCreateForm() {
               type="submit"
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+                isLoading
                   ? ""
                   : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-                }`}
+              }`}
               onClick={onSubmitHandler}
             >
               Save
@@ -199,10 +198,11 @@ export default function ProductCreateForm() {
             <Button
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+                isLoading
                   ? ""
                   : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-                }`}
+              }`}
               onClick={() => navigate("/admin/products/all")}
             >
               Discard

@@ -48,7 +48,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
   const createSaleOrder = async () => {
     if (text === "" || display === "") {
-      toast("You have to click Pay button & amount");
+      toast.error("You have to click Pay button & amount");
       return;
     } else {
       const orderLines = [];
@@ -83,7 +83,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
         if (resData.status) {
           setOrder(resData.data);
-          toast(resData.message);
+          toast.success(resData.message);
           setPaySlip(true);
         }
       } catch (error) {
