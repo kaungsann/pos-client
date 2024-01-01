@@ -14,7 +14,7 @@ body {
 
 @media print {
   @page {
-    size: 70mm 297mm;
+    size: 70mm 210mm;
   }
 }
 

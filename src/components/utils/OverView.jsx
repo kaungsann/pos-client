@@ -184,9 +184,7 @@ export default function OverView() {
         `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
         token.accessToken
       );
-     
     }
-
 
     if (resData.status) {
       setTotalPurchaseAmount(resData.data.purchases.totalAmountWithTax);

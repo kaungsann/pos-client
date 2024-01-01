@@ -1,19 +1,35 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import logo from "../../../public/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useReactToPrint } from "react-to-print";
 import { removeAllItems } from "../../redux/actions";
 import { Button } from "@nextui-org/react";
-
+import { getApi } from "../Api";
 
 export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
   let user = useSelector((state) => state.loginData);
+  let [info, setInfo] = useState(null);
   const product = useSelector((state) => state.orderData);
+  const token = useSelector((state) => state.IduniqueData);
+
   const dispatch = useDispatch();
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+
+  const getInfo = async () => {
+    const response = await getApi("/company", token.accessToken);
+    if (response.status) {
+      console.log("res data  is a", response);
+      setInfo(response.data[0]);
+    }
+    console.log("usr store name is ", response);
+  };
+
+  useEffect(() => {
+    getInfo();
+  }, []);
 
   return (
     <>
@@ -30,63 +46,64 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
 
       <div
         ref={componentRef}
-        className="shadow-lg rounded-sm w-80 mx-auto text-center overflow-y-scroll custom-scrollbar h-3/5 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100"
+        className="shadow-lg mt-3 rounded-sm w-80  h-3/5 mx-auto text-center overflow-y-scroll custom-scrollbar scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-blue-100"
       >
-        <img src={logo} width={"60px"} height={"30px"} className="mx-auto" />
-        <h3 className="text-black text-xl font-bold">Amitbound Technology</h3>
-        <h3 className="text-black text-lg font-bold mt-1">Tel+95-973426589</h3>
-        <h3 className="text-black text-lg font-bold mt-1">TextID:US39699</h3>
-        <h3 className="text-black text-lg font-bold mt-1">
-          ambitboundtech@gmail.com
+        <h3 className="text-black mt-2 text-xl font-extrabold">
+          {info?.name ? info.name : ""}
         </h3>
-        <a className="text-black text-lg font-bold mt-1">
-          https://www.amitboundtech.com
-        </a>
+        <h3 className="text-black text-lg font-extrabold mt-1">
+          Tel+ {info?.phone ? info.phone : ""}
+        </h3>
+        <h3 className="text-black text-lg font-extrabold mt-1">
+          {info?.email ? info.email : ""}
+        </h3>
         <hr class="border-t-4 border-black border-dotted text-xl mt-1 w-1/2 mx-auto" />
-        <h3 className="text-black text-lg font-bold mt-1">
+        <h3 className="text-black text-lg font-extrabold mt-1">
           Served by {user.username}
         </h3>
-        <div className="flex px-3  flex-col">
+        <div className="flex px-3 flex-col">
           {product.length > 0 &&
             product.map((pd) => (
               <div
                 key={pd._id}
                 className="text-lg font-bold text-black flex justify-evenly"
               >
-                <h4 className="w-2/5">{pd.name}</h4>
-                <h4>x{pd.quantity}</h4>
-                <h4>{pd.salePrice * pd.quantity}</h4>
+                <h4 className="w-2/5 extrabold">{pd.name}</h4>
+                <h4 className="extrabold">x{pd.quantity}</h4>
+                <h4 className="extrabold">{pd.salePrice * pd.quantity}</h4>
               </div>
             ))}
         </div>
         <hr class="justify-self-end  border-t-1 border-black border-solid mx-6 my-2" />
         <div className="flex flex-col">
           <div className="flex justify-between mx-6">
-            <h4 className="text-lg font-bold text-black">Total</h4>
-            <h4 className="text-md font-bold text-black">{sub}</h4>
+            <h4 className="text-lg font-extrabold text-black">Total</h4>
+            <h4 className="text-md font-extrabold text-black">{sub}</h4>
           </div>
           <div className="flex justify-between mx-6">
-            <h4 className="text-md font-bold text-black">Cash</h4>
-            <h4 className="text-md font-bold text-black">{cash}</h4>
+            <h4 className="text-md font-extrabold text-black">Cash</h4>
+            <h4 className="text-md font-extrabold text-black">{cash}</h4>
           </div>
           <div className="flex justify-between mx-6">
-            <h4 className="text-md font-bold text-black">Tax</h4>
-            <h4 className="text-md font-bold text-black">{tax.toFixed(2)}</h4>
+            <h4 className="text-md font-extrabold text-black">Tax</h4>
+            <h4 className="text-md font-extrabold text-black">
+              {tax.toFixed(2)}
+            </h4>
           </div>
-          {/* <div className="flex justify-between mx-6">
-            <h4 className="text-md font-bold text-black">Change</h4>
-            <h4 className="text-md font-bold text-black">{change}</h4>
-          </div> */}
           <div className="flex justify-between mx-6">
-            <h4 className="text-md font-bold text-black">Sub Total</h4>
-            <h4 className="text-md font-bold text-black">{total} mmk</h4>
+            <h4 className="text-md font-bold text-black">Charge</h4>
+            <h4 className="text-md font-bold text-black">{pay.toFixed(2)}</h4>
+          </div>
+          <div className="flex justify-between mx-6">
+            <h4 className="text-md font-extrabold text-black">Sub Total</h4>
+            <h4 className="text-md font-extrabold text-black">{total} mmk</h4>
           </div>
         </div>
-        <div className="flex flex-col my-6 justify-center">
-          <h5 className="text-md font-bold text-black">
+        <div className="flex flex-col my-3 justify-center">
+          <h5 className="text-md font-extrabold text-black">
             Order : {order.length > 0 ? order[0].orderRef : "none"}
           </h5>
-          <h5 className="text-md font-bold text-black">
+          <h5 className="text-md font-extrabold text-black">
             {new Date().toLocaleString()}
           </h5>
         </div>
@@ -94,7 +111,7 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
 
       <div className="w-80 mx-auto mt-2 mb-4">
         <Button
-          className="w-full mb-2 mt-2"  
+          className="w-full mb-2 mt-2"
           color="primary"
           variant="solid"
           onClick={handlePrint}
@@ -114,7 +131,6 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
           New Order
         </Button>
       </div>
-
     </>
   );
 }

@@ -52,7 +52,6 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
       return;
     } else {
       const orderLines = [];
-
       orderData.forEach((item) => {
         const orderLine = {
           product: item.id,
@@ -77,6 +76,8 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
       try {
         let resData = await sendJsonToApi("/sale", data, token.accessToken);
+        console.log("data is a", data);
+        console.log("res data  is a", data);
         if (!resData.success) {
           toast.error(resData.message);
         }

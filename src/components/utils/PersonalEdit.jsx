@@ -233,7 +233,7 @@ function PersonalEdit() {
               name="username"
               value={info.username}
               onChange={(e) => inputChangeHandler(e)}
-              placeholder="Enter product name..."
+              placeholder="Enter name..."
               labelPlacement="outside"
             />
           </div>
