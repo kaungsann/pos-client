@@ -62,6 +62,21 @@ function PersonalEdit() {
   const navigate = useNavigate();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const handleFileInputChange = (event) => {
+    const selectedImg = event.target.files[0];
+    setSelectedFile(selectedImg);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setSelectedImage(e.target.result);
+    };
+
+    if (selectedImg) {
+      setIsSelected(true);
+      reader.readAsDataURL(selectedImg);
+    }
+  };
+
   const inputChangeHandler = (event) => {
     const { name, value } = event.target;
     let newAdminInfo = { [name]: value };
@@ -121,20 +136,7 @@ function PersonalEdit() {
     updateUserInfo();
   };
 
-  const handleFileInputChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setSelectedFile(selectedFile);
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setSelectedImage(e.target.result);
-    };
-
-    if (selectedFile) {
-      setIsSelected(true);
-      reader.readAsDataURL(selectedFile);
-    }
-  };
+  console.log("image is a ", selectFile);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -150,6 +152,7 @@ function PersonalEdit() {
         }
 
         const adminData = data.data[0];
+        console.log("admin datta is a", adminData);
         const image = adminData?.image;
         if (image) setAdminImg(image);
         setInfo({ ...info, ...adminData });
@@ -266,11 +269,12 @@ function PersonalEdit() {
           <div className="w-60">
             <Input
               type="number"
-              name="phone"
               label="Phone"
+              name="phone"
               value={info.phone}
               placeholder="Enter phone number..."
               labelPlacement="outside"
+              onChange={(e) => inputChangeHandler(e)}
             />
           </div>
           <div className="w-60">
