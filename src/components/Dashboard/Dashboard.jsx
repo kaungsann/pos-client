@@ -123,7 +123,7 @@ export default function Admin() {
         </div>
       ) : null}
       <div
-        className={`mt-14 bg-white h-full	 mx-auto p-4 ${
+        className={`mt-14 mx-auto p-4  ${
           (user.role && user.role.name === "admin") || user.role.name === "root"
             ? "ml-20"
             : ""
