@@ -34,8 +34,12 @@ export default function Admin() {
   const { id } = useParams();
   const [usr, setUsr] = useState([]);
 
+  console.log("user is arguments", usr);
+
   const user = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
+
+  console.log("login user is a", user);
   const dipatch = useDispatch();
 
   const navigate = useNavigate();
@@ -46,6 +50,7 @@ export default function Admin() {
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
+    console.log("res data is usr", resData);
     if (resData.status) {
       setUsr(resData.data[0]);
     }
@@ -89,12 +94,12 @@ export default function Admin() {
 
             <div
               className="flex items-center mx-3"
-              onClick={() => navigate(`/admin/user/info/${usr._id}`)}
+              onClick={() => navigate(`/admin/user/info/${user._id}`)}
             >
               {user && (
                 <>
                   <img
-                    src={usr.image ? usr.image : userIcons}
+                    src={user.image ? user.image : userIcons}
                     alt="User Icon"
                     className="w-12 h-10 rounded-full shadow-sm hover:opacity-75"
                     onError={(e) => {
@@ -103,7 +108,7 @@ export default function Admin() {
                   />
 
                   <h3 className="font-semibold text-slate-500 text-md ml-2">
-                    {usr.username}
+                    {user.username}
                   </h3>
                 </>
               )}

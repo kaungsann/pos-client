@@ -47,7 +47,6 @@ export default function Profile() {
 
   const token = useSelector((state) => state.IduniqueData);
 
-  const navigate = useNavigate();
   const singleUser = async () => {
     let response = await getApi(`/user/${id}`, token.accessToken);
     if (response.message == "Token Expire , Please Login Again") {
@@ -65,7 +64,6 @@ export default function Profile() {
     setGender(response.data[0].gender);
     setCity(response.data[0].city);
   };
-
 
   const EditUserApi = async () => {
     const formData = new FormData();
@@ -95,9 +93,7 @@ export default function Profile() {
       formData.append("image", file);
     }
 
-
     let resData = await FormPathApi(`/user/${id}`, formData, token);
-
 
     if (resData.con) {
       toast(resData.message);
@@ -129,17 +125,8 @@ export default function Profile() {
     setActiveSection("personal");
   };
 
-  const handleAddUserSectionClick = () => {
-    setActiveSection("addUser");
-  };
-
   const handleCompanyRegister = () => {
     setActiveSection("company");
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    EditUserApi();
   };
 
   useEffect(() => {
@@ -160,8 +147,9 @@ export default function Profile() {
         theme="light"
       />
       <div
-        className={`flex mb-8 cursor-pointer ${userInfo.role && userInfo.role.name == "user" ? "mt-3" : ""
-          }`}
+        className={`flex mb-8 cursor-pointer ${
+          userInfo.role && userInfo.role.name == "user" ? "mt-3" : ""
+        }`}
       >
         <div className="w-1/4 flex flex-col justify-items-center items-center p-4 bg-white shadow-md h-screen">
           <div className="relative">
@@ -178,23 +166,26 @@ export default function Profile() {
           </div>
           <div className="w-full mt-6">
             <div
-              className={`flex w-full py-2 items-center justify-start rounded-2xl ${activeSection === "personal"
+              className={`flex w-full py-2 items-center justify-start rounded-2xl ${
+                activeSection === "personal"
                   ? "bg-blue-100 font-bold"
                   : "text-slate-400"
-                }`}
+              }`}
               onClick={handlePersonalSectionClick}
             >
               <BiSolidUser
-                className={`text-2xl font-bold  mx-4 ${activeSection === "personal"
+                className={`text-2xl font-bold  mx-4 ${
+                  activeSection === "personal"
                     ? "text-blue-500"
                     : "text-slate-500"
-                  }`}
+                }`}
               />
               <h3
-                className={`text-lg ${activeSection === "personal"
+                className={`text-lg ${
+                  activeSection === "personal"
                     ? "text-slate-800 font-bold"
                     : "text-slate-500"
-                  }`}
+                }`}
               >
                 Personal Information
               </h3>
@@ -203,23 +194,26 @@ export default function Profile() {
             {userInfo.role && userInfo.role.name == "admin" && (
               <>
                 <div
-                  className={`flex py-2  mt-4 w-full items-center justify-start rounded-2xl ${activeSection === "company"
+                  className={`flex py-2  mt-4 w-full items-center justify-start rounded-2xl ${
+                    activeSection === "company"
                       ? "bg-blue-100 font-bold"
                       : "text-slate-400"
-                    }`}
+                  }`}
                   onClick={handleCompanyRegister}
                 >
                   <TiBusinessCard
-                    className={`text-2xl font-bold  mx-4 ${activeSection === "company"
+                    className={`text-2xl font-bold  mx-4 ${
+                      activeSection === "company"
                         ? "text-blue-500"
                         : "text-slate-500"
-                      }`}
+                    }`}
                   />
                   <h3
-                    className={`text-lg ${activeSection === "company"
+                    className={`text-lg ${
+                      activeSection === "company"
                         ? "text-slate-800 font-bold"
                         : "text-slate-500"
-                      }`}
+                    }`}
                   >
                     Company Information
                   </h3>
@@ -228,19 +222,22 @@ export default function Profile() {
             )}
 
             <div
-              className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${logout ? "bg-blue-100 font-bold" : "text-slate-400"
-                }}`}
+              className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
+                logout ? "bg-blue-100 font-bold" : "text-slate-400"
+              }}`}
               onClick={() => {
                 setLogout(true), setActiveSection(null);
               }}
             >
               <IoLogOutSharp
-                className={`text-2xl font-bold mx-4 ${logout ? "text-blue-500" : "text-slate-600"
-                  }`}
+                className={`text-2xl font-bold mx-4 ${
+                  logout ? "text-blue-500" : "text-slate-600"
+                }`}
               />
               <h3
-                className={`text-lg ${logout ? "text-slate-800 font-bold" : "text-slate-500"
-                  }`}
+                className={`text-lg ${
+                  logout ? "text-slate-800 font-bold" : "text-slate-500"
+                }`}
               >
                 Logout
               </h3>
@@ -271,7 +268,6 @@ export default function Profile() {
           text="Do you want to logout. Pls confirm it"
           onDelete={() => {
             dipatch(removeData(null));
-            setAlert(false);
           }}
         />
       )}

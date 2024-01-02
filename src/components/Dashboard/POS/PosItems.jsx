@@ -8,12 +8,14 @@ import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { itemsAdd, updateItemQuantity } from "../../../redux/actions";
 import { removeData } from "../../../redux/actions";
+import { Icon } from "@iconify/react";
 
 export default function PosItems() {
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
   const [categorys, setCategory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [noItems, setNoItems] = useState("");
 
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -83,10 +85,16 @@ export default function PosItems() {
     const productMatch = products.find(
       (product) => product.barcode === barcode
     );
+
+    if (!productMatch) {
+      setNoItems("This barcode is not have in products");
+    }
+
     if (productMatch) {
       const existingProduct = selectProduct.find(
         (pd) => pd.barcode === barcode
       );
+      setNoItems("");
       if (existingProduct) {
         dipatch(
           updateItemQuantity(
@@ -110,6 +118,7 @@ export default function PosItems() {
       handleBarcodeDetected(search);
     }
   }, [search, user]);
+
   return (
     <>
       <div
@@ -121,15 +130,22 @@ export default function PosItems() {
           <div>
             <div className="flex justify-between items-center p-4">
               <h3 className="font-semibold text-xl w-full">Avaliable Items</h3>
-              <input
-                ref={searchInputRef}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                autoFocus={true}
-                type="text"
-                className=" py-2 px-2 shadow-sm bg-slate-50 border-2 w-64 block rounded-md  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6"
-                placeholder="Search By Barcode"
-              />
+              <div className="flex relative">
+                <input
+                  ref={searchInputRef}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  autoFocus={true}
+                  type="text"
+                  className=" py-2 px-2 shadow-sm bg-slate-50 border-2 w-64 block rounded-md  text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6"
+                  placeholder="Search By Barcode"
+                />
+                <Icon
+                  icon="entypo:cross"
+                  className="absolute text-lg rounded-full bg-slate-500 text-white top-3 right-3"
+                  onClick={() => setSearch("")}
+                />
+              </div>
             </div>
             <ul className="mt-4 flex flex-wrap cursor-pointer items-center max-w-3xl relative p-3">
               {currentPage > 1 && (
@@ -189,7 +205,7 @@ export default function PosItems() {
                 .map((pd) => <Card key={pd.id} product={pd} />)
             ) : (
               <div className="w-10/12 mx-auto  mt-40 flex justify-center">
-                {loading && (
+                {/* {loading && (
                   <FadeLoader
                     color={"#0284c7"}
                     loading={loading}
@@ -197,6 +213,11 @@ export default function PosItems() {
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />
+                )} */}
+                {noItems && (
+                  <h2 className="text-slate-500 font-semibold text-xl text-center w-full mt-40">
+                    {noItems}
+                  </h2>
                 )}
               </div>
             )}

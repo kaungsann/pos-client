@@ -152,7 +152,9 @@ function PersonalEdit() {
         }
 
         const adminData = data.data[0];
-        console.log("admin datta is a", adminData);
+
+        console.log("admin dataa is a", adminData);
+
         const image = adminData?.image;
         if (image) setAdminImg(image);
         setInfo({ ...info, ...adminData });

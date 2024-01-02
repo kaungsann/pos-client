@@ -30,6 +30,12 @@ import {
   DropdownTrigger,
   DropdownMenu,
   Button,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
 } from "@nextui-org/react";
 
 import { useSelector } from "react-redux";
@@ -42,13 +48,31 @@ const AccoutingOverView = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-
   const [expandedIndex, setExpandedIndex] = useState(null);
   let [account, setAccount] = useState([]);
+  let [totalYear, setTotalYear] = useState([]);
   const token = useSelector((state) => state.IduniqueData);
+
+  console.log("weekend is a", startDate, endDate);
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   const ACCOUNT_API = {
     INDEX: BASE_URL + "/account/totals",
+    YEAR: BASE_URL + "/account/totalByYear",
   };
 
   const selectedValue = React.useMemo(
@@ -60,7 +84,7 @@ const AccoutingOverView = () => {
     (option) => {
       const currentDate = new Date();
 
-      ("today date is a", currentDate);
+      "today date is a", currentDate;
 
       switch (option) {
         case "This Weekend":
@@ -137,14 +161,31 @@ const AccoutingOverView = () => {
         console.error("Error fetching account:", error);
       }
     };
+    const fetchYearlyData = async () => {
+      try {
+        const response = await axios.get(ACCOUNT_API.YEAR, {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        setTotalYear(response.data?.data);
+      } catch (error) {
+        console.error("Error fetching year cost:", error);
+      }
+    };
     fetchAccountData();
+    fetchYearlyData();
   }, [token, handleDateSelection]);
+
+  console.log("totla year is a", totalYear);
 
   let count = 0;
 
   return (
     <>
-      <div className="flex items-center">
+      <div className="flex items-center mb-6">
         <div className="flex w-full justify-center items-center">
           <Dropdown>
             <DropdownTrigger>
@@ -265,13 +306,20 @@ const AccoutingOverView = () => {
           </div>
         </div>
       </div>
-      <div className="w-2/4 mx-auto mt-12">
+      <div className="w-4/5 mx-auto">
         <h2 className="text-xl text-slate-600 font-semibold mb-4">
           Statement Report
         </h2>
         <table className="w-full bg-white rounded-sm shadow-md">
           <tbody>
-            {['Gross Sale', 'Opex', 'Waste', 'Fixed Cost', 'Variable Cost', 'Purchase Cost']
+            {[
+              "Gross Sale",
+              "Opex",
+              "Waste",
+              "Fixed Cost",
+              "Variable Cost",
+              "Purchase Cost",
+            ]
               .map((type) => account.find((acc) => acc.type === type))
               .filter((acc) => acc && !selectedKeys.has(acc.type))
               .map((acc, index) => (
@@ -361,6 +409,40 @@ const AccoutingOverView = () => {
         </table>
       </div>
 
+      <hr className="my-16 bg-slate-200 h-1 border-none" />
+
+      <h2 className="text-slate-500 font-semibold text-xl mb-8">
+        Yearly Report - {new Date().getFullYear()}
+      </h2>
+
+      <table className="w-full border-2">
+        <thead className="flex justify-between border">
+          <th className="w-28"></th>
+          {months.map((month, index) => (
+            <th key={index} className="w-24 text-slate-500 text-lg my-2">
+              {month}
+            </th>
+          ))}
+        </thead>
+        <tbody>
+          {totalYear[0] &&
+            totalYear[0].map((_, colIndex) => (
+              <tr
+                key={colIndex}
+                className="p-3 flex items-center justify-between my-1 border-b-slate-300 border-2"
+              >
+                <td className="w-28 text-center text-slate-400 text-md font-semibold">
+                  {totalYear[0][colIndex].type}
+                </td>
+                {totalYear.map((rowData, rowIndex) => (
+                  <td key={rowIndex} className="w-24 text-center">
+                    {rowData[colIndex].balance.toFixed()}
+                  </td>
+                ))}
+              </tr>
+            ))}
+        </tbody>
+      </table>
     </>
   );
 };

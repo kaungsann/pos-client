@@ -52,6 +52,19 @@ export default function ProductCreateForm() {
     setUpdateProduct({ ...updateProduct, barcode: newBarCode });
   };
 
+  const inputBarcodeHandler = (e) => {
+    e.preventDefault();
+    const newBarCode = e.target.value;
+    console.log("barcode value is", e.target.value);
+    setProduct({ ...product, barcode: newBarCode });
+    setUpdateProduct({ ...updateProduct, barcode: newBarCode });
+  };
+
+  const beforeInputBarcodeHandler = () => {
+    setProduct({ ...product, barcode: "" });
+    setUpdateProduct({ ...updateProduct, barcode: "" });
+  };
+
   const inputChangeHandler = (event) => {
     const { name, value } = event.target;
     let newProduct = { [name]: value };
@@ -163,6 +176,9 @@ export default function ProductCreateForm() {
     fetchData();
   }, []);
 
+  console.log("product is", product);
+
+  console.log("update product is", updateProduct);
   return (
     <>
       <ToastContainer
@@ -297,8 +313,11 @@ export default function ProductCreateForm() {
                   name="barcode"
                   label="Barcode"
                   value={product.barcode}
+                  autoFocus={true}
                   placeholder="Enter barcode..."
                   labelPlacement="outside"
+                  onChange={inputBarcodeHandler}
+                  onBeforeInput={beforeInputBarcodeHandler}
                   endContent={
                     <button
                       type="button"
