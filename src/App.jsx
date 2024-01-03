@@ -56,6 +56,9 @@ import WasteTemplate from "./components/Accounting/Waste/WasteTemplate";
 import WasteCreateForm from "./components/Accounting/Waste/WasteCreateForm";
 import WasteDetail from "./components/Accounting/Waste/WasteDetail";
 import AccoutingOverView from "./components/Accounting/AccoutingOverView";
+import TaxTemplate from "./components/Accounting/Tax/TaxTemplate";
+import TaxCreateForm from "./components/Accounting/Tax/TaxCreateForm";
+import TaxDetail from "./components/Accounting/Tax/TaxDetail";
 
 function App() {
   return (
@@ -75,6 +78,12 @@ function App() {
 
             <Route path="inventory/overview" element={<OverView />} />
             <Route path="account/overview" element={<AccoutingOverView />} />
+
+            <Route path="tax">
+              <Route path="all" element={<TaxTemplate />} />
+              <Route path="create" element={<TaxCreateForm />} />
+              <Route path="detail/:id" element={<TaxDetail />} />
+            </Route>
 
             <Route path="opex">
               <Route path="all" element={<OpexTemplate />} />

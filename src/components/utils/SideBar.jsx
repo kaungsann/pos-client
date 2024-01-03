@@ -726,6 +726,13 @@ export default function SideBar() {
                         </li>
                       </div>
                     </ListboxItem>
+                    <ListboxItem onClick={() => navigate("/admin/tax/all")}>
+                      <div className="flex justify-between">
+                        <li className={`my-1 ml-2 text-start  rounded-md`}>
+                          Tax
+                        </li>
+                      </div>
+                    </ListboxItem>
                     <ListboxItem onClick={() => navigate("/admin/opex/all")}>
                       <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
@@ -799,6 +806,25 @@ export default function SideBar() {
                         className="tet-slate-500 text-xl"
                       />
                       <span className="ml-3">Overview</span>
+                    </li>
+                    <li
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                        location.pathname === "/admin/tax/all" ||
+                        location.pathname === "/admin/tax/create" ||
+                        location.pathname === `/admin/tax/edit/${id}` ||
+                        location.pathname === `/admin/tax/detail/${id}`
+                          ? "text-white bg-slate-300 "
+                          : ""
+                      }}`}
+                      onClick={() => {
+                        navigate("/admin/tax/all"), clostHandleList();
+                      }}
+                    >
+                      <Icon
+                        icon="basil:invoice-outline"
+                        className="tet-slate-500 text-xl"
+                      />
+                      <span className="ml-3">Tax</span>
                     </li>
                     <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${

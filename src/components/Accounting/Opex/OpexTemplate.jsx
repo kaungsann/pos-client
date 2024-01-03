@@ -154,7 +154,6 @@ function OpexTemplate() {
     [opex, filteredKeywords]
   );
 
-
   return (
     <>
       <div className="flex justify-between items-center my-3">
