@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GoAlertFill } from "react-icons/go";
 import { useSelector } from "react-redux";
 export default function Message({ message }) {

@@ -1,64 +1,17 @@
-import React, { useEffect, useState } from "react";
-import Pos from "../../assets/logo.png";
-import {
-  Link,
-  Outlet,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
-import { BiCategory } from "react-icons/bi";
-import { AiOutlineStock } from "react-icons/ai";
-import { HiOutlineAdjustments } from "react-icons/hi";
-import { PiUsersThree } from "react-icons/pi";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import userIcons from "../../assets/user.jpeg";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
-import { removeData } from "../../redux/actions";
-import { getApi } from "../Api";
 
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@nextui-org/react";
 import SideBar from "../utils/SideBar";
-import { useRefreshContext } from "../utils/RefreshProvider";
 
 export default function Admin() {
-  const { refresh } = useRefreshContext();
-
   const location = useLocation();
-  const { id } = useParams();
-  const [usr, setUsr] = useState([]);
-
-  console.log("user is arguments", usr);
 
   const user = useSelector((state) => state.loginData);
-  const token = useSelector((state) => state.IduniqueData);
-
-  console.log("login user is a", user);
-  const dipatch = useDispatch();
 
   const navigate = useNavigate();
-
-  const singleUserApi = async () => {
-    let resData = await getApi(`/user/${user._id}`, token.accessToken);
-
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    console.log("res data is usr", resData);
-    if (resData.status) {
-      setUsr(resData.data[0]);
-    }
-  };
-
-  useEffect(() => {
-    singleUserApi();
-  }, []);
 
   return (
     <>
@@ -128,7 +81,7 @@ export default function Admin() {
         </div>
       ) : null}
       <div
-        className={`mt-14 mx-auto p-4  ${
+        className={`mt-14 mx-auto p-4  bg-[#f5f5f5] ${
           (user.role && user.role.name === "admin") || user.role.name === "root"
             ? "ml-20"
             : ""

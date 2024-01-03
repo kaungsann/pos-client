@@ -1,42 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getApi, FormPathApi } from "../Api";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getApi } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
 import { BiSolidUser } from "react-icons/bi";
 import { IoLogOutSharp } from "react-icons/io5";
 import { TiBusinessCard } from "react-icons/ti";
 import DeleteAlert from "./DeleteAlert";
-import { format } from "date-fns";
-import { Input, Progress, Button, Select, SelectItem } from "@nextui-org/react";
 
-import {
-  AiTwotoneEdit,
-  AiOutlineUsergroupAdd,
-  AiOutlineUsergroupDelete,
-} from "react-icons/ai";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Register from "../Staff/Register";
 import user from "../../assets/user.jpeg";
-import BusinessRegister from "./BusinessRegister";
 import EditBusinessInfo from "./EditBusinessInfo";
-import Staff from "../Staff/Staff";
 import CompanyInfo from "./CompanyInfo";
-import StaffDetail from "../Staff/StaffDetail";
 import PersonalEdit from "./PersonalEdit";
 
 export default function Profile() {
   const { id } = useParams();
-  const fileInputRef = useRef(null);
   const [usr, setUsr] = useState([]);
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [date, setDate] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [gender, setGender] = useState("");
+
   const [file, setFile] = useState(null);
 
   const [logout, setLogout] = useState(false);
@@ -52,73 +34,10 @@ export default function Profile() {
     if (response.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }
-    const formattedBirthDate = response.data[0].birthdate
-      ? new Date(response.data[0].birthdate).toISOString().split("T")[0]
-      : "";
-    setDate(formattedBirthDate);
+
     setUsr(response.data[0]);
     setName(response.data[0].username);
-    setEmail(response.data[0].email);
-    setPhone(response.data[0].phone);
-    setAddress(response.data[0].address);
-    setGender(response.data[0].gender);
-    setCity(response.data[0].city);
-  };
-
-  const EditUserApi = async () => {
-    const formData = new FormData();
-
-    if (name) {
-      formData.append("name", name);
-    }
-    if (email) {
-      formData.append("email", email);
-    }
-    if (address) {
-      formData.append("address", address);
-    }
-    if (phone) {
-      formData.append("phone", phone);
-    }
-    if (city) {
-      formData.append("city", city);
-    }
-    if (date) {
-      formData.append("birthdate", date);
-    }
-    if (gender) {
-      formData.append("gender", gender);
-    }
-    if (file) {
-      formData.append("image", file);
-    }
-
-    let resData = await FormPathApi(`/user/${id}`, formData, token);
-
-    if (resData.con) {
-      toast(resData.message);
-      singleUser();
-    } else {
-      toast.error(resData.message, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-  };
-
-  const handleFileInputClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleFileInputChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setFile(selectedFile);
+    setFile(response.data[0].image);
   };
 
   const handlePersonalSectionClick = () => {
@@ -134,18 +53,6 @@ export default function Profile() {
   }, []);
   return (
     <>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       <div
         className={`flex mb-8 cursor-pointer ${
           userInfo.role && userInfo.role.name == "user" ? "mt-3" : ""
@@ -249,7 +156,6 @@ export default function Profile() {
           {activeSection === "company" && (
             <>
               <CompanyInfo />
-              {/* <BusinessRegister /> */}
             </>
           )}
           {activeSection === "EditInfo" && (

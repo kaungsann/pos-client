@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PaySlip from "./PaySlip";
 import { useDispatch, useSelector } from "react-redux";
 import { add } from "../../redux/actions";
@@ -75,6 +75,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
       };
 
       try {
+        setIsLoading(true);
         let resData = await sendJsonToApi("/sale", data, token.accessToken);
         console.log("data is a", data);
         console.log("res data  is a", data);
@@ -83,11 +84,13 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
         }
 
         if (resData.status) {
+          setIsLoading(false);
           setOrder(resData.data);
           toast.success(resData.message);
           setPaySlip(true);
         }
       } catch (error) {
+        setIsLoading(false);
         console.error("Error creating product:", error);
       }
     }
@@ -149,9 +152,6 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
             >
               Back
             </Button>
-            {/* <h3 className="font-semibold text-lg" onClick={() => change(false)}>
-              Go Back
-            </h3> */}
           </div>
           <div className="mt-4 flex justify-start">
             <button

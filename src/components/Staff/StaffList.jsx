@@ -6,22 +6,18 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
   Button,
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Chip,
-  User,
   Pagination,
+  User,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import SearchBox from "../utils/SearchBox";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL, deleteMultiple } from "../Api";
+import { deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
-import { format } from "date-fns";
 import DeleteAlert from "../utils/DeleteAlert";
 import ChangePassword from "../utils/ChangePassword";
 
@@ -57,9 +53,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-  const addCEmployeeRoute = () => {
-    navigate("/admin/employee/create");
-  };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -136,13 +129,7 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
 
     switch (columnKey) {
       case "username":
-        return (
-          <User
-            name={cellValue}
-          >
-            {staffs.username}
-          </User>
-        );
+        return <User name={cellValue}>{staffs.username}</User>;
       case "role":
         return <h3>{staffs.role ? staffs.role.name : "none"}</h3>;
       case "birthdate":
@@ -230,8 +217,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          
-
           <div className="flex items-end">
             <h2 className="text-xl font-bold">Staff</h2>
             <h3 className="text-default-400 text-md pl-4">
@@ -333,7 +318,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
-  console.log(staffs);
   return (
     <>
       <Table

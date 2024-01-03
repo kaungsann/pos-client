@@ -17,10 +17,8 @@ import {
 } from "@nextui-org/react";
 
 import { useNavigate } from "react-router-dom";
-import { deleteMultiple } from "../Api";
-import { useSelector } from "react-redux";
+
 import { Icon } from "@iconify/react";
-import DeleteAlert from "../utils/DeleteAlert";
 import { format } from "date-fns";
 
 const columns = [
@@ -32,7 +30,6 @@ const columns = [
 ];
 
 export default function AdjustmentList({ adjustments }) {
-  const [showDeleteBox, setShowDeleteBox] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -46,7 +43,6 @@ export default function AdjustmentList({ adjustments }) {
   });
   const [page, setPage] = React.useState(1);
 
-  const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
 
   const totalProducts = adjustments.length;
@@ -78,19 +74,6 @@ export default function AdjustmentList({ adjustments }) {
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, currentPageItems]);
-
-  const deleteProducts = async () => {
-    const response = await deleteMultiple(
-      "/adjustment",
-      {
-        adjustmentId: [...selectedKeys],
-      },
-      token.accessToken
-    );
-    if (response.status) {
-      setSelectedKeys([]);
-    }
-  };
 
   const onRowsPerPageChange = React.useCallback((e) => {
     setRowsPerPage(Number(e.target.value));
@@ -175,14 +158,6 @@ export default function AdjustmentList({ adjustments }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            {selectedKeys.size > 0 && (
-              <button
-                onClick={() => setShowDeleteBox(true)}
-                className="px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
-              >
-                Delete
-              </button>
-            )}
           </div>
         </div>
       </>

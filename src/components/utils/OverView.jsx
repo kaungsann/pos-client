@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   PieChart,
   Pie,
@@ -9,7 +9,6 @@ import {
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
-  Bar,
   Tooltip,
   Legend,
 } from "recharts";
@@ -23,44 +22,28 @@ import {
   ListboxItem,
 } from "@nextui-org/react";
 
-import FadeLoader from "react-spinners/FadeLoader";
 import { getApi } from "../Api";
-import { useDispatch, useSelector } from "react-redux";
-import { removeData } from "../../redux/actions";
+import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
-import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 export default function OverView() {
-  const [filter, setFilter] = useState("");
   const [day, setDay] = useState("1");
   const [month, setMonth] = useState("January");
   const [year, setYear] = useState("2023");
   const [StartDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const [ShowFilter, setShowFilter] = useState(false);
-  const [showFilterDateBox, setShowFilterDateBox] = useState(false);
-
-  const handleDayChange = (e) => setDay(e.target.value);
-  const handleMonthChange = (e) => setMonth(e.target.value);
-  const handleYearChange = (e) => setYear(e.target.value);
-
   const token = useSelector((state) => state.IduniqueData);
-  const dipatch = useDispatch();
 
   const [totalPurchaseAmount, setTotalPurchaseAmount] = useState(0);
   const [totalPurchaseOrders, setTotalPurchaseOrders] = useState(0);
   const [totalPurchaseItems, setTotalPurchaseItems] = useState(0);
   const [totalPurchasePerDay, setTotalPurchasePerDay] = useState([]);
-  const [orderPurchaseLines, setOrderPurchaseLines] = useState([]);
   const [popularPurchaseProducts, setPopularPurchaseProducts] = useState([]);
   const [totalSaleAmount, setTotalSaleAmount] = useState(0);
   const [totalSaleOrders, setTotalSaleOrders] = useState(0);
   const [totalSaleItems, setTotalSaleItems] = useState(0);
   const [totalSalePerDay, setTotalSalePerDay] = useState([]);
-  const [orderSaleLines, setOrderSaleLines] = useState([]);
-  const [popularSaleProducts, setPopularSaleProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [text, setText] = useState("Monthly");
 
   const todayDate = format(new Date(), "MM-dd-yyyy");
@@ -143,11 +126,6 @@ export default function OverView() {
     };
   };
 
-  const handleFilterChange = (e) => {
-    setEndDate(todayDate);
-    setFilter(e.target.value);
-  };
-
   const calculateDailyFilter = () => {
     setMonth("");
     setYear("");
@@ -191,39 +169,17 @@ export default function OverView() {
       setTotalPurchaseOrders(resData.data.purchases.totalOrders);
       setTotalPurchasePerDay(resData.data.purchases.totalsAmountPerDay);
       setTotalPurchaseItems(resData.data.purchases.totalItems);
-      setOrderPurchaseLines(resData.data.purchases.allLines);
       setPopularPurchaseProducts(resData.data.purchases.topProducts);
       setTotalSaleAmount(resData.data.sales.totalAmountWithTax);
       setTotalSaleOrders(resData.data.sales.totalOrders);
       setTotalSalePerDay(resData.data.sales.totalsAmountPerDay);
       setTotalSaleItems(resData.data.sales.totalItems);
-      setOrderSaleLines(resData.data.sales.allLines);
-      setPopularSaleProducts(resData.data.sales.topProducts);
-      setLoading(false);
-    } else {
-      setLoading(true);
     }
   };
 
   useEffect(() => {
     getTotals();
   }, [day, month, year, StartDate]);
-
-  const orderList = Array.from(
-    new Set(orderPurchaseLines.map((line) => line.orderId._id))
-  ).map(
-    (orderId) =>
-      orderPurchaseLines.find((line) => line.orderId._id === orderId).orderId
-  );
-
-  const lineChartDatas = orderPurchaseLines.map((line) => {
-    return {
-      id: line._id,
-      orderRef: line.orderId.orderRef,
-      productId: line.product.name,
-      total: line.subTotal,
-    };
-  });
 
   const lineChartData = totalPurchasePerDay.map((item1) => {
     const matchingItem2 = totalSalePerDay.find(
@@ -319,8 +275,6 @@ export default function OverView() {
                       setMonth("");
                       setYear("");
                       setDay("");
-                      setFilter(""); // Reset other filters if needed
-
                       getTotals();
                     }}
                   >
@@ -336,7 +290,6 @@ export default function OverView() {
                       setMonth("");
                       setYear("");
                       setDay("");
-
                       getTotals();
                     }}
                   >
@@ -349,7 +302,6 @@ export default function OverView() {
                         calculateLastFinancialYearDates();
                       setStartDate(startDate);
                       setEndDate(endDate);
-                      setFilter(""); // Reset other filters if needed
 
                       getTotals();
                     }}

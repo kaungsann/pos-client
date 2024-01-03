@@ -18,8 +18,6 @@ import {
 import { capitalize } from "../utils/utils";
 import { Icon } from "@iconify/react";
 
-//const INITIAL_VISIBLE_COLUMNS = ["product", "location", "onhand", "created"];
-
 const columns = [
   { name: "Product", uid: "product" },
   { name: "Location", uid: "location" },

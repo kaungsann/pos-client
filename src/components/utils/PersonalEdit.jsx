@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getApi, FormPathApi } from "../Api";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
 import { RiImageAddFill } from "react-icons/ri";
@@ -8,7 +7,6 @@ import { AiOutlinePlus } from "react-icons/ai";
 import axios from "axios";
 import { BASE_URL } from "../Api";
 
-import { format } from "date-fns";
 import {
   Input,
   Progress,
@@ -22,10 +20,9 @@ import {
   ModalFooter,
   ModalBody,
 } from "@nextui-org/react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Icon } from "@iconify/react";
-import { useRefreshContext } from "./RefreshProvider";
 
 function PersonalEdit() {
   const userDoc = {
@@ -38,8 +35,6 @@ function PersonalEdit() {
     birthdate: "",
     gender: "",
   };
-
-  const { refresh, setRefesh } = useRefreshContext();
 
   const [info, setInfo] = useState(userDoc);
   const [updateInfo, setUpdateInfo] = useState({});
@@ -59,7 +54,6 @@ function PersonalEdit() {
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const navigate = useNavigate();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const handleFileInputChange = (event) => {
@@ -88,12 +82,6 @@ function PersonalEdit() {
   const onSubmitHandler = () => {
     setIsLoading(true);
 
-    // if (updateInfo.password !== info.password) {
-    //   toast.warn("Password is not correct");
-    //   setIsLoading(false);
-    //   return;
-    // }
-
     const updateUserInfo = async () => {
       const formData = new FormData();
       if (isSelected) {
@@ -118,10 +106,9 @@ function PersonalEdit() {
           }
           toast.warn(data.message);
         } else {
-          setRefesh(true);
           toast.success(data.message);
           onOpenChange();
-          //navigate("/admin/products/all");
+          ModalBody;
         }
       } catch (error) {
         console.error("Error fetching admin info:", error);
@@ -135,8 +122,6 @@ function PersonalEdit() {
 
     updateUserInfo();
   };
-
-  console.log("image is a ", selectFile);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -152,8 +137,6 @@ function PersonalEdit() {
         }
 
         const adminData = data.data[0];
-
-        console.log("admin dataa is a", adminData);
 
         const image = adminData?.image;
         if (image) setAdminImg(image);

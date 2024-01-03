@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FormPathApi, getApi } from "../Api";
 import { removeData } from "../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ChangePassword from "../utils/ChangePassword";
-import { format } from "date-fns";
 import { Button, Input, Progress, Select, SelectItem } from "@nextui-org/react";
 
 export default function StaffEdit() {
@@ -44,6 +42,7 @@ export default function StaffEdit() {
   };
 
   const EditStaffInfoApi = async () => {
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("password", password);
     if (name) {
@@ -73,8 +72,10 @@ export default function StaffEdit() {
       dipatch(removeData(null));
     }
     if (resData.status) {
+      setIsLoading(false);
       navigate("/admin/user/all");
     } else {
+      setIsLoading(false);
       toast.error(resData.message);
     }
   };
@@ -112,10 +113,11 @@ export default function StaffEdit() {
               type="submit"
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+                isLoading
                   ? ""
                   : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-                }`}
+              }`}
               onClick={() => setShowBox(true)}
             >
               Save
@@ -123,10 +125,11 @@ export default function StaffEdit() {
             <Button
               isDisabled={isLoading}
               isLoading={isLoading}
-              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+              className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+                isLoading
                   ? ""
                   : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-                }`}
+              }`}
               onClick={() => navigate("/admin/user/all")}
             >
               Discard
@@ -177,51 +180,12 @@ export default function StaffEdit() {
           )}
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
-              {/* <div>
-                <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
-                  <RiImageAddFill className=" text-slate-400 text-6xl" />
-                  {isSelected ? (
-                    <img
-                      src={selectedImage}
-                      className="absolute object-cover w-full h-full"
-                    />
-                  ) : image ? (
-                    <img
-                      src={productImg}
-                      alt={product.name}
-                      className="absolute object-cover w-full h-full"
-                    />
-                  ) : (
-                    <img
-                      src={BoxImg}
-                      className="absolute object-cover w-full h-full"
-                    />
-                  )}
-                </div>
-                <div
-                  onClick={() => {
-                    fileInputRef.current.click();
-                  }}
-                  className="w-36 cursor-pointer py-1.5 px-2 flex justify-center items-center hover:opacity-75 rounded-md shadow-md bg-blue-600 mt-3"
-                >
-                  <AiOutlinePlus className="text-xl text-white font-bold mr-1" />
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    ref={fileInputRef}
-                    onChange={handleFileInputChange}
-                  />
-                  <span className="text-white font-semibold text-md">Upload</span>
-                </div>
-              </div> */}
               <div className="w-60">
                 <Input
                   type="text"
                   label="Name"
                   name="name"
                   value={name}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter Staff name..."
                   labelPlacement="outside"

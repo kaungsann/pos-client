@@ -9,7 +9,7 @@ import ExcelImportButton from "../ExcelImportButton";
 import PartnerList from "./PartnerList";
 import { Button } from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
-import FilterBox from "../Dashboard/Partner/FilterBox";
+import FilterBox from "./FilterBox";
 
 export default function AdjustmentTemplate() {
   const [partners, setPartners] = useState([]);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -10,36 +10,27 @@ import {
   Pie,
   Cell,
   PieChart,
-  LineChart,
   Legend,
   Rectangle,
 } from "recharts";
 
 import { getApi } from "../../Api";
 import { format } from "date-fns";
-import FadeLoader from "react-spinners/FadeLoader";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
-import { removeData } from "../../../redux/actions";
 
 export default function PurchaseView() {
-  const [purchase, setPurchase] = useState([]);
-  const [product, setProduct] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
-  const [totalPerDay, setTotalPerDay] = useState([]);
   const [orderLines, setOrderLines] = useState([]);
   const [popularProducts, setPopularProducts] = useState([]);
 
-  const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.IduniqueData);
-  const dipatch = useDispatch();
 
   const todayDate = format(new Date(), "MM-dd-yyyy"); // Get today's date in the same format as orderDate
 
   const getTotals = async () => {
-    setLoading(true);
     let resData = await getApi(
       `/orders/totals?startDate=${todayDate.toString()}`,
       token.accessToken
@@ -48,13 +39,10 @@ export default function PurchaseView() {
     if (resData.status) {
       setTotalAmount(resData.data.purchases.totalAmount);
       setTotalOrders(resData.data.purchases.totalOrders);
-      setTotalPerDay(resData.data.purchases.totalsAmountPerDay);
+
       setTotalItems(resData.data.purchases.totalItems);
       setOrderLines(resData.data.purchases.allLines);
       setPopularProducts(resData.data.purchases.topProducts);
-      setLoading(false);
-    } else {
-      setLoading(true);
     }
   };
 
@@ -89,7 +77,7 @@ export default function PurchaseView() {
               className="text-4xl text-cyan-700 font-semibold"
             />
 
-            <div className="">
+            <div>
               <h3 className="font-bold text-slate-600 text-xl">
                 Total Cost <span className="text-sm">(Inc. Tax)</span>
               </h3>
@@ -162,11 +150,7 @@ export default function PurchaseView() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  {/* <Bar
-                    dataKey="pv"
-                    fill="#8884d8"
-                    activeBar={<Rectangle fill="pink" stroke="blue" />}
-                  /> */}
+
                   <Bar
                     dataKey="total"
                     fill="#82ca9d"
@@ -323,20 +307,6 @@ export default function PurchaseView() {
           </div>
         </div>
       </div>
-
-      {purchase.length > 0 && (
-        <div className="absolute inset-0 flex justify-center items-center">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
-        </div>
-      )}
     </>
   );
 }

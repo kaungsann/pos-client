@@ -15,11 +15,7 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
-import SearchBox from "../../utils/SearchBox";
-import ExcelExportButton from "../../ExcelExportButton";
-import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../Api";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
@@ -60,12 +56,7 @@ export default function SaleList({ sales }) {
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
 
-  const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-
-  const addPurchaseRoute = () => {
-    navigate("/admin/purchase/create");
-  };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -219,8 +210,6 @@ export default function SaleList({ sales }) {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-        
-
           <div className="flex items-end">
             <h2 className="text-xl font-bold">Sale Orders</h2>
             <h3 className="text-default-400 text-md pl-4">
@@ -313,7 +302,6 @@ export default function SaleList({ sales }) {
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
-
 
   return (
     <>

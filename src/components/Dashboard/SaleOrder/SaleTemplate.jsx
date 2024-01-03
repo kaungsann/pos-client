@@ -6,7 +6,6 @@ import SaleList from "./SaleList";
 import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import ExcelExportButton from "../../ExcelExportButton";
-import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@nextui-org/react";
 
@@ -188,11 +187,6 @@ export default function SaleTemplate() {
               apiEndpoint={SALE_API.EXPORT}
             />
           </div>
-
-          {/* <ExcelImportButton
-            token={token.accessToken}
-            apiEndpoint={SALE_API.IMPORT}
-          /> */}
         </div>
       </div>
       <SaleList sales={filteredSale} />

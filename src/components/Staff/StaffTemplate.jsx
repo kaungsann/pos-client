@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../Api";
 
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SearchCompo from "../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import { Button } from "@nextui-org/react";
@@ -149,7 +149,6 @@ export default function StaffTemplate() {
       }),
     [staff, filteredKeywords]
   );
-
 
   return (
     <>

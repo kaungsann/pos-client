@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { BiSolidEdit } from "react-icons/bi";
@@ -6,8 +6,6 @@ import EditBusinessInfo from "./EditBusinessInfo";
 
 import { getApi } from "../Api";
 import { Icon } from "@iconify/react";
-
-import img from "../../../src/assets/logo.png";
 
 export default function CompanyInfo() {
   const [info, setInfo] = useState([]);
@@ -27,10 +25,6 @@ export default function CompanyInfo() {
 
   const handleDiscard = () => {
     setEdit(true);
-  };
-
-  const updateInfo = (newInfo) => {
-    setInfo(newInfo);
   };
 
   useEffect(() => {

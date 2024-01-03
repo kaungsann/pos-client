@@ -10,8 +10,6 @@ import { Input, Select, SelectItem } from "@nextui-org/react";
 import { removeData } from "../../../redux/actions";
 import { Icon } from "@iconify/react";
 
-import BoxImg from "../../../assets/box.png";
-
 import {
   Table,
   TableHeader,
@@ -29,16 +27,9 @@ export default function SaleOrderCreate() {
   const [part, setPart] = useState([]);
   const [partner, setPartner] = useState("");
   const [loca, setLoca] = useState("");
-  const [state, setState] = useState("pending");
   const [note, setNote] = useState("");
 
-  const [payment, setPayment] = useState(null);
   const [item, setItem] = useState(null);
-
-  const handleDropdownItemClick = (key) => {
-    setShowErrorPayment(false); // Reset error state on change
-    setSelectedOption(key);
-  };
 
   const [pd, setPd] = useState(null);
   const [quantity, setQuantity] = useState(0);
@@ -49,18 +40,8 @@ export default function SaleOrderCreate() {
   const [totalTax, setTotalTax] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
   const [selectedOption, setSelectedOption] = React.useState("default");
-  const [showErrorPayment, setShowErrorPayment] = React.useState(false);
 
   const navigate = useNavigate();
-
-  // State variables for showing red borders and error messages
-  const [showErrorPartner, setShowErrorPartner] = useState(false);
-  const [showErrorLocation, setShowErrorLocation] = useState(false);
-  const [showErrorState, setShowErrorState] = useState(false);
-  const [showErrorNote, setShowErrorNote] = useState(false);
-  const [showErrorProduct, setShowErrorProduct] = useState(false);
-  const [showErrorQuantity, setShowErrorQuantity] = useState(false);
-  const [showErrorDate, setShowErrorDate] = useState("");
 
   const userData = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
@@ -70,36 +51,6 @@ export default function SaleOrderCreate() {
     if (saleOrderLines.length == 0) {
       toast.error("you need to selecte the product");
       return;
-    }
-    if (date === "") {
-      setShowErrorDate(true);
-    } else {
-      setShowErrorDate(false);
-    }
-    if (payment === "") {
-      setShowErrorPayment(true);
-    } else {
-      setShowErrorPayment(false);
-    }
-    if (partner.trim() === "") {
-      setShowErrorPartner(true);
-    } else {
-      setShowErrorPartner(false);
-    }
-    if (loca.trim() === "") {
-      setShowErrorLocation(true);
-    } else {
-      setShowErrorLocation(false);
-    }
-    if (state.trim() === "") {
-      setShowErrorState(true);
-    } else {
-      setShowErrorState(false);
-    }
-    if (note.trim() === "") {
-      setShowErrorNote(true);
-    } else {
-      setShowErrorNote(false);
     }
 
     const data = {
@@ -114,7 +65,7 @@ export default function SaleOrderCreate() {
         unitPrice: line.unitPrice,
         subTotal: line.subTotal,
       })),
-      state: state,
+      state: "pending",
       note: note,
       // payment: payment,
       taxTotal: totalTax,
@@ -133,7 +84,7 @@ export default function SaleOrderCreate() {
         toast.error(resData.message);
       }
     } catch (error) {
-      toast.error(resData.message);
+      toast.error(error.message);
     }
   };
   const handleSubmit = (e) => {
@@ -160,8 +111,6 @@ export default function SaleOrderCreate() {
 
   const handleAddProduct = () => {
     if (pd === "" || parseInt(quantity) === 0 || quantity === "") {
-      setShowErrorProduct(true);
-      setShowErrorQuantity(true);
       toast.error("you need to selecte the product and add quantity");
       return;
     }
@@ -280,7 +229,6 @@ export default function SaleOrderCreate() {
                     value={selectedOption}
                     placeholder="Select Payment Type"
                     onChange={(e) => {
-                      setShowErrorPayment(false); // Reset error state on change
                       setSelectedOption(e.target.value);
                     }}
                     className="max-w-xs"
@@ -334,30 +282,13 @@ export default function SaleOrderCreate() {
                   ))}
                 </Select>
               </div>
-              {/* <div className="w-60">
-                <Select
-                  labelPlacement="outside"
-                  label="State"
-                  name="state"
-                  value={state}
-                  placeholder="State"
-                  defaultSelectedKeys={["pending"]}
-                  onChange={(e) => setState(e.target.value)}
-                  className="max-w-xs"
-                >
-                  <SelectItem value="pending" key="pending">
-                    Pending
-                  </SelectItem>
-                </Select>
-              </div> */}
+
               <div className="w-60">
                 <Input
                   type="text"
                   label="Note"
                   name="note"
                   value={note}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => setNote(e.target.value)}
                   placeholder="Enter Note name..."
                   labelPlacement="outside"

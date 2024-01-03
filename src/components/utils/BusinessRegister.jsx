@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FormPostApi } from "../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
+import { removeData } from "../../redux/actions";
 
 export default function BusinessRegister() {
   const [name, setName] = useState("");
@@ -46,7 +47,6 @@ export default function BusinessRegister() {
     } else {
       setLoading(false);
       toast.error(response.message);
-      setI;
     }
   };
   return (

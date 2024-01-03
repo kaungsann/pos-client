@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../Api";

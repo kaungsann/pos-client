@@ -5,7 +5,6 @@ import { BASE_URL } from "../Api";
 import StockList from "./StockList";
 import SearchCompo from "../utils/SearchCompo";
 import ExcelExportButton from "../ExcelExportButton";
-import ExcelImportButton from "../ExcelImportButton";
 import FilterBox from "./FilterBox";
 
 export default function StockTemplate() {
@@ -103,12 +102,6 @@ export default function StockTemplate() {
               apiEndpoint={STOCK_API.EXPORT}
             />
           </div>
-
-          {/* <ExcelImportButton
-            text="Stock"
-            token={token.accessToken}
-            apiEndpoint={STOCK_API.IMPORT}
-          /> */}
         </div>
       </div>
       <StockList stocks={filteredStock} />

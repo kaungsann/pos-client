@@ -2,12 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../Api";
-import { Icon } from "@iconify/react";
 import VendorList from "./VendorList";
 import FilterBox from "./FilterBox";
 import SearchCompo from "../utils/SearchCompo";
-import { Button } from "@nextui-org/react";
-import { useNavigate } from "react-router-dom";
 
 export default function VendorTemplate() {
   const [vendors, setVendors] = useState([]);
@@ -17,7 +14,6 @@ export default function VendorTemplate() {
     address: "",
     city: "",
   });
-  const navigate = useNavigate();
 
   const token = useSelector((state) => state.IduniqueData);
 

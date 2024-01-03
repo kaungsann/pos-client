@@ -6,7 +6,6 @@ import PurchaseList from "./PurchaseList";
 import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import ExcelExportButton from "../../ExcelExportButton";
-import ExcelImportButton from "../../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@nextui-org/react";
 
@@ -188,12 +187,6 @@ export default function PurchaseTemplate() {
               apiEndpoint={PURCHASE_API.EXPORT}
             />
           </div>
-
-          {/* <ExcelImportButton
-            token={token.accessToken}
-            apiEndpoint={PURCHASE_API.IMPORT}
-            text="Purchase"
-          /> */}
         </div>
       </div>
       <PurchaseList purchases={filteredPurchase} refresh={fetchPurchaseData} />

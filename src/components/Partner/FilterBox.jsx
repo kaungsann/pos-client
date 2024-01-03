@@ -9,8 +9,6 @@ import {
   Button,
   useDisclosure,
   Input,
-  Select,
-  SelectItem,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 

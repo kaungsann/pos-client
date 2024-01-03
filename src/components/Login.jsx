@@ -8,7 +8,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
 import { sendJsonToApi } from "./Api";
-import { useEffect } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("admin@gmail.com");

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -21,7 +21,7 @@ import { removeData } from "../../../redux/actions";
 
 export default function PurchaseOverview() {
   const [purchase, setPurchase] = useState([]);
-  const [product, setProduct] = useState([]);
+
   const [purchaseLines, setPurchaseLines] = useState([]);
   const [popularProductsData, setPopularProductsData] = useState([]);
   const [stock, setStock] = useState([]);
@@ -73,28 +73,6 @@ export default function PurchaseOverview() {
     }
   };
 
-  const getProduct = async () => {
-    setLoading(true);
-    let resData = await getApi("/product", token.accessToken);
-    if (resData.status) {
-      setLoading(false);
-      setProduct(resData.data);
-    } else {
-      setLoading(true);
-    }
-  };
-
-  const getTotal = async () => {
-    setLoading(true);
-    let resData = await getApi("/orders/totals", token.accessToken);
-    if (resData.status) {
-      setLoading(false);
-      setProduct(resData.data);
-    } else {
-      setLoading(true);
-    }
-  };
-
   const todayDate = format(new Date(), "dd.MM.yyyy"); // Get today's date in the same format as orderDate
 
   const filteredPurchase = purchase.filter((pur) => {
@@ -102,11 +80,11 @@ export default function PurchaseOverview() {
     return formattedOrderDate === todayDate;
   });
 
-    //To show barchart for only today date
-    const todayPurchaseDate  = filteredPurchase.map((item) => ({
-      ...item,
-      created: format(new Date(item.createdAt), "yyyy-MM-dd"),
-    }));
+  //To show barchart for only today date
+  const todayPurchaseDate = filteredPurchase.map((item) => ({
+    ...item,
+    created: format(new Date(item.createdAt), "yyyy-MM-dd"),
+  }));
 
   const todayPurchaseLine = purchaseLines.filter(
     (purchase) =>
@@ -129,16 +107,9 @@ export default function PurchaseOverview() {
 
   useEffect(() => {
     getStockApi();
-    getProduct();
     getPurchase();
-    getTotal();
     getPurhaseLines();
   }, []);
-
-  const formattedSaleData = purchase.map((item) => ({
-    ...item,
-    created: format(new Date(item.createdAt), "yyyy-MM-dd"),
-  }));
 
   const todayStock = stock.filter(
     (stk) => format(new Date(stk.updatedAt), "dd.MM.yyyy") === todayDate
@@ -254,34 +225,34 @@ export default function PurchaseOverview() {
                 Purchase Order Dashboard
               </h3>
               <ResponsiveContainer height={300} className="mx-auto">
-               <BarChart
-                width={700}
-                height={400}
-                data={todayPurchaseDate}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 60,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="created"
-                  angle={-60} // Rotate the text by -90 degrees
-                  textAnchor="end" // Anchor the text at the end (right)
-                />
-                <YAxis dataKey="total" />
-                <Tooltip />
-                <Bar dataKey="total" barSize={20} fill="#8884d8" />
-              </BarChart>
+                <BarChart
+                  width={700}
+                  height={400}
+                  data={todayPurchaseDate}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 60,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="created"
+                    angle={-60} // Rotate the text by -90 degrees
+                    textAnchor="end" // Anchor the text at the end (right)
+                  />
+                  <YAxis dataKey="total" />
+                  <Tooltip />
+                  <Bar dataKey="total" barSize={20} fill="#8884d8" />
+                </BarChart>
               </ResponsiveContainer>
             </div>
             <div className="items-center w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
               <h1 className="text-slate-500 font-semibold text-lg mb-6">
                 Most of sale products
               </h1>
-              <ResponsiveContainer  height={300} className="mx-auto">
+              <ResponsiveContainer height={300} className="mx-auto">
                 <PieChart>
                   <Pie
                     dataKey="value"
@@ -371,7 +342,7 @@ export default function PurchaseOverview() {
               </h1>
               <div className="px-2 max-h-80 overflow-y-scroll custom-scrollbar mb-6">
                 {todayPurchaseLine.length > 0 ? (
-                  todayPurchaseLine.slice(0,3).map((purchaseLines) => (
+                  todayPurchaseLine.slice(0, 3).map((purchaseLines) => (
                     <div
                       key={purchaseLines._id}
                       className="w-full flex justify-between mb-3 border-b-2 pb-3"

@@ -176,9 +176,6 @@ export default function ProductCreateForm() {
     fetchData();
   }, []);
 
-  console.log("product is", product);
-
-  console.log("update product is", updateProduct);
   return (
     <>
       <ToastContainer

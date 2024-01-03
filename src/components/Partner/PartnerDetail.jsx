@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import { getApi } from "../../Api";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { getApi } from "../Api";
 import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
-import { removeData } from "../../../redux/actions";
-import { Icon } from "@iconify/react";
+import { removeData } from "../../redux/actions";
 import { format } from "date-fns";
 
 export default function PartnerDetail() {
@@ -14,7 +13,6 @@ export default function PartnerDetail() {
   const [error, setError] = useState(null);
   const token = useSelector((state) => state.IduniqueData);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const singleProducts = async () => {
     setLoading(true);
@@ -51,8 +49,7 @@ export default function PartnerDetail() {
       ) : detail && detail.length > 0 ? (
         <div className="container cursor-pointer">
           <div className="container bg-white p-5 rounded-md max-w-6xl">
-              <div className="flex justify-between items-center">
-
+            <div className="flex justify-between items-center">
               <div className="flex gap-2 pb-4">
                 <Link
                   to="/admin/partners/all"
@@ -61,17 +58,16 @@ export default function PartnerDetail() {
                   Back
                 </Link>
               </div>
-                <div className="flex">
-                  <Link
-                    to={`/admin/partners/edit/${id}`}
-                    className="font-bold rounded-sm shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-[#4338ca] px-3 py-1.5"
-                  >
-                    Edit
-                  </Link>
-                </div>
-
+              <div className="flex">
+                <Link
+                  to={`/admin/partners/edit/${id}`}
+                  className="font-bold rounded-sm shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-[#4338ca] px-3 py-1.5"
+                >
+                  Edit
+                </Link>
               </div>
-              
+            </div>
+
             <div>
               <div className="flex">
                 <div className="flex">
@@ -87,7 +83,6 @@ export default function PartnerDetail() {
                 <h1 className="text-xl font-bold text-slate-600">
                   Personal Data
                 </h1>
-
               </div>
               <div className="mb-4 flex p-4 items-center w-4/5">
                 <div className="flex justify-between w-full">

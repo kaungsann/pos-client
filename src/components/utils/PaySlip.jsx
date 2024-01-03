@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import logo from "../../../public/logo.png";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useReactToPrint } from "react-to-print";
 import { removeAllItems } from "../../redux/actions";
@@ -21,10 +20,8 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
   const getInfo = async () => {
     const response = await getApi("/company", token.accessToken);
     if (response.status) {
-      console.log("res data  is a", response);
       setInfo(response.data[0]);
     }
-    console.log("usr store name is ", response);
   };
 
   useEffect(() => {
@@ -57,7 +54,7 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
         <h3 className="text-black text-lg font-extrabold mt-1">
           {info?.email ? info.email : ""}
         </h3>
-        <hr class="border-t-4 border-black border-dotted text-xl mt-1 w-1/2 mx-auto" />
+        <hr className="border-t-4 border-black border-dotted text-xl mt-1 w-1/2 mx-auto" />
         <h3 className="text-black text-lg font-extrabold mt-1">
           Served by {user.username}
         </h3>
@@ -74,7 +71,7 @@ export default function PaySlip({ change, total, cash, pay, tax, sub, order }) {
               </div>
             ))}
         </div>
-        <hr class="justify-self-end  border-t-1 border-black border-solid mx-6 my-2" />
+        <hr className="justify-self-end  border-t-1 border-black border-solid mx-6 my-2" />
         <div className="flex flex-col">
           <div className="flex justify-between mx-6">
             <h4 className="text-lg font-extrabold text-black">Total</h4>

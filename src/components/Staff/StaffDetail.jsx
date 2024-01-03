@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { removeData } from "../../redux/actions";
-import { TbEdit } from "react-icons/tb";
+
 import { getApi } from "../Api";
-import { Icon } from "@iconify/react";
+
 import { format } from "date-fns";
 import FadeLoader from "react-spinners/FadeLoader";
 import user from "../../assets/icon.png";
@@ -17,12 +17,10 @@ export default function StaffDetail() {
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
-  const navigate = useNavigate();
 
   const singleUserApi = async () => {
     setLoading(true);
     let resData = await getApi(`/user/${id}`, token.accessToken);
-
 
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
@@ -38,29 +36,18 @@ export default function StaffDetail() {
 
   return (
     <>
-      {/* <div className="flex justify-between">
-        <div className="flex gap-2">
-          <Link
-            to="/admin/user/all"
-            className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
-          >
-            Back
-          </Link>
-        </div>
-      </div> */}
-
       {detail && detail.length > 0 ? (
         <div className="container cursor-pointer">
           <div className="container bg-white p-5 rounded-md max-w-6xl">
             <div className="flex justify-between items-center">
-            <div className="flex gap-2 pb-4">
-              <Link
-                to="/admin/user/all"
-                className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
-              >
-                Back
-              </Link>
-            </div>
+              <div className="flex gap-2 pb-4">
+                <Link
+                  to="/admin/user/all"
+                  className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
+                >
+                  Back
+                </Link>
+              </div>
               <div className="flex">
                 <Link
                   to={`/admin/user/edit/${id}`}
@@ -69,9 +56,7 @@ export default function StaffDetail() {
                   Edit
                 </Link>
               </div>
-
             </div>
-
 
             <div>
               <div className="flex">
@@ -89,8 +74,6 @@ export default function StaffDetail() {
                 <h1 className="text-xl font-bold text-slate-600">
                   Personal Data
                 </h1>
-
-              
               </div>
               <div className="mb-4 flex p-4 items-center w-4/5">
                 <img

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
-import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 import FadeLoader from "react-spinners/FadeLoader";
@@ -24,7 +23,6 @@ export default function SaleOrderDetail() {
 
   const token = useSelector((state) => state.IduniqueData);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const columns = [
     { key: "name", label: "Name", align: "center" },
@@ -97,14 +95,14 @@ export default function SaleOrderDetail() {
       ) : detail && detail.length > 0 ? (
         <div className="container cursor-pointer">
           <div className="container bg-white p-5 rounded-md max-w-6xl">
-              <div className="flex gap-2 pb-4">
-                <Link
-                  to="/admin/saleorders/all"
-                  className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
-                >
-                  Back
-                </Link>
-              </div>
+            <div className="flex gap-2 pb-4">
+              <Link
+                to="/admin/saleorders/all"
+                className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
+              >
+                Back
+              </Link>
+            </div>
             <div>
               <div className="flex">
                 <h1 className="text-2xl font-bold text-slate-600">

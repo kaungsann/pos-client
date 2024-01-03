@@ -1,86 +1,67 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { getApi, PathData } from "../../Api";
-import { useDispatch, useSelector } from "react-redux";
-import { removeData } from "../../../redux/actions";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { sendJsonToApi } from "../Api";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../redux/actions";
 import { Input, Progress, Button, Checkbox } from "@nextui-org/react";
 
-export default function PartnerEdit() {
-  const { id } = useParams();
-  let [name, setName] = useState("");
-  let [city, setCity] = useState("");
-  let [contactAddress, setcontentAddress] = useState("");
-  let [phone, setPhone] = useState("");
-  const [isCustomer, setIsCustomer] = useState(null);
-  const [isCompany, setIsCompany] = useState(null);
+export default function PartnerCreate() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const getSinglePartnere = async () => {
-    let resData = await getApi(`/partner/${id}`, token.accessToken);
-    setName(resData.data[0].name);
-    setCity(resData.data[0].city);
-    setcontentAddress(resData.data[0].address);
-    setPhone(resData.data[0].phone);
-    setIsCustomer(resData.data[0].isCustomer);
-    setIsCompany(resData.data[0].isCompany);
-  };
-  const editPartnerApi = async () => {
-    const data = {};
-    if (name) {
-      data.name = name;
-    }
-    if (contactAddress) {
-      data.address = contactAddress;
-    }
-    if (city) {
-      data.city = city;
-    }
-    if (phone) {
-      data.phone = phone;
-    }
-    if (isCustomer) {
-      data.isCustomer = isCustomer;
-    }
-    if (isCompany) {
-      data.isCompany = isCompany;
-    }
+  const [formData, setFormData] = useState({
+    name: "",
+    address: "",
+    city: "",
+    phone: "",
+    isCustomer: false,
+    isCompany: false,
+  });
 
-    try {
-      let resData = await PathData(`/partner/${id}`, data, token.accessToken);
-      if (resData.message == "Token Expire , Please Login Again") {
-        dipatch(removeData(null));
-      }
-      if (resData.status) {
-        setIsLoading(false);
-        navigate("/admin/partners/all");
-      } else {
-        setIsLoading(false);
-        toast.error(resData.message);
-      }
-    } catch (error) {
-      console.error("Error edit partner:", error);
-    }
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleSubmit = (e) => {
+
+  const handleCheckboxChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.checked });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    editPartnerApi();
+    try {
+      const response = await sendJsonToApi(
+        "/partner",
+        formData,
+        token.accessToken
+      );
+
+      if (response.message === "Token Expire , Please Login Again")
+        dipatch(removeData(null));
+
+      if (response.status) {
+        navigate("/admin/partners/all");
+        setIsLoading(false);
+      } else {
+        toast.error(response.message);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error creating partner:", error);
+    }
   };
-  useEffect(() => {
-    getSinglePartnere();
-  }, []);
+
   return (
     <>
       <ToastContainer
         position="top-center"
         autoClose={5000}
-        hideProgressBar={false}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
         rtl={false}
@@ -92,7 +73,7 @@ export default function PartnerEdit() {
 
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-          <h2 className="lg:text-xl font-bold ">Partner Edit</h2>
+          <h2 className="lg:text-xl font-bold ">Partner Create</h2>
           <div className="flex gap-3 ">
             <Button
               type="submit"
@@ -107,7 +88,6 @@ export default function PartnerEdit() {
             >
               Save
             </Button>
-
             <Button
               isDisabled={isLoading}
               isLoading={isLoading}
@@ -122,22 +102,23 @@ export default function PartnerEdit() {
             </Button>
           </div>
         </div>
+
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           {isLoading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />
           )}
           <form className="flex justify-between gap-10 p-5">
-            <div className="flex flex-wrap gap-8 items-center">
+            <div className="flex flex-wrap gap-8">
               <div className="w-60">
                 <Input
                   type="text"
-                  label="Name"
+                  label="Partner Name"
                   name="name"
-                  value={name}
+                  value={formData.name}
                   // color={isInvalid ? "danger" : "success"}
                   // errorMessage={isInvalid && "Please enter a valid email"}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter product name..."
+                  onChange={(e) => handleInputChange(e)}
+                  placeholder="Enter Partner name..."
                   labelPlacement="outside"
                 />
               </div>
@@ -146,8 +127,8 @@ export default function PartnerEdit() {
                   type="text"
                   name="address"
                   label="Address"
-                  value={contactAddress}
-                  onChange={(e) => setcontentAddress(e.target.value)}
+                  value={formData.address}
+                  onChange={(e) => handleInputChange(e)}
                   placeholder="Enter reference..."
                   labelPlacement="outside"
                 />
@@ -157,28 +138,27 @@ export default function PartnerEdit() {
                   type="number"
                   name="phone"
                   label="Phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Enter barcode..."
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange(e)}
+                  placeholder="Enter Phone..."
                   labelPlacement="outside"
                 />
               </div>
               <div className="w-60 flex items-center mt-6">
                 <Checkbox
-                  size="md"
+                  size="lg"
                   id="customer"
-                  isSelected={isCustomer}
-                  onChange={() => setIsCustomer(!isCustomer)}
-                  className=""
+                  name="isCustomer"
+                  onChange={(e) => handleCheckboxChange(e)}
                 >
                   Customer
                 </Checkbox>
                 <Checkbox
-                  size="md "
-                  id="customer"
-                  isSelected={isCompany}
+                  size="lg"
+                  id="company"
+                  name="isCompany"
                   className="ml-3"
-                  onChange={() => setIsCompany(!isCompany)}
+                  onChange={(e) => handleCheckboxChange(e)}
                 >
                   Company
                 </Checkbox>

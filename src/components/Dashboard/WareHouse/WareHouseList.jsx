@@ -16,9 +16,7 @@ import {
 } from "@nextui-org/react";
 
 import SearchBox from "../../utils/SearchBox";
-import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../Api";
-import { useSelector } from "react-redux";
+
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
 
@@ -49,9 +47,6 @@ export default function WareHouseList({ warehouses }) {
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-
-  const token = useSelector((state) => state.IduniqueData);
-  const navigate = useNavigate();
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -287,7 +282,6 @@ export default function WareHouseList({ warehouses }) {
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
-
 
   return (
     <>

@@ -3,20 +3,11 @@ import { useSelector } from "react-redux";
 import { BASE_URL } from "../Api";
 import CustomerList from "./CustomerList";
 import FilterBox from "./FilterBox";
-import SearchBox from "./SearchBox";
 import axios from "axios";
 import SearchCompo from "../utils/SearchCompo";
-import { useNavigate } from "react-router-dom";
-
-const CUSTOMER_API = {
-  INDEX: BASE_URL + "/partner",
-  IMPORT: BASE_URL + "/partner/import-excel",
-};
 
 export default function CustomerTemplate() {
   const [customers, setCustomers] = useState([]);
-
-  const navigate = useNavigate();
 
   const [filteredKeywords, setFilteredKeywords] = useState({
     name: "",

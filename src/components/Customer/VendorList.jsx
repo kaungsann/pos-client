@@ -6,7 +6,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
   Button,
   DropdownTrigger,
   Dropdown,
@@ -17,11 +16,8 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import SearchBox from "../utils/SearchBox";
-import ExcelExportButton from "../ExcelExportButton";
-import ExcelImportButton from "../ExcelImportButton";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL, deleteMultiple } from "../Api";
+import { deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import DeleteAlert from "../utils/DeleteAlert";
@@ -210,16 +206,10 @@ export default function VendorList({ vendors, onDeleteSuccess }) {
     }
   }, []);
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
-  }, []);
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
-          
           <div className="flex items-end">
             <h2 className="text-xl font-bold">Vendor</h2>
             <h3 className="text-default-400 text-md pl-4">

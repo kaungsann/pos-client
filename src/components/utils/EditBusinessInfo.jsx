@@ -1,14 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FormPathApi, getApi } from "../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import MoonLoader from "react-spinners/MoonLoader";
 import { RiImageAddFill } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
 import { removeData } from "../../redux/actions";
-import { useParams } from "react-router-dom";
-import { Icon } from "@iconify/react";
 import { BASE_URL } from "../Api";
 import axios from "axios";
 import { Button, Input, Progress } from "@nextui-org/react";
@@ -30,7 +26,6 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
   const [selectFile, setSelectedFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const { id } = useParams();
   const fileInputRef = useRef(null);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();

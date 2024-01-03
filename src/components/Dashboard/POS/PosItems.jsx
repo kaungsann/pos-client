@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Card from "../../utils/Card";
 import PayBox from "../../utils/PayBox";
 import { MdArrowBackIosNew } from "react-icons/md";
@@ -15,7 +15,6 @@ export default function PosItems() {
   const [products, setProducts] = useState([]);
   const [categorys, setCategory] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [noItems, setNoItems] = useState("");
 
   const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -86,15 +85,11 @@ export default function PosItems() {
       (product) => product.barcode === barcode
     );
 
-    if (!productMatch) {
-      setNoItems("This barcode is not have in products");
-    }
-
     if (productMatch) {
       const existingProduct = selectProduct.find(
         (pd) => pd.barcode === barcode
       );
-      setNoItems("");
+
       if (existingProduct) {
         dipatch(
           updateItemQuantity(
@@ -113,7 +108,6 @@ export default function PosItems() {
   useEffect(() => {
     getProducts();
     getCategorysApi();
-    const user = JSON.parse(localStorage.getItem("user"));
     if (search) {
       handleBarcodeDetected(search);
     }
@@ -142,7 +136,7 @@ export default function PosItems() {
                 />
                 <Icon
                   icon="entypo:cross"
-                  className="absolute text-lg rounded-full bg-slate-500 text-white top-3 right-3"
+                  className="absolute text-lg rounded-full hover:opacity-75 bg-slate-500 text-white top-3 right-3"
                   onClick={() => setSearch("")}
                 />
               </div>
@@ -205,7 +199,7 @@ export default function PosItems() {
                 .map((pd) => <Card key={pd.id} product={pd} />)
             ) : (
               <div className="w-10/12 mx-auto  mt-40 flex justify-center">
-                {/* {loading && (
+                {loading && (
                   <FadeLoader
                     color={"#0284c7"}
                     loading={loading}
@@ -213,11 +207,6 @@ export default function PosItems() {
                     aria-label="Loading Spinner"
                     data-testid="loader"
                   />
-                )} */}
-                {noItems && (
-                  <h2 className="text-slate-500 font-semibold text-xl text-center w-full mt-40">
-                    {noItems}
-                  </h2>
                 )}
               </div>
             )}

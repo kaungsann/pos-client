@@ -30,7 +30,6 @@ export default function SaleOrderCreate() {
   const [note, setNote] = useState("");
   const [selectedOption, setSelectedOption] = React.useState("default");
 
-  const [payment, setPayment] = useState(null);
   const [item, setItem] = useState(null);
 
   const [pd, setPd] = useState("default");
@@ -41,19 +40,7 @@ export default function SaleOrderCreate() {
   const [date, setDate] = useState("");
   const [totalTax, setTotalTax] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
-
   const navigate = useNavigate();
-
-  // State variables for showing red borders and error messages
-  const [showErrorPartner, setShowErrorPartner] = useState(false);
-  const [showErrorLocation, setShowErrorLocation] = useState(false);
-  const [showErrorState, setShowErrorState] = useState(false);
-  const [showErrorNote, setShowErrorNote] = useState(false);
-  const [showErrorProduct, setShowErrorProduct] = useState(false);
-  const [showErrorQuantity, setShowErrorQuantity] = useState(false);
-  const [showErrorPayment, setShowErrorPayment] = useState(false);
-  const [showErrorDate, setShowErrorDate] = useState("");
-
   const userData = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
@@ -62,36 +49,6 @@ export default function SaleOrderCreate() {
     if (saleOrderLines.length == 0) {
       toast.error("you need to selecte the product");
       return;
-    }
-    if (date === "") {
-      setShowErrorDate(true);
-    } else {
-      setShowErrorDate(false);
-    }
-    if (payment === "") {
-      setShowErrorPayment(true);
-    } else {
-      setShowErrorPayment(false);
-    }
-    if (partner.trim() === "") {
-      setShowErrorPartner(true);
-    } else {
-      setShowErrorPartner(false);
-    }
-    if (loca.trim() === "") {
-      setShowErrorLocation(true);
-    } else {
-      setShowErrorLocation(false);
-    }
-    if (state.trim() === "") {
-      setShowErrorState(true);
-    } else {
-      setShowErrorState(false);
-    }
-    if (note.trim() === "") {
-      setShowErrorNote(true);
-    } else {
-      setShowErrorNote(false);
     }
 
     const data = {
@@ -159,44 +116,8 @@ export default function SaleOrderCreate() {
     setPart(filteredPartners);
   };
 
-  // const handleAddProduct = () => {
-  //   if (pd === null) {
-  //     setShowErrorProduct(true);
-  //   } else {
-  //     setShowErrorProduct(false);
-  //   }
-  //   if (quantity === 0) {
-  //     setShowErrorQuantity(true);
-  //   } else {
-  //     setShowErrorQuantity(false);
-  //   }
-
-  //   if (pd === null || quantity === 0) {
-  //     return;
-  //   }
-
-  //   const subTotal = unitPrice * quantity;
-  //   const selectedProduct = product.find((pt) => pt.id === pd);
-
-  //   const newSaleOrderLine = {
-  //     product: item,
-  //     qty: quantity,
-  //     tax: (selectedProduct.tax / 100) * quantity * unitPrice,
-  //     unitPrice: unitPrice,
-  //     subTotal: subTotal,
-  //   };
-
-  //   setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
-  //   setPd(new Set([options[0]]));
-  //   setQuantity(0);
-  //   setTax(0);
-  //   setUnitPrice(0);
-  // };
-
   const handleAddProduct = () => {
     if (pd === "" || parseInt(quantity) === 0 || quantity === "") {
-      setShowErrorProduct(true);
-      setShowErrorQuantity(true);
       toast.error("you need to selecte the product and add quantity");
       return;
     }
@@ -314,7 +235,6 @@ export default function SaleOrderCreate() {
                     value={selectedOption}
                     placeholder="Select Payment Type"
                     onChange={(e) => {
-                      setShowErrorPayment(false); // Reset error state on change
                       setSelectedOption(e.target.value);
                     }}
                     className="max-w-xs"
@@ -391,8 +311,6 @@ export default function SaleOrderCreate() {
                   label="Note"
                   name="note"
                   value={note}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => setNote(e.target.value)}
                   placeholder="Enter Note name..."
                   labelPlacement="outside"

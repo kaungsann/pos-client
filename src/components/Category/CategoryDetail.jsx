@@ -38,7 +38,6 @@ export default function CategoryDetail() {
   };
 
   useEffect(() => {
-    // Remove the timer logic
     singleProducts();
   }, []);
 
@@ -57,10 +56,8 @@ export default function CategoryDetail() {
 
       {error ? (
         <div className="flex items-center justify-center mt-40 pb-10">
-          <p className="text-red-500 text-xl px-4 py-2 ">
-            Failed To Load Data
-          </p>        
-          </div>
+          <p className="text-red-500 text-xl px-4 py-2 ">Failed To Load Data</p>
+        </div>
       ) : detail && detail.length > 0 ? (
         <div className="container my-5">
           <h2 className="lg:text-xl font-bold my-2">Category Information</h2>

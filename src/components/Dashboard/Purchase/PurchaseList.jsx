@@ -16,7 +16,7 @@ import {
 } from "@nextui-org/react";
 
 import { useNavigate } from "react-router-dom";
-import { BASE_URL, orderConfirmApi } from "../../Api";
+import { orderConfirmApi } from "../../Api";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
@@ -326,7 +326,7 @@ export default function PurchaseList({ purchases, refresh }) {
   };
 
   const changeConfirmOrder = async () => {
-    const response = await orderConfirmApi(
+    await orderConfirmApi(
       `/purchase/${ConfirmOrderId}?state=confirmed`,
       token.accessToken
     );
@@ -337,7 +337,6 @@ export default function PurchaseList({ purchases, refresh }) {
     setconfrimShowBox(false);
   };
 
-  console.log(totalLine, totalPages, page);
   return (
     <>
       <Table

@@ -1,5 +1,4 @@
-import React, { useState, useEffect, Fragment, useMemo } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { BASE_URL } from "../Api";
 import axios from "axios";
@@ -10,7 +9,6 @@ import {
   endOfWeek,
   startOfYear,
   endOfYear,
-  addDays,
   format,
   subMonths,
   subYears,
@@ -30,12 +28,6 @@ import {
   DropdownTrigger,
   DropdownMenu,
   Button,
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
 } from "@nextui-org/react";
 
 import { useSelector } from "react-redux";
@@ -52,8 +44,6 @@ const AccoutingOverView = () => {
   let [account, setAccount] = useState([]);
   let [totalYear, setTotalYear] = useState([]);
   const token = useSelector((state) => state.IduniqueData);
-
-  console.log("weekend is a", startDate, endDate);
 
   const months = [
     "January",
@@ -75,16 +65,9 @@ const AccoutingOverView = () => {
     YEAR: BASE_URL + "/account/totalByYear",
   };
 
-  const selectedValue = React.useMemo(
-    () => Array.from(selectedKeys).join(", ").replaceAll("_", " "),
-    [selectedKeys]
-  );
-
   const handleDateSelection = React.useCallback(
     (option) => {
       const currentDate = new Date();
-
-      "today date is a", currentDate;
 
       switch (option) {
         case "This Weekend":
@@ -178,10 +161,6 @@ const AccoutingOverView = () => {
     fetchAccountData();
     fetchYearlyData();
   }, [token, handleDateSelection]);
-
-  console.log("totla year is a", totalYear);
-
-  let count = 0;
 
   return (
     <>

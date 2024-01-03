@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../Api";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CategoryList from "./CategoryList";
 import ExcelExportButton from "../ExcelExportButton";
 import ExcelImportButton from "../ExcelImportButton";

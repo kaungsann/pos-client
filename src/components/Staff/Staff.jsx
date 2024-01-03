@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { deleteMultiple, getApi } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -6,12 +6,13 @@ import { ToastContainer, toast } from "react-toastify";
 import { BiSolidEdit } from "react-icons/bi";
 import "react-toastify/dist/ReactToastify.css";
 import { FaEye } from "react-icons/fa6";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DeleteAlert from "../utils/DeleteAlert";
 import { Icon } from "@iconify/react";
 import ChangePassword from "../utils/ChangePassword";
 import ReactPaginate from "react-paginate";
 import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
+import { removeData } from "../../redux/actions";
 
 export default function Staff() {
   const [users, setUsers] = useState([]);
@@ -130,11 +131,6 @@ export default function Staff() {
       />
       <div className=" pb-6 border-b-2 border-b-slate-300 flex justify-between">
         <h1 className="text-2xl text-slate-700 font-bold">Users Information</h1>
-        {/* <Link to="/admin/user/create">
-          <div className="font-bold rounded-sm shadow-sm flex items-cente text-blue-700 border-blue-500 border-2 hover:opacity-75 text-md hover:text-white hover:bg-blue-700 px-6 py-2">
-            Add User
-          </div>
-        </Link> */}
       </div>
 
       {selectedItems.length > 0 && (
@@ -151,7 +147,7 @@ export default function Staff() {
         </div>
       )}
 
-      <table class="table-fixed w-full mt-8">
+      <table className="table-fixed w-full mt-8">
         <tr className="bg-blue-600 text-white">
           <th className="lg:px-4 py-2 text-center">
             <input

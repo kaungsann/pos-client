@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Input, Progress, Select, SelectItem } from "@nextui-org/react";
+import { Input, Progress, Select, SelectItem } from "@nextui-org/react";
 import { FormPostApi } from "../Api";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import MoonLoader from "react-spinners/MoonLoader";
 import { useSelector } from "react-redux";
 
 export default function Register() {
@@ -14,11 +13,9 @@ export default function Register() {
   const [phone, setphone] = useState("");
   const [email, setemail] = useState("");
   const [address, setAddress] = useState("");
-  const [file, setFile] = useState("");
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -27,11 +24,6 @@ export default function Register() {
   const token = useSelector((state) => state.IduniqueData);
 
   const navigate = useNavigate();
-
-  const fileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-  };
 
   const registerUser = async (e) => {
     setLoading(true);
@@ -53,9 +45,9 @@ export default function Register() {
     if (address) {
       formData.append("address", address);
     }
-    if (file) {
-      formData.append("image", file);
-    }
+    // if (file) {
+    //   formData.append("image", file);
+    // }
     formData.append("username", name);
     formData.append("email", email);
     formData.append("password", password);
@@ -105,7 +97,7 @@ export default function Register() {
           </div>
         </div>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
-          {isLoading && (
+          {loading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />
           )}
           <form className="flex justify-between gap-10 p-5">
@@ -116,8 +108,6 @@ export default function Register() {
                   label="Name"
                   name="name"
                   value={name}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => setname(e.target.value)}
                   placeholder="Enter Staff name..."
                   labelPlacement="outside"

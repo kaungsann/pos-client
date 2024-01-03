@@ -161,8 +161,6 @@ export default function EmployeeEdit() {
                   label="Name"
                   name="name"
                   value={name}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter  name..."
                   labelPlacement="outside"

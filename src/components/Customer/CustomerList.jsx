@@ -6,7 +6,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input,
   Button,
   DropdownTrigger,
   Dropdown,
@@ -17,13 +16,11 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import SearchBox from "../utils/SearchBox";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL, deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import DeleteAlert from "../utils/DeleteAlert";
-import FilterBox from "./FilterBox";
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "phone", "actions"];
 
@@ -47,14 +44,6 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
-  const addCustomerRoute = () => {
-    navigate("/admin/partners/create");
-  };
-  const STOCK_API = {
-    INDEX: BASE_URL + "/stock",
-    IMPORT: BASE_URL + "/stock/import-excel",
-    EXPORT: BASE_URL + "/stock/export-excel",
-  };
 
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);

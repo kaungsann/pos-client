@@ -34,6 +34,7 @@ const SearchCompo = ({ keyword, onSearch, text }) => {
 SearchCompo.propTypes = {
   keyword: PropTypes.string,
   onSearch: PropTypes.func,
+  text: PropTypes.string,
 };
 
 export default SearchCompo;

@@ -36,7 +36,7 @@ export default function CategoryCreate() {
           dipatch(removeData(null));
         }
 
-        toast.error(message);
+        toast.error(data.data.message);
       } else {
         navigate("/admin/categorys/all");
       }

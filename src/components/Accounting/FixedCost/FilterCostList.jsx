@@ -246,11 +246,6 @@ export default function FixedCostList({ opexs, refresh }) {
     }
   }, []);
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
-  }, []);
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -283,7 +278,6 @@ export default function FixedCostList({ opexs, refresh }) {
                 disallowEmptySelection
                 aria-label="Table Columns"
                 closeOnSelect={false}
-                selectedKeys={visibleColumns}
                 selectionMode="multiple"
                 onSelectionChange={setVisibleColumns}
               >

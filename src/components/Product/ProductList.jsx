@@ -22,6 +22,8 @@ import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import DeleteAlert from "../utils/DeleteAlert";
 import { format } from "date-fns";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const columns = [
   { name: "Name", uid: "name", sortable: true },
@@ -92,9 +94,12 @@ export default function ProductList({ products, fetchProducts }) {
       },
       token.accessToken
     );
+    console.log("res data is a", response);
     if (response.status) {
       setSelectedKeys([]);
       fetchProducts();
+    } else {
+      toast.error(response.message);
     }
   };
 

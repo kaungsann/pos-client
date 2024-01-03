@@ -117,9 +117,6 @@ export default function EmployeeCreate() {
                   label="Name"
                   name="name"
                   value={formData.name}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
-                  // onChange={(e) => setName(e.target.value)}
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter Employee name..."
                   labelPlacement="outside"
@@ -132,7 +129,6 @@ export default function EmployeeCreate() {
                   name="email"
                   label="Email"
                   value={formData.email}
-                  //onChange={(e) => setEmail(e.target.value)}
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter reference..."
                   labelPlacement="outside"
@@ -157,7 +153,6 @@ export default function EmployeeCreate() {
                   labelPlacement="outside"
                   value={formData.birthdate}
                   onChange={(e) => handleInputChange(e)}
-                  // onChange={(e) => setBirthDate(e.target.value)}
                 />
               </div>
               <div className="w-60">
@@ -166,9 +161,6 @@ export default function EmployeeCreate() {
                   label="address"
                   name="address"
                   value={formData.address}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
-                  // onChange={(e) => setName(e.target.value)}
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter address ..."
                   labelPlacement="outside"
@@ -180,35 +172,12 @@ export default function EmployeeCreate() {
                   label="City"
                   name="city"
                   value={formData.city}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
-                  // onChange={(e) => setName(e.target.value)}
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter city name..."
                   labelPlacement="outside"
                 />
               </div>
               <div className="w-60 my-2">
-                {/* <label className="after:content-['*'] mb-3 after:ml-0.5 after:text-red-500 block text-lg font-semibold text-slate-600">
-                  Gender
-                </label>
-                <select
-                  // onChange={(e) => setGender(e.target.value)}
-                  onChange={(e) => handleInputChange(e)}
-                  id="gender"
-                  required
-                  name="gender"
-                  className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                  value={formData.gender}
-                >
-                  <option disabled value="">
-                    Select an option
-                  </option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select> */}
-
                 <Select
                   label="Gender"
                   placeholder="Select Gender"

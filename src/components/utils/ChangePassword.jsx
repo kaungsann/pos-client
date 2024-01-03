@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { FormPathApi, PathData } from "../Api";
+import { PathData } from "../Api";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -51,7 +51,7 @@ export default function ChangePassword({ close, id }) {
       />
       {/* staff username in add label */}
 
-      <div classNameName="absolute z-40 top-0">
+      <div className="absolute z-40 top-0">
         <div
           className="relative z-10"
           aria-labelledby="modal-title"
