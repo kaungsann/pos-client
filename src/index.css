@@ -1,7 +1,7 @@
 body {
   background-color: whitesmoke;
   font-family: "Roboto", ital;
-  height: auto;
+  height: 100%;
 }
 
 @tailwind base;

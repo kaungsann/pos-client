@@ -21,7 +21,6 @@ import { deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import DeleteAlert from "../utils/DeleteAlert";
-import { capitalize } from "../utils/utils";
 
 const columns = [
   { name: "Name", uid: "name", sortable: true },
@@ -146,7 +145,6 @@ export default function CategoryList({ categories, refresh }) {
     return (
       <>
         <div className="flex justify-between items-center">
-        
           <div className="flex items-end">
             <h2 className="text-xl font-bold">Category</h2>
             <h3 className="text-default-400 text-md pl-4">
@@ -181,9 +179,7 @@ export default function CategoryList({ categories, refresh }) {
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
+                  <DropdownItem key={column.uid}>{column.name}</DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>

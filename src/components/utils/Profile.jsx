@@ -62,9 +62,14 @@ export default function Profile() {
           <div className="relative">
             <img
               loading="eager | lazy"
-              src={file ? URL.createObjectURL(file) : user}
+              src={file ? file : user}
+              //src={file ? URL.createObjectURL(file) : user}
               alt="image"
               className="w-40 h-36 rounded-full"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = user;
+              }}
             />
           </div>
           <div className="text-center">

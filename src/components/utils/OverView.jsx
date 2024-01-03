@@ -416,8 +416,8 @@ export default function OverView() {
                   <h2 className="text-slate-400 text-md font-semibold">
                     Monthly Profits
                   </h2>
-                  <h2 className="text-slate-800 text-xl font-extrabold  my-2">
-                    12456
+                  <h2 className="text-slate-800 my-2">
+                    Unavailable
                   </h2>
                 </div>
               </div>

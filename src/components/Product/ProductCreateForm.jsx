@@ -265,8 +265,6 @@ export default function ProductCreateForm() {
                   label="Name"
                   name="name"
                   value={product.name}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => inputChangeHandler(e)}
                   placeholder="Enter product name..."
                   labelPlacement="outside"

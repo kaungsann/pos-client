@@ -15,7 +15,6 @@ import {
   Pagination,
 } from "@nextui-org/react";
 
-import { capitalize } from "../utils/utils";
 import { Icon } from "@iconify/react";
 
 const columns = [
@@ -137,9 +136,7 @@ export default function StockList({ stocks }) {
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
+                  <DropdownItem key={column.uid}>{column.name}</DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>

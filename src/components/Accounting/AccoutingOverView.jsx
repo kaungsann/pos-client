@@ -40,6 +40,8 @@ const AccoutingOverView = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
   const [expandedIndex, setExpandedIndex] = useState(null);
   let [account, setAccount] = useState([]);
   let [totalYear, setTotalYear] = useState([]);
@@ -88,7 +90,6 @@ const AccoutingOverView = () => {
           setEndDate(format(endOfYear(currentDate), "MM-dd-yyyy"));
           setText(new Date().getFullYear());
           break;
-
         case "Last Month":
           const lastMonthStartDate = startOfMonth(subMonths(currentDate, 1));
           const lastMonthEndDate = endOfMonth(subMonths(currentDate, 1));
@@ -96,7 +97,6 @@ const AccoutingOverView = () => {
           setEndDate(format(lastMonthEndDate, "MM-dd-yyyy"));
           setText(format(lastMonthStartDate, "MMMM"));
           break;
-
         case "Last Year":
           const lastYearStartDate = startOfYear(subYears(currentDate, 1));
           const lastYearEndDate = endOfYear(subYears(currentDate, 1));
@@ -104,7 +104,6 @@ const AccoutingOverView = () => {
           setEndDate(format(lastYearEndDate, "MM-dd-yyyy"));
           setText(format(lastYearStartDate, "yyyy"));
           break;
-
         case "Last Quarter":
           const lastQuarterStartDate = startOfQuarter(
             subQuarters(currentDate, 1)
@@ -127,6 +126,23 @@ const AccoutingOverView = () => {
     [startDate, endDate, setText]
   );
 
+  const handleAccountYearly = React.useCallback(
+    (year) => {
+      let currentYear = new Date().getFullYear();
+      switch (year) {
+        case "lastyear":
+          setSelectedYear(currentYear - 1);
+          break;
+        case "currentyear":
+          setSelectedYear(currentYear);
+          break;
+        default:
+          break;
+      }
+    },
+    [selectedYear]
+  );
+
   useEffect(() => {
     const fetchAccountData = async () => {
       try {
@@ -146,21 +162,26 @@ const AccoutingOverView = () => {
     };
     const fetchYearlyData = async () => {
       try {
-        const response = await axios.get(ACCOUNT_API.YEAR, {
-          headers: {
-            Authorization: `Bearer ${token.accessToken}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await axios.get(
+          ACCOUNT_API.YEAR + `?year=${selectedYear}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("api isa", ACCOUNT_API.YEAR + `?year=${selectedYear}`);
 
         setTotalYear(response.data?.data);
       } catch (error) {
-        console.error("Error fetching year cost:", error);
+        console.error("Error fetching year cost:", error.response?.data);
       }
     };
     fetchAccountData();
     fetchYearlyData();
-  }, [token, handleDateSelection]);
+  }, [token, handleDateSelection, handleAccountYearly]);
 
   return (
     <>
@@ -285,8 +306,8 @@ const AccoutingOverView = () => {
           </div>
         </div>
       </div>
-      <div className="w-4/5 mx-auto">
-        <h2 className="text-xl text-slate-600 font-semibold mb-4">
+      <div className="w-4/5 mx-auto mt-16">
+        <h2 className="text-xl text-slate-600 font-semibold mb-6">
           Statement Report
         </h2>
         <table className="w-full bg-white rounded-sm shadow-md">
@@ -390,9 +411,44 @@ const AccoutingOverView = () => {
 
       <hr className="my-16 bg-slate-200 h-1 border-none" />
 
-      <h2 className="text-slate-500 font-semibold text-xl mb-8">
-        Yearly Report - {new Date().getFullYear()}
-      </h2>
+      <div className="flex items-center mb-8">
+        <h2 className="text-slate-500 font-semibold text-xl mr-4">
+          Yearly Report - {selectedYear}
+        </h2>
+        <Dropdown>
+          <DropdownTrigger>
+            <Button
+              size="sm"
+              className="rounded-sm ml-3 transition shadow-sm flex items-centertext-[#4338ca] border-[#4338ca] hover:bg-[#4338ca]
+                 border-2 hover:opacity-75 text-sm hover:text-white bg-white  font-bold px-3 py-1.5`"
+            >
+              <Icon icon="basil:filter-outline" className="text-lg" />
+              Filter
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu
+            aria-label="Single selection example"
+            variant="flat"
+            disallowEmptySelection
+            selectionMode="single"
+            selectedKeys={selectedKeys}
+            onSelectionChange={setSelectedKeys}
+          >
+            <DropdownItem
+              key="lastyear"
+              onClick={() => handleAccountYearly("lastyear")}
+            >
+              Last Year
+            </DropdownItem>
+            <DropdownItem
+              key="currentyear"
+              onClick={() => handleAccountYearly("currentyear")}
+            >
+              This Year
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </div>
 
       <table className="w-full border-2">
         <thead className="flex justify-between border">
@@ -414,7 +470,13 @@ const AccoutingOverView = () => {
                   {totalYear[0][colIndex].type}
                 </td>
                 {totalYear.map((rowData, rowIndex) => (
-                  <td key={rowIndex} className="w-24 text-center">
+                  <td
+                    key={rowIndex}
+                    className="w-24 text-center"
+                    style={{
+                      color: rowData[colIndex].balance < 0 ? "red" : "black",
+                    }}
+                  >
                     {rowData[colIndex].balance.toFixed()}
                   </td>
                 ))}

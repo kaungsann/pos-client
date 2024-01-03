@@ -6,6 +6,7 @@ import { RiImageAddFill } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
 import axios from "axios";
 import { BASE_URL } from "../Api";
+import user from "../../assets/icon.png";
 
 import {
   Input,
@@ -181,16 +182,24 @@ function PersonalEdit() {
             {isSelected ? (
               <img
                 src={selectedImage}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = user;
+                }}
                 className="absolute object-cover w-full h-full"
               />
             ) : adminImg ? (
               <img
                 src={adminImg}
                 alt={info.name}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = user;
+                }}
                 className="absolute object-cover w-full h-full"
               />
             ) : (
-              <RiImageAddFill className=" text-slate-400 text-6xl" />
+              <img src={user} className="absolute object-cover w-full h-full" />
             )}
           </div>
           <div

@@ -21,7 +21,6 @@ import { deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import DeleteAlert from "../utils/DeleteAlert";
-import { capitalize } from "../utils/utils";
 
 const columns = [
   { name: "Name", uid: "name", sortable: true },
@@ -180,9 +179,7 @@ export default function LocationList({ locations, refresh }) {
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
+                  <DropdownItem key={column.uid}>{column.name}</DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>
