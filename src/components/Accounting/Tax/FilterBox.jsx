@@ -9,22 +9,28 @@ import {
   Button,
   useDisclosure,
   Input,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 const FilterBox = ({ onFilter }) => {
-  const [taxRate, setTaxRate] = useState("");
   const [name, setName] = useState("");
+  const [createdAt, setCreatedAt] = useState("");
+  const [taxRate, setTaxRate] = useState("");
 
   const [isFilterActive, setIsFilterActive] = useState(false);
   const [totalComparison, setTotalComparison] = useState("");
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  console.log("created date is a", createdAt);
+
   const handleFilterClick = () => {
     setIsFilterActive(!isFilterActive);
     onFilter({
       name,
+      createdAt,
       taxRate: {
         value: taxRate,
         comparison: totalComparison,
@@ -37,8 +43,10 @@ const FilterBox = ({ onFilter }) => {
     setTaxRate("");
     setName("");
     setTotalComparison("");
+    setCreatedAt("");
     onFilter({
       name: "",
+      createdAt: "",
       taxRate: {
         value: "",
         comparison: "",
@@ -77,19 +85,40 @@ const FilterBox = ({ onFilter }) => {
                     size="md"
                     placeholder="Enter created date"
                     labelPlacement="outside"
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setCreatedAt(e.target.value)}
                   />
                 </div>
-                <Input
-                  type="number"
-                  variant="bordered"
-                  radius="sm"
-                  size="md"
-                  label="Ref"
-                  placeholder="Enter Tax-Rate"
-                  labelPlacement="outside"
-                  onChange={(e) => setTaxRate(e.target.value)}
-                />
+                <div className="container flex flex-col">
+                  <span className=" text-sm  mb-2">Amount</span>
+                  <div className="flex gap-2">
+                    <Input
+                      type="number"
+                      variant="bordered"
+                      id="total"
+                      onChange={(e) => setTaxRate(e.target.value)}
+                      value={taxRate || ""}
+                      radius="sm"
+                      placeholder="Enter amount"
+                      size="md"
+                    />
+                    <Select
+                      variant="bordered"
+                      radius="sm"
+                      label="Comparison"
+                      placeholder="Select comparison"
+                      id="onHandComparison"
+                      onChange={(e) => setTotalComparison(e.target.value)}
+                      value={totalComparison}
+                    >
+                      <SelectItem value="LESS" key="LESS">
+                        Less Than
+                      </SelectItem>
+                      <SelectItem value="GREATER" key="GREATER">
+                        Greater Than
+                      </SelectItem>
+                    </Select>
+                  </div>
+                </div>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>

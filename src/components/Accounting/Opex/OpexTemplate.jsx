@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import OpexList from "./OpexList";

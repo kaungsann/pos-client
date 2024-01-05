@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import OpexList from "./TaxList";
@@ -19,6 +19,7 @@ function TaxTemplate() {
 
   const [filteredKeywords, setFilteredKeywords] = useState({
     name: "",
+    createdAt: "",
     taxRate: {
       value: 0,
       comparison: "",
@@ -56,15 +57,17 @@ function TaxTemplate() {
   }, [token]);
 
   const handleFilterChange = (selected) => {
+    console.log("filter selected is  a", selected);
     setFilteredKeywords((prevFilter) => ({
       ...prevFilter,
       ...selected,
     }));
   };
+
   const filteredTax = useMemo(
     () =>
       tax.filter((tx) => {
-        const { name, taxRate } = filteredKeywords;
+        const { name, taxRate, createdAt } = filteredKeywords;
 
         const isName = () => {
           if (!name) {
@@ -72,15 +75,15 @@ function TaxTemplate() {
           }
 
           if (tx.name) {
-            return tx.name.includes(name);
+            return tx.name.toLowerCase().includes(name.toLocaleLowerCase());
           }
 
           return false;
         };
         const isTaxRate = () => {
-          if (!tx.amount || !tx.comparison) return true;
+          if (!tx.taxRate || !taxRate.comparison) return true;
 
-          const QTY = tx.amount || 0;
+          const QTY = tx.taxRate || 0;
 
           return (
             (taxRate.comparison === COMPARISION.LESS && QTY < taxRate.value) ||
@@ -88,7 +91,23 @@ function TaxTemplate() {
           );
         };
 
-        return tx.name.includes(name) && isName() && isTaxRate();
+        const isDate = () => {
+          if (!createdAt) {
+            return true;
+          }
+
+          if (tx.createdAt) {
+            const taxDate = tx.createdAt.split("T")[0];
+
+            return taxDate === createdAt;
+          }
+        };
+        return (
+          tx.name.toLowerCase().includes(name.toLocaleLowerCase()) &&
+          isName() &&
+          isTaxRate() &&
+          isDate()
+        );
       }),
     [tax, filteredKeywords]
   );

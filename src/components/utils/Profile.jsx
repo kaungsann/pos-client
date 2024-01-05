@@ -16,10 +16,6 @@ import PersonalEdit from "./PersonalEdit";
 
 export default function Profile() {
   const { id } = useParams();
-  const [usr, setUsr] = useState([]);
-  const [name, setName] = useState("");
-
-  const [file, setFile] = useState(null);
 
   const [logout, setLogout] = useState(false);
   const dipatch = useDispatch();
@@ -27,18 +23,9 @@ export default function Profile() {
 
   const userInfo = useSelector((state) => state.loginData);
 
+  console.log("user info is a", userInfo);
+
   const token = useSelector((state) => state.IduniqueData);
-
-  const singleUser = async () => {
-    let response = await getApi(`/user/${id}`, token.accessToken);
-    if (response.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-
-    setUsr(response.data[0]);
-    setName(response.data[0].username);
-    setFile(response.data[0].image);
-  };
 
   const handlePersonalSectionClick = () => {
     setActiveSection("personal");
@@ -48,9 +35,6 @@ export default function Profile() {
     setActiveSection("company");
   };
 
-  useEffect(() => {
-    singleUser();
-  }, []);
   return (
     <>
       <div
@@ -62,8 +46,7 @@ export default function Profile() {
           <div className="relative">
             <img
               loading="eager | lazy"
-              src={file ? file : user}
-              //src={file ? URL.createObjectURL(file) : user}
+              src={userInfo.image ? userInfo.image : user}
               alt="image"
               className="w-40 h-36 rounded-full"
               onError={(e) => {
@@ -73,8 +56,7 @@ export default function Profile() {
             />
           </div>
           <div className="text-center">
-            <h3 className="font-bold text-2xl mt-2">{usr.name}</h3>
-            <h3 className="font-semibold text-lg text-slate-500">{name}</h3>
+            <h3 className="font-bold text-2xl mt-2">{userInfo.username}</h3>
           </div>
           <div className="w-full mt-6">
             <div

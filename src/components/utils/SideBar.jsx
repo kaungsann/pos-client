@@ -61,12 +61,12 @@ export default function SideBar() {
             >
               {expanded ? (
                 <Icon
-                  icon="iconamoon:arrow-left-2"
+                  icon="mingcute:right-line"
                   className="text-2xl text-slate-500"
                 />
               ) : (
                 <Icon
-                  icon="iconamoon:arrow-right-2"
+                  icon="icon-park-outline:left"
                   className="text-2xl text-slate-500"
                 />
               )}
@@ -156,10 +156,17 @@ export default function SideBar() {
                   onClick={() => setInventory(!inventory)}
                 >
                   <h4 className="font-semibold text-md">Inventory</h4>
-                  <Icon
-                    icon="iconamoon:arrow-down-2"
-                    className="text-lg ml-2 text-gray-600"
-                  />
+                  {inventory ? (
+                    <Icon
+                      icon="iconamoon:arrow-down-2"
+                      className="text-lg ml-2 text-gray-600"
+                    />
+                  ) : (
+                    <Icon
+                      icon="iconamoon:arrow-up-2"
+                      className="text-lg ml-2 text-gray-600"
+                    />
+                  )}
                 </div>
               </div>
               <div
@@ -220,8 +227,8 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="iconamoon:category-light"
-                        className="text-slate-600 text-xl"
+                        icon="tabler:category-plus"
+                        className="text-slate-500 text-2xl"
                       />
 
                       <h3 className="ml-3">Category</h3>
@@ -240,7 +247,7 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="healthicons:stock-out-outline"
+                        icon="healthicons:rdt-result-out-stock-outline"
                         className="text-slate-500 text-2xl"
                       />
 
@@ -257,7 +264,7 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="tabler:adjustments"
+                        icon="tabler:adjustments-horizontal"
                         className="text-slate-500 text-xl"
                       />
 
@@ -353,10 +360,18 @@ export default function SideBar() {
                   onClick={() => setPurchase(!purchase)}
                 >
                   <h4 className="font-semibold text-md">Purchase</h4>
-                  <Icon
-                    icon="iconamoon:arrow-down-2"
-                    className="text-lg ml-2 text-gray-600"
-                  />
+
+                  {purchase ? (
+                    <Icon
+                      icon="iconamoon:arrow-down-2"
+                      className="text-lg ml-2 text-gray-600"
+                    />
+                  ) : (
+                    <Icon
+                      icon="iconamoon:arrow-up-2"
+                      className="text-lg ml-2 text-gray-600"
+                    />
+                  )}
                 </div>
               </div>
               <div
@@ -377,9 +392,10 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="uil:analytics"
+                        icon="uim:analytics"
                         className="text-slate-500 text-xl"
                       />
+
                       <span className="ml-3">Overview</span>
                     </li>
                     <li
@@ -411,15 +427,13 @@ export default function SideBar() {
                         navigate("/admin/customers/vendors"), clostHandleList();
                       }}
                     >
-                      <Icon icon="bx:user" className="text-slate-500 text-xl" />
+                      <Icon icon="ph:user" className="text-slate-500 text-xl" />
 
                       <span className="ml-3">Vendor</span>
                     </li>
                   </ul>
                 )}
               </div>
-
-              {/* <MoreVertical size={20} /> */}
             </div>
           </div>
 
@@ -486,15 +500,22 @@ export default function SideBar() {
                   onClick={() => setSale(!sale)}
                 >
                   <h4 className="font-semibold text-md">Sale</h4>
-                  <Icon
-                    icon="iconamoon:arrow-down-2"
-                    className="text-lg ml-2 text-gray-600"
-                  />
+                  {sale ? (
+                    <Icon
+                      icon="iconamoon:arrow-down-2"
+                      className="text-lg ml-2 text-gray-600"
+                    />
+                  ) : (
+                    <Icon
+                      icon="iconamoon:arrow-up-2"
+                      className="text-lg ml-2 text-gray-600"
+                    />
+                  )}
                 </div>
               </div>
               <div
                 className={`
-              overflow-hidden transition-all ${sale ? "w-40 ml-3" : "w-0"}
+                overflow-hidden transition-all ${sale ? "w-40 ml-3" : "w-0"}
           `}
               >
                 {sale && (
@@ -510,7 +531,7 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="uil:analytics"
+                        icon="uim:analytics"
                         className="text-slate-500 text-xl"
                       />
                       <span className="ml-3">Overview</span>
@@ -532,6 +553,11 @@ export default function SideBar() {
                         className="text-slate-500 text-xl"
                       />
 
+                      <Icon
+                        icon="la:cart-plus"
+                        className="text-slate-500 text-xl"
+                      />
+
                       <span className="ml-3">SaleOrders</span>
                     </li>
                     <li
@@ -544,14 +570,12 @@ export default function SideBar() {
                         navigate("/admin/customers/all"), clostHandleList();
                       }}
                     >
-                      <Icon icon="bx:user" className="text-slate-500 text-xl" />
+                      <Icon icon="ph:user" className="text-slate-500 text-xl" />
                       <span className="ml-3">Customers</span>
                     </li>
                   </ul>
                 )}
               </div>
-
-              {/* <MoreVertical size={20} /> */}
             </div>
           </div>
 
@@ -616,10 +640,17 @@ export default function SideBar() {
                   onClick={() => setSkate(!skate)}
                 >
                   <h4 className="font-semibold text-md">Stakeholders</h4>
-                  <Icon
-                    icon="iconamoon:arrow-down-2"
-                    className="text-lg ml-2 text-gray-600"
-                  />
+                  {skate ? (
+                    <Icon
+                      icon="iconamoon:arrow-down-2"
+                      className="text-lg ml-2 text-gray-600"
+                    />
+                  ) : (
+                    <Icon
+                      icon="iconamoon:arrow-up-2"
+                      className="text-lg ml-2 text-gray-600"
+                    />
+                  )}
                 </div>
               </div>
               <div
@@ -643,9 +674,10 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="mdi:partnership-outline"
+                        icon="ph:users-three"
                         className="text-slate-500 text-xl"
                       />
+
                       <span className="ml-3">Partner</span>
                     </li>
                     <li
@@ -681,7 +713,7 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="ph:users-three-light"
+                        icon="solar:user-id-outline"
                         className="text-slate-500 text-xl"
                       />
 
@@ -778,10 +810,17 @@ export default function SideBar() {
                 >
                   <h4 className="font-semibold text-md">Accountant</h4>
 
-                  <Icon
-                    icon="iconamoon:arrow-down-2"
-                    className="text-lg ml-2 text-gray-600"
-                  />
+                  {account ? (
+                    <Icon
+                      icon="iconamoon:arrow-down-2"
+                      className="text-lg ml-2 text-gray-600"
+                    />
+                  ) : (
+                    <Icon
+                      icon="iconamoon:arrow-up-2"
+                      className="text-lg ml-2 text-gray-600"
+                    />
+                  )}
                 </div>
               </div>
               <div
@@ -802,9 +841,10 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="carbon:report"
+                        icon="carbon:account"
                         className="tet-slate-500 text-xl"
                       />
+
                       <span className="ml-3">Overview</span>
                     </li>
                     <li
@@ -821,9 +861,10 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="basil:invoice-outline"
+                        icon="material-symbols-light:feed-outline"
                         className="tet-slate-500 text-xl"
                       />
+
                       <span className="ml-3">Tax</span>
                     </li>
                     <li
@@ -840,9 +881,10 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="basil:invoice-outline"
+                        icon="icon-park-outline:table-report"
                         className="tet-slate-500 text-xl"
                       />
+
                       <span className="ml-3">Opex</span>
                     </li>
                     <li
@@ -859,9 +901,10 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="teenyicons:cost-estimate-outline"
+                        icon="bi:file-text"
                         className="tet-slate-500 text-xl"
                       />
+
                       <span className="ml-3">Fixed-Cost</span>
                     </li>
                     <li
@@ -879,7 +922,11 @@ export default function SideBar() {
                         navigate("/admin/variable-cost/all"), clostHandleList();
                       }}
                     >
-                      <Icon icon="ep:list" className="tet-slate-500 text-xl" />
+                      <Icon
+                        icon="lucide:clipboard-list"
+                        className="tet-slate-500 text-xl"
+                      />
+
                       <span className="ml-3"> Variable-Cost</span>
                     </li>
                     <li
@@ -896,16 +943,15 @@ export default function SideBar() {
                       }}
                     >
                       <Icon
-                        icon="game-icons:expense"
+                        icon="fluent:feed-28-regular"
                         className="tet-slate-500 text-xl"
                       />
+
                       <span className="ml-3">Waste</span>
                     </li>
                   </ul>
                 )}
               </div>
-
-              {/* <MoreVertical size={20} /> */}
             </div>
           </div>
         </nav>

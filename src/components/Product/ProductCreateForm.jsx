@@ -13,6 +13,7 @@ import axios from "axios";
 
 export default function ProductCreateForm() {
   const [categories, setCatgs] = useState([]);
+  const [taxs, setTaxs] = useState([]);
   const [isSelected, setIsSelected] = useState(false);
   const [selectFile, setSelectedFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -29,7 +30,7 @@ export default function ProductCreateForm() {
     minStockQty: 0,
     marginProfit: 0,
     expiredAt: "",
-    tax: 0,
+    tax: [],
   };
   const [product, setProduct] = useState(productDoc);
   const [updateProduct, setUpdateProduct] = useState({});
@@ -165,6 +166,21 @@ export default function ProductCreateForm() {
       setCatgs(filteredCategory);
     };
 
+    const fetchTaxs = async () => {
+      const { data } = await axios.get(BASE_URL + `/tax`, {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (data?.message == "Token Expire , Please Login Again") {
+        dipatch(removeData(null));
+      }
+      const filteredTax = data.data.filter((tx) => tx.active === true);
+
+      setTaxs(filteredTax);
+    };
+
     const fetchData = async () => {
       try {
         await fetchCategories();
@@ -172,7 +188,8 @@ export default function ProductCreateForm() {
         console.error("Error fetching products:", error);
       }
     };
-
+    fetchCategories();
+    fetchTaxs();
     fetchData();
   }, []);
 
@@ -353,7 +370,7 @@ export default function ProductCreateForm() {
                 />
               </div>
               <div className="w-60">
-                <Input
+                {/* <Input
                   type="number"
                   required
                   name="tax"
@@ -367,7 +384,29 @@ export default function ProductCreateForm() {
                       <span className="text-default-400 text-small">$</span>
                     </div>
                   }
-                />
+                /> */}
+                <Select
+                  labelPlacement="outside"
+                  label="Tax-Rate"
+                  name="tax"
+                  placeholder="Select tax"
+                  // selectedKeys={
+                  //   product.tax ? [product.tax.id || product.tax] : false
+                  // }
+                  selectionMode="multiple"
+                  onChange={(e) => inputChangeHandler(e)}
+                  className="max-w-xs"
+                >
+                  {taxs.map((tx) => (
+                    <SelectItem
+                      key={tx.id}
+                      value={tx.id}
+                      startContent={tx.taxRate}
+                    >
+                      {tx.name}
+                    </SelectItem>
+                  ))}
+                </Select>
               </div>
               <div className="w-60">
                 <Input

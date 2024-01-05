@@ -41,7 +41,7 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
     new Set(columns.map((column) => column.uid))
   );
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "name",
     direction: "ascending",
@@ -155,8 +155,6 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
     return (
       <>
         <div className="flex justify-between items-center">
-          
-
           <div className="flex items-end">
             <h2 className="text-xl font-bold">Partner</h2>
             <h3 className="text-default-400 text-md pl-4">
@@ -247,7 +245,6 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
       </div>
     );
   }, [selectedKeys, totalItems, page, isLastPage, isFirstPage, totalPages]);
-
 
   return (
     <>

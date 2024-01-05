@@ -110,10 +110,7 @@ export default function PayBox({ onContinueToPay }) {
                       </div>
                     </div>
                     <span className=" font-semibold text-md text-slate-600">
-                      tax -{" "}
-                      {(sel.tax && sel.tax * sel.quantity).toLocaleString(
-                        "en-US"
-                      )}
+                      tax - {sel.tax ? sel.tax * sel.quantity : 0}
                     </span>
 
                     <div className="flex items-center justify-between w-full">
@@ -181,25 +178,22 @@ export default function PayBox({ onContinueToPay }) {
                 {totalCost.toLocaleString("en-US")}MMK
               </h3>
             </div>
-            
 
-              <Button
-                className="w-full mt-5"
-                color="primary"
-                variant="solid"
-                onClick={() => {
-                  if (product.length > 0) {
-                    setPayment(!payment);
-                  } else {
-                    setPayment(false);
-                    toast("You need to select a product");
-                  }
-                }}
-              >
-                Continue To Pay
-              </Button>
-
-
+            <Button
+              className="w-full mt-5"
+              color="primary"
+              variant="solid"
+              onClick={() => {
+                if (product.length > 0) {
+                  setPayment(!payment);
+                } else {
+                  setPayment(false);
+                  toast("You need to select a product");
+                }
+              }}
+            >
+              Continue To Pay
+            </Button>
           </div>
         </div>
       )}

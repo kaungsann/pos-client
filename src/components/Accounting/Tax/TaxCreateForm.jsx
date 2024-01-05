@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import { Input, Progress, Button, Checkbox } from "@nextui-org/react";
+import { Input, Progress, Button } from "@nextui-org/react";
 
 export default function TaxCreateForm() {
   const navigate = useNavigate();
@@ -89,7 +89,7 @@ export default function TaxCreateForm() {
         </Button>
       </div>
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Opex Create</h2>
+        <h2 className="lg:text-xl font-bold my-2">Tax Create</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           {isLoading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />
