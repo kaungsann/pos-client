@@ -553,11 +553,6 @@ export default function SideBar() {
                         className="text-slate-500 text-xl"
                       />
 
-                      <Icon
-                        icon="la:cart-plus"
-                        className="text-slate-500 text-xl"
-                      />
-
                       <span className="ml-3">SaleOrders</span>
                     </li>
                     <li

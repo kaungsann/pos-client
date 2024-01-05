@@ -41,6 +41,8 @@ export default function ProductCreateForm() {
 
   const dipatch = useDispatch();
 
+  console.log("product created is a", product);
+
   const generateBarCode = () => {
     const generateRandomNumber = (digits) => {
       const min = 10 ** (digits - 1);

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
-import { RiImageAddFill } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
 import axios from "axios";
 import { BASE_URL } from "../Api";
@@ -21,7 +20,7 @@ import {
   ModalFooter,
   ModalBody,
 } from "@nextui-org/react";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Icon } from "@iconify/react";
 
@@ -101,6 +100,8 @@ function PersonalEdit() {
           },
         });
 
+        console.log("data is a user", data);
+
         if (!data.status) {
           if (data?.message == "Token Expire , Please Login Again") {
             dipatch(removeData(null));
@@ -158,6 +159,18 @@ function PersonalEdit() {
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="flex justify-between w-full mt-4 text-slate-700 pb-3 px-4">
         <h3 className="text-2xl font-bold">Personal Information</h3>
 

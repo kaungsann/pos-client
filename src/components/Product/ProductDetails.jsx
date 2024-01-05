@@ -202,7 +202,9 @@ export default function ProductDetails() {
                         <div>
                           <h4 className="text-md text-slate-500">Profit</h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                            {product.marginProfit ? product.marginProfit : ""}
+                            {product.marginProfit
+                              ? product.marginProfit
+                              : "none"}
                           </h2>
                         </div>
                       </div>
