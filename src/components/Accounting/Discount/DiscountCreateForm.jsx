@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 import { Input, Progress, Button } from "@nextui-org/react";
 
-export default function TaxCreateForm() {
+export default function DiscountCreateForm() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -16,10 +16,8 @@ export default function TaxCreateForm() {
 
   const [formData, setFormData] = useState({
     name: "",
-    taxRate: 0,
+    amount: 0,
   });
-
-  console.log("forma data is a", formData);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,13 +27,17 @@ export default function TaxCreateForm() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await sendJsonToApi("/tax", formData, token.accessToken);
+      const response = await sendJsonToApi(
+        "/discount",
+        formData,
+        token.accessToken
+      );
 
       if (response.message === "Token Expire , Please Login Again")
         dipatch(removeData(null));
 
       if (response.status) {
-        navigate("/admin/tax/all");
+        navigate("/admin/discount/all");
         setIsLoading(false);
       } else {
         toast.error(response.message || "An error occurred");
@@ -83,13 +85,13 @@ export default function TaxCreateForm() {
               ? ""
               : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
           }`}
-          onClick={() => navigate("/admin/tax/all")}
+          onClick={() => navigate("/admin/discount/all")}
         >
           Discard
         </Button>
       </div>
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Tax Create</h2>
+        <h2 className="lg:text-xl font-bold my-2">Discount Create</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           {isLoading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />
@@ -110,11 +112,11 @@ export default function TaxCreateForm() {
               <div className="w-60">
                 <Input
                   type="number"
-                  name="taxRate"
-                  label="TaxRate"
-                  value={formData.taxRate}
+                  name="amount"
+                  label="Amount"
+                  value={formData.amount}
                   onChange={(e) => handleInputChange(e)}
-                  placeholder="enter tax-rate..."
+                  placeholder="enter amount..."
                   labelPlacement="outside"
                 />
               </div>

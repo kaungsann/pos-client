@@ -11,67 +11,62 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Chip,
   Pagination,
 } from "@nextui-org/react";
-
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
 
-const statusOptions = [
-  { name: "pending", uid: "pending" },
-  { name: "confirmed", uid: "confirmed" },
-];
+import { useNavigate } from "react-router-dom";
+import { deleteMultiple } from "../../Api";
+import { useSelector } from "react-redux";
+import DeleteAlert from "../../utils/DeleteAlert";
 
-const INITIAL_VISIBLE_COLUMNS = [
-  "scheduledate",
-  "name",
-  "partner",
-  "location",
-  "state",
-  "total",
-  "discount",
-  "orderref",
-  "actions",
-];
+const INITIAL_VISIBLE_COLUMNS = ["name", "amount", "created", "actions"];
 
 const columns = [
-  { name: "Schedule-Date", uid: "scheduledate" },
-  { name: "Name", uid: "name" },
-  { name: "Partner", uid: "partner" },
-  { name: "Location", uid: "location" },
-  { name: "State", uid: "state" },
-  { name: "Discount", uid: "discount" },
-  { name: "TotalProduct", uid: "totalproduct" },
-  { name: "TaxTotal", uid: "taxtotal", sortable: true },
-  { name: "OrderRef", uid: "orderref" },
-  { name: "Total", uid: "total", sortable: true },
+  { name: "Name", uid: "name", sortable: true },
+  { name: "Amount", uid: "amount", sortable: true },
+  { name: "Create-Date", uid: "created" },
   { name: "Action", uid: "actions" },
 ];
 
-export default function SaleList({ sales }) {
+export default function DiscountList({ discounts, refresh }) {
   const [filterValue, setFilterValue] = React.useState("");
+  const [showDeleteBox, setShowDeleteBox] = React.useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-
-  const navigate = useNavigate();
-
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "total",
+    column: "name",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
 
+  const navigate = useNavigate();
+  const token = useSelector((state) => state.IduniqueData);
+
   const hasSearchFilter = Boolean(filterValue);
 
+  const deleteDiscounts = async () => {
+    const response = await deleteMultiple(
+      "/discount",
+      {
+        discountIds: [...selectedKeys],
+      },
+      token.accessToken
+    );
+
+    if (response.status) {
+      setSelectedKeys([]);
+      refresh();
+    }
+  };
+
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return INITIAL_VISIBLE_COLUMNS;
+    if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
@@ -79,24 +74,24 @@ export default function SaleList({ sales }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredSale = [...sales];
+    let filteredOpex = [...discounts];
 
     if (hasSearchFilter) {
-      filteredSale = filteredSale.filter((sale) =>
-        sale.partner.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredOpex = filteredOpex.filter((op) =>
+        op.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredSale = filteredSale.filter((sale) =>
-        Array.from(statusFilter).includes(sale.state)
+      filteredOpex = filteredOpex.filter((op) =>
+        Array.from(statusFilter).includes(op.state)
       );
     }
 
-    return filteredSale;
-  }, [sales, filterValue, statusFilter]);
+    return filteredOpex;
+  }, [discounts, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -117,62 +112,46 @@ export default function SaleList({ sales }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((sales, columnKey) => {
-    const cellValue = sales[columnKey];
+  const renderCell = React.useCallback((discounts, columnKey) => {
+    const cellValue = discounts[columnKey];
 
     switch (columnKey) {
-      case "scheduledate":
-        return <h3>{format(new Date(sales.scheduledDate), "yyyy-MM-dd")}</h3>;
       case "name":
-        return <h3>{sales.user?.username}</h3>;
-      case "partner":
-        return <h3>{sales.partner?.name}</h3>;
-      case "location":
-        return <h3>{sales.location?.name}</h3>;
-      case "orderref":
-        return <h3>{sales.orderRef}</h3>;
-
-      case "state":
-        return (
-          <div className="flex gap-4">
-            {sales.state === "pending" ? (
-              <Chip color="danger" variant="bordered">
-                {sales.state}
-              </Chip>
-            ) : (
-              <Chip color="success" variant="bordered">
-                {sales.state}
-              </Chip>
-            )}
-          </div>
-        );
-      case "discount":
-        return <h3>{sales.discount?.amount} %</h3>;
-      case "totalproduct":
-        return <h3>{sales.lines.length}</h3>;
-      case "taxtotal":
-        return <h3>{sales.taxTotal.toFixed(2)}</h3>;
-      case "total":
-        return <h3>{sales.total.toFixed(2)}</h3>;
+        return <h3>{discounts.name}</h3>;
+      case "amount":
+        return <h3>{discounts.amount}</h3>;
+      case "created":
+        return <h3>{format(new Date(discounts.createdAt), "yyyy-MM-dd")}</h3>;
       case "actions":
         return (
-          <div className="relative flex justify-start items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <Icon icon="fluent:grid-dots-28-regular" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem
-                  onPress={() => {
-                    navigate(`/admin/saleorders/detail/${sales.id}`);
-                  }}
-                >
-                  View
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+          <div className="flex justify-between items-center">
+            <div className="relative flex justify-start items-center gap-2">
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button isIconOnly size="sm" variant="light">
+                    <Icon icon="fluent:grid-dots-28-regular" />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu>
+                  <DropdownItem
+                    onPress={() => {
+                      navigate(`/admin/discount/detail/${discounts.id}`);
+                    }}
+                    className="text-blue-600"
+                  >
+                    View
+                  </DropdownItem>
+                  <DropdownItem
+                    onPress={() => {
+                      navigate(`/admin/discount/edit/${discounts.id}`);
+                    }}
+                    className="text-blue-600"
+                  >
+                    Edit
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
           </div>
         );
       default:
@@ -206,24 +185,18 @@ export default function SaleList({ sales }) {
     }
   }, []);
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
-  }, []);
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <div className="flex items-end">
-            <h2 className="text-xl font-bold">Sale Orders</h2>
+            <h2 className="text-xl font-bold">Discount</h2>
             <h3 className="text-default-400 text-md pl-4">
-              Total {sales.length}
+              Total {discounts.length}
             </h3>
           </div>
-
           <div className="flex items-center">
-            <label className="flex items-center text-default-400 text-small mr-4">
+            <label className="flex items-center text-default-400 text-small">
               Rows per page:
               <select
                 className="bg-transparent outline-none text-default-400 text-small"
@@ -235,7 +208,7 @@ export default function SaleList({ sales }) {
               </select>
             </label>
             <Dropdown>
-              <div>
+              <div className="mx-4">
                 <DropdownTrigger className="hidden sm:flex">
                   <Icon icon="system-uicons:filtering" />
                 </DropdownTrigger>
@@ -249,12 +222,18 @@ export default function SaleList({ sales }) {
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
-                    {column.name}
-                  </DropdownItem>
+                  <DropdownItem key={column.uid}>{column.name}</DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>
+            {selectedKeys.size > 0 && selectedKeys !== "all" && (
+              <button
+                onClick={() => setShowDeleteBox(true)}
+                className="px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
+              >
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -264,10 +243,14 @@ export default function SaleList({ sales }) {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    sales.length,
+    discounts.length,
+    selectedKeys,
     onSearchChange,
     hasSearchFilter,
   ]);
+  console.log("selectedKeys type:", typeof selectedKeys);
+
+  console.log("selected is a ", selectedKeys);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -311,17 +294,20 @@ export default function SaleList({ sales }) {
   return (
     <>
       <Table
+        classNames={{
+          wrapper: "max-h-[382px]",
+        }}
         aria-label="Example table with custom cells, pagination and sorting"
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
-        classNames={{
-          wrapper: "max-h-[382px]",
-        }}
+        selectedKeys={selectedKeys}
+        selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
-        onSortChange={setSortDescriptor}
+        onSelectionChange={setSelectedKeys}
+        onSortChange={(descriptor) => setSortDescriptor(descriptor)}
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
@@ -334,7 +320,7 @@ export default function SaleList({ sales }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Purchases found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record Found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -344,6 +330,18 @@ export default function SaleList({ sales }) {
           )}
         </TableBody>
       </Table>
+      {showDeleteBox && (
+        <DeleteAlert
+          cancel={() => {
+            setShowDeleteBox(false);
+            setSelectedKeys(new Set([]));
+          }}
+          onDelete={() => {
+            deleteDiscounts();
+            setShowDeleteBox(false);
+          }}
+        />
+      )}
     </>
   );
 }

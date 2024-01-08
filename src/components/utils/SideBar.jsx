@@ -753,6 +753,15 @@ export default function SideBar() {
                         </li>
                       </div>
                     </ListboxItem>
+                    <ListboxItem
+                      onClick={() => navigate("/admin/discount/all")}
+                    >
+                      <div className="flex justify-between">
+                        <li className={`my-1 ml-2 text-start  rounded-md`}>
+                          Discount
+                        </li>
+                      </div>
+                    </ListboxItem>
                     <ListboxItem onClick={() => navigate("/admin/tax/all")}>
                       <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
@@ -841,6 +850,26 @@ export default function SideBar() {
                       />
 
                       <span className="ml-3">Overview</span>
+                    </li>
+                    <li
+                      className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                        location.pathname === "/admin/discount/all" ||
+                        location.pathname === "/admin/discount/create" ||
+                        location.pathname === `/admin/discount/edit/${id}` ||
+                        location.pathname === `/admin/discount/detail/${id}`
+                          ? "text-white bg-slate-300 "
+                          : ""
+                      }}`}
+                      onClick={() => {
+                        navigate("/admin/discount/all"), clostHandleList();
+                      }}
+                    >
+                      <Icon
+                        icon="iconamoon:discount"
+                        className="tet-slate-500 text-xl"
+                      />
+
+                      <span className="ml-3">Discount</span>
                     </li>
                     <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${

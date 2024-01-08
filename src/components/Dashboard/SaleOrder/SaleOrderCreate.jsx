@@ -19,6 +19,7 @@ import {
   TableCell,
   Divider,
 } from "@nextui-org/react";
+import { useSpring } from "framer-motion";
 
 export default function SaleOrderCreate() {
   let count = 0;
@@ -27,6 +28,8 @@ export default function SaleOrderCreate() {
   const [part, setPart] = useState([]);
   const [partner, setPartner] = useState("");
   const [loca, setLoca] = useState("");
+  const [discountId, setDiscountId] = useState("");
+  const [discountAmount, setDiscountAmount] = useState(0);
   const [note, setNote] = useState("");
 
   const [item, setItem] = useState(null);
@@ -39,6 +42,14 @@ export default function SaleOrderCreate() {
   const [date, setDate] = useState("");
   const [totalTax, setTotalTax] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
+  const [discount, setDiscount] = useState([]);
+
+  const handleDiscountChange = (e) => {
+    const selectedDiscount = discount.find((ds) => ds.id === e.target.value);
+    setDiscountId(e.target.value);
+    setDiscountAmount(selectedDiscount ? selectedDiscount.amount : 0);
+  };
+
   const [selectedOption, setSelectedOption] = React.useState("default");
 
   const navigate = useNavigate();
@@ -58,6 +69,7 @@ export default function SaleOrderCreate() {
       user: userData._id,
       partner: partner,
       location: loca,
+      discount: discountId,
       lines: saleOrderLines.map((line) => ({
         product: line.product.id,
         qty: line.qty,
@@ -107,6 +119,12 @@ export default function SaleOrderCreate() {
       (partner) => partner.isCustomer === true && partner.active === true
     );
     setPart(filteredPartners);
+  };
+
+  const getDiscount = async () => {
+    const resData = await getApi("/discount", token.accessToken);
+    const filteredDiscount = resData.data.filter((la) => la.active === true);
+    setDiscount(filteredDiscount);
   };
 
   const handleAddProduct = () => {
@@ -179,6 +197,7 @@ export default function SaleOrderCreate() {
     getLocation();
     getPartner();
     getProduct();
+    getDiscount();
   }, [saleOrderLines]);
 
   return (
@@ -408,7 +427,25 @@ export default function SaleOrderCreate() {
                 </TableBody>
               </Table>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full">
+              <Select
+                label="Discount"
+                variant="bordered"
+                placeholder="Select a discount"
+                labelPlacement="outside"
+                classNames={{
+                  trigger: "font-bold w-60",
+                }}
+                endContent={<Icon icon="ic:round-create" />}
+                onChange={handleDiscountChange}
+              >
+                {discount.map((ds) => (
+                  <SelectItem key={ds.id} value={ds.id}>
+                    {ds.name}
+                  </SelectItem>
+                ))}
+              </Select>
+
               <div className="flex mt-8 justify-self-end">
                 <h1 className="text-lg font-semibold">
                   TaxTotal : <span>{totalTax.toFixed(2) ?? 0}</span>
@@ -416,7 +453,10 @@ export default function SaleOrderCreate() {
               </div>
               <div className="flex mt-4 justify-self-end">
                 <h1 className="text-lg font-semibold">
-                  Total : <span>{totalCost.toFixed(2) ?? 0}</span>
+                  {/* Total : <span>{totalCost.toFixed(2) ?? 0}</span> */}
+                  {(totalCost - (discountAmount / 100) * totalCost).toFixed(
+                    2
+                  ) ?? 0}
                 </h1>
               </div>
             </div>

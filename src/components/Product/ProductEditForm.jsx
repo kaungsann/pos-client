@@ -96,8 +96,6 @@ export default function ProductEditForm() {
           }
         );
 
-        console.log("response data is a", data);
-
         if (!data.status) {
           if (data?.message == "Token Expire , Please Login Again") {
             dipatch(removeData(null));
@@ -286,8 +284,6 @@ export default function ProductEditForm() {
                   label="Name"
                   name="name"
                   value={product.name}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => inputChangeHandler(e)}
                   placeholder="Enter product name..."
                   labelPlacement="outside"

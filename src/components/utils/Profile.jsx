@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getApi } from "../Api";
+import { BASE_URL, getApi } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
 import { BiSolidUser } from "react-icons/bi";
@@ -13,19 +13,20 @@ import user from "../../assets/user.jpeg";
 import EditBusinessInfo from "./EditBusinessInfo";
 import CompanyInfo from "./CompanyInfo";
 import PersonalEdit from "./PersonalEdit";
+import axios from "axios";
 
 export default function Profile() {
-  const { id } = useParams();
-
+  const [userInfo, setUserInfo] = useState(false);
   const [logout, setLogout] = useState(false);
   const dipatch = useDispatch();
   const [activeSection, setActiveSection] = useState("personal");
 
-  const userInfo = useSelector((state) => state.loginData);
+  const userData = useSelector((state) => state.loginData);
 
   console.log("user info is a", userInfo);
 
   const token = useSelector((state) => state.IduniqueData);
+  const isPageRefreshed = useSelector((state) => state.refresh);
 
   const handlePersonalSectionClick = () => {
     setActiveSection("personal");
@@ -34,6 +35,28 @@ export default function Profile() {
   const handleCompanyRegister = () => {
     setActiveSection("company");
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(BASE_URL + `/user/${userData._id}`, {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (data?.message == "Token Expire , Please Login Again") {
+          dipatch(removeData(null));
+        }
+
+        setUserInfo(data.data[0]);
+      } catch (error) {
+        console.error("Error fetching admin info:", error);
+      }
+    };
+
+    fetchData();
+  }, [isPageRefreshed, token]);
 
   return (
     <>

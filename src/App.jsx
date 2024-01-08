@@ -59,6 +59,10 @@ import AccoutingOverView from "./components/Accounting/AccoutingOverView";
 import TaxTemplate from "./components/Accounting/Tax/TaxTemplate";
 import TaxCreateForm from "./components/Accounting/Tax/TaxCreateForm";
 import TaxDetail from "./components/Accounting/Tax/TaxDetail";
+import DiscountTemplate from "./components/Accounting/Discount/DiscountTemplate";
+import DiscountCreateForm from "./components/Accounting/Discount/DiscountCreateForm";
+import DiscountDetail from "./components/Accounting/Discount/DiscountDetail";
+import DiscountEdit from "./components/Accounting/Discount/DiscountEdit";
 
 function App() {
   return (
@@ -78,6 +82,13 @@ function App() {
 
             <Route path="inventory/overview" element={<OverView />} />
             <Route path="account/overview" element={<AccoutingOverView />} />
+
+            <Route path="discount">
+              <Route path="all" element={<DiscountTemplate />} />
+              <Route path="create" element={<DiscountCreateForm />} />
+              <Route path="edit/:id" element={<DiscountEdit />} />
+              <Route path="detail/:id" element={<DiscountDetail />} />
+            </Route>
 
             <Route path="tax">
               <Route path="all" element={<TaxTemplate />} />
