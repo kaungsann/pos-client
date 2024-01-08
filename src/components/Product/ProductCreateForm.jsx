@@ -372,7 +372,7 @@ export default function ProductCreateForm() {
                 />
               </div>
               <div className="w-60">
-                {/* <Input
+                <Input
                   type="number"
                   required
                   name="tax"
@@ -386,8 +386,8 @@ export default function ProductCreateForm() {
                       <span className="text-default-400 text-small">$</span>
                     </div>
                   }
-                /> */}
-                <Select
+                />
+                {/* <Select
                   labelPlacement="outside"
                   label="Tax-Rate"
                   name="tax"
@@ -408,7 +408,7 @@ export default function ProductCreateForm() {
                       {tx.name}
                     </SelectItem>
                   ))}
-                </Select>
+                </Select> */}
               </div>
               <div className="w-60">
                 <Input

@@ -1,17 +1,48 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import userIcons from "../../assets/user.jpeg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
-
+import axios from "axios";
 import SideBar from "../utils/SideBar";
+import { useEffect, useState } from "react";
+import { BASE_URL } from "../Api";
+import { removeData } from "../../redux/actions";
 
 export default function Admin() {
   const location = useLocation();
+  const [user, setUser] = useState([]);
 
-  const user = useSelector((state) => state.loginData);
+  const token = useSelector((state) => state.IduniqueData);
+
+  const isPageRefreshed = useSelector((state) => state.refresh);
+
+  const userData = useSelector((state) => state.loginData);
+  const dipatch = useDispatch();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(BASE_URL + `/user/${userData._id}`, {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (data?.message == "Token Expire , Please Login Again") {
+          dipatch(removeData(null));
+        }
+
+        setUser(data.data[0]);
+      } catch (error) {
+        console.error("Error fetching admin info:", error);
+      }
+    };
+
+    fetchData();
+  }, [isPageRefreshed]);
 
   return (
     <>
@@ -32,7 +63,7 @@ export default function Admin() {
                 />
               </Link>
               {(user.role && user.role.name === "admin") ||
-              user.role.name === "root" ? (
+              user.role?.name === "root" ? (
                 <Link to="/admin/warehouse">
                   <Icon
                     icon="maki:warehouse"
@@ -71,7 +102,7 @@ export default function Admin() {
       </div>
 
       {(user.role && user.role.name === "admin") ||
-      user.role.name === "root" ? (
+      user.role?.name === "root" ? (
         <div className="w-full flex relative z-50">
           <div
             className={`fixed top-0 shadow-md left-0 bottom-0 bg-white flex flex-col transform transition-transform duration-500 ease-in-out`}
@@ -82,7 +113,8 @@ export default function Admin() {
       ) : null}
       <div
         className={`mt-14 mx-auto p-4  bg-[#f5f5f5] h-full ${
-          (user.role && user.role.name === "admin") || user.role.name === "root"
+          (user.role && user.role?.name === "admin") ||
+          user.role?.name === "root"
             ? "ml-20"
             : ""
         }`}

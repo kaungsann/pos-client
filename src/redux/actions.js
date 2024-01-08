@@ -63,3 +63,10 @@ export const idRemove = (payload) => {
     payload: payload,
   };
 };
+
+export const pageRefresh = (payload) => {
+  return {
+    type: "refresh",
+    payload: payload,
+  };
+};

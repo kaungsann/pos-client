@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { removeData } from "../../redux/actions";
+import { removeData, pageRefresh } from "../../redux/actions";
 import { AiOutlinePlus } from "react-icons/ai";
 import axios from "axios";
 import { BASE_URL } from "../Api";
@@ -52,6 +52,9 @@ function PersonalEdit() {
   const fileInputRef = useRef(null);
   const { id } = useParams();
   const token = useSelector((state) => state.IduniqueData);
+  const dispatch = useDispatch();
+  const isPageRefreshed = useSelector((state) => state.pageRefresh);
+
   const dipatch = useDispatch();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -100,14 +103,13 @@ function PersonalEdit() {
           },
         });
 
-        console.log("data is a user", data);
-
         if (!data.status) {
           if (data?.message == "Token Expire , Please Login Again") {
             dipatch(removeData(null));
           }
           toast.warn(data.message);
         } else {
+          dispatch(pageRefresh());
           toast.success(data.message);
           onOpenChange();
           ModalBody;
@@ -139,8 +141,6 @@ function PersonalEdit() {
         }
 
         const adminData = data.data[0];
-
-        console.log("admin data is a", adminData);
 
         const image = adminData?.image;
         if (image) setAdminImg(image);

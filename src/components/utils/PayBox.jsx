@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { BiMinus } from "react-icons/bi";
 import { useSelector } from "react-redux";
@@ -45,12 +45,24 @@ export default function PayBox({ onContinueToPay }) {
   let subTotal = 0;
   let totalTax = 0;
 
+  // product.forEach((sel) => {
+  //   totalTax += ((sel.tax * sel.quantity) / 100) * sel.salePrice;
+  //   subTotal += sel.salePrice * sel.quantity;
+  // });
+
+  // const totalCost = subTotal + totalTax;
+
   product.forEach((sel) => {
+    console.log("Product: ", sel);
     totalTax += ((sel.tax * sel.quantity) / 100) * sel.salePrice;
     subTotal += sel.salePrice * sel.quantity;
   });
 
-  const totalCost = subTotal + totalTax;
+  console.log("Total Tax: ", totalTax);
+  console.log("Sub Total: ", subTotal);
+
+  const totalCost = subTotal;
+  console.log("Total Cost: ", totalCost);
 
   return (
     <>
@@ -110,7 +122,10 @@ export default function PayBox({ onContinueToPay }) {
                       </div>
                     </div>
                     <span className=" font-semibold text-md text-slate-600">
-                      tax - {sel.tax ? sel.tax * sel.quantity : 0}
+                      tax -{" "}
+                      {sel.tax && sel.quantity
+                        ? (sel.tax * sel.quantity).toLocaleString("en-US")
+                        : 0}
                     </span>
 
                     <div className="flex items-center justify-between w-full">
