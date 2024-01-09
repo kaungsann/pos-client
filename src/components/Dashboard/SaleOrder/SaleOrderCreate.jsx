@@ -436,7 +436,7 @@ export default function SaleOrderCreate() {
                 classNames={{
                   trigger: "font-bold w-60",
                 }}
-                endContent={<Icon icon="ic:round-create" />}
+                //endContent={<Icon icon="ic:round-create" />}
                 onChange={handleDiscountChange}
               >
                 {discount.map((ds) => (

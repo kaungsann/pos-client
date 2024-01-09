@@ -3,7 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import FadeLoader from "react-spinners/FadeLoader";
+import { Spinner } from "@nextui-org/react";
+
 import {
   Table,
   TableHeader,
@@ -156,15 +157,34 @@ export default function SaleOrderDetail() {
                       </h2>
                     </div>
                   </div>
+
                   <div>
-                    <h4 className="text-md text-slate-500">State</h4>
-                    <h2
-                      className={`font-semibold text-md mt-1 ${
-                        detail[0].state === "pending" && "text-red-500 "
-                      } ${detail[0].state === "confirmed" && "text-green-500"}`}
-                    >
-                      {detail[0].state}
-                    </h2>
+                    <div>
+                      <h4 className="text-md text-slate-500">State</h4>
+                      <h2
+                        className={`font-semibold text-md mt-1 ${
+                          detail[0].state === "pending" && "text-red-500 "
+                        } ${
+                          detail[0].state === "confirmed" && "text-green-500"
+                        }`}
+                      >
+                        {detail[0].state}
+                      </h2>
+                    </div>
+                    <div className="my-6">
+                      <h4 className="text-md text-slate-500">Discount</h4>
+                      <div className="flex">
+                        <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                          {detail[0].discount ? detail[0].discount.amount : "0"}
+                          %
+                        </h2>
+                        <h2 className="text-md ml-4 text-slate-600 mt-1 font-semibold">
+                          {detail[0].discount.name
+                            ? "(" + detail[0].discount.name + ")"
+                            : ""}
+                        </h2>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -211,16 +231,8 @@ export default function SaleOrderDetail() {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center mt-40">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
+        <div className="flex h-screen items-center justify-center">
+          {loading && <Spinner size="lg" />}
         </div>
       )}
     </>
