@@ -4,6 +4,11 @@ const initialState = {
   pageRefresh: false,
 };
 
+const initialStates = {
+  loginData: null,
+  IduniqueData: null,
+};
+
 const idReducers = (state = null, { type, payload }) => {
   switch (type) {
     case "idAdd":
@@ -69,12 +74,36 @@ const orderReducers = (state = [], { type, payload }) => {
   }
 };
 
+const loadUserFromStorageReducer = (state = initialStates, action) => {
+  if (action.type === "loadUserFromStorage") {
+    return {
+      ...state,
+      loginData: action.payload.userData,
+      IduniqueData: action.payload.userTokens,
+    };
+  }
+  return state;
+};
+
+const clearUserStorageReducer = (state = initialStates, action) => {
+  if (action.type === "clearUserStorage") {
+    return {
+      ...state,
+      loginData: null,
+      IduniqueData: null,
+    };
+  }
+  return state;
+};
+
 const reducers = combineReducers({
   IduniqueData: idReducers,
   loginData: userReducers,
   orderData: orderReducers,
   orderCheck: orderValidReducers,
   refresh: refreshReducer,
+  loadUserFromStorage: loadUserFromStorageReducer,
+  clearUserStorage: clearUserStorageReducer,
 });
 
 export default reducers;

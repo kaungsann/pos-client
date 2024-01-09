@@ -31,6 +31,11 @@ export default function Login() {
       if (success) {
         setLoading(false);
         toast(message);
+
+        // Store user data and tokens in localStorage
+        localStorage.setItem("userData", JSON.stringify(data));
+        localStorage.setItem("userTokens", JSON.stringify(tokens));
+
         dispatch(addData(data));
         dispatch(idAdd(tokens));
         navigate("/admin/pos/all");

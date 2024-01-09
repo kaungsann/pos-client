@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BASE_URL, getApi } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
-import { removeData } from "../../redux/actions";
+import { clearUserStorage, removeData } from "../../redux/actions";
 import { BiSolidUser } from "react-icons/bi";
 import { IoLogOutSharp } from "react-icons/io5";
 import { TiBusinessCard } from "react-icons/ti";
@@ -18,12 +18,10 @@ import axios from "axios";
 export default function Profile() {
   const [userInfo, setUserInfo] = useState(false);
   const [logout, setLogout] = useState(false);
-  const dipatch = useDispatch();
+  const dispatch = useDispatch();
   const [activeSection, setActiveSection] = useState("personal");
 
   const userData = useSelector((state) => state.loginData);
-
-  console.log("user info is a", userInfo);
 
   const token = useSelector((state) => state.IduniqueData);
   const isPageRefreshed = useSelector((state) => state.refresh);
@@ -183,7 +181,8 @@ export default function Profile() {
           }}
           text="Do you want to logout. Pls confirm it"
           onDelete={() => {
-            dipatch(removeData(null));
+            dispatch(removeData(null));
+            dispatch(clearUserStorage());
           }}
         />
       )}

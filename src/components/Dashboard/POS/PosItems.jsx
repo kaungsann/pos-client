@@ -4,7 +4,7 @@ import PayBox from "../../utils/PayBox";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { GrNext } from "react-icons/gr";
 import { getApi } from "../../Api";
-import FadeLoader from "react-spinners/FadeLoader";
+import { Spinner } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { itemsAdd, updateItemQuantity } from "../../../redux/actions";
 import { removeData } from "../../../redux/actions";
@@ -199,15 +199,7 @@ export default function PosItems() {
                 .map((pd) => <Card key={pd.id} product={pd} />)
             ) : (
               <div className="w-10/12 mx-auto  mt-40 flex justify-center">
-                {loading && (
-                  <FadeLoader
-                    color={"#0284c7"}
-                    loading={loading}
-                    size={10}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
-                  />
-                )}
+                {loading && <Spinner size="lg" />}
               </div>
             )}
           </div>
