@@ -45,24 +45,12 @@ export default function PayBox({ onContinueToPay }) {
   let subTotal = 0;
   let totalTax = 0;
 
-  // product.forEach((sel) => {
-  //   totalTax += ((sel.tax * sel.quantity) / 100) * sel.salePrice;
-  //   subTotal += sel.salePrice * sel.quantity;
-  // });
-
-  // const totalCost = subTotal + totalTax;
-
   product.forEach((sel) => {
-    console.log("Product: ", sel);
     totalTax += ((sel.tax * sel.quantity) / 100) * sel.salePrice;
     subTotal += sel.salePrice * sel.quantity;
   });
 
-  console.log("Total Tax: ", totalTax);
-  console.log("Sub Total: ", subTotal);
-
-  const totalCost = subTotal;
-  console.log("Total Cost: ", totalCost);
+  const totalCost = subTotal + totalTax;
 
   return (
     <>
