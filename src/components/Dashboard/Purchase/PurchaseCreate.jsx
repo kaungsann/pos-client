@@ -256,7 +256,7 @@ export default function SaleOrderCreate() {
                   onChange={(e) => setDate(e.target.value)}
                 />
               </div>
-              <div className="w-60">
+              <div className="w-60 flex justify-between relative">
                 <Select
                   labelPlacement="outside"
                   label="Partner"
@@ -271,8 +271,14 @@ export default function SaleOrderCreate() {
                     </SelectItem>
                   ))}
                 </Select>
+                <Link to="/admin/partners/create">
+                  <Icon
+                    icon="ic:round-create"
+                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                  />
+                </Link>
               </div>
-              <div className="w-60">
+              <div className="w-60  flex justify-between relative">
                 <Select
                   labelPlacement="outside"
                   label="Location"
@@ -287,6 +293,12 @@ export default function SaleOrderCreate() {
                     </SelectItem>
                   ))}
                 </Select>
+                <Link to="/admin/locations/create">
+                  <Icon
+                    icon="ic:round-create"
+                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                  />
+                </Link>
               </div>
               <div className="w-60">
                 <Select

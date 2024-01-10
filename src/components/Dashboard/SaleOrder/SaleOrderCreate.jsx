@@ -19,7 +19,6 @@ import {
   TableCell,
   Divider,
 } from "@nextui-org/react";
-import { useSpring } from "framer-motion";
 
 export default function SaleOrderCreate() {
   let count = 0;
@@ -269,7 +268,7 @@ export default function SaleOrderCreate() {
                   onChange={(e) => setDate(e.target.value)}
                 />
               </div>
-              <div className="w-60">
+              <div className="w-60 flex justify-between relative">
                 <Select
                   labelPlacement="outside"
                   label="Partner"
@@ -284,13 +283,19 @@ export default function SaleOrderCreate() {
                     </SelectItem>
                   ))}
                 </Select>
+                <Link to="/admin/partners/create">
+                  <Icon
+                    icon="ic:round-create"
+                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                  />
+                </Link>
               </div>
-              <div className="w-60">
+              <div className="w-60 flex justify-between relative">
                 <Select
                   labelPlacement="outside"
                   label="Location"
                   name="location"
-                  placeholder="Select an category"
+                  placeholder="Select an location"
                   onChange={(e) => setLoca(e.target.value)}
                   className="max-w-xs"
                 >
@@ -300,6 +305,12 @@ export default function SaleOrderCreate() {
                     </SelectItem>
                   ))}
                 </Select>
+                <Link to="/admin/locations/create">
+                  <Icon
+                    icon="ic:round-create"
+                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                  />
+                </Link>
               </div>
 
               <div className="w-60">
@@ -428,23 +439,30 @@ export default function SaleOrderCreate() {
               </Table>
             </div>
             <div className="flex flex-col w-full">
-              <Select
-                label="Discount"
-                variant="bordered"
-                placeholder="Select a discount"
-                labelPlacement="outside"
-                classNames={{
-                  trigger: "font-bold w-60",
-                }}
-                //endContent={<Icon icon="ic:round-create" />}
-                onChange={handleDiscountChange}
-              >
-                {discount.map((ds) => (
-                  <SelectItem key={ds.id} value={ds.id}>
-                    {ds.name}
-                  </SelectItem>
-                ))}
-              </Select>
+              <div className="flex w-60 justify-between relative">
+                <Select
+                  label="Discount"
+                  variant="bordered"
+                  placeholder="Select a discount"
+                  labelPlacement="outside"
+                  classNames={{
+                    trigger: "font-bold w-60",
+                  }}
+                  onChange={handleDiscountChange}
+                >
+                  {discount.map((ds) => (
+                    <SelectItem key={ds.id} value={ds.id}>
+                      {ds.name}
+                    </SelectItem>
+                  ))}
+                </Select>
+                <Link to="/admin/discount/create">
+                  <Icon
+                    icon="ic:round-create"
+                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                  />
+                </Link>
+              </div>
 
               <div className="flex mt-8 justify-self-end">
                 <h1 className="text-lg font-semibold">
