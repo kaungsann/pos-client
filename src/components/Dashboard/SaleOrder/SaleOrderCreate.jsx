@@ -43,6 +43,21 @@ export default function SaleOrderCreate() {
   const [totalCost, setTotalCost] = useState(0);
   const [discount, setDiscount] = useState([]);
 
+  const handlePartnerButtonClick = () => {
+    const url = "/admin/partners/create";
+    window.open(url, "_blank");
+  };
+
+  const handleLocationButtonClick = () => {
+    const url = "/admin/locations/create";
+    window.open(url, "_blank");
+  };
+
+  const handleDiscountButtonClick = () => {
+    const url = "/admin/discount/create";
+    window.open(url, "_blank");
+  };
+
   const handleDiscountChange = (e) => {
     const selectedDiscount = discount.find((ds) => ds.id === e.target.value);
     setDiscountId(e.target.value);
@@ -283,12 +298,12 @@ export default function SaleOrderCreate() {
                     </SelectItem>
                   ))}
                 </Select>
-                <Link to="/admin/partners/create">
-                  <Icon
-                    icon="ic:round-create"
-                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
-                  />
-                </Link>
+
+                <Icon
+                  onClick={handlePartnerButtonClick}
+                  icon="ic:round-create"
+                  className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                />
               </div>
               <div className="w-60 flex justify-between relative">
                 <Select
@@ -305,12 +320,12 @@ export default function SaleOrderCreate() {
                     </SelectItem>
                   ))}
                 </Select>
-                <Link to="/admin/locations/create">
-                  <Icon
-                    icon="ic:round-create"
-                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
-                  />
-                </Link>
+
+                <Icon
+                  onClick={handleLocationButtonClick}
+                  icon="ic:round-create"
+                  className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                />
               </div>
 
               <div className="w-60">
@@ -456,12 +471,12 @@ export default function SaleOrderCreate() {
                     </SelectItem>
                   ))}
                 </Select>
-                <Link to="/admin/discount/create">
-                  <Icon
-                    icon="ic:round-create"
-                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
-                  />
-                </Link>
+
+                <Icon
+                  onClick={handleDiscountButtonClick}
+                  icon="ic:round-create"
+                  className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                />
               </div>
 
               <div className="flex mt-8 justify-self-end">

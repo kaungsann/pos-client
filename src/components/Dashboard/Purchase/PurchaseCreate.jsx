@@ -45,6 +45,16 @@ export default function SaleOrderCreate() {
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
+  const handlePartnerButtonClick = () => {
+    const url = "/admin/partners/create";
+    window.open(url, "_blank");
+  };
+
+  const handleLocationButtonClick = () => {
+    const url = "/admin/locations/create";
+    window.open(url, "_blank");
+  };
+
   const createProductApi = async () => {
     if (saleOrderLines.length == 0) {
       toast.error("you need to selecte the product");
@@ -271,19 +281,20 @@ export default function SaleOrderCreate() {
                     </SelectItem>
                   ))}
                 </Select>
-                <Link to="/admin/partners/create">
-                  <Icon
-                    icon="ic:round-create"
-                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
-                  />
-                </Link>
+                {/* <Link to="/admin/partners/create"> */}
+                <Icon
+                  onClick={handlePartnerButtonClick}
+                  icon="ic:round-create"
+                  className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                />
+                {/* </Link> */}
               </div>
               <div className="w-60  flex justify-between relative">
                 <Select
                   labelPlacement="outside"
                   label="Location"
                   name="location"
-                  placeholder="Select an category"
+                  placeholder="Select an location"
                   onChange={(e) => setLoca(e.target.value)}
                   className="max-w-xs"
                 >
@@ -293,12 +304,12 @@ export default function SaleOrderCreate() {
                     </SelectItem>
                   ))}
                 </Select>
-                <Link to="/admin/locations/create">
-                  <Icon
-                    icon="ic:round-create"
-                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
-                  />
-                </Link>
+
+                <Icon
+                  onClick={handleLocationButtonClick}
+                  icon="ic:round-create"
+                  className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                />
               </div>
               <div className="w-60">
                 <Select
