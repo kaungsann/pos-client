@@ -31,6 +31,9 @@ export default function SaleOrderCreate() {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [note, setNote] = useState("");
 
+  const [refreshIconRotation, setRefreshIconRotation] = useState(false);
+  const [partIconRotation, setPartIconRotation] = useState(false);
+
   const [item, setItem] = useState(null);
 
   const [pd, setPd] = useState(null);
@@ -51,6 +54,24 @@ export default function SaleOrderCreate() {
   const handleLocationButtonClick = () => {
     const url = "/admin/locations/create";
     window.open(url, "_blank");
+  };
+
+  const handleLocalRefreshIcon = () => {
+    getLocation();
+    setRefreshIconRotation(true);
+
+    setTimeout(() => {
+      setRefreshIconRotation(false);
+    }, 500);
+  };
+
+  const handlePartRefreshIcon = () => {
+    getPartner();
+    setPartIconRotation(true);
+
+    setTimeout(() => {
+      setPartIconRotation(false);
+    }, 500);
   };
 
   const handleDiscountButtonClick = () => {
@@ -230,7 +251,7 @@ export default function SaleOrderCreate() {
       />
 
       <div className="container mt-2">
-        <div className="flex flex-row justify-between my-5 max-w-6xl">
+        <div className="flex flex-row justify-between my-5 max-w-7xl">
           <h2 className="lg:text-xl font-bold">Create Sale Order</h2>
 
           <div className="flex gap-3">
@@ -250,7 +271,7 @@ export default function SaleOrderCreate() {
           </div>
         </div>
 
-        <div className="container bg-white p-5 rounded-lg max-w-6xl">
+        <div className="container bg-white p-5 rounded-lg max-w-7xl">
           <div className="flex justify-between flex-wrap gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="mt-1">
@@ -283,48 +304,67 @@ export default function SaleOrderCreate() {
                   onChange={(e) => setDate(e.target.value)}
                 />
               </div>
-              <div className="w-60 flex justify-between relative">
-                <Select
-                  labelPlacement="outside"
-                  label="Partner"
-                  name="partner"
-                  placeholder="Select partner"
-                  onChange={(e) => setPartner(e.target.value)}
-                  className="max-w-xs"
-                >
-                  {part.map((ct) => (
-                    <SelectItem key={ct.id} value={ct.id}>
-                      {ct.name}
-                    </SelectItem>
-                  ))}
-                </Select>
+              <div className="flex">
+                <div className="w-60 flex justify-between relative">
+                  <Select
+                    labelPlacement="outside"
+                    label="Partner"
+                    name="partner"
+                    placeholder="Select partner"
+                    onChange={(e) => setPartner(e.target.value)}
+                    className="max-w-xs"
+                  >
+                    {part.map((ct) => (
+                      <SelectItem key={ct.id} value={ct.id}>
+                        {ct.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
 
+                  <Icon
+                    onClick={handlePartnerButtonClick}
+                    icon="icomoon-free:new-tab"
+                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                  />
+                </div>
                 <Icon
-                  onClick={handlePartnerButtonClick}
-                  icon="ic:round-create"
-                  className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                  onClick={handlePartRefreshIcon}
+                  icon="ic:baseline-refresh"
+                  className={`mt-10 mx-3 text-xl text-slate-600 font-semibold hover:opacity-70 duration-1000 transition-all ${
+                    partIconRotation ? "rotate-[360deg]" : "rotate-0"
+                  }`}
                 />
               </div>
-              <div className="w-60 flex justify-between relative">
-                <Select
-                  labelPlacement="outside"
-                  label="Location"
-                  name="location"
-                  placeholder="Select an location"
-                  onChange={(e) => setLoca(e.target.value)}
-                  className="max-w-xs"
-                >
-                  {location.map((ct) => (
-                    <SelectItem key={ct.id} value={ct.id}>
-                      {ct.name}
-                    </SelectItem>
-                  ))}
-                </Select>
 
+              <div className="flex">
+                <div className="w-60 flex justify-between relative">
+                  <Select
+                    labelPlacement="outside"
+                    label="Location"
+                    name="location"
+                    placeholder="Select an location"
+                    onChange={(e) => setLoca(e.target.value)}
+                    className="max-w-xs"
+                  >
+                    {location.map((ct) => (
+                      <SelectItem key={ct.id} value={ct.id}>
+                        {ct.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
+
+                  <Icon
+                    onClick={handleLocationButtonClick}
+                    icon="icomoon-free:new-tab"
+                    className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                  />
+                </div>
                 <Icon
-                  onClick={handleLocationButtonClick}
-                  icon="ic:round-create"
-                  className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                  onClick={handleLocalRefreshIcon}
+                  icon="ic:baseline-refresh"
+                  className={`mt-10 mx-3 text-xl text-slate-600 font-semibold hover:opacity-70 duration-1000 transition-all ${
+                    refreshIconRotation ? "rotate-[360deg]" : "rotate-0"
+                  }`}
                 />
               </div>
 
@@ -474,7 +514,7 @@ export default function SaleOrderCreate() {
 
                 <Icon
                   onClick={handleDiscountButtonClick}
-                  icon="ic:round-create"
+                  icon="icomoon-free:new-tab"
                   className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
                 />
               </div>

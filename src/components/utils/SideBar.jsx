@@ -1,4 +1,3 @@
-import React from "react";
 import { Icon } from "@iconify/react";
 import logo from "../../assets/logo.png";
 import invent from "../../assets/inv.png";
