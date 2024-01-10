@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import img from "../../assets/product.svg";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
 import {
   itemRemove,
@@ -18,9 +19,11 @@ import {
 import "../../App.css";
 
 import ChoosePay from "./ChoosePay";
+import DiscountBox from "./DiscountBox";
 
 export default function PayBox({ onContinueToPay }) {
   const [payment, setPayment] = useState(false);
+  const [showBox, setShowBox] = useState(false);
   const dispatch = useDispatch();
 
   const product = useSelector((state) => state.orderData);
@@ -62,7 +65,7 @@ export default function PayBox({ onContinueToPay }) {
           subTotal={subTotal}
         />
       ) : (
-        <div className="cursor-pointer">
+        <div className="relative">
           {!setPayment && (
             <ToastContainer
               position="top-right"
@@ -77,7 +80,6 @@ export default function PayBox({ onContinueToPay }) {
               theme="colored"
             />
           )}
-
           <div className="flex p-2">
             <h3 className="font-semibold text-xl w-full">Current Order</h3>
             <h3
@@ -100,11 +102,20 @@ export default function PayBox({ onContinueToPay }) {
                     className="w-16 h-17 rounded-sm"
                     alt={sel.name}
                   />
-                  <div className="flex flex-col justify-between ml-4 w-full">
+                  <div className="flex flex-col justify-between ml-4 w-full cursor-pointer">
                     <div className="flex items-center justify-between">
-                      <h4 className="font-bold text-md text-slate-700">
-                        {sel.name}
-                      </h4>
+                      <div className="flex items-center">
+                        <h4 className="font-bold text-md text-slate-700">
+                          {sel.name}
+                        </h4>
+
+                        {/* <Icon
+                          icon="ic:twotone-discount"
+                          className="ml-3"
+                          onClick={() => setShowBox(!showBox)}
+                        /> */}
+                      </div>
+
                       <div onClick={() => dispatch(itemRemove(sel.id))}>
                         <BsFillTrash3Fill className="text-red-700 hover:opacity-70" />
                       </div>
@@ -198,6 +209,7 @@ export default function PayBox({ onContinueToPay }) {
               Continue To Pay
             </Button>
           </div>
+          {showBox && <DiscountBox />}
         </div>
       )}
     </>

@@ -28,6 +28,8 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
   const [discount, setDiscount] = useState([]);
   const [discountAmount, setDiscountAmount] = useState(0);
 
+  console.log("located ", Locate);
+
   const handleDiscountChange = (e) => {
     const selectedDiscount = discount.find((ds) => ds.id === e.target.value);
     setDiscountId(e.target.value);
@@ -84,7 +86,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
         user: user._id,
         location: Locate,
         partner: name,
-        discount: discountId,
+        // discount: discountId,
         taxTotal: totalCost,
         // payment: text,
         lines: orderLines,
@@ -95,7 +97,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
         setIsLoading(true);
         let resData = await sendJsonToApi("/sale", data, token.accessToken);
         console.log("data is a", data);
-        console.log("res data  is a", data);
+
         if (!resData.success) {
           toast.error(resData.message);
         }
@@ -105,6 +107,8 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
           setOrder(resData.data);
           toast.success(resData.message);
           setPaySlip(true);
+        } else {
+          setIsLoading(false);
         }
       } catch (error) {
         setIsLoading(false);
@@ -140,7 +144,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
           tax={tax}
           sub={subTotal}
           order={order}
-          discount={discountAmount}
+          //discount={discountAmount}
         />
       ) : (
         <div>
@@ -221,15 +225,15 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               </span>
             </div>
           </div>
-
+          {/* 
           <div className="mt-2 flex justify-between">
             <span className="text-lg font-semibold text-slate-600">
               Discount
             </span>
             <h3 className="text-lg font-bold text-right">{discountAmount}%</h3>
-          </div>
+          </div> */}
 
-          <Select
+          {/* <Select
             variant="bordered"
             placeholder="Select a discount"
             classNames={{
@@ -246,11 +250,11 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
                 {ds.name}
               </SelectItem>
             ))}
-          </Select>
+          </Select> */}
 
           <div className=" justify-around grid grid-cols-2 gap-4">
             <div>
-              <Autocomplete
+              {/* <Autocomplete
                 label="Customer"
                 placeholder="Names"
                 className="max-w-xs"
@@ -266,11 +270,27 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
                       {pt.name}
                     </AutocompleteItem>
                   ))}
-              </Autocomplete>
+              </Autocomplete> */}
+
+              <Select
+                labelPlacement="outside"
+                label="Partner"
+                name="partner"
+                placeholder="Select partner"
+                onChange={(e) => setName(e.target.value)}
+                className="max-w-xs"
+              >
+                {partner.length > 0 &&
+                  partner.map((pt) => (
+                    <SelectItem key={pt.id} value={pt.id}>
+                      {pt.name}
+                    </SelectItem>
+                  ))}
+              </Select>
             </div>
 
             <div>
-              <Autocomplete
+              {/* <Autocomplete
                 label="Location"
                 placeholder="Select an option"
                 className="max-w-xs"
@@ -286,7 +306,23 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
                       {loc.name}
                     </AutocompleteItem>
                   ))}
-              </Autocomplete>
+              </Autocomplete> */}
+
+              <Select
+                labelPlacement="outside"
+                label="Location"
+                name="location"
+                placeholder="Select an location"
+                onChange={(e) => setLocate(e.target.value)}
+                className="max-w-xs"
+              >
+                {location.length > 0 &&
+                  location.map((loc) => (
+                    <SelectItem key={loc.id} value={loc.id}>
+                      {loc.name}
+                    </SelectItem>
+                  ))}
+              </Select>
             </div>
           </div>
           <div className="calculator mt-8 flex justify-center">

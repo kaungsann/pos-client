@@ -104,7 +104,7 @@ export default function SaleOrderCreate() {
       user: userData._id,
       partner: partner,
       location: loca,
-      discount: discountId,
+      //discount: discountId,
       lines: saleOrderLines.map((line) => ({
         product: line.product.id,
         qty: line.qty,
@@ -494,7 +494,7 @@ export default function SaleOrderCreate() {
               </Table>
             </div>
             <div className="flex flex-col w-full">
-              <div className="flex w-60 justify-between relative">
+              {/* <div className="flex w-60 justify-between relative">
                 <Select
                   label="Discount"
                   variant="bordered"
@@ -517,7 +517,7 @@ export default function SaleOrderCreate() {
                   icon="icomoon-free:new-tab"
                   className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
                 />
-              </div>
+              </div> */}
 
               <div className="flex mt-8 justify-self-end">
                 <h1 className="text-lg font-semibold">
@@ -526,10 +526,10 @@ export default function SaleOrderCreate() {
               </div>
               <div className="flex mt-4 justify-self-end">
                 <h1 className="text-lg font-semibold">
-                  {/* Total : <span>{totalCost.toFixed(2) ?? 0}</span> */}
-                  {(totalCost - (discountAmount / 100) * totalCost).toFixed(
+                  Total : <span>{totalCost.toFixed(2) ?? 0}</span>
+                  {/* {(totalCost - (discountAmount / 100) * totalCost).toFixed(
                     2
-                  ) ?? 0}
+                  ) ?? 0} */}
                 </h1>
               </div>
             </div>

@@ -13,7 +13,7 @@ export default function PaySlip({
   tax,
   sub,
   order,
-  discount,
+  // discount,
 }) {
   let user = useSelector((state) => state.loginData);
   let [info, setInfo] = useState(null);
@@ -98,12 +98,12 @@ export default function PaySlip({
             <h4 className="text-md font-bold text-black">Charge</h4>
             <h4 className="text-md font-bold text-black">{pay.toFixed(2)}</h4>
           </div>
-          <div className="flex justify-between mx-6">
+          {/* <div className="flex justify-between mx-6">
             <h4 className="text-md font-bold text-black">Discount</h4>
             <h4 className="text-md font-bold text-black">
               {discount.toFixed()}
             </h4>
-          </div>
+          </div> */}
           <div className="flex justify-between mx-6">
             <h4 className="text-md font-extrabold text-black">Sub Total</h4>
             <h4 className="text-md font-extrabold text-black">{total} mmk</h4>

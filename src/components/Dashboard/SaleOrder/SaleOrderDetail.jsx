@@ -171,7 +171,7 @@ export default function SaleOrderDetail() {
                         {detail[0].state}
                       </h2>
                     </div>
-                    <div className="my-6">
+                    {/* <div className="my-6">
                       <h4 className="text-md text-slate-500">Discount</h4>
                       <div className="flex">
                         <h2 className="text-md text-slate-600 mt-1 font-semibold">
@@ -184,7 +184,7 @@ export default function SaleOrderDetail() {
                             : ""}
                         </h2>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

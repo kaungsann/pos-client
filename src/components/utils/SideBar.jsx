@@ -752,7 +752,7 @@ export default function SideBar() {
                         </li>
                       </div>
                     </ListboxItem>
-                    <ListboxItem
+                    {/* <ListboxItem
                       onClick={() => navigate("/admin/discount/all")}
                     >
                       <div className="flex justify-between">
@@ -767,7 +767,7 @@ export default function SideBar() {
                           Tax
                         </li>
                       </div>
-                    </ListboxItem>
+                    </ListboxItem> */}
                     <ListboxItem onClick={() => navigate("/admin/opex/all")}>
                       <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
@@ -850,7 +850,7 @@ export default function SideBar() {
 
                       <span className="ml-3">Overview</span>
                     </li>
-                    <li
+                    {/* <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/discount/all" ||
                         location.pathname === "/admin/discount/create" ||
@@ -869,8 +869,8 @@ export default function SideBar() {
                       />
 
                       <span className="ml-3">Discount</span>
-                    </li>
-                    <li
+                    </li> */}
+                    {/* <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/tax/all" ||
                         location.pathname === "/admin/tax/create" ||
@@ -889,7 +889,7 @@ export default function SideBar() {
                       />
 
                       <span className="ml-3">Tax</span>
-                    </li>
+                    </li> */}
                     <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/opex/all" ||
