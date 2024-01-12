@@ -74,27 +74,25 @@ const orderReducers = (state = [], { type, payload }) => {
   }
 };
 
-const loadUserFromStorageReducer = (state = initialStates, action) => {
-  if (action.type === "loadUserFromStorage") {
-    return {
-      ...state,
-      loginData: action.payload.userData,
-      IduniqueData: action.payload.userTokens,
-    };
-  }
-  return state;
-};
-
-const clearUserStorageReducer = (state = initialStates, action) => {
-  if (action.type === "clearUserStorage") {
-    return {
-      ...state,
-      loginData: null,
-      IduniqueData: null,
-    };
-  }
-  return state;
-};
+// const discountReducers = (state = null, { type, payload }) => {
+//   switch (type) {
+//     case "addorder":
+//       return [...state, payload];
+//     case "removeorder":
+//       return state.filter((item) => item.id !== payload);
+//     case "updateItemQuantity":
+//       return state.map((item) => {
+//         if (item._id === payload.productId) {
+//           return { ...item, quantity: payload.quantity };
+//         }
+//         return item;
+//       });
+//     case "removeAllOrders":
+//       return [];
+//     default:
+//       return state;
+//   }
+// };
 
 const reducers = combineReducers({
   IduniqueData: idReducers,
@@ -102,8 +100,7 @@ const reducers = combineReducers({
   orderData: orderReducers,
   orderCheck: orderValidReducers,
   refresh: refreshReducer,
-  loadUserFromStorage: loadUserFromStorageReducer,
-  clearUserStorage: clearUserStorageReducer,
+  //discount: discountReducers,
 });
 
 export default reducers;

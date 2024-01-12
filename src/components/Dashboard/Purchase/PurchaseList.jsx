@@ -129,9 +129,7 @@ export default function PurchaseList({ purchases, refresh }) {
 
     switch (columnKey) {
       case "scheduledate":
-        return (
-          <h3> {format(new Date(purchases.scheduledDate), "yyyy-MM-dd")}</h3>
-        );
+        return <h3> {format(new Date(purchases.orderDate), "yyyy-MM-dd")}</h3>;
       case "name":
         return <h3>{purchases.user?.username}</h3>;
       case "partner":

@@ -66,7 +66,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
   const createSaleOrder = async () => {
     if (text === "" || display === "") {
-      toast.error("You have to click Pay button & amount");
+      toast.error("You need to Pay  & amount");
       return;
     } else {
       const orderLines = [];
