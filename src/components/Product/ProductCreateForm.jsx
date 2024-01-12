@@ -127,7 +127,7 @@ export default function ProductCreateForm() {
           navigate("/admin/products/all");
         }
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error.response.data.message);
       } finally {
         setIsSelected(false);
         setSelectedImage(null);

@@ -18,6 +18,8 @@ import {
   TableRow,
   TableCell,
   Divider,
+  Button,
+  Progress,
 } from "@nextui-org/react";
 
 export default function SaleOrderCreate() {
@@ -35,6 +37,7 @@ export default function SaleOrderCreate() {
   const [partIconRotation, setPartIconRotation] = useState(false);
 
   const [item, setItem] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [pd, setPd] = useState(null);
   const [quantity, setQuantity] = useState(0);
@@ -94,8 +97,9 @@ export default function SaleOrderCreate() {
   const dipatch = useDispatch();
 
   const createProductApi = async () => {
+    setIsLoading(true);
     if (saleOrderLines.length == 0) {
-      toast.error("you need to selecte the product");
+      toast.error("You need to select products before saving");
       return;
     }
 
@@ -125,14 +129,17 @@ export default function SaleOrderCreate() {
         dipatch(removeData(null));
       }
       if (resData.status) {
+        setIsLoading(false);
         toast(resData.message);
         navigate("/admin/saleorders/all");
       } else {
         toast.error(resData.message);
       }
     } catch (error) {
+      setIsLoading(false);
       toast.error(error.message);
     }
+    setIsLoading(false);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -255,23 +262,33 @@ export default function SaleOrderCreate() {
           <h2 className="lg:text-xl font-bold">Create Sale Order</h2>
 
           <div className="flex gap-3">
-            <button
+            <Button
               type="submit"
-              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+              isDisabled={isLoading}
+              isLoading={isLoading}
+              size="md"
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+                isLoading
+                  ? ""
+                  : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+              }`}
               onClick={handleSubmit}
             >
               Save
-            </button>
+            </Button>
 
             <Link to="/admin/saleOrders/all">
-              <button className="rounded-sm shadow-sm flex items-center text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
+              <Button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
                 Discard
-              </button>
+              </Button>
             </Link>
           </div>
         </div>
 
         <div className="container bg-white p-5 rounded-lg max-w-7xl">
+          {isLoading && (
+            <Progress size="sm" isIndeterminate aria-label="Loading..." />
+          )}
           <div className="flex justify-between flex-wrap gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="mt-1">

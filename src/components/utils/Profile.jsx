@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BASE_URL, getApi } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUserStorage, removeData } from "../../redux/actions";
+import { removeData } from "../../redux/actions";
 import { BiSolidUser } from "react-icons/bi";
 import { IoLogOutSharp } from "react-icons/io5";
 import { TiBusinessCard } from "react-icons/ti";

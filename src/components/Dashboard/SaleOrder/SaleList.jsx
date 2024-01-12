@@ -122,7 +122,7 @@ export default function SaleList({ sales }) {
 
     switch (columnKey) {
       case "scheduledate":
-        return <h3>{format(new Date(sales.scheduledDate), "yyyy-MM-dd")}</h3>;
+        return <h3>{format(new Date(sales.orderDate), "yyyy-MM-dd")}</h3>;
       case "name":
         return <h3>{sales.user?.username}</h3>;
       case "partner":

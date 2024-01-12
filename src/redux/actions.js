@@ -70,25 +70,3 @@ export const pageRefresh = (payload) => {
     payload: payload,
   };
 };
-
-export const loadUserFromStorage = () => {
-  const storedUserData = JSON.parse(localStorage.getItem("userData"));
-  const storedUserTokens = JSON.parse(localStorage.getItem("userTokens"));
-
-  return {
-    type: "loadUserFromStorage",
-    payload: {
-      userData: storedUserData,
-      userTokens: storedUserTokens,
-    },
-  };
-};
-
-export const clearUserStorage = () => {
-  localStorage.removeItem("userData");
-  localStorage.removeItem("userTokens");
-
-  return {
-    type: "clearUserStorage",
-  };
-};

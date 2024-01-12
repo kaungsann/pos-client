@@ -20,8 +20,8 @@
 }
 
 .filter-box {
-  transform: translateX(0); /* Start visible */
-  transition: transform 0.3s ease-in-out; /* Transition effect */
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
 }
 body::-webkit-scrollbar {
   width: 0px;
@@ -35,5 +35,15 @@ body::-webkit-scrollbar-track {
   background-color: lightgray;
 }
 .custom-select {
-  padding: 10px; /* Add your desired padding */
+  padding: 10px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { BiMinus } from "react-icons/bi";
 import { useSelector } from "react-redux";
@@ -8,7 +8,13 @@ import { add } from "../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import img from "../../assets/product.svg";
 import "react-toastify/dist/ReactToastify.css";
-import { Button } from "@nextui-org/react";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownTrigger,
+  DropdownMenu,
+  Button,
+} from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 import {
@@ -20,11 +26,53 @@ import "../../App.css";
 
 import ChoosePay from "./ChoosePay";
 import DiscountBox from "./DiscountBox";
+import { BASE_URL } from "../Api";
+import axios from "axios";
 
 export default function PayBox({ onContinueToPay }) {
   const [payment, setPayment] = useState(false);
-  const [showBox, setShowBox] = useState(false);
+
+  const [discount, setDiscount] = useState([]);
+  const [discountId, setDiscountId] = useState("");
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["text"]));
+
   const dispatch = useDispatch();
+
+  const handleDiscountChange = (e) => {
+    const selectedDiscount = discount.find((ds) => ds.id === e.target.value);
+    setDiscountId(e.target.value);
+    setDiscountAmount(selectedDiscount ? selectedDiscount.amount : 0);
+  };
+
+  const DISCOUNT_API = {
+    INDEX: BASE_URL + "/discount",
+  };
+
+  const token = useSelector((state) => state.IduniqueData);
+
+  const fetchDiscountData = async () => {
+    try {
+      const response = await axios.get(DISCOUNT_API.INDEX, {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const validDiscountFilter = response.data.data.filter(
+        (dis) => dis.active === true
+      );
+
+      setDiscount(validDiscountFilter);
+    } catch (error) {
+      console.error("Error fetching discount:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDiscountData();
+  }, [token]);
 
   const product = useSelector((state) => state.orderData);
   dispatch(add(false));
@@ -109,11 +157,29 @@ export default function PayBox({ onContinueToPay }) {
                           {sel.name}
                         </h4>
 
-                        {/* <Icon
-                          icon="ic:twotone-discount"
-                          className="ml-3"
-                          onClick={() => setShowBox(!showBox)}
-                        /> */}
+                        <Dropdown>
+                          <DropdownTrigger>
+                            <Icon icon="ic:twotone-discount" className="ml-3" />
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Multiple selection example"
+                            variant="flat"
+                            selectionMode="single"
+                            selectedKeys={selectedKeys}
+                            onSelectionChange={setSelectedKeys}
+                          >
+                            {discount.map((dis) => (
+                              <DropdownItem key={dis.name}>
+                                {dis.name +
+                                  " " +
+                                  " ( " +
+                                  dis.amount +
+                                  "%" +
+                                  " ) "}
+                              </DropdownItem>
+                            ))}
+                          </DropdownMenu>
+                        </Dropdown>
                       </div>
 
                       <div onClick={() => dispatch(itemRemove(sel.id))}>
@@ -209,7 +275,6 @@ export default function PayBox({ onContinueToPay }) {
               Continue To Pay
             </Button>
           </div>
-          {showBox && <DiscountBox />}
         </div>
       )}
     </>

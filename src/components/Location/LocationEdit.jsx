@@ -107,7 +107,7 @@ export default function LocationEdit() {
                   label="Short Name"
                   name="code"
                   value={code}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => setCode(e.target.value)}
                   placeholder="Enter short name..."
                   labelPlacement="outside"
                 />
