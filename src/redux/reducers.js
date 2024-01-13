@@ -67,32 +67,27 @@ const orderReducers = (state = [], { type, payload }) => {
         }
         return item;
       });
+    case "applyDiscount":
+      let { productId, discount } = payload;
+
+      return state.map((item) => {
+        if (item.id === productId) {
+          return {
+            ...item,
+            discount: {
+              name: discount.name,
+              amount: discount.amount,
+            },
+          };
+        }
+        return item;
+      });
     case "removeAllOrders":
       return [];
     default:
       return state;
   }
 };
-
-// const discountReducers = (state = null, { type, payload }) => {
-//   switch (type) {
-//     case "addorder":
-//       return [...state, payload];
-//     case "removeorder":
-//       return state.filter((item) => item.id !== payload);
-//     case "updateItemQuantity":
-//       return state.map((item) => {
-//         if (item._id === payload.productId) {
-//           return { ...item, quantity: payload.quantity };
-//         }
-//         return item;
-//       });
-//     case "removeAllOrders":
-//       return [];
-//     default:
-//       return state;
-//   }
-// };
 
 const reducers = combineReducers({
   IduniqueData: idReducers,

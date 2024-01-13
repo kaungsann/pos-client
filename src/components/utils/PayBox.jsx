@@ -14,6 +14,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   Button,
+  Chip,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
@@ -21,11 +22,12 @@ import {
   itemRemove,
   removeAllItems,
   updateItemQuantity,
+  applyDiscount,
+  removeDiscount,
 } from "../../redux/actions";
 import "../../App.css";
 
 import ChoosePay from "./ChoosePay";
-import DiscountBox from "./DiscountBox";
 import { BASE_URL } from "../Api";
 import axios from "axios";
 
@@ -33,17 +35,9 @@ export default function PayBox({ onContinueToPay }) {
   const [payment, setPayment] = useState(false);
 
   const [discount, setDiscount] = useState([]);
-  const [discountId, setDiscountId] = useState("");
-  const [discountAmount, setDiscountAmount] = useState(0);
   const [selectedKeys, setSelectedKeys] = useState(new Set(["text"]));
 
   const dispatch = useDispatch();
-
-  const handleDiscountChange = (e) => {
-    const selectedDiscount = discount.find((ds) => ds.id === e.target.value);
-    setDiscountId(e.target.value);
-    setDiscountAmount(selectedDiscount ? selectedDiscount.amount : 0);
-  };
 
   const DISCOUNT_API = {
     INDEX: BASE_URL + "/discount",
@@ -98,10 +92,30 @@ export default function PayBox({ onContinueToPay }) {
 
   product.forEach((sel) => {
     totalTax += ((sel.tax * sel.quantity) / 100) * sel.salePrice;
-    subTotal += sel.salePrice * sel.quantity;
+    //subTotal += sel.salePrice * sel.quantity;
+    subTotal += sel.discount
+      ? ((sel.salePrice * sel.discount.amount) / 100) *
+        sel.quantity.toLocaleString("en-US")
+      : sel.salePrice * sel.quantity.toLocaleString("en-US");
   });
 
   const totalCost = subTotal + totalTax;
+
+  const handleDiscountAdd = (name, amount, item) => {
+    const selectedDiscount = {
+      name: name,
+      amount: parseInt(amount, 10),
+    };
+    const existingProduct = product.find((pd) => pd.id === item.id);
+
+    if (existingProduct) {
+      dispatch(applyDiscount(item.id, selectedDiscount));
+    }
+  };
+
+  const handleRemoveDiscount = () => {
+    dispatch(removeDiscount());
+  };
 
   return (
     <>
@@ -169,7 +183,13 @@ export default function PayBox({ onContinueToPay }) {
                             onSelectionChange={setSelectedKeys}
                           >
                             {discount.map((dis) => (
-                              <DropdownItem key={dis.name}>
+                              <DropdownItem
+                                key={dis.name}
+                                value={dis.amount}
+                                onClick={() =>
+                                  handleDiscountAdd(dis.name, dis.amount, sel)
+                                }
+                              >
                                 {dis.name +
                                   " " +
                                   " ( " +
@@ -180,6 +200,16 @@ export default function PayBox({ onContinueToPay }) {
                             ))}
                           </DropdownMenu>
                         </Dropdown>
+                        {sel.discount && (
+                          <Chip
+                            color="success"
+                            variant="bordered"
+                            className="ml-3"
+                          >
+                            {sel.discount?.name}
+                            {`${" ( " + sel.discount?.amount + " ) "}% `}
+                          </Chip>
+                        )}
                       </div>
 
                       <div onClick={() => dispatch(itemRemove(sel.id))}>
@@ -225,7 +255,12 @@ export default function PayBox({ onContinueToPay }) {
                         />
                       </div>
                       <span className="font-bold text-md text-blue-600">
-                        {(sel.salePrice * sel.quantity).toLocaleString("en-US")}{" "}
+                        {sel.discount
+                          ? ((sel.salePrice * sel.discount.amount) / 100) *
+                            sel.quantity.toLocaleString("en-US")
+                          : sel.salePrice *
+                            sel.quantity.toLocaleString("en-US")}
+                        {/* {( sel.salePrice * sel.quantity).toLocaleString("en-US")} */}
                         mmk
                       </span>
                     </div>

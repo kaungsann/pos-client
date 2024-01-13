@@ -27,13 +27,15 @@ export default function ProductCreateForm() {
     purchasePrice: 0,
     barcode: "",
     category: { name: "" },
+    discount: [],
     minStockQty: 0,
     marginProfit: 0,
     expiredAt: "",
-    tax: [],
+    tax: 0,
   };
   const [product, setProduct] = useState(productDoc);
   const [updateProduct, setUpdateProduct] = useState({});
+  const [discount, setDiscount] = useState([]);
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
@@ -183,6 +185,25 @@ export default function ProductCreateForm() {
       setTaxs(filteredTax);
     };
 
+    const fetchDiscountData = async () => {
+      try {
+        const response = await axios.get(BASE_URL + `/discount`, {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const validDiscountFilter = response.data.data.filter(
+          (dis) => dis.active === true
+        );
+
+        setDiscount(validDiscountFilter);
+      } catch (error) {
+        console.error("Error fetching discount:", error);
+      }
+    };
+
     const fetchData = async () => {
       try {
         await fetchCategories();
@@ -193,6 +214,7 @@ export default function ProductCreateForm() {
     fetchCategories();
     fetchTaxs();
     fetchData();
+    fetchDiscountData();
   }, []);
 
   return (
@@ -312,7 +334,6 @@ export default function ProductCreateForm() {
                       : false
                   }
                   onChange={(e) => inputChangeHandler(e)}
-                  className="max-w-xs"
                 >
                   {categories.map((ct) => (
                     <SelectItem key={ct.id} value={ct.id}>
@@ -422,6 +443,7 @@ export default function ProductCreateForm() {
                   onChange={(e) => inputChangeHandler(e)}
                 />
               </div>
+
               <div className="w-60">
                 <Input
                   type="number"

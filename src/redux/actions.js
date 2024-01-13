@@ -70,3 +70,15 @@ export const pageRefresh = (payload) => {
     payload: payload,
   };
 };
+
+export const applyDiscount = (productId, discount) => ({
+  type: "applyDiscount",
+  payload: {
+    productId,
+    discount,
+  },
+});
+
+export const removeDiscount = () => ({
+  type: "removeDiscount",
+});

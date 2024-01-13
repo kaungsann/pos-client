@@ -100,6 +100,9 @@ export default function SaleOrderCreate() {
     setIsLoading(true);
     if (saleOrderLines.length == 0) {
       toast.error("You need to select products before saving");
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
       return;
     }
 
@@ -485,7 +488,7 @@ export default function SaleOrderCreate() {
                   <TableColumn>Name</TableColumn>
                   <TableColumn>Barcode</TableColumn>
                   <TableColumn>Tax</TableColumn>
-                  <TableColumn>Stock QTY</TableColumn>
+                  <TableColumn>Qty</TableColumn>
                   <TableColumn>Unit Price</TableColumn>
                   <TableColumn>SubTotal</TableColumn>
                   <TableColumn>Delete</TableColumn>
