@@ -4,7 +4,6 @@ import { BiMinus } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { add } from "../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import img from "../../assets/product.svg";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,15 +14,17 @@ import {
   DropdownMenu,
   Button,
   Chip,
+  Avatar,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 import {
+  add,
   itemRemove,
   removeAllItems,
   updateItemQuantity,
   applyDiscount,
-  removeDiscount,
+  removeDiscountItem,
 } from "../../redux/actions";
 import "../../App.css";
 
@@ -113,8 +114,8 @@ export default function PayBox({ onContinueToPay }) {
     }
   };
 
-  const handleRemoveDiscount = () => {
-    dispatch(removeDiscount());
+  const handleRemoveDiscountItem = (productId) => {
+    dispatch(removeDiscountItem(productId));
   };
 
   return (
@@ -200,15 +201,24 @@ export default function PayBox({ onContinueToPay }) {
                             ))}
                           </DropdownMenu>
                         </Dropdown>
+
                         {sel.discount && (
-                          <Chip
-                            color="success"
-                            variant="bordered"
-                            className="ml-3"
-                          >
-                            {sel.discount?.name}
-                            {`${" ( " + sel.discount?.amount + " ) "}% `}
-                          </Chip>
+                          <div className="flex relative">
+                            <Chip
+                              color="success"
+                              variant="bordered"
+                              className="ml-3"
+                            >
+                              {sel.discount?.name}
+                              {`${" ( " + sel.discount?.amount + " ) "}% `}
+                            </Chip>
+
+                            <Avatar
+                              isDisabled
+                              name="X"
+                              onClick={() => handleRemoveDiscountItem(sel.id)}
+                            />
+                          </div>
                         )}
                       </div>
 

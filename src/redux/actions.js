@@ -79,6 +79,13 @@ export const applyDiscount = (productId, discount) => ({
   },
 });
 
+export const removeDiscountItem = (productID) => ({
+  type: "removeDiscountItem",
+  payload: {
+    productID,
+  },
+});
+
 export const removeDiscount = () => ({
   type: "removeDiscount",
 });

@@ -82,6 +82,16 @@ const orderReducers = (state = [], { type, payload }) => {
         }
         return item;
       });
+    case "removeDiscountItem":
+      let { productID } = payload;
+
+      return state.map((item) => {
+        if (item.id === productID) {
+          const { discount, ...itemWithoutDiscount } = item;
+          return itemWithoutDiscount;
+        }
+        return item;
+      });
     case "removeAllOrders":
       return [];
     default:
