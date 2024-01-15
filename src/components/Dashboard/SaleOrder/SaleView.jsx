@@ -16,14 +16,14 @@ import {
 
 import { getApi } from "../../Api";
 import { format } from "date-fns";
-import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { removeData } from "../../../redux/actions";
+import { Spinner } from "@nextui-org/react";
 
 export default function SaleView() {
-  const [purchase, setPurchase] = useState([]);
-  const [purchaseLines, setPurchaseLines] = useState([]);
+  const [sale, setSales] = useState([]);
+  const [saleLines, setSaleLines] = useState([]);
   const [popularProductsData, setPopularProductsData] = useState([]);
   const [stock, setStock] = useState([]);
 
@@ -38,7 +38,7 @@ export default function SaleView() {
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const getPurchase = async () => {
+  const getSale = async () => {
     setLoading(true);
     let resData = await getApi("/sale", token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
@@ -46,7 +46,7 @@ export default function SaleView() {
     }
     if (resData.success) {
       setLoading(false);
-      setPurchase(resData.data);
+      setSales(resData.data);
     } else {
       setLoading(true);
     }
@@ -66,7 +66,7 @@ export default function SaleView() {
     }
   };
 
-  const getPurhaseLines = async () => {
+  const getSaleLines = async () => {
     setLoading(true);
     let resData = await getApi("/salelines", token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
@@ -75,7 +75,7 @@ export default function SaleView() {
 
     if (resData.status) {
       setLoading(false);
-      setPurchaseLines(resData.data);
+      setSaleLines(resData.data);
     } else {
       setLoading(true);
     }
@@ -83,18 +83,19 @@ export default function SaleView() {
 
   const lineChartData = orderLines.map((line) => {
     return {
-      id: line._id,
-      orderRef: line.orderId.orderRef,
+      id: line?._id,
+      orderRef: line.orderId?.orderRef,
       productId: line.product.name,
       total: line.subTotal,
     };
   });
 
+  //console.log("line chart is a", lineChartData);
+
   const todayDate = format(new Date(), "MM-dd-yyyy"); // Get today's date in the same format as orderDate
 
-  const todayPurchaseLine = purchaseLines.filter(
-    (purchase) =>
-      format(new Date(purchase.orderDate), "MM-dd-yyyy") === todayDate
+  const todaySaleLine = saleLines.filter(
+    (sale) => format(new Date(sale.orderDate), "MM-dd-yyyy") === todayDate
   );
 
   const getTotals = async () => {
@@ -103,8 +104,7 @@ export default function SaleView() {
       `/orders/totals?startDate=${todayDate.toString()}`,
       token.accessToken
     );
-
-    console.log("res data s a", resData);
+    console.log("res data is a", resData);
     if (resData.status) {
       setTotalAmount(resData.data.sales.totalAmountWithTax);
       setTotalOrders(resData.data.sales.totalOrders);
@@ -120,26 +120,33 @@ export default function SaleView() {
 
   useEffect(() => {
     getStockApi();
-    getPurchase();
+    getSale();
     getTotals();
-    getPurhaseLines();
+    getSaleLines();
   }, []);
 
   const todayStock = stock.filter(
     (stk) => format(new Date(stk.updatedAt), "MM-dd-yyyy") === todayDate
   );
+  console.log("orderlines res data is a", orderLines);
 
-  const orderList = Array.from(
-    new Set(orderLines.map((line) => line.orderId._id))
-  ).map(
-    (orderId) => orderLines.find((line) => line.orderId._id === orderId).orderId
-  );
+  const orderList =
+    orderLines && orderLines.length > 0
+      ? Array.from(new Set(orderLines.map((line) => line.orderId?._id))).map(
+          (orderId) =>
+            orderLines.find((line) => line.orderId?._id === orderId)?.orderId
+        )
+      : [];
+
+  console.log("orderlist is a", orderList);
+
+  console.log("orderlines isa ", orderLines);
 
   useEffect(() => {
     // Count the quantity sold for each product
-    const productCount = purchaseLines.reduce((acc, purchaseLine) => {
-      const productId = purchaseLine.product._id;
-      acc[productId] = (acc[productId] || 0) + purchaseLine.qty;
+    const productCount = saleLines.reduce((acc, sal) => {
+      const productId = sal.product._id;
+      acc[productId] = (acc[productId] || 0) + sal.qty;
       return acc;
     }, {});
 
@@ -154,13 +161,13 @@ export default function SaleView() {
     // Create data for the pie chart
     const pieChartData = topProducts.map((productId, index) => ({
       name:
-        purchaseLines.find((purchase) => purchase.product._id === productId)
-          ?.product.name || `Product ${index + 1}`,
+        saleLines.find((sal) => sal.product._id === productId)?.product.name ||
+        `Product ${index + 1}`,
       value: productCount[productId],
     }));
 
     setPopularProductsData(pieChartData);
-  }, [purchaseLines]);
+  }, [saleLines]);
 
   const getStockQuantity = (productId) => {
     const todayStockEntry = todayStock.find(
@@ -168,8 +175,6 @@ export default function SaleView() {
     );
     return todayStockEntry ? todayStockEntry.onHand : 0;
   };
-
-  console.log("sale lines is a", orderLines);
 
   return (
     <>
@@ -212,7 +217,9 @@ export default function SaleView() {
               <h4 className="text-lg font-bold text-slate-600">
                 {
                   new Set(
-                    orderList.map((line) => line.partner && line.partner._id)
+                    orderList.map((line) =>
+                      line ? line.partner && line.partner?._id : "0"
+                    )
                   ).size
                 }
               </h4>
@@ -256,11 +263,7 @@ export default function SaleView() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  {/* <Bar
-                    dataKey="pv"
-                    fill="#8884d8"
-                    activeBar={<Rectangle fill="pink" stroke="blue" />}
-                  /> */}
+
                   <Bar
                     dataKey="total"
                     fill="#82ca9d"
@@ -320,35 +323,37 @@ export default function SaleView() {
 
                 <tbody className="w-full space-y-10 relative">
                   {orderList.length > 0 ? (
-                    orderList.map((sal) => (
-                      <tr key={sal._id}>
-                        <td className="lg:px-4 py-2 text-center">
-                          {sal.partner && sal.partner.name}
-                        </td>
-                        <td className="lg:px-4 py-2 text-center">
-                          {format(new Date(sal.orderDate), "yyyy-MM-dd")}
-                        </td>
-                        <td className="lg:px-4 py-2 text-center">
-                          {sal.total}
-                        </td>
-                        <td className="lg:px-4 py-2 text-center">
-                          {sal.location && sal.location.name}
-                        </td>
-                        <td
-                          className={`lg:px-4 py-2 text-center font-semibold ${
-                            sal.state == "pending"
-                              ? "text-red-400"
-                              : sal.state == "deliver"
-                              ? "text-cyan-700"
-                              : sal.state == "confirmed"
-                              ? "text-green-600"
-                              : ""
-                          }`}
-                        >
-                          {sal.state && sal.state}
-                        </td>
-                      </tr>
-                    ))
+                    orderList.map((sal) =>
+                      sal ? (
+                        <tr key={sal._id}>
+                          <td className="lg:px-4 py-2 text-center">
+                            {sal.partner && sal.partner.name}
+                          </td>
+                          <td className="lg:px-4 py-2 text-center">
+                            {format(new Date(sal.orderDate), "yyyy-MM-dd")}
+                          </td>
+                          <td className="lg:px-4 py-2 text-center">
+                            {sal.total}
+                          </td>
+                          <td className="lg:px-4 py-2 text-center">
+                            {sal.location && sal.location.name}
+                          </td>
+                          <td
+                            className={`lg:px-4 py-2 text-center font-semibold ${
+                              sal.state == "pending"
+                                ? "text-red-400"
+                                : sal.state == "deliver"
+                                ? "text-cyan-700"
+                                : sal.state == "confirmed"
+                                ? "text-green-600"
+                                : ""
+                            }`}
+                          >
+                            {sal.state && sal.state}
+                          </td>
+                        </tr>
+                      ) : null
+                    )
                   ) : (
                     <h2 className="text-center text-xl text-slate-600 font-semibold  h-32 w-full absolute mt-20">
                       No Currently Sale
@@ -362,22 +367,22 @@ export default function SaleView() {
                 Sale Products
               </h1>
               <div className="px-2 max-h-80 overflow-y-scroll custom-scrollbar mb-6">
-                {todayPurchaseLine.length > 0 ? (
-                  todayPurchaseLine.slice(0, 3).map((purchaseLines) => (
+                {todaySaleLine.length > 0 ? (
+                  todaySaleLine.slice(0, 3).map((sale) => (
                     <div
-                      key={purchaseLines._id}
+                      key={sale._id}
                       className="w-full flex justify-between mb-3 border-b-2 pb-3"
                     >
                       <div className="flex flex-col">
                         <h4 className="text-md text-slate-700 font-bold">
-                          {purchaseLines.product.name}
+                          {sale.product.name}
                         </h4>
                         <h4 className="font-bold text-green-700">
-                          Stock in {getStockQuantity(purchaseLines.product._id)}
+                          Stock in {getStockQuantity(sale.product._id)}
                         </h4>
                       </div>
                       <p className="text-slate-500 font-semibold">
-                        {purchaseLines.product.salePrice} mmk
+                        {sale.product.salePrice} mmk
                       </p>
                     </div>
                   ))
@@ -392,17 +397,9 @@ export default function SaleView() {
         </div>
       </div>
 
-      {purchase.length > 0 && (
-        <div className="absolute inset-0 flex justify-center items-center">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
+      {sale.length > 0 && (
+        <div className="w-10/12 h-screen mx-auto  flex justify-center items-center">
+          {loading && <Spinner size="lg" />}
         </div>
       )}
     </>

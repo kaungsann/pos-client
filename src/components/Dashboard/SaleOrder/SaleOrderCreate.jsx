@@ -456,7 +456,21 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                   />
                 </div>
+
                 <div className="w-60">
+                  <Select
+                    labelPlacement="outside"
+                    label="Discount"
+                    placeholder="Select an discount"
+                  >
+                    {discount.map((dis) => (
+                      <SelectItem key={dis.id} value={dis.id}>
+                        {dis.name + " " + " ( " + dis.amount + "%" + " ) "}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
+                <div className="w-40">
                   <Input
                     type="number"
                     label="Tax"
@@ -468,7 +482,7 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                   />
                 </div>
-                <div className="w-60">
+                <div className="w-40">
                   <Input
                     type="number"
                     label="SubTotal"
