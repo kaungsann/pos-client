@@ -7,8 +7,6 @@ export default function Card({ product }) {
   const products = useSelector((state) => state.orderData);
   const isHave = useSelector((state) => state.orderCheck);
 
-  console.log("redux product is a", products);
-
   const addCard = (product) => {
     if (!isHave) {
       const existingProduct = products.find((pd) => pd.id === product.id);

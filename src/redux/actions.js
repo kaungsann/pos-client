@@ -71,10 +71,11 @@ export const pageRefresh = (payload) => {
   };
 };
 
-export const applyDiscount = (productId, discount) => ({
+export const applyDiscount = (productId, discountId, discount) => ({
   type: "applyDiscount",
   payload: {
     productId,
+    discountId,
     discount,
   },
 });

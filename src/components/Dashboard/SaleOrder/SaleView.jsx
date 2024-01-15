@@ -103,6 +103,8 @@ export default function SaleView() {
       `/orders/totals?startDate=${todayDate.toString()}`,
       token.accessToken
     );
+
+    console.log("res data s a", resData);
     if (resData.status) {
       setTotalAmount(resData.data.sales.totalAmountWithTax);
       setTotalOrders(resData.data.sales.totalOrders);
@@ -166,6 +168,8 @@ export default function SaleView() {
     );
     return todayStockEntry ? todayStockEntry.onHand : 0;
   };
+
+  console.log("sale lines is a", orderLines);
 
   return (
     <>
@@ -317,7 +321,7 @@ export default function SaleView() {
                 <tbody className="w-full space-y-10 relative">
                   {orderList.length > 0 ? (
                     orderList.map((sal) => (
-                      <tr key={sal.id}>
+                      <tr key={sal._id}>
                         <td className="lg:px-4 py-2 text-center">
                           {sal.partner && sal.partner.name}
                         </td>

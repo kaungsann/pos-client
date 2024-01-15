@@ -76,11 +76,25 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
           qty: item.quantity,
           tax: item.tax,
           unitPrice: item.salePrice,
-          subTotal: item.quantity * item.salePrice,
+          subTotal: item.salePrice * item.quantity,
         };
+
+        console.log("Discount ID to be assigned:", item.discount.id);
+
+        // Include discount details if available
+        if (item.discount) {
+          orderLine.discount = item.discount.id;
+          orderLine.unitPrice =
+            (item.salePrice * (item.discount.amount || 0)) / 100;
+          orderLine.subTotal =
+            ((item.salePrice * (item.discount.amount || 0)) / 100) *
+            item.quantity;
+        }
 
         orderLines.push(orderLine);
       });
+
+      console.log("sale line is a", orderLines);
 
       const data = {
         user: user._id,
@@ -96,8 +110,8 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
       try {
         setIsLoading(true);
         let resData = await sendJsonToApi("/sale", data, token.accessToken);
-        console.log("data is a", data);
-
+        console.log("data is a", resData);
+        console.log("Data to be sent:", data);
         if (!resData.success) {
           toast.error(resData.message);
         }
@@ -112,7 +126,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
         }
       } catch (error) {
         setIsLoading(false);
-        console.error("Error creating product:", error);
+        console.error("Error creating saleorder:", error);
       }
     }
   };

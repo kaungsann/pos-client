@@ -102,15 +102,16 @@ export default function PayBox({ onContinueToPay }) {
 
   const totalCost = subTotal + totalTax;
 
-  const handleDiscountAdd = (name, amount, item) => {
+  const handleDiscountAdd = (name, amount, Id, item) => {
     const selectedDiscount = {
       name: name,
+      id: Id,
       amount: parseInt(amount, 10),
     };
     const existingProduct = product.find((pd) => pd.id === item.id);
 
     if (existingProduct) {
-      dispatch(applyDiscount(item.id, selectedDiscount));
+      dispatch(applyDiscount(item.id, Id, selectedDiscount));
     }
   };
 
@@ -188,7 +189,12 @@ export default function PayBox({ onContinueToPay }) {
                                 key={dis.name}
                                 value={dis.amount}
                                 onClick={() =>
-                                  handleDiscountAdd(dis.name, dis.amount, sel)
+                                  handleDiscountAdd(
+                                    dis.name,
+                                    dis.amount,
+                                    dis.id,
+                                    sel
+                                  )
                                 }
                               >
                                 {dis.name +
@@ -212,12 +218,12 @@ export default function PayBox({ onContinueToPay }) {
                               {sel.discount?.name}
                               {`${" ( " + sel.discount?.amount + " ) "}% `}
                             </Chip>
-
-                            <Avatar
-                              isDisabled
-                              name="X"
+                            <span
+                              className="text-[8px] hover:opacity-75 text-slate-300 bg-slate-600 font-bold bottom-4 h-4 w-4 p-1.5 border-2 rounded-full flex items-center justify-center cursor-pointer"
                               onClick={() => handleRemoveDiscountItem(sel.id)}
-                            />
+                            >
+                              X
+                            </span>
                           </div>
                         )}
                       </div>

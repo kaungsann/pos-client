@@ -31,6 +31,7 @@ export default function SaleOrderDetail() {
     { key: "qty", label: "Stock Qty", align: "center" },
     { key: "unitPrice", label: "Unit Price", align: "center" },
     { key: "subTotal", label: "Subtotal", align: "center" },
+    { key: "discount", label: "Discount", align: "center" },
   ];
 
   const getProductName = (item) => {
@@ -188,10 +189,10 @@ export default function SaleOrderDetail() {
                   </div>
                 </div>
               </div>
-              <h2 className="text-xl font-bold text-slate-600">
+              <h2 className="text-xl font-bold text-slate-600 mb-6">
                 Order Products
               </h2>
-              <Table
+              {/* <Table
                 isStriped
                 aria-label="Order Lines Table"
                 className="my-custom-table "
@@ -226,7 +227,49 @@ export default function SaleOrderDetail() {
                     </TableRow>
                   )}
                 </TableBody>
-              </Table>
+              </Table> */}
+              <table className="w-full">
+                <thead className="w-full">
+                  <tr className="bg-blue-600 text-white">
+                    <th className="lg:px-4 py-2 text-center">Name</th>
+                    <th className="lg:px-4 py-2 text-center">Tax</th>
+                    <th className="lg:px-4 py-2 text-center">Qty</th>
+                    <th className="lg:px-4 py-2 text-center">unitPrice</th>
+                    <th className="lg:px-4 py-2 text-center">SubTotal</th>
+                    <th className="lg:px-4 py-2 text-center">Discount</th>
+                  </tr>
+                </thead>
+                <tbody className="mt-4">
+                  {lines.map((line, index) => (
+                    <tr key={index}>
+                      <td className="py-2 text-center text-slate-600 font-semibold">
+                        {line.product.name}
+                      </td>
+                      <td className="py-2 text-center text-slate-600 font-semibold">
+                        {line.tax}
+                      </td>
+                      <td className="py-2 text-center text-slate-600 font-semibold">
+                        {line.qty}
+                      </td>
+                      <td className="py-2 text-center text-slate-600 font-semibold">
+                        {line.unitPrice}
+                      </td>
+                      <td className="py-2 text-center text-slate-600 font-semibold">
+                        {line.subTotal}
+                      </td>
+                      <td className="py-2 text-center text-slate-600 font-semibold">
+                        {line.discount &&
+                          line.discount.name +
+                            " " +
+                            " ( " +
+                            line.discount.amount +
+                            "%" +
+                            " ) "}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
