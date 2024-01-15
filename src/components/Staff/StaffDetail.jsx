@@ -8,6 +8,7 @@ import { getApi } from "../Api";
 import { format } from "date-fns";
 import FadeLoader from "react-spinners/FadeLoader";
 import user from "../../assets/icon.png";
+import { Spinner } from "@nextui-org/react";
 
 export default function StaffDetail() {
   const { id } = useParams();
@@ -153,16 +154,8 @@ export default function StaffDetail() {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center mt-40">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
+        <div className="h-screen mx-auto  flex justify-center items-center">
+          {loading && <Spinner size="lg" />}
         </div>
       )}
     </>

@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { removeData } from "../../../redux/actions";
-import FadeLoader from "react-spinners/FadeLoader";
 
 import { getApi } from "../../Api";
-import { format } from "date-fns";
+
+import { Spinner } from "@nextui-org/react";
 
 export default function TaxDetail() {
   const { id } = useParams();
@@ -73,16 +73,8 @@ export default function TaxDetail() {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center mt-40">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
+        <div className="w-10/12 h-screen mx-auto  flex justify-center items-center">
+          {loading && <Spinner size="lg" />}
         </div>
       )}
     </>

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { removeData } from "../../../redux/actions";
-import FadeLoader from "react-spinners/FadeLoader";
 
 import { getApi } from "../../Api";
-import { Icon } from "@iconify/react";
 import { format } from "date-fns";
+import { Spinner } from "@nextui-org/react";
 
 export default function WasteDetail() {
   const { id } = useParams();
@@ -16,7 +15,6 @@ export default function WasteDetail() {
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
-  const navigate = useNavigate();
 
   const singleOpexApi = async () => {
     setLoading(true);
@@ -117,16 +115,8 @@ export default function WasteDetail() {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center mt-40">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
+        <div className="w-10/12 h-screen mx-auto  flex justify-center items-center">
+          {loading && <Spinner size="lg" />}
         </div>
       )}
     </>
