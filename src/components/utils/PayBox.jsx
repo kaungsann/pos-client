@@ -1,73 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { BiMinus } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
+import { add } from "../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import img from "../../assets/product.svg";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownTrigger,
-  DropdownMenu,
-  Button,
-  Chip,
-  Avatar,
-} from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 import {
-  add,
   itemRemove,
   removeAllItems,
   updateItemQuantity,
-  applyDiscount,
-  removeDiscountItem,
 } from "../../redux/actions";
 import "../../App.css";
 
 import ChoosePay from "./ChoosePay";
-import { BASE_URL } from "../Api";
-import axios from "axios";
+import DiscountBox from "./DiscountBox";
 
 export default function PayBox({ onContinueToPay }) {
   const [payment, setPayment] = useState(false);
-
-  const [discount, setDiscount] = useState([]);
-  const [selectedKeys, setSelectedKeys] = useState(new Set(["text"]));
-
+  const [showBox, setShowBox] = useState(false);
   const dispatch = useDispatch();
-
-  const DISCOUNT_API = {
-    INDEX: BASE_URL + "/discount",
-  };
-
-  const token = useSelector((state) => state.IduniqueData);
-
-  const fetchDiscountData = async () => {
-    try {
-      const response = await axios.get(DISCOUNT_API.INDEX, {
-        headers: {
-          Authorization: `Bearer ${token.accessToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      const validDiscountFilter = response.data.data.filter(
-        (dis) => dis.active === true
-      );
-
-      setDiscount(validDiscountFilter);
-    } catch (error) {
-      console.error("Error fetching discount:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchDiscountData();
-  }, [token]);
 
   const product = useSelector((state) => state.orderData);
   dispatch(add(false));
@@ -93,31 +50,10 @@ export default function PayBox({ onContinueToPay }) {
 
   product.forEach((sel) => {
     totalTax += ((sel.tax * sel.quantity) / 100) * sel.salePrice;
-    //subTotal += sel.salePrice * sel.quantity;
-    subTotal += sel.discount
-      ? ((sel.salePrice * sel.discount.amount) / 100) *
-        sel.quantity.toLocaleString("en-US")
-      : sel.salePrice * sel.quantity.toLocaleString("en-US");
+    subTotal += sel.salePrice * sel.quantity;
   });
 
   const totalCost = subTotal + totalTax;
-
-  const handleDiscountAdd = (name, amount, Id, item) => {
-    const selectedDiscount = {
-      name: name,
-      id: Id,
-      amount: parseInt(amount, 10),
-    };
-    const existingProduct = product.find((pd) => pd.id === item.id);
-
-    if (existingProduct) {
-      dispatch(applyDiscount(item.id, Id, selectedDiscount));
-    }
-  };
-
-  const handleRemoveDiscountItem = (productId) => {
-    dispatch(removeDiscountItem(productId));
-  };
 
   return (
     <>
@@ -173,59 +109,11 @@ export default function PayBox({ onContinueToPay }) {
                           {sel.name}
                         </h4>
 
-                        <Dropdown>
-                          <DropdownTrigger>
-                            <Icon icon="ic:twotone-discount" className="ml-3" />
-                          </DropdownTrigger>
-                          <DropdownMenu
-                            aria-label="Multiple selection example"
-                            variant="flat"
-                            selectionMode="single"
-                            selectedKeys={selectedKeys}
-                            onSelectionChange={setSelectedKeys}
-                          >
-                            {discount.map((dis) => (
-                              <DropdownItem
-                                key={dis.name}
-                                value={dis.amount}
-                                onClick={() =>
-                                  handleDiscountAdd(
-                                    dis.name,
-                                    dis.amount,
-                                    dis.id,
-                                    sel
-                                  )
-                                }
-                              >
-                                {dis.name +
-                                  " " +
-                                  " ( " +
-                                  dis.amount +
-                                  "%" +
-                                  " ) "}
-                              </DropdownItem>
-                            ))}
-                          </DropdownMenu>
-                        </Dropdown>
-
-                        {sel.discount && (
-                          <div className="flex relative">
-                            <Chip
-                              color="success"
-                              variant="bordered"
-                              className="ml-3"
-                            >
-                              {sel.discount?.name}
-                              {`${" ( " + sel.discount?.amount + " ) "}% `}
-                            </Chip>
-                            <span
-                              className="text-[8px] hover:opacity-75 text-slate-300 bg-slate-600 font-bold bottom-4 h-4 w-4 p-1.5 border-2 rounded-full flex items-center justify-center cursor-pointer"
-                              onClick={() => handleRemoveDiscountItem(sel.id)}
-                            >
-                              X
-                            </span>
-                          </div>
-                        )}
+                        {/* <Icon
+                          icon="ic:twotone-discount"
+                          className="ml-3"
+                          onClick={() => setShowBox(!showBox)}
+                        /> */}
                       </div>
 
                       <div onClick={() => dispatch(itemRemove(sel.id))}>
@@ -271,12 +159,7 @@ export default function PayBox({ onContinueToPay }) {
                         />
                       </div>
                       <span className="font-bold text-md text-blue-600">
-                        {sel.discount
-                          ? ((sel.salePrice * sel.discount.amount) / 100) *
-                            sel.quantity.toLocaleString("en-US")
-                          : sel.salePrice *
-                            sel.quantity.toLocaleString("en-US")}
-                        {/* {( sel.salePrice * sel.quantity).toLocaleString("en-US")} */}
+                        {(sel.salePrice * sel.quantity).toLocaleString("en-US")}{" "}
                         mmk
                       </span>
                     </div>
@@ -326,6 +209,7 @@ export default function PayBox({ onContinueToPay }) {
               Continue To Pay
             </Button>
           </div>
+          {showBox && <DiscountBox />}
         </div>
       )}
     </>

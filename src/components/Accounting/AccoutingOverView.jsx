@@ -28,6 +28,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   Button,
+  Spinner,
 } from "@nextui-org/react";
 
 import { useSelector } from "react-redux";
@@ -43,6 +44,8 @@ const AccoutingOverView = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   let [account, setAccount] = useState([]);
   let [totalYear, setTotalYear] = useState([]);
   const token = useSelector((state) => state.IduniqueData);
@@ -146,6 +149,7 @@ const AccoutingOverView = () => {
   useEffect(() => {
     const fetchAccountData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           ACCOUNT_API.INDEX + `?startDate=${startDate}&endDate=${endDate}`,
           {
@@ -155,13 +159,18 @@ const AccoutingOverView = () => {
             },
           }
         );
-        setAccount(response.data?.data);
+        if (response.data?.success) {
+          setLoading(false);
+          setAccount(response.data?.data);
+        }
       } catch (error) {
         console.error("Error fetching account:", error);
+        setLoading(false);
       }
     };
     const fetchYearlyData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           ACCOUNT_API.YEAR + `?year=${selectedYear}`,
           {
@@ -171,11 +180,13 @@ const AccoutingOverView = () => {
             },
           }
         );
-
+        if (response.data?.success) {
+          setLoading(false);
+          setTotalYear(response.data?.data);
+        }
         console.log("api isa", ACCOUNT_API.YEAR + `?year=${selectedYear}`);
-
-        setTotalYear(response.data?.data);
       } catch (error) {
+        setLoading(false);
         console.error("Error fetching year cost:", error.response?.data);
       }
     };
@@ -484,6 +495,11 @@ const AccoutingOverView = () => {
             ))}
         </tbody>
       </table>
+      {loading && (
+        <div className="absolute top-0 w-full h-screen flex items-center justify-center bg-slate-50 opacity-75">
+          <Spinner />
+        </div>
+      )}
     </>
   );
 };
