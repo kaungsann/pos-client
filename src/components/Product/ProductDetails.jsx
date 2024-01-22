@@ -147,7 +147,7 @@ export default function ProductDetails() {
                       <div>
                         <div>
                           <h4 className="text-md text-slate-500">
-                            Mininum Quantity
+                            Minimum Quantity
                           </h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
                             {product.minStockQty ? product.minStockQty : "None"}

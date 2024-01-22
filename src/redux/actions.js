@@ -90,3 +90,21 @@ export const removeDiscountItem = (productID) => ({
 export const removeDiscount = () => ({
   type: "removeDiscount",
 });
+
+export const addProduct = (product, discountValue, quantity) => {
+  return {
+    type: "addProduct",
+    payload: { product, discountValue, quantity },
+  };
+};
+
+export const removeProduct = (productID) => ({
+  type: "removeDiscountItem",
+  payload: {
+    productID,
+  },
+});
+
+export const removeAllSaleDiscount = () => ({
+  type: "removeAllDiscounts",
+});

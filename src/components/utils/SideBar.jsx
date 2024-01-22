@@ -38,7 +38,7 @@ export default function SideBar() {
 
   return (
     <>
-      <aside className="overflow-y-scroll custom-scrollbar h-screen">
+      {/* <aside className="overflow-y-scroll custom-scrollbar h-screen">
         <nav className="h-full flex flex-col bg-white ">
           <div className="px-4 pb-2 flex justify-between items-center">
             <img
@@ -291,8 +291,6 @@ export default function SideBar() {
                   </ul>
                 )}
               </div>
-
-              {/* <MoreVertical size={20} /> */}
             </div>
           </div>
 
@@ -716,8 +714,6 @@ export default function SideBar() {
                   </ul>
                 )}
               </div>
-
-              {/* <MoreVertical size={20} /> */}
             </div>
           </div>
 
@@ -752,7 +748,7 @@ export default function SideBar() {
                         </li>
                       </div>
                     </ListboxItem>
-                    {/* <ListboxItem
+                    <ListboxItem
                       onClick={() => navigate("/admin/discount/all")}
                     >
                       <div className="flex justify-between">
@@ -767,7 +763,7 @@ export default function SideBar() {
                           Tax
                         </li>
                       </div>
-                    </ListboxItem> */}
+                    </ListboxItem>
                     <ListboxItem onClick={() => navigate("/admin/opex/all")}>
                       <div className="flex justify-between">
                         <li className={`my-1 ml-2 text-start  rounded-md`}>
@@ -850,7 +846,7 @@ export default function SideBar() {
 
                       <span className="ml-3">Overview</span>
                     </li>
-                    {/* <li
+                    <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/discount/all" ||
                         location.pathname === "/admin/discount/create" ||
@@ -869,8 +865,8 @@ export default function SideBar() {
                       />
 
                       <span className="ml-3">Discount</span>
-                    </li> */}
-                    {/* <li
+                    </li>
+                    <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/tax/all" ||
                         location.pathname === "/admin/tax/create" ||
@@ -889,7 +885,7 @@ export default function SideBar() {
                       />
 
                       <span className="ml-3">Tax</span>
-                    </li> */}
+                    </li>
                     <li
                       className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                         location.pathname === "/admin/opex/all" ||
@@ -974,6 +970,477 @@ export default function SideBar() {
                     </li>
                   </ul>
                 )}
+              </div>
+            </div>
+          </div>
+        </nav>
+      </aside> */}
+
+      <aside className="overflow-y-scroll custom-scrollbar h-screen w-48">
+        <nav className="h-full flex flex-col bg-white w-full">
+          <div className="px-4 pb-2 flex justify-between items-center">
+            <img
+              src={logo}
+              className="overflow-hidden duration-1000 transition-all mt-3 w-10"
+            />
+          </div>
+
+          <div className="border-t flex p-3">
+            <div
+              className="
+              flex flex-col justify-between
+              overflow-hidden duration-1000 transition-all w-full
+                "
+            >
+              <div className="cursor-pointer mt-2">
+                <h4 className="font-semibold text-md">Inventory</h4>
+              </div>
+              <div className="overflow-hidden transition-all w-full">
+                <ul className="cursor-pointer mt-2 w-full">
+                  <li
+                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/inventory/overview"
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/inventory/overview"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="fluent-mdl2:analytics-view"
+                      className="text-slate-600 text-xl"
+                    />
+                    <h3 className="ml-3">OverView</h3>
+                  </li>
+                  <li
+                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/products/all" ||
+                      location.pathname === "/admin/products/create" ||
+                      location.pathname === `/admin/products/edit/${id}` ||
+                      location.pathname === `/admin/products/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/products/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="fluent-mdl2:product"
+                      className="text-slate-600 text-xl"
+                    />
+
+                    <h3 className="ml-3">Product</h3>
+                  </li>
+                  <li
+                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/categorys/all" ||
+                      location.pathname === "/admin/categorys/create" ||
+                      location.pathname === `/admin/categorys/edit/${id}` ||
+                      location.pathname === `/admin/categorys/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/categorys/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="tabler:category-plus"
+                      className="text-slate-500 text-2xl"
+                    />
+
+                    <h3 className="ml-3">Category</h3>
+                  </li>
+                  <li
+                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/stock/all" ||
+                      location.pathname === "/admin/stock/create" ||
+                      location.pathname === `/admin/stock/edit/${id}` ||
+                      location.pathname === `/admin/stock/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/stock/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="healthicons:rdt-result-out-stock-outline"
+                      className="text-slate-500 text-2xl"
+                    />
+
+                    <h3 className="ml-3">Stock</h3>
+                  </li>
+                  <li
+                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/adjustment/view"
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/adjustment/view"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="tabler:adjustments-horizontal"
+                      className="text-slate-500 text-xl"
+                    />
+
+                    <h3 className="ml-3">Adjustment</h3>
+                  </li>
+                  <li
+                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/locations/all" ||
+                      location.pathname === "/admin/locations/create" ||
+                      location.pathname === `/admin/locations/edit/${id}` ||
+                      location.pathname === `/admin/locations/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/locations/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="ep:location"
+                      className="text-slate-600 text-xl"
+                    />
+                    <h3 className="ml-3">Location</h3>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t flex p-3">
+            <div
+              className="flex flex-col justify-between w-full
+              overflow-hidden duration-1000 transition-all"
+            >
+              <h4 className="font-semibold text-md">Purchase</h4>
+
+              <div className="overflow-hidden transition-all w-full">
+                <ul className="cursor-pointer mt-2">
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/purchase/view"
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/purchase/view"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="uim:analytics"
+                      className="text-slate-500 text-xl"
+                    />
+
+                    <span className="ml-3">Overview</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/purchase/all" ||
+                      location.pathname === "/admin/purchase/create" ||
+                      location.pathname === `/admin/purchase/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/purchase/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="icons8:buy"
+                      className="text-slate-500 text-xl"
+                    />
+                    <span className="ml-3"> Purchase</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex items-center rounded-sm text-md hover:bg-slate-100 text-slate-500 ${
+                      location.pathname === "/admin/customers/vendors" ||
+                      location.pathname === `/admin/customers/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/customers/vendors"), clostHandleList();
+                    }}
+                  >
+                    <Icon icon="ph:user" className="text-slate-500 text-xl" />
+
+                    <span className="ml-3">Vendor</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t flex p-3">
+            <div
+              className="flex flex-col justify-between w-full
+              overflow-hidden duration-1000 transition-all "
+            >
+              <div className=" cursor-pointer mt-2">
+                <h4 className="font-semibold text-md">Sale</h4>
+              </div>
+              <div className="overflow-hidden transition-all w-full">
+                <ul className="cursor-pointer mt-2">
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/saleorders/view"
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/saleorders/view"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="uim:analytics"
+                      className="text-slate-500 text-xl"
+                    />
+                    <span className="ml-3">Overview</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex hover:bg-slate-100 items-center rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/saleorders/all" ||
+                      location.pathname === "/admin/saleorders/create" ||
+                      location.pathname === `/admin/saleorders/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/saleorders/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="icon-park-outline:buy"
+                      className="text-slate-500 text-xl"
+                    />
+
+                    <span className="ml-3">SaleOrders</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/customers/all"
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/customers/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon icon="ph:user" className="text-slate-500 text-xl" />
+                    <span className="ml-3">Customers</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t flex p-3">
+            <div
+              className="flex flex-col justify-between w-full
+              overflow-hidden duration-1000 transition-all"
+            >
+              <h4 className="font-semibold text-md">Stakeholders</h4>
+
+              <div className="overflow-hidden transition-all w-full">
+                <ul className="cursor-pointer mt-2">
+                  <li
+                    className={`p-1 px-3 flex items-center rounded-sm hover:bg-slate-100 text-md text-slate-500 ${
+                      location.pathname === "/admin/partners/all" ||
+                      location.pathname === "/admin/partners/create" ||
+                      location.pathname === `/admin/partners/edit/${id}` ||
+                      location.pathname === `/admin/partners/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/partners/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="ph:users-three"
+                      className="text-slate-500 text-xl"
+                    />
+
+                    <span className="ml-3">Partner</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/employee/all" ||
+                      location.pathname === "/admin/employee/create" ||
+                      location.pathname === `/admin/employee/edit/${id}` ||
+                      location.pathname === `/admin/employee/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/employee/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="clarity:employee-line"
+                      className="text-slate-500 text-xl"
+                    />
+                    <span className="ml-3">Employee</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/user/all" ||
+                      location.pathname === "/admin/user/create" ||
+                      location.pathname === `/admin/user/edit/${id}` ||
+                      location.pathname === `/admin/user/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/user/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="solar:user-id-outline"
+                      className="text-slate-500 text-xl"
+                    />
+
+                    <span className="ml-3">Staff</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t flex p-3">
+            <div
+              className="flex flex-col justify-between w-full
+                 overflow-hidden duration-1000 transition-all "
+            >
+              <h4 className="font-semibold text-md text-start">Accountant</h4>
+
+              <div className="overflow-hidden transition-all w-full">
+                <ul className="cursor-pointer mt-2">
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/account/overview"
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/account/overview"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="carbon:account"
+                      className="tet-slate-500 text-xl"
+                    />
+
+                    <span className="ml-3">Overview</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/discount/all" ||
+                      location.pathname === "/admin/discount/create" ||
+                      location.pathname === `/admin/discount/edit/${id}` ||
+                      location.pathname === `/admin/discount/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/discount/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="iconamoon:discount"
+                      className="tet-slate-500 text-xl"
+                    />
+
+                    <span className="ml-3">Discount</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/opex/all" ||
+                      location.pathname === "/admin/opex/create" ||
+                      location.pathname === `/admin/opex/edit/${id}` ||
+                      location.pathname === `/admin/opex/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/opex/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="icon-park-outline:table-report"
+                      className="tet-slate-500 text-xl"
+                    />
+
+                    <span className="ml-3">Opex</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/fixed-cost/all" ||
+                      location.pathname === "/admin/fixed-cost/create" ||
+                      location.pathname === `/admin/fixed-cost/edit/${id}` ||
+                      location.pathname === `/admin/fixed-cost/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/fixed-cost/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="bi:file-text"
+                      className="tet-slate-500 text-xl"
+                    />
+
+                    <span className="ml-3">Fixed-Cost</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/variable-cost/all" ||
+                      location.pathname === "/admin/variable-cost/create" ||
+                      location.pathname === `/admin/variable-cost/edit/${id}` ||
+                      location.pathname === `/admin/variable-cost/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/variable-cost/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="lucide:clipboard-list"
+                      className="tet-slate-500 text-xl"
+                    />
+
+                    <span className="ml-3"> Variable-Cost</span>
+                  </li>
+                  <li
+                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/waste/all" ||
+                      location.pathname === "/admin/waste/create" ||
+                      location.pathname === `/admin/waste/edit/${id}` ||
+                      location.pathname === `/admin/waste/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/waste/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="fluent:feed-28-regular"
+                      className="tet-slate-500 text-xl"
+                    />
+
+                    <span className="ml-3">Waste</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>

@@ -115,7 +115,7 @@ export default function Admin() {
         className={`mt-14 mx-auto p-4  bg-[#f5f5f5] h-full ${
           (user.role && user.role?.name === "admin") ||
           user.role?.name === "root"
-            ? "ml-20"
+            ? "ml-48"
             : ""
         }`}
       >

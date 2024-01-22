@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MoonLoader from "react-spinners/MoonLoader";
 import { sendJsonToApi } from "./Api";
+import { Spinner } from "@nextui-org/react";
 
 export default function Login() {
   const [email, setEmail] = useState("admin@gmail.com");
@@ -156,23 +157,23 @@ export default function Login() {
                   />
                 </div>
               </div>
-              <div>
+              <div className="relative">
                 <button
                   type="submit"
-                  className="flex w-full items-center justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  className={`w-full items-center justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
+                    loading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  disabled={loading}
                 >
-                  {loading && (
-                    <MoonLoader
-                      color={"#f0f7f6"}
-                      loading={loading}
-                      size={15}
-                      aria-label="Loading Spinner"
-                      data-testid="loader"
-                      className="mx-4"
-                    />
-                  )}
                   Sign in
                 </button>
+                {loading && (
+                  <Spinner
+                    size="sm"
+                    color="default"
+                    className="absolute top-0 bottom-0 right-0 left-0"
+                  />
+                )}
               </div>
             </form>
           </div>

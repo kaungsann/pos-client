@@ -100,13 +100,59 @@ const orderReducers = (state = [], { type, payload }) => {
   }
 };
 
+const saleOrderDiscountReducers = (state = [], { type, payload }) => {
+  switch (type) {
+    case "addProduct":
+      let { product, discountValue, quantity } = payload;
+      const existingProductIndex = state.findIndex(
+        (item) => item.id === product.id
+      );
+
+      if (existingProductIndex !== -1) {
+        // If the product already exists in state, update the discountValue
+        return state.map((item, index) => {
+          if (index === existingProductIndex) {
+            return {
+              ...item,
+              discount: discountValue,
+              qty: parseInt(quantity),
+            };
+          }
+          return item;
+        });
+      } else {
+        // If the product is not in state, add it with the discountValue
+        return [
+          ...state,
+          { ...product, discount: discountValue, qty: parseInt(quantity) },
+        ];
+      }
+
+    case "removeSaleDiscountItem":
+      let { productID } = payload;
+      // Remove the item with the specified productID
+      return state.filter((item) => item.id !== productID);
+
+    case "removeAllDiscounts":
+      // Remove the discount property from all items
+      // return state.map((item) => {
+      //const { discount, ...itemWithoutDiscount } = item;
+
+      // });
+      return [];
+
+    default:
+      return state;
+  }
+};
+
 const reducers = combineReducers({
   IduniqueData: idReducers,
   loginData: userReducers,
   orderData: orderReducers,
   orderCheck: orderValidReducers,
   refresh: refreshReducer,
-  //discount: discountReducers,
+  discount: saleOrderDiscountReducers,
 });
 
 export default reducers;

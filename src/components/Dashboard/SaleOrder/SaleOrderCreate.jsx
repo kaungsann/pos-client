@@ -6,8 +6,19 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
-import { Input, Select, SelectItem } from "@nextui-org/react";
-import { removeData } from "../../../redux/actions";
+import {
+  Input,
+  Select,
+  SelectItem,
+  TableCell,
+  TableRow,
+} from "@nextui-org/react";
+import {
+  addProduct,
+  removeAllSaleDiscount,
+  removeData,
+  removeProduct,
+} from "../../../redux/actions";
 import { Icon } from "@iconify/react";
 
 import {
@@ -15,8 +26,6 @@ import {
   TableHeader,
   TableColumn,
   TableBody,
-  TableRow,
-  TableCell,
   Divider,
   Button,
   Progress,
@@ -31,6 +40,7 @@ export default function SaleOrderCreate() {
   const [loca, setLoca] = useState("");
   const [discountId, setDiscountId] = useState("");
   const [discountAmount, setDiscountAmount] = useState(0);
+  const [discountValue, setDiscountValue] = useState(null);
   const [note, setNote] = useState("");
 
   const [refreshIconRotation, setRefreshIconRotation] = useState(false);
@@ -48,6 +58,8 @@ export default function SaleOrderCreate() {
   const [totalTax, setTotalTax] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
   const [discount, setDiscount] = useState([]);
+
+  const dispatch = useDispatch();
 
   const handlePartnerButtonClick = () => {
     const url = "/admin/partners/create";
@@ -77,6 +89,15 @@ export default function SaleOrderCreate() {
     }, 500);
   };
 
+  const handleDiscontRefresh = () => {
+    getDiscount();
+    setPartIconRotation(true);
+
+    setTimeout(() => {
+      setPartIconRotation(false);
+    }, 500);
+  };
+
   const handleDiscountButtonClick = () => {
     const url = "/admin/discount/create";
     window.open(url, "_blank");
@@ -86,6 +107,8 @@ export default function SaleOrderCreate() {
     const selectedDiscount = discount.find((ds) => ds.id === e.target.value);
     setDiscountId(e.target.value);
     setDiscountAmount(selectedDiscount ? selectedDiscount.amount : 0);
+    setDiscountValue(selectedDiscount);
+    //dispatch(removeAllSaleDiscount());
   };
 
   const [selectedOption, setSelectedOption] = React.useState("default");
@@ -93,12 +116,13 @@ export default function SaleOrderCreate() {
   const navigate = useNavigate();
 
   const userData = useSelector((state) => state.loginData);
+  const selectProduct = useSelector((state) => state.discount);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
   const createProductApi = async () => {
     setIsLoading(true);
-    if (saleOrderLines.length == 0) {
+    if (selectProduct.length == 0) {
       toast.error("You need to select products before saving");
       setTimeout(() => {
         setIsLoading(false);
@@ -112,12 +136,12 @@ export default function SaleOrderCreate() {
       partner: partner,
       location: loca,
       //discount: discountId,
-      lines: saleOrderLines.map((line) => ({
-        product: line.product.id,
+      lines: selectProduct.map((line) => ({
+        product: line.id,
         qty: line.qty,
         tax: line.tax,
-        unitPrice: line.unitPrice,
-        subTotal: line.subTotal,
+        unitPrice: line.salePrice,
+        subTotal: line.salePrice * parseInt(line.qty),
       })),
       state: "pending",
       note: note,
@@ -165,53 +189,73 @@ export default function SaleOrderCreate() {
     );
     setPart(filteredPartners);
   };
-
   const getDiscount = async () => {
     const resData = await getApi("/discount", token.accessToken);
     const filteredDiscount = resData.data.filter((la) => la.active === true);
     setDiscount(filteredDiscount);
   };
-
   const handleAddProduct = () => {
-    if (pd === "" || parseInt(quantity) === 0 || quantity === "") {
+    if (pd == "" || quantity == 0) {
       toast.error("you need to selecte the product and add quantity");
       return;
     }
+    dispatch(addProduct(item, discountValue, quantity));
 
-    const selectedProduct = product.find((pt) => pt.id === pd);
-    const existingProductIndex = saleOrderLines.findIndex(
-      (line) => line.product.id === pd
-    );
-
-    if (existingProductIndex !== -1) {
-      // Product already exists in the array, update the values
-      const updatedSaleOrderLines = [...saleOrderLines];
-      const existingLine = updatedSaleOrderLines[existingProductIndex];
-
-      // Calculate the updated quantity
-      const updatedQuantity = existingLine.qty + parseInt(quantity);
-
-      existingLine.qty = updatedQuantity;
-      existingLine.tax =
-        (selectedProduct.tax / 100) * updatedQuantity * unitPrice;
-      existingLine.unitPrice = unitPrice;
-      existingLine.subTotal = unitPrice * updatedQuantity;
-
-      setSaleOrderLines(updatedSaleOrderLines);
-    } else {
-      // Product doesn't exist in the array, add a new line
-      const subTotal = unitPrice * quantity;
-
-      const newSaleOrderLine = {
-        product: item,
-        qty: parseInt(quantity),
-        tax: (selectedProduct.tax / 100) * quantity * unitPrice,
-        unitPrice: unitPrice,
-        subTotal: subTotal,
+    selectProduct.forEach((item) => {
+      const orderLine = {
+        product: item.id,
+        qty: parseInt(item.qty),
+        tax: item.tax || 0,
+        unitPrice: item.salePrice || 0,
+        subTotal: item.salePrice * parseInt(item.qty),
       };
 
-      setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
-    }
+      // Include discount details if available
+      if (discountValue) {
+        orderLine.discount = discountValue.id;
+        orderLine.unitPrice = (item.salePrice * discountValue.amount) / 100;
+        orderLine.subTotal =
+          ((pd.salePrice * discountValue.amount) / 100) * parseInt(item.qty);
+      }
+
+      // Add the new sale order line to the state
+      setSaleOrderLines([...saleOrderLines, orderLine]);
+    });
+
+    // const selectedProduct = product.find((pt) => pt.id === pd);
+    // const existingProductIndex = saleOrderLines.findIndex(
+    //   (line) => line.product.id === pd
+    // );
+
+    // if (existingProductIndex !== -1) {
+    //   // Product already exists in the array, update the values
+    //   const updatedSaleOrderLines = [...saleOrderLines];
+    //   const existingLine = updatedSaleOrderLines[existingProductIndex];
+
+    //   // Calculate the updated quantity
+    //   const updatedQuantity = existingLine.qty + parseInt(quantity);
+
+    //   existingLine.qty = updatedQuantity;
+    //   existingLine.tax =
+    //     (selectedProduct.tax / 100) * updatedQuantity * unitPrice;
+    //   existingLine.unitPrice = unitPrice;
+    //   existingLine.subTotal = unitPrice * updatedQuantity;
+
+    //   setSaleOrderLines(updatedSaleOrderLines);
+    // } else {
+    //   // Product doesn't exist in the array, add a new line
+    //   const subTotal = unitPrice * quantity;
+
+    //   const newSaleOrderLine = {
+    //     product: item,
+    //     qty: parseInt(quantity),
+    //     tax: (selectedProduct.tax / 100) * quantity * unitPrice,
+    //     unitPrice: unitPrice,
+    //     subTotal: subTotal,
+    //   };
+
+    //   setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
+    // }
 
     // Reset input values
     setPd(options[0]);
@@ -220,30 +264,38 @@ export default function SaleOrderCreate() {
     setUnitPrice(0);
   };
 
-  const removeProduct = (id) => {
-    // Filter out the product with the specified id
-    const updatedSaleOrderLines = saleOrderLines.filter(
-      (line) => line.product.id !== id
-    );
-    setSaleOrderLines(updatedSaleOrderLines);
-  };
-
   useEffect(() => {
     let calculatedTotalTax = 0;
     let calculatedSubTotal = 0;
 
-    saleOrderLines.forEach((sel) => {
-      calculatedTotalTax += sel.tax;
-      calculatedSubTotal += sel.unitPrice * sel.qty;
+    // saleOrderLines.forEach((sel) => {
+    //   calculatedTotalTax += sel.tax;
+    //   calculatedSubTotal += sel.unitPrice * sel.qty;
+    // });
+
+    selectProduct.forEach((sel) => {
+      calculatedTotalTax += ((sel.tax * sel.qty) / 100) * sel.salePrice;
+      //subTotal += sel.salePrice * sel.quantity;
+      calculatedSubTotal += sel.discount
+        ? ((sel.salePrice * sel.discount.amount) / 100) * sel.qty
+        : sel.salePrice * sel.qty;
     });
 
+    //const totalCost = calculatedSubTotal + calculatedTotalTax;
+    console.log(calculatedTotalTax);
+    console.log(calculatedSubTotal + calculatedTotalTax);
+
     setTotalTax(calculatedTotalTax);
-    setTotalCost(calculatedSubTotal + calculatedTotalTax);
+    setTotalCost(calculatedSubTotal);
     getLocation();
     getPartner();
     getProduct();
     getDiscount();
-  }, [saleOrderLines]);
+  }, []);
+
+  console.log("redux prouduct is a", selectProduct);
+
+  console.log("line prouduct is a", saleOrderLines);
 
   return (
     <>
@@ -400,7 +452,6 @@ export default function SaleOrderCreate() {
                 />
               </div>
             </div>
-
             <Divider />
             <div className="flex items-center w-full justify-between">
               <h3 className="text-lg font-semibold">Order Products</h3>
@@ -412,7 +463,6 @@ export default function SaleOrderCreate() {
                 Add
               </button>
             </div>
-
             <form onSubmit={handleAddProduct} className="flex justify-between">
               <div className="flex flex-wrap gap-8">
                 <div className="w-60">
@@ -456,21 +506,36 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                   />
                 </div>
-
-                <div className="w-60">
-                  <Select
-                    labelPlacement="outside"
-                    label="Discount"
-                    placeholder="Select an discount"
-                  >
-                    {discount.map((dis) => (
-                      <SelectItem key={dis.id} value={dis.id}>
-                        {dis.name + " " + " ( " + dis.amount + "%" + " ) "}
-                      </SelectItem>
-                    ))}
-                  </Select>
+                <div className="flex">
+                  <div className="flex w-60 justify-between relative">
+                    <Select
+                      labelPlacement="outside"
+                      label="Discount"
+                      placeholder="Select an discount"
+                      onChange={handleDiscountChange}
+                    >
+                      {discount.map((dis) => (
+                        <SelectItem key={dis.id} value={dis.id}>
+                          {dis.name + " " + " ( " + dis.amount + "%" + " ) "}
+                        </SelectItem>
+                      ))}
+                    </Select>
+                    <Icon
+                      onClick={handleDiscountButtonClick}
+                      icon="icomoon-free:new-tab"
+                      className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
+                    />
+                  </div>
+                  <Icon
+                    onClick={handleDiscontRefresh}
+                    icon="ic:baseline-refresh"
+                    className={`mt-10 mx-3 text-xl text-slate-600 font-semibold hover:opacity-70 duration-1000 transition-all ${
+                      partIconRotation ? "rotate-[360deg]" : "rotate-0"
+                    }`}
+                  />
                 </div>
-                <div className="w-40">
+
+                <div className="w-32">
                   <Input
                     type="number"
                     label="Tax"
@@ -482,13 +547,17 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                   />
                 </div>
-                <div className="w-40">
+                <div className="w-32">
                   <Input
                     type="number"
                     label="SubTotal"
                     name="subTotal"
                     isDisabled
-                    value={unitPrice * quantity}
+                    value={
+                      discountValue
+                        ? ((unitPrice * discountValue.amount) / 100) * quantity
+                        : unitPrice * quantity
+                    }
                     onChange={(e) => setTotalCost(e.target.value)}
                     placeholder="SubTotal"
                     labelPlacement="outside"
@@ -508,18 +577,22 @@ export default function SaleOrderCreate() {
                   <TableColumn>Delete</TableColumn>
                 </TableHeader>
                 <TableBody>
-                  {saleOrderLines.map((line) => (
+                  {selectProduct.map((pd) => (
                     <TableRow key={count + 1}>
-                      <TableCell>{line.product.name}</TableCell>
-                      <TableCell>{line.product.barcode}</TableCell>
-                      <TableCell>{line.tax.toFixed(2)}</TableCell>
-                      <TableCell>{line.qty}</TableCell>
-                      <TableCell>{line.unitPrice}</TableCell>
-                      <TableCell>{line.subTotal}</TableCell>
+                      <TableCell>{pd.name}</TableCell>
+                      <TableCell>{pd.barcode}</TableCell>
+                      <TableCell>{pd.tax.toFixed(2)}</TableCell>
+                      <TableCell>{pd.qty}</TableCell>
+                      <TableCell>{pd.salePrice}</TableCell>
+                      <TableCell>
+                        {pd.discount
+                          ? ((pd.salePrice * pd.discount.amount) / 100) * pd.qty
+                          : pd.salePrice * pd.qty}
+                      </TableCell>
                       <TableCell>
                         <BsTrash
                           className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
-                          onClick={() => removeProduct(line.product.id)}
+                          onClick={() => removeProduct(pd.id)}
                         />
                       </TableCell>
                     </TableRow>
