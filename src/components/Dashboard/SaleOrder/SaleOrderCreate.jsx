@@ -113,6 +113,7 @@ export default function SaleOrderCreate() {
   const dipatch = useDispatch();
 
   const createProductApi = async () => {
+    console.log("is working sale api");
     setIsLoading(true);
     if (selectProduct.length == 0) {
       toast.error("You need to select products before saving");
@@ -145,17 +146,21 @@ export default function SaleOrderCreate() {
       total: totalCost,
     };
 
+    console.log(" adddata is a", data);
+
     try {
       let resData = await sendJsonToApi("/sale", data, token.accessToken);
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
+      console.log("res data sale is ", resData);
       if (resData.status) {
         setIsLoading(false);
         toast(resData.message);
         navigate("/admin/saleorders/all");
       } else {
         toast.error(resData.message);
+        setIsLoading(false);
       }
     } catch (error) {
       setIsLoading(false);
@@ -163,6 +168,7 @@ export default function SaleOrderCreate() {
     }
     setIsLoading(false);
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     createProductApi();

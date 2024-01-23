@@ -334,7 +334,7 @@ export default function SaleList({ sales }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Purchases found"} items={sortedItems}>
+        <TableBody emptyContent={"No Sales found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
