@@ -114,8 +114,8 @@ const saleOrderDiscountReducers = (state = [], { type, payload }) => {
           if (index === existingProductIndex) {
             return {
               ...item,
-              discount: discountValue,
-              qty: parseInt(quantity),
+              discount: discountValue ? discountValue : {},
+              qty: (item.qty += parseInt(quantity)),
             };
           }
           return item;
@@ -127,6 +127,18 @@ const saleOrderDiscountReducers = (state = [], { type, payload }) => {
           { ...product, discount: discountValue, qty: parseInt(quantity) },
         ];
       }
+    case "updateDiscount":
+      const { productIds, discountValues } = payload;
+      return state.map((item) => {
+        if (item.id === productID) {
+          return {
+            ...item,
+            discount: discountValues ? discountValues : {},
+            // Update other properties if needed
+          };
+        }
+        return item;
+      });
 
     case "removeSaleDiscountItem":
       let { productID } = payload;
@@ -134,11 +146,6 @@ const saleOrderDiscountReducers = (state = [], { type, payload }) => {
       return state.filter((item) => item.id !== productID);
 
     case "removeAllDiscounts":
-      // Remove the discount property from all items
-      // return state.map((item) => {
-      //const { discount, ...itemWithoutDiscount } = item;
-
-      // });
       return [];
 
     default:

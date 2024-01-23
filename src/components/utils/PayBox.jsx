@@ -94,7 +94,7 @@ export default function PayBox({ onContinueToPay }) {
     totalTax += ((sel.tax * sel.quantity) / 100) * sel.salePrice;
     //subTotal += sel.salePrice * sel.quantity;
     subTotal += sel.discount
-      ? ((sel.salePrice * sel.discount.amount) / 100) *
+      ? (sel.salePrice - (sel.salePrice * sel.discount.amount) / 100) *
         sel.quantity.toLocaleString("en-US")
       : sel.salePrice * sel.quantity.toLocaleString("en-US");
   });
@@ -169,7 +169,7 @@ export default function PayBox({ onContinueToPay }) {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <h4 className="font-bold text-md text-slate-700">
-                          {sel.name.substring(0, 8)}
+                          {sel.name.substring(0, 5)}
                         </h4>
 
                         <Dropdown>
@@ -276,7 +276,8 @@ export default function PayBox({ onContinueToPay }) {
                       </div>
                       <span className="font-bold text-md text-blue-600">
                         {sel.discount
-                          ? ((sel.salePrice * sel.discount.amount) / 100) *
+                          ? (sel.salePrice -
+                              (sel.salePrice * sel.discount.amount) / 100) *
                             sel.quantity.toLocaleString("en-US")
                           : sel.salePrice *
                             sel.quantity.toLocaleString("en-US")}

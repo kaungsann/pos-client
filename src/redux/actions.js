@@ -99,7 +99,7 @@ export const addProduct = (product, discountValue, quantity) => {
 };
 
 export const removeProduct = (productID) => ({
-  type: "removeDiscountItem",
+  type: "removeSaleDiscountItem",
   payload: {
     productID,
   },

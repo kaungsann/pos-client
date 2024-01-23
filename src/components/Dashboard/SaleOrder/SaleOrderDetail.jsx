@@ -148,7 +148,7 @@ export default function SaleOrderDetail() {
                     <div>
                       <h4 className="text-md text-slate-500">Tax-Total</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].taxTotal}
+                        {detail[0].subTaxTotal ? detail[0].subTaxTotal : "0"}
                       </h2>
                     </div>
                     <div className="my-6">

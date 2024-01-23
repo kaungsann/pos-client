@@ -81,7 +81,8 @@ export default function PaySlip({
                   <h4 className="extrabold">
                     {/* //{pd.salePrice * pd.quantity}{" "} */}
                     {pd.discount
-                      ? ((pd.salePrice * pd.discount.amount) / 100) *
+                      ? (pd.salePrice -
+                          (pd.salePrice * pd.discount.amount) / 100) *
                         pd.quantity.toLocaleString("en-US")
                       : pd.salePrice * pd.quantity.toLocaleString("en-US")}
                   </h4>

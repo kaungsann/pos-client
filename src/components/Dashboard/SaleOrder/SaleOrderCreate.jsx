@@ -103,14 +103,6 @@ export default function SaleOrderCreate() {
     window.open(url, "_blank");
   };
 
-  const handleDiscountChange = (e) => {
-    const selectedDiscount = discount.find((ds) => ds.id === e.target.value);
-    setDiscountId(e.target.value);
-    setDiscountAmount(selectedDiscount ? selectedDiscount.amount : 0);
-    setDiscountValue(selectedDiscount);
-    //dispatch(removeAllSaleDiscount());
-  };
-
   const [selectedOption, setSelectedOption] = React.useState("default");
 
   const navigate = useNavigate();
@@ -135,13 +127,16 @@ export default function SaleOrderCreate() {
       user: userData._id,
       partner: partner,
       location: loca,
-      //discount: discountId,
       lines: selectProduct.map((line) => ({
         product: line.id,
         qty: line.qty,
         tax: line.tax,
+        discount: line.discount.id,
         unitPrice: line.salePrice,
-        subTotal: line.salePrice * parseInt(line.qty),
+        subTotal: line.discount.amount
+          ? (line.salePrice - (line.salePrice * line.discount.amount) / 100) *
+            line.qty
+          : line.salePrice * line.qty,
       })),
       state: "pending",
       note: note,
@@ -194,11 +189,21 @@ export default function SaleOrderCreate() {
     const filteredDiscount = resData.data.filter((la) => la.active === true);
     setDiscount(filteredDiscount);
   };
+
+  const handleDiscountChange = (e) => {
+    const selectedDiscount = discount.find((ds) => ds.id === e.target.value);
+    setDiscountId(e.target.value);
+    setDiscountAmount(selectedDiscount ? selectedDiscount.amount : 0);
+    setDiscountValue(selectedDiscount);
+    //dispatch(removeAllSaleDiscount());
+  };
+
   const handleAddProduct = () => {
     if (pd == "" || quantity == 0) {
       toast.error("you need to selecte the product and add quantity");
       return;
     }
+
     dispatch(addProduct(item, discountValue, quantity));
 
     selectProduct.forEach((item) => {
@@ -222,41 +227,6 @@ export default function SaleOrderCreate() {
       setSaleOrderLines([...saleOrderLines, orderLine]);
     });
 
-    // const selectedProduct = product.find((pt) => pt.id === pd);
-    // const existingProductIndex = saleOrderLines.findIndex(
-    //   (line) => line.product.id === pd
-    // );
-
-    // if (existingProductIndex !== -1) {
-    //   // Product already exists in the array, update the values
-    //   const updatedSaleOrderLines = [...saleOrderLines];
-    //   const existingLine = updatedSaleOrderLines[existingProductIndex];
-
-    //   // Calculate the updated quantity
-    //   const updatedQuantity = existingLine.qty + parseInt(quantity);
-
-    //   existingLine.qty = updatedQuantity;
-    //   existingLine.tax =
-    //     (selectedProduct.tax / 100) * updatedQuantity * unitPrice;
-    //   existingLine.unitPrice = unitPrice;
-    //   existingLine.subTotal = unitPrice * updatedQuantity;
-
-    //   setSaleOrderLines(updatedSaleOrderLines);
-    // } else {
-    //   // Product doesn't exist in the array, add a new line
-    //   const subTotal = unitPrice * quantity;
-
-    //   const newSaleOrderLine = {
-    //     product: item,
-    //     qty: parseInt(quantity),
-    //     tax: (selectedProduct.tax / 100) * quantity * unitPrice,
-    //     unitPrice: unitPrice,
-    //     subTotal: subTotal,
-    //   };
-
-    //   setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
-    // }
-
     // Reset input values
     setPd(options[0]);
     setQuantity(0);
@@ -268,34 +238,22 @@ export default function SaleOrderCreate() {
     let calculatedTotalTax = 0;
     let calculatedSubTotal = 0;
 
-    // saleOrderLines.forEach((sel) => {
-    //   calculatedTotalTax += sel.tax;
-    //   calculatedSubTotal += sel.unitPrice * sel.qty;
-    // });
-
     selectProduct.forEach((sel) => {
       calculatedTotalTax += ((sel.tax * sel.qty) / 100) * sel.salePrice;
       //subTotal += sel.salePrice * sel.quantity;
-      calculatedSubTotal += sel.discount
-        ? ((sel.salePrice * sel.discount.amount) / 100) * sel.qty
+      calculatedSubTotal += sel.discount?.amount
+        ? (sel.salePrice - (sel.salePrice * sel.discount.amount) / 100) *
+          sel.qty
         : sel.salePrice * sel.qty;
     });
 
-    //const totalCost = calculatedSubTotal + calculatedTotalTax;
-    console.log(calculatedTotalTax);
-    console.log(calculatedSubTotal + calculatedTotalTax);
-
     setTotalTax(calculatedTotalTax);
-    setTotalCost(calculatedSubTotal);
+    setTotalCost(calculatedSubTotal + calculatedTotalTax);
     getLocation();
     getPartner();
     getProduct();
     getDiscount();
-  }, []);
-
-  console.log("redux prouduct is a", selectProduct);
-
-  console.log("line prouduct is a", saleOrderLines);
+  }, [handleAddProduct]);
 
   return (
     <>
@@ -555,7 +513,8 @@ export default function SaleOrderCreate() {
                     isDisabled
                     value={
                       discountValue
-                        ? ((unitPrice * discountValue.amount) / 100) * quantity
+                        ? unitPrice -
+                          ((unitPrice * discountValue.amount) / 100) * quantity
                         : unitPrice * quantity
                     }
                     onChange={(e) => setTotalCost(e.target.value)}
@@ -577,26 +536,29 @@ export default function SaleOrderCreate() {
                   <TableColumn>Delete</TableColumn>
                 </TableHeader>
                 <TableBody>
-                  {selectProduct.map((pd) => (
-                    <TableRow key={count + 1}>
-                      <TableCell>{pd.name}</TableCell>
-                      <TableCell>{pd.barcode}</TableCell>
-                      <TableCell>{pd.tax.toFixed(2)}</TableCell>
-                      <TableCell>{pd.qty}</TableCell>
-                      <TableCell>{pd.salePrice}</TableCell>
-                      <TableCell>
-                        {pd.discount
-                          ? ((pd.salePrice * pd.discount.amount) / 100) * pd.qty
-                          : pd.salePrice * pd.qty}
-                      </TableCell>
-                      <TableCell>
-                        <BsTrash
-                          className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
-                          onClick={() => removeProduct(pd.id)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {selectProduct.length > 0 &&
+                    selectProduct.map((pd) => (
+                      <TableRow key={count + 1}>
+                        <TableCell>{pd.name}</TableCell>
+                        <TableCell>{pd.barcode}</TableCell>
+                        <TableCell>{pd.tax.toFixed(2)}</TableCell>
+                        <TableCell>{pd.qty}</TableCell>
+                        <TableCell>{pd.salePrice}</TableCell>
+                        <TableCell>
+                          {pd.discount?.amount
+                            ? (pd.salePrice -
+                                (pd.salePrice * pd.discount.amount) / 100) *
+                              pd.qty
+                            : pd.salePrice * pd.qty}
+                        </TableCell>
+                        <TableCell>
+                          <BsTrash
+                            className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
+                            onClick={() => dispatch(removeProduct(pd.id))}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </div>
