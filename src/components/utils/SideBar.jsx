@@ -976,7 +976,7 @@ export default function SideBar() {
         </nav>
       </aside> */}
 
-      <aside className="overflow-y-scroll custom-scrollbar h-screen w-48">
+      <aside className="overflow-y-scroll custom-scrollbar h-screen">
         <nav className="h-full flex flex-col bg-white w-full">
           <div className="px-4 pb-2 flex justify-between items-center">
             <img

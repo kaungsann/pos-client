@@ -8,6 +8,7 @@ import SideBar from "../utils/SideBar";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../Api";
 import { removeData } from "../../redux/actions";
+import logo from "../../assets/logo.png";
 
 export default function Admin() {
   const location = useLocation();
@@ -48,7 +49,12 @@ export default function Admin() {
     <>
       <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b-2 border-b-slate-200">
         <div className="flex items-center justify-between py-2 w-full  cursor-pointer">
-          <span></span>
+          <span>
+            <img
+              src={logo}
+              className="overflow-hidden duration-1000 transition-all w-12 ml-16"
+            />
+          </span>
 
           <div className="flex w-2/5 justify-end lg:mr-[30px] md:mr-[80px] items-center px-3">
             <>
@@ -103,9 +109,9 @@ export default function Admin() {
 
       {(user.role && user.role.name === "admin") ||
       user.role?.name === "root" ? (
-        <div className="w-full flex relative z-50">
+        <div className="w-full flex relative z-40">
           <div
-            className={`fixed top-0 shadow-md left-0 bottom-0 bg-white flex flex-col transform transition-transform duration-500 ease-in-out`}
+            className={`fixed top-0 shadow-md left-0 bottom-0  bg-white flex flex-col transform transition-transform duration-500 ease-in-out`}
           >
             <SideBar />
           </div>
