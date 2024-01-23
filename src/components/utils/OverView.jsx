@@ -20,6 +20,7 @@ import {
   Button,
   Listbox,
   ListboxItem,
+  Spinner,
 } from "@nextui-org/react";
 
 import { getApi } from "../Api";
@@ -27,11 +28,13 @@ import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 
 export default function OverView() {
-  const [day, setDay] = useState("1");
-  const [month, setMonth] = useState("January");
-  const [year, setYear] = useState("2023");
+  const [loading, setLoading] = useState(false);
+
   const [StartDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  const [startDayFilter, setStartDayFilter] = useState("");
+  const [endDayFilter, setEndDayFilter] = useState("");
 
   const token = useSelector((state) => state.IduniqueData);
 
@@ -44,29 +47,83 @@ export default function OverView() {
   const [totalSaleOrders, setTotalSaleOrders] = useState(0);
   const [totalSaleItems, setTotalSaleItems] = useState(0);
   const [totalSalePerDay, setTotalSalePerDay] = useState([]);
-  const [text, setText] = useState("Monthly");
+  const [text, setText] = useState("");
 
-  const todayDate = format(new Date(), "MM-dd-yyyy");
+  const getTotals = async () => {
+    try {
+      setLoading(true);
 
-  const calculateStartDate = () => {
+      let resData = await getApi(
+        `/orders/totals?startDate=${StartDate}&endDate=${endDate}`,
+        token.accessToken
+      );
+
+      console.log(
+        "res data is a",
+        `/orders/totals?startDate=${StartDate}&endDate=${endDate}`
+      );
+
+      console.log(" data is a", resData);
+
+      if (resData.status) {
+        setText(
+          StartDate && endDate ? `${StartDate} to ${endDate}` : "This Month"
+        );
+
+        setTotalPurchaseAmount(resData.data.purchases.totalAmountWithTax);
+        setTotalPurchaseOrders(resData.data.purchases.totalOrders);
+        setTotalPurchasePerDay(resData.data.purchases.totalsAmountPerDay);
+        setTotalPurchaseItems(resData.data.purchases.totalItems);
+        setPopularPurchaseProducts(resData.data.purchases.topProducts);
+        setTotalSaleAmount(resData.data.sales.totalAmountWithTax);
+        setTotalSaleOrders(resData.data.sales.totalOrders);
+        setTotalSalePerDay(resData.data.sales.totalsAmountPerDay);
+        setTotalSaleItems(resData.data.sales.totalItems);
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+    setLoading(false);
+  };
+
+  const calculateWeeklyDates = () => {
     const today = new Date();
     const startDate = new Date(today);
     startDate.setDate(today.getDate() - 7); // Subtract 7 days
-    return format(startDate, "MM-dd-yyyy");
+
+    const formattedStartDate = format(startDate, "MM-dd-yyyy");
+    const formattedEndDate = format(today, "MM-dd-yyyy");
+
+    setStartDate(formattedStartDate);
+    setEndDate(formattedEndDate);
   };
 
-  const calculateMonthlyStartDate = () => {
+  const calculateMonthlyDates = () => {
     const today = new Date();
     const startDate = new Date(today);
     startDate.setMonth(today.getMonth() - 1); // Subtract 1 month for "Monthly"
-    return format(startDate, "MM-dd-yyyy");
+
+    const formattedStartDate = format(startDate, "MM-dd-yyyy");
+    const formattedEndDate = format(today, "MM-dd-yyyy");
+
+    setStartDate(formattedStartDate);
+    setEndDate(formattedEndDate);
   };
 
-  const calculateYearlyStartDate = () => {
+  const calculateYearlyDates = async () => {
     const today = new Date();
     const startDate = new Date(today);
     startDate.setFullYear(today.getFullYear() - 1); // Subtract 1 year for "Yearly"
-    return format(startDate, "MM-dd-yyyy");
+
+    const formattedStartDate = format(startDate, "MM-dd-yyyy");
+    const formattedEndDate = format(today, "MM-dd-yyyy");
+
+    setStartDate(formattedStartDate);
+    setEndDate(formattedEndDate);
   };
 
   const calculateLastMonthDates = () => {
@@ -81,12 +138,8 @@ export default function OverView() {
     const formattedStartDate = format(lastMonthStartDate, "MM-dd-yyyy");
     const formattedEndDate = format(lastMonthEndDate, "MM-dd-yyyy");
 
-    setText(`${formattedStartDate}  to  ${formattedEndDate} `);
-
-    return {
-      startDate: formattedStartDate,
-      endDate: formattedEndDate,
-    };
+    setStartDate(formattedStartDate);
+    setEndDate(formattedEndDate);
   };
 
   const calculateLastFinancialYearDates = () => {
@@ -97,12 +150,8 @@ export default function OverView() {
 
     const formattedStartDate = format(lastFinancialYearStartDate, "MM-dd-yyyy");
     const formattedEndDate = format(lastFinancialYearEndDate, "MM-dd-yyyy");
-    setText(`${formattedStartDate}  to  ${formattedEndDate} `);
-
-    return {
-      startDate: formattedStartDate,
-      endDate: formattedEndDate,
-    };
+    setStartDate(formattedStartDate);
+    setEndDate(formattedEndDate);
   };
 
   const calculateLastQuarterDates = () => {
@@ -118,68 +167,18 @@ export default function OverView() {
 
     const formattedStartDate = format(lastQuarterStartDate, "MM-dd-yyyy");
     const formattedEndDate = format(lastQuarterEndDate, "MM-dd-yyyy");
-    setText(`${formattedStartDate}  to  ${formattedEndDate} `);
-
-    return {
-      startDate: formattedStartDate,
-      endDate: formattedEndDate,
-    };
+    setStartDate(formattedStartDate);
+    setEndDate(formattedEndDate);
   };
 
   const calculateDailyFilter = () => {
-    setMonth("");
-    setYear("");
-    setDay("");
-    getTotals();
-    setText(`${StartDate}  to  ${endDate} `);
-  };
-
-  const getTotals = async () => {
-    let startDate;
-    let resData;
-    if (day === "7") {
-      // Weekly
-      startDate = calculateStartDate();
-    } else if (month === "Monthly") {
-      // Monthly
-      startDate = calculateMonthlyStartDate();
-    } else if (year === "Yearly") {
-      // Yearly
-      startDate = calculateYearlyStartDate();
-    } else if (StartDate && endDate) {
-      // Yearly
-      startDate = StartDate;
-    } else {
-      // Default to daily (today)
-      resData = await getApi(`/orders/totals`, token.accessToken);
-    }
-    if (startDate) {
-      let formattedStartDate = format(new Date(startDate), "MM-dd-yyyy");
-      let formattedEndDate = format(new Date(endDate), "MM-dd-yyyy");
-
-      //day === "7" & month === "Monthly" &  year === "Yearly"
-      resData = await getApi(
-        `/orders/totals?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
-        token.accessToken
-      );
-    }
-
-    if (resData.status) {
-      setTotalPurchaseAmount(resData.data.purchases.totalAmountWithTax);
-      setTotalPurchaseOrders(resData.data.purchases.totalOrders);
-      setTotalPurchasePerDay(resData.data.purchases.totalsAmountPerDay);
-      setTotalPurchaseItems(resData.data.purchases.totalItems);
-      setPopularPurchaseProducts(resData.data.purchases.topProducts);
-      setTotalSaleAmount(resData.data.sales.totalAmountWithTax);
-      setTotalSaleOrders(resData.data.sales.totalOrders);
-      setTotalSalePerDay(resData.data.sales.totalsAmountPerDay);
-      setTotalSaleItems(resData.data.sales.totalItems);
-    }
+    setStartDate(startDayFilter);
+    setEndDate(endDayFilter);
   };
 
   useEffect(() => {
     getTotals();
-  }, [day, month, year, StartDate]);
+  }, [StartDate, endDate]);
 
   const lineChartData = totalPurchasePerDay.map((item1) => {
     const matchingItem2 = totalSalePerDay.find(
@@ -230,12 +229,7 @@ export default function OverView() {
                   <ListboxItem
                     className="rounded-none"
                     onClick={() => {
-                      setMonth("");
-                      setYear("");
-                      setEndDate(todayDate); // Set end date to today
-                      setDay("7");
-                      getTotals();
-                      setText("Weekly");
+                      calculateWeeklyDates();
                     }}
                   >
                     Weekly
@@ -243,12 +237,7 @@ export default function OverView() {
                   <ListboxItem
                     className="rounded-none"
                     onClick={() => {
-                      setDay("");
-                      setYear("");
-                      setEndDate(todayDate); // Set end date to today
-                      setMonth("Monthly"); // Set month to "Monthly"
-                      getTotals();
-                      setText("Monthly");
+                      calculateMonthlyDates();
                     }}
                   >
                     Monthly
@@ -256,12 +245,7 @@ export default function OverView() {
                   <ListboxItem
                     className="border-b-slate-300 border-b-2 rounded-sm"
                     onClick={() => {
-                      setDay("");
-                      setMonth("");
-                      setEndDate(todayDate); // Set end date to today
-                      setYear("Yearly"); // Set year to "Yearly"
-                      getTotals();
-                      setText("Yearly");
+                      calculateYearlyDates();
                     }}
                   >
                     Yearly
@@ -269,13 +253,7 @@ export default function OverView() {
                   <ListboxItem
                     className="rounded-none"
                     onClick={() => {
-                      const { startDate, endDate } = calculateLastMonthDates();
-                      setStartDate(startDate);
-                      setEndDate(endDate);
-                      setMonth("");
-                      setYear("");
-                      setDay("");
-                      getTotals();
+                      calculateLastMonthDates();
                     }}
                   >
                     Last Month
@@ -283,14 +261,7 @@ export default function OverView() {
                   <ListboxItem
                     className="rounded-none"
                     onClick={() => {
-                      const { startDate, endDate } =
-                        calculateLastQuarterDates();
-                      setStartDate(startDate);
-                      setEndDate(endDate);
-                      setMonth("");
-                      setYear("");
-                      setDay("");
-                      getTotals();
+                      calculateLastQuarterDates();
                     }}
                   >
                     Last Quarter
@@ -298,12 +269,7 @@ export default function OverView() {
                   <ListboxItem
                     className="border-b-slate-300 border-b-2 rounded-none"
                     onClick={() => {
-                      const { startDate, endDate } =
-                        calculateLastFinancialYearDates();
-                      setStartDate(startDate);
-                      setEndDate(endDate);
-
-                      getTotals();
+                      calculateLastFinancialYearDates();
                     }}
                   >
                     Last Financial Year
@@ -315,7 +281,7 @@ export default function OverView() {
                     <input
                       type="date"
                       placeholder="Select date"
-                      onChange={(e) => setStartDate(e.target.value)}
+                      onChange={(e) => setStartDayFilter(e.target.value)}
                       className="border-none ml-2"
                     />
                   </div>
@@ -325,7 +291,7 @@ export default function OverView() {
                     <input
                       type="date"
                       placeholder="Select date"
-                      onChange={(e) => setEndDate(e.target.value)}
+                      onChange={(e) => setEndDayFilter(e.target.value)}
                       className="border-none ml-2"
                     />
                   </div>
@@ -340,7 +306,9 @@ export default function OverView() {
             </Popover>
 
             <div className="w-56 flex shadow-sm justify-center px-3 mx-3 py-1 bg-white border-2 text-center rounded-sm">
-              <h4 className="text-slate-500  font-semibold">{text}</h4>
+              <h4 className="text-slate-500 items-center font-semibold">
+                {text}
+              </h4>
             </div>
           </div>
         </div>
@@ -416,9 +384,7 @@ export default function OverView() {
                   <h2 className="text-slate-400 text-md font-semibold">
                     Monthly Profits
                   </h2>
-                  <h2 className="text-slate-800 my-2">
-                    Unavailable
-                  </h2>
+                  <h2 className="text-slate-800 my-2">Unavailable</h2>
                 </div>
               </div>
             </div>
@@ -583,6 +549,12 @@ export default function OverView() {
             </ResponsiveContainer>
           </div>
         </div>
+
+        {loading && (
+          <div className="absolute top-0 w-full h-screen flex items-center justify-center bg-slate-50 opacity-75">
+            <Spinner />
+          </div>
+        )}
       </div>
     </>
   );

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { removeData } from "../../../redux/actions";
-import FadeLoader from "react-spinners/FadeLoader";
 
 import { getApi } from "../../Api";
-import { Icon } from "@iconify/react";
 import { format } from "date-fns";
+import { Spinner } from "@nextui-org/react";
 
 export default function WasteDetail() {
   const { id } = useParams();
@@ -16,7 +15,6 @@ export default function WasteDetail() {
 
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
-  const navigate = useNavigate();
 
   const singleOpexApi = async () => {
     setLoading(true);
@@ -71,22 +69,28 @@ export default function WasteDetail() {
                   </div>
                   <div>
                     <div>
-                      <h4 className="text-md text-slate-500">Date</h4>
-                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].date
-                          ? format(new Date(detail[0].date), "yyyy-MM-dd")
-                          : "none"}
-                      </h2>
-                    </div>
-                    <div className="my-6">
-                      <h4 className="text-md text-slate-500">Amount</h4>
-                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].amount ? detail[0].amount : "none"}
-                      </h2>
+                      <div>
+                        <h4 className="text-md text-slate-500">Product</h4>
+                        <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                          {detail[0].product ? detail[0].product.name : "none"}
+                        </h2>
+                      </div>
+                      <div className="my-6">
+                        <h4 className="text-md text-slate-500">Amount</h4>
+                        <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                          {detail[0].amount ? detail[0].amount : "none"}
+                        </h2>
+                      </div>
                     </div>
                   </div>
                   <div>
                     <div>
+                      <h4 className="text-md text-slate-500">Location</h4>
+                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                        {detail[0].amount ? detail[0].amount : "none"}
+                      </h2>
+                    </div>
+                    <div className="my-6">
                       <h4 className="text-md text-slate-500">State</h4>
                       <h2
                         className={`font-semibold text-md mt-1 ${
@@ -102,11 +106,19 @@ export default function WasteDetail() {
                         {detail[0].state}
                       </h2>
                     </div>
-                    <div className="my-6">
-                      <h4 className="text-md text-slate-500">Created-Date</h4>
+                  </div>
+                  <div>
+                    <div>
+                      <h4 className="text-md text-slate-500">Ref</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].createdAt
-                          ? format(new Date(detail[0].createdAt), "yyyy-MM-dd")
+                        {detail[0].ref ? detail[0].ref : "none"}
+                      </h2>
+                    </div>
+                    <div className="my-6">
+                      <h4 className="text-md text-slate-500">Date</h4>
+                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                        {detail[0].date
+                          ? format(new Date(detail[0].date), "yyyy-MM-dd")
                           : "none"}
                       </h2>
                     </div>
@@ -117,16 +129,8 @@ export default function WasteDetail() {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center mt-40">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
+        <div className="w-10/12 h-screen mx-auto  flex justify-center items-center">
+          {loading && <Spinner size="lg" />}
         </div>
       )}
     </>

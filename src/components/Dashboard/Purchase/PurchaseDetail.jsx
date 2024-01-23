@@ -10,8 +10,8 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
+  Spinner,
 } from "@nextui-org/react";
-import FadeLoader from "react-spinners/FadeLoader";
 import { removeData } from "../../../redux/actions";
 
 export default function SaleOrderDetail() {
@@ -211,16 +211,8 @@ export default function SaleOrderDetail() {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center mt-40">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
+        <div className="w-10/12 h-screen mx-auto  flex justify-center items-center">
+          {loading && <Spinner size="lg" />}
         </div>
       )}
     </>

@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { removeData } from "../../redux/actions";
-import { Input } from "@nextui-org/react";
+import { Input, Button, Progress } from "@nextui-org/react";
 
 export default function LocationEdit() {
   let [name, setName] = useState("");
   const [code, setCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -30,17 +32,22 @@ export default function LocationEdit() {
   };
 
   const editCategoryApi = async () => {
+    setIsLoading(true);
     const data = { name, code };
     try {
       let resData = await PathData(`/location/${id}`, data, token.accessToken);
       if (resData.status) {
+        setIsLoading(false);
         navigate("/admin/locations/all");
       } else {
+        setIsLoading(false);
         toast(resData.message);
       }
     } catch (error) {
+      setIsLoading(false);
       console.error("Error creating location:", error);
     }
+    setIsLoading(false);
   };
 
   const handleSubmit = (e) => {
@@ -71,21 +78,32 @@ export default function LocationEdit() {
         <div className="flex flex-row justify-between my-4 max-w-6xl">
           <h2 className="lg:text-xl font-bold">Location Edit</h2>
           <div className="flex gap-3 ">
-            <button
+            <Button
               type="submit"
-              className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
+              isDisabled={isLoading}
+              isLoading={isLoading}
+              size="md"
+              className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+                isLoading
+                  ? ""
+                  : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
+              }`}
               onClick={handleSubmit}
             >
               Save
-            </button>
+            </Button>
+
             <Link to="/admin/locations/all">
-              <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
+              <Button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
                 Discard
-              </button>
+              </Button>
             </Link>
           </div>
         </div>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
+          {isLoading && (
+            <Progress size="sm" isIndeterminate aria-label="Loading..." />
+          )}
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">

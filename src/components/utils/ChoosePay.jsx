@@ -6,7 +6,6 @@ import { getApi, sendJsonToApi } from "../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button, Select, SelectItem } from "@nextui-org/react";
-import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 
 export default function ChoosePay({ totalCost, change, tax, subTotal }) {
   const [display, setDisplay] = useState("");
@@ -65,56 +64,82 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
   };
 
   const createSaleOrder = async () => {
+    console.log("its is workibg");
     if (text === "" || display === "") {
       toast.error("You need to Pay  & amount");
       return;
-    } else {
-      const orderLines = [];
-      orderData.forEach((item) => {
-        const orderLine = {
-          product: item.id,
-          qty: item.quantity,
-          tax: item.tax,
-          unitPrice: item.salePrice,
-          subTotal: item.quantity * item.salePrice,
-        };
+    }
 
-        orderLines.push(orderLine);
-      });
-
-      const data = {
-        user: user._id,
-        location: Locate,
-        partner: name,
-        // discount: discountId,
-        taxTotal: totalCost,
-        // payment: text,
-        lines: orderLines,
-        total: subTotal,
+    const orderLines = [];
+    orderData.forEach((item) => {
+      const orderLine = {
+        product: item.id,
+        qty: item.quantity,
+        tax: item.tax,
+        unitPrice: item.salePrice,
+        discount: item.discount.id,
+        subTotal: item.salePrice * item.quantity,
       };
 
-      try {
-        setIsLoading(true);
-        let resData = await sendJsonToApi("/sale", data, token.accessToken);
-        console.log("data is a", data);
-
-        if (!resData.success) {
-          toast.error(resData.message);
-        }
-
-        if (resData.status) {
-          setIsLoading(false);
-          setOrder(resData.data);
-          toast.success(resData.message);
-          setPaySlip(true);
-        } else {
-          setIsLoading(false);
-        }
-      } catch (error) {
-        setIsLoading(false);
-        console.error("Error creating product:", error);
+      // Include discount details if available
+      if (item.discount) {
+        orderLine.discount = item.discount.id;
+        orderLine.subTotal =
+          (item.salePrice -
+            (item.salePrice * (item.discount.amount || 0)) / 100) *
+          item.quantity;
       }
+
+      orderLines.push(orderLine);
+    });
+
+    console.log("sale line is a", orderLines);
+
+    const data = {
+      user: user._id,
+      location: Locate,
+      partner: name,
+      // discount: discountId,
+      taxTotal: totalCost,
+      // payment: text,
+      lines: orderLines,
+      total: subTotal,
+    };
+    setIsLoading(true);
+    let resData = await sendJsonToApi("/sale", data, token.accessToken);
+
+    if (!resData.success) {
+      toast.error(resData.message);
     }
+    if (resData.status) {
+      setIsLoading(false);
+      setOrder(resData.data);
+      toast.success(resData.message);
+      setPaySlip(true);
+    }
+    setIsLoading(false);
+    //   try {
+    //     setIsLoading(true);
+    //     console.log("data is a", data);
+    //     let resData = await sendJsonToApi("/sale", data, token.accessToken);
+    //     console.log("res data is a", resData);
+
+    //     if (!resData.success) {
+    //       toast.error(resData.message);
+    //     }
+
+    //     if (resData.status) {
+    //       setIsLoading(false);
+    //       setOrder(resData.data);
+    //       toast.success(resData.message);
+    //       setPaySlip(true);
+    //     } else {
+    //       setIsLoading(false);
+    //     }
+    //   } catch (error) {
+    //     setIsLoading(false);
+    //     console.error("Error creating saleorder:", error);
+    //   }
   };
 
   const handleButtonClick = (value) => {
@@ -251,7 +276,6 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               </SelectItem>
             ))}
           </Select> */}
-
           <div className=" justify-around grid grid-cols-2 gap-4">
             <div>
               {/* <Autocomplete
@@ -411,9 +435,13 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
           </div>
 
           <Button
-            className="w-full mt-5"
             color="primary"
             variant="solid"
+            isDisabled={isLoading}
+            isLoading={isLoading}
+            className={`w-full mt-5 ${
+              isLoading ? "" : "hover:opacity-75 text-sm"
+            }`}
             onClick={createSaleOrder}
           >
             Validate

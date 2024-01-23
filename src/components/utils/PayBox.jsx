@@ -4,7 +4,6 @@ import { BiMinus } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { add } from "../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import img from "../../assets/product.svg";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,18 +13,21 @@ import {
   DropdownTrigger,
   DropdownMenu,
   Button,
+  Chip,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 import {
+  add,
   itemRemove,
   removeAllItems,
   updateItemQuantity,
+  applyDiscount,
+  removeDiscountItem,
 } from "../../redux/actions";
 import "../../App.css";
 
 import ChoosePay from "./ChoosePay";
-import DiscountBox from "./DiscountBox";
 import { BASE_URL } from "../Api";
 import axios from "axios";
 
@@ -33,17 +35,9 @@ export default function PayBox({ onContinueToPay }) {
   const [payment, setPayment] = useState(false);
 
   const [discount, setDiscount] = useState([]);
-  const [discountId, setDiscountId] = useState("");
-  const [discountAmount, setDiscountAmount] = useState(0);
   const [selectedKeys, setSelectedKeys] = useState(new Set(["text"]));
 
   const dispatch = useDispatch();
-
-  const handleDiscountChange = (e) => {
-    const selectedDiscount = discount.find((ds) => ds.id === e.target.value);
-    setDiscountId(e.target.value);
-    setDiscountAmount(selectedDiscount ? selectedDiscount.amount : 0);
-  };
 
   const DISCOUNT_API = {
     INDEX: BASE_URL + "/discount",
@@ -98,10 +92,31 @@ export default function PayBox({ onContinueToPay }) {
 
   product.forEach((sel) => {
     totalTax += ((sel.tax * sel.quantity) / 100) * sel.salePrice;
-    subTotal += sel.salePrice * sel.quantity;
+    //subTotal += sel.salePrice * sel.quantity;
+    subTotal += sel.discount
+      ? (sel.salePrice - (sel.salePrice * sel.discount.amount) / 100) *
+        sel.quantity.toLocaleString("en-US")
+      : sel.salePrice * sel.quantity.toLocaleString("en-US");
   });
 
   const totalCost = subTotal + totalTax;
+
+  const handleDiscountAdd = (name, amount, Id, item) => {
+    const selectedDiscount = {
+      name: name,
+      id: Id,
+      amount: parseInt(amount, 10),
+    };
+    const existingProduct = product.find((pd) => pd.id === item.id);
+
+    if (existingProduct) {
+      dispatch(applyDiscount(item.id, Id, selectedDiscount));
+    }
+  };
+
+  const handleRemoveDiscountItem = (productId) => {
+    dispatch(removeDiscountItem(productId));
+  };
 
   return (
     <>
@@ -154,12 +169,15 @@ export default function PayBox({ onContinueToPay }) {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <h4 className="font-bold text-md text-slate-700">
-                          {sel.name}
+                          {sel.name.substring(0, 5)}
                         </h4>
 
                         <Dropdown>
                           <DropdownTrigger>
-                            <Icon icon="ic:twotone-discount" className="ml-3" />
+                            <Icon
+                              icon="ic:twotone-discount"
+                              className="ml-1.5"
+                            />
                           </DropdownTrigger>
                           <DropdownMenu
                             aria-label="Multiple selection example"
@@ -169,7 +187,18 @@ export default function PayBox({ onContinueToPay }) {
                             onSelectionChange={setSelectedKeys}
                           >
                             {discount.map((dis) => (
-                              <DropdownItem key={dis.name}>
+                              <DropdownItem
+                                key={dis.name}
+                                value={dis.amount}
+                                onClick={() =>
+                                  handleDiscountAdd(
+                                    dis.name,
+                                    dis.amount,
+                                    dis.id,
+                                    sel
+                                  )
+                                }
+                              >
                                 {dis.name +
                                   " " +
                                   " ( " +
@@ -180,6 +209,27 @@ export default function PayBox({ onContinueToPay }) {
                             ))}
                           </DropdownMenu>
                         </Dropdown>
+
+                        {sel.discount?.amount ? (
+                          <div className="flex relative">
+                            <Chip
+                              color="success"
+                              variant="bordered"
+                              className="ml-1.5"
+                            >
+                              {sel.discount?.name}
+                              {`${" ( " + sel.discount?.amount + " ) "}% `}
+                            </Chip>
+                            <span
+                              className="text-[8px] hover:opacity-75 text-slate-300 bg-slate-600 font-bold bottom-4 h-4 w-4 p-1.5 border-2 rounded-full flex items-center justify-center cursor-pointer"
+                              onClick={() => handleRemoveDiscountItem(sel.id)}
+                            >
+                              X
+                            </span>
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
 
                       <div onClick={() => dispatch(itemRemove(sel.id))}>
@@ -205,9 +255,9 @@ export default function PayBox({ onContinueToPay }) {
 
                         {/* <input
                           className="w-8"
-                          type="text" // Change the type to text
-                          inputMode="numeric" // Specify the input mode
-                          pattern="[0-9]*" // Allow only numeric input
+                          type="text" 
+                          inputMode="numeric" 
+                          pattern="[0-9]*" 
                           value={sel.quantity + dynamicInputValue}
                           // value={dynamicInputValue}
                           onChange={(e) => {
@@ -225,7 +275,13 @@ export default function PayBox({ onContinueToPay }) {
                         />
                       </div>
                       <span className="font-bold text-md text-blue-600">
-                        {(sel.salePrice * sel.quantity).toLocaleString("en-US")}{" "}
+                        {sel.discount
+                          ? (sel.salePrice -
+                              (sel.salePrice * sel.discount.amount) / 100) *
+                            sel.quantity.toLocaleString("en-US")
+                          : sel.salePrice *
+                            sel.quantity.toLocaleString("en-US")}
+                        {/* {( sel.salePrice * sel.quantity).toLocaleString("en-US")} */}
                         mmk
                       </span>
                     </div>

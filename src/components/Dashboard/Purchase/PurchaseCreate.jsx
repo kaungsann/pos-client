@@ -79,8 +79,13 @@ export default function SaleOrderCreate() {
 
   const createProductApi = async () => {
     setIsLoading(true);
-    if (saleOrderLines.length == 0) {
+    if (saleOrderLines.length === 0) {
       toast.error("You need to select products before saving");
+
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+
       return;
     }
 
@@ -133,6 +138,7 @@ export default function SaleOrderCreate() {
     setIsLoading(false);
   };
   const handleSubmit = (e) => {
+    setIsLoading(true);
     e.preventDefault();
     createProductApi();
   };
@@ -227,8 +233,6 @@ export default function SaleOrderCreate() {
   }, [saleOrderLines]);
 
   let count = 0;
-
-  console.log("show loading is", isLoading);
 
   return (
     <>
@@ -489,7 +493,7 @@ export default function SaleOrderCreate() {
                   <TableColumn>Name</TableColumn>
                   <TableColumn>Barcode</TableColumn>
                   <TableColumn>Tax</TableColumn>
-                  <TableColumn>Stock QTY</TableColumn>
+                  <TableColumn>Qty</TableColumn>
                   <TableColumn>Unit Price</TableColumn>
                   <TableColumn>SubTotal</TableColumn>
                   <TableColumn>Delete</TableColumn>

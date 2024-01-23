@@ -78,7 +78,7 @@ export default function DiscountDetail() {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center mt-40">
+        <div className="w-10/12 h-screen mx-auto  flex justify-center items-center">
           {loading && <Spinner size="lg" />}
         </div>
       )}

@@ -70,3 +70,41 @@ export const pageRefresh = (payload) => {
     payload: payload,
   };
 };
+
+export const applyDiscount = (productId, discountId, discount) => ({
+  type: "applyDiscount",
+  payload: {
+    productId,
+    discountId,
+    discount,
+  },
+});
+
+export const removeDiscountItem = (productID) => ({
+  type: "removeDiscountItem",
+  payload: {
+    productID,
+  },
+});
+
+export const removeDiscount = () => ({
+  type: "removeDiscount",
+});
+
+export const addProduct = (product, discountValue, quantity) => {
+  return {
+    type: "addProduct",
+    payload: { product, discountValue, quantity },
+  };
+};
+
+export const removeProduct = (productID) => ({
+  type: "removeSaleDiscountItem",
+  payload: {
+    productID,
+  },
+});
+
+export const removeAllSaleDiscount = () => ({
+  type: "removeAllDiscounts",
+});

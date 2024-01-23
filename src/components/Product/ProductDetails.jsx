@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { BASE_URL } from "../Api";
 import BoxImg from "../../assets/box.png";
-import FadeLoader from "react-spinners/FadeLoader";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
 import axios from "axios";
+import { Spinner } from "@nextui-org/react";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -65,14 +65,8 @@ export default function ProductDetails() {
   return (
     <>
       {loading ? (
-        <div className="flex items-center justify-center mt-40">
-          <FadeLoader
-            color={"#0284c7"}
-            loading={loading}
-            size={20}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
+        <div className="w-10/12 h-screen mx-auto  flex justify-center items-center">
+          {loading && <Spinner size="lg" />}
         </div>
       ) : (
         <div className="container my-5">
@@ -153,7 +147,7 @@ export default function ProductDetails() {
                       <div>
                         <div>
                           <h4 className="text-md text-slate-500">
-                            Mininum Quantity
+                            Minimum Quantity
                           </h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
                             {product.minStockQty ? product.minStockQty : "None"}

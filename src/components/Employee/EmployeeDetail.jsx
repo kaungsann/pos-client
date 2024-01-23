@@ -7,6 +7,7 @@ import { getApi } from "../Api";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
 import user from "../../assets/icon.png";
+import { Spinner } from "@nextui-org/react";
 
 export default function EmployeeDetail() {
   const { id } = useParams();
@@ -53,7 +54,7 @@ export default function EmployeeDetail() {
       ) : detail && detail.length > 0 ? (
         <div className="container cursor-pointer">
           <div className="container bg-white p-5 rounded-md max-w-6xl">
-              <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center">
               <div className="flex gap-2 pb-4">
                 <Link
                   to="/admin/employee/all"
@@ -62,15 +63,15 @@ export default function EmployeeDetail() {
                   Back
                 </Link>
               </div>
-                <div className="flex">
-                  <Link
-                    to={`/admin/employee/edit/${id}`}
-                    className="font-bold rounded-sm shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-[#4338ca] px-3 py-1.5"
-                  >
-                    Edit
-                  </Link>
-                </div>
+              <div className="flex">
+                <Link
+                  to={`/admin/employee/edit/${id}`}
+                  className="font-bold rounded-sm shadow-sm flex items-center text-[#4338ca] border-[#4338ca] border-2 hover:opacity-75 text-sm hover:text-white hover:bg-[#4338ca] px-3 py-1.5"
+                >
+                  Edit
+                </Link>
               </div>
+            </div>
 
             <div>
               <div className="flex">
@@ -173,16 +174,8 @@ export default function EmployeeDetail() {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center mt-40">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
+        <div className="w-10/12 h-screen mx-auto  flex justify-center items-center">
+          {loading && <Spinner size="lg" />}
         </div>
       )}
     </>

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "../Api";
-import FadeLoader from "react-spinners/FadeLoader";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
 import { Icon } from "@iconify/react";
+import { Spinner } from "@nextui-org/react";
 
 export default function CategoryDetail() {
   const { id } = useParams();
@@ -109,16 +109,8 @@ export default function CategoryDetail() {
           </div>
         </div>
       ) : (
-        <div className="flex items-center justify-center mt-40">
-          {loading && (
-            <FadeLoader
-              color={"#0284c7"}
-              loading={loading}
-              size={20}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          )}
+        <div className="w-10/12 h-screen mx-auto  flex justify-center items-center">
+          {loading && <Spinner size="lg" />}
         </div>
       )}
     </>

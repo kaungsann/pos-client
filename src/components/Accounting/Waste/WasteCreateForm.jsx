@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { sendJsonToApi } from "../../Api";
+import { getApi, sendJsonToApi } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import { Input, Progress, Button, Checkbox } from "@nextui-org/react";
+import { Input, Progress, Button, Select, SelectItem } from "@nextui-org/react";
 
 export default function WasteCreateForm() {
   const navigate = useNavigate();
+  const [product, setProduct] = useState([]);
+  const [location, setLocation] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const token = useSelector((state) => state.IduniqueData);
@@ -19,8 +21,11 @@ export default function WasteCreateForm() {
     remark: "",
     ref: "",
     date: "",
+    product: "",
+    location: "",
     amount: null,
   });
+  console.log("res data is ", formData);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -40,6 +45,8 @@ export default function WasteCreateForm() {
         token.accessToken
       );
 
+      console.log("res data is ", response);
+
       if (response.message === "Token Expire , Please Login Again")
         dipatch(removeData(null));
 
@@ -54,6 +61,21 @@ export default function WasteCreateForm() {
       console.error("Error creating partner:", error);
     }
   };
+
+  useEffect(() => {
+    const getProduct = async () => {
+      const resData = await getApi("/product", token.accessToken);
+      const filteredProduct = resData.data.filter((pt) => pt.active === true);
+      setProduct(filteredProduct);
+    };
+    const getLocation = async () => {
+      const resData = await getApi("/location", token.accessToken);
+      const filteredLocation = resData.data.filter((la) => la.active === true);
+      setLocation(filteredLocation);
+    };
+    getProduct();
+    getLocation();
+  }, []);
 
   return (
     <>
@@ -111,8 +133,6 @@ export default function WasteCreateForm() {
                   label="Name"
                   name="name"
                   value={formData.name}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter fixed cost name..."
                   labelPlacement="outside"
@@ -129,6 +149,36 @@ export default function WasteCreateForm() {
                   labelPlacement="outside"
                 />
               </div>
+              <Select
+                labelPlacement="outside"
+                label="Location"
+                name="location"
+                required
+                placeholder="Select an Location"
+                onChange={(e) => handleInputChange(e)}
+                className="w-60"
+              >
+                {location.map((loc) => (
+                  <SelectItem key={loc.id} value={loc.id}>
+                    {loc.name}
+                  </SelectItem>
+                ))}
+              </Select>
+              <Select
+                labelPlacement="outside"
+                label="Product"
+                name="product"
+                required
+                placeholder="Select an product"
+                onChange={(e) => handleInputChange(e)}
+                className="w-60"
+              >
+                {product.map((pt) => (
+                  <SelectItem key={pt.id} value={pt.id}>
+                    {pt.name}
+                  </SelectItem>
+                ))}
+              </Select>
               <div className="w-60">
                 <Input
                   type="number"
