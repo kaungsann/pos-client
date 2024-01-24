@@ -128,7 +128,7 @@ export default function WasteCreateForm() {
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
-                <Input
+                {/* <Input
                   type="text"
                   label="Name"
                   name="name"
@@ -136,7 +136,20 @@ export default function WasteCreateForm() {
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter fixed cost name..."
                   labelPlacement="outside"
-                />
+                /> */}
+                <Select
+                  labelPlacement="outside"
+                  label="Waste"
+                  name="name"
+                  placeholder="Select Waste Type"
+                  className="max-w-xs"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange(e)}
+                >
+                  <SelectItem key="p&l" value="l">
+                    P & L
+                  </SelectItem>
+                </Select>
               </div>
               <div className="w-60">
                 <Input

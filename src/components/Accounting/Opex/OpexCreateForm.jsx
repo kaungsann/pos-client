@@ -5,7 +5,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import { Input, Progress, Button, Checkbox } from "@nextui-org/react";
+import {
+  Input,
+  Progress,
+  Button,
+  Checkbox,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
 
 export default function OpexCreateForm() {
   const navigate = useNavigate();
@@ -75,10 +82,11 @@ export default function OpexCreateForm() {
           type="submit"
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+            isLoading
               ? ""
               : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-            }`}
+          }`}
           onClick={handleSubmit}
         >
           Save
@@ -86,10 +94,11 @@ export default function OpexCreateForm() {
         <Button
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+            isLoading
               ? ""
               : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-            }`}
+          }`}
           onClick={() => navigate("/admin/opex/all")}
         >
           Discard
@@ -104,7 +113,7 @@ export default function OpexCreateForm() {
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
-                <Input
+                {/* <Input
                   type="text"
                   label="Name"
                   name="name"
@@ -114,7 +123,44 @@ export default function OpexCreateForm() {
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter Partner name..."
                   labelPlacement="outside"
-                />
+                /> */}
+                <Select
+                  labelPlacement="outside"
+                  label="Opex"
+                  name="name"
+                  placeholder="Select Opex Type"
+                  className="max-w-xs"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange(e)}
+                >
+                  <SelectItem key="fuel" value="fuel">
+                    Fuel
+                  </SelectItem>
+                  <SelectItem key="salary" value="salary">
+                    Salary
+                  </SelectItem>
+                  <SelectItem
+                    key="incentive or Bonus"
+                    value="incentive or Bonus"
+                  >
+                    Incentive or Bonus
+                  </SelectItem>
+                  <SelectItem
+                    key="maintaince & repair"
+                    value="maintaince & repair"
+                  >
+                    Mantaince & Repair
+                  </SelectItem>
+                  <SelectItem
+                    key="software & License"
+                    value="software & License"
+                  >
+                    Software & License
+                  </SelectItem>
+                  <SelectItem key="3rd party hiring" value="3rd party hiring">
+                    3rd party hiring
+                  </SelectItem>
+                </Select>
               </div>
               <div className="w-60">
                 <Input
