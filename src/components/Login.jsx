@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import MoonLoader from "react-spinners/MoonLoader";
 import { sendJsonToApi } from "./Api";
 import { Spinner } from "@nextui-org/react";
 
@@ -32,11 +31,6 @@ export default function Login() {
       if (success) {
         setLoading(false);
         toast(message);
-
-        // Store user data and tokens in localStorage
-        localStorage.setItem("userData", JSON.stringify(data));
-        localStorage.setItem("userTokens", JSON.stringify(tokens));
-
         dispatch(addData(data));
         dispatch(idAdd(tokens));
         navigate("/admin/pos/all");

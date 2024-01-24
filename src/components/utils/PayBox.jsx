@@ -31,7 +31,7 @@ import ChoosePay from "./ChoosePay";
 import { BASE_URL } from "../Api";
 import axios from "axios";
 
-export default function PayBox({ onContinueToPay }) {
+export default function PayBox() {
   const [payment, setPayment] = useState(false);
 
   const [discount, setDiscount] = useState([]);
