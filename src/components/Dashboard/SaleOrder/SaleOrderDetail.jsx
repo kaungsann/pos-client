@@ -83,6 +83,8 @@ export default function SaleOrderDetail() {
     }
   };
 
+  console.log("detail is a", lines);
+
   useEffect(() => {
     saleLinesApi();
     singleSaleOrder();

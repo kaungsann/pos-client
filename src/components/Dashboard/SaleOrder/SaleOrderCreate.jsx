@@ -323,7 +323,6 @@ export default function SaleOrderCreate() {
                     }}
                     className="max-w-xs"
                   >
-                    {/* Replace dynamic data with fixed options */}
                     <SelectItem value="bank">Bank</SelectItem>
                     <SelectItem value="cash">Cash</SelectItem>
                   </Select>

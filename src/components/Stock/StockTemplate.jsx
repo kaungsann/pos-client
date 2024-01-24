@@ -45,7 +45,7 @@ export default function StockTemplate() {
       );
       setStocks(filteredStock);
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      console.error("Error fetching stocks:", error);
     }
   };
 
@@ -84,6 +84,8 @@ export default function StockTemplate() {
       }),
     [filteredKeywords, stocks]
   );
+
+  console.log("stocks isa", stocks);
 
   return (
     <div>

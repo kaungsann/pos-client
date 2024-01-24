@@ -32,7 +32,6 @@ const INITIAL_VISIBLE_COLUMNS = [
   "location",
   "state",
   "total",
-  "discount",
   "orderref",
   "actions",
 ];
@@ -43,7 +42,6 @@ const columns = [
   { name: "Partner", uid: "partner" },
   { name: "Location", uid: "location" },
   { name: "State", uid: "state" },
-  { name: "Discount", uid: "discount" },
   { name: "TotalProduct", uid: "totalproduct" },
   { name: "TaxTotal", uid: "taxtotal", sortable: true },
   { name: "OrderRef", uid: "orderref" },
@@ -146,8 +144,6 @@ export default function SaleList({ sales }) {
             )}
           </div>
         );
-      case "discount":
-        return <h3>{sales.discount?.amount} %</h3>;
       case "totalproduct":
         return <h3>{sales.lines.length}</h3>;
       case "taxtotal":

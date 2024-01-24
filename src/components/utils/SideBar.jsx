@@ -1051,7 +1051,7 @@ export default function SideBar() {
                       className="text-slate-500 text-2xl"
                     />
 
-                    <h3 className="ml-3">Category</h3>
+                    <h3 className="ml-2">Category</h3>
                   </li>
                   <li
                     className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
@@ -1071,7 +1071,7 @@ export default function SideBar() {
                       className="text-slate-500 text-2xl"
                     />
 
-                    <h3 className="ml-3">Stock</h3>
+                    <h3 className="ml-2">Stock</h3>
                   </li>
                   <li
                     className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${

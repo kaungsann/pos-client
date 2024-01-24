@@ -31,7 +31,7 @@ import ChoosePay from "./ChoosePay";
 import { BASE_URL } from "../Api";
 import axios from "axios";
 
-export default function PayBox({ onContinueToPay }) {
+export default function PayBox({ locationId }) {
   const [payment, setPayment] = useState(false);
 
   const [discount, setDiscount] = useState([]);
@@ -69,6 +69,7 @@ export default function PayBox({ onContinueToPay }) {
   }, [token]);
 
   const product = useSelector((state) => state.orderData);
+
   dispatch(add(false));
 
   const handleIncrement = (productId, product) => {
@@ -92,7 +93,6 @@ export default function PayBox({ onContinueToPay }) {
 
   product.forEach((sel) => {
     totalTax += ((sel.tax * sel.quantity) / 100) * sel.salePrice;
-    //subTotal += sel.salePrice * sel.quantity;
     subTotal += sel.discount
       ? (sel.salePrice - (sel.salePrice * sel.discount.amount) / 100) *
         sel.quantity.toLocaleString("en-US")
@@ -100,17 +100,20 @@ export default function PayBox({ onContinueToPay }) {
   });
 
   const totalCost = subTotal + totalTax;
-
+  console.log("exist redux pd ", product);
   const handleDiscountAdd = (name, amount, Id, item) => {
+    console.log("handle discount click", item);
+
     const selectedDiscount = {
       name: name,
       id: Id,
       amount: parseInt(amount, 10),
     };
-    const existingProduct = product.find((pd) => pd.id === item.id);
+    console.log("discount ", selectedDiscount);
+    const existingProduct = product.find((pd) => pd._id === item._id);
 
     if (existingProduct) {
-      dispatch(applyDiscount(item.id, Id, selectedDiscount));
+      dispatch(applyDiscount(item._id, Id, selectedDiscount));
     }
   };
 
@@ -126,6 +129,7 @@ export default function PayBox({ onContinueToPay }) {
           change={reBack}
           tax={totalTax}
           subTotal={subTotal}
+          locId={locationId}
         />
       ) : (
         <div className="relative">
@@ -252,23 +256,6 @@ export default function PayBox({ onContinueToPay }) {
                         <span className="text-slate-700 text-lg">
                           {sel.quantity}
                         </span>
-
-                        {/* <input
-                          className="w-8"
-                          type="text" 
-                          inputMode="numeric" 
-                          pattern="[0-9]*" 
-                          value={sel.quantity + dynamicInputValue}
-                          // value={dynamicInputValue}
-                          onChange={(e) => {
-                            dispatch(
-                              updateItemQuantity(
-                                sel.id,
-                                sel.quantity + e.target.value
-                              )
-                            );
-                          }}
-                        /> */}
                         <BiMinus
                           className="text-md rounded-sm shadow-md bg-blue-600 ml-3 text-white"
                           onClick={() => handleDecrement(sel.id, sel)}
@@ -281,7 +268,6 @@ export default function PayBox({ onContinueToPay }) {
                             sel.quantity.toLocaleString("en-US")
                           : sel.salePrice *
                             sel.quantity.toLocaleString("en-US")}
-                        {/* {( sel.salePrice * sel.quantity).toLocaleString("en-US")} */}
                         mmk
                       </span>
                     </div>

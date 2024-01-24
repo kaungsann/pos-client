@@ -67,11 +67,11 @@ const orderReducers = (state = [], { type, payload }) => {
         }
         return item;
       });
-    case "applyDiscount":
+    case "applyDiscount": {
       let { productId, discountId, discount } = payload;
 
       return state.map((item) => {
-        if (item.id === productId) {
+        if (item._id === productId) {
           return {
             ...item,
             discount: {
@@ -83,9 +83,10 @@ const orderReducers = (state = [], { type, payload }) => {
         }
         return item;
       });
-    case "removeDiscountItem":
-      let { productID } = payload;
+    }
 
+    case "removeDiscountItem": {
+      let { productID } = payload;
       return state.map((item) => {
         if (item.id === productID) {
           const { discount, ...itemWithoutDiscount } = item;
@@ -93,6 +94,7 @@ const orderReducers = (state = [], { type, payload }) => {
         }
         return item;
       });
+    }
     case "removeAllOrders":
       return [];
     default:
