@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function WasteTemplate() {
-  const [opex, setOpex] = useState([]);
+  const [waste, setWaste] = useState([]);
 
   const COMPARISION = {
     LESS: "LESS",
@@ -35,7 +35,7 @@ function WasteTemplate() {
   const navigate = useNavigate();
   const token = useSelector((state) => state.IduniqueData);
 
-  const fetchOpexData = async () => {
+  const fetchWasteData = async () => {
     try {
       const response = await axios.get(OPEX_API.INDEX, {
         headers: {
@@ -44,14 +44,14 @@ function WasteTemplate() {
         },
       });
 
-      setOpex(response.data.data);
+      setWaste(response.data.data);
     } catch (error) {
-      console.error("Error fetching opex:", error);
+      console.error("Error fetching waste:", error);
     }
   };
 
   useEffect(() => {
-    fetchOpexData();
+    fetchWasteData();
   }, [token]);
 
   const handleFilterChange = (selected) => {
@@ -62,7 +62,7 @@ function WasteTemplate() {
   };
   const filteredWaste = useMemo(
     () =>
-      opex.filter((op) => {
+      waste.filter((op) => {
         const { name, ref, date, amount, state, createdAt } = filteredKeywords;
 
         const isName = () => {
@@ -150,9 +150,10 @@ function WasteTemplate() {
           isRef()
         );
       }),
-    [opex, filteredKeywords]
+    [waste, filteredKeywords]
   );
 
+  console.log("waste is a", waste);
 
   return (
     <>
@@ -173,7 +174,7 @@ function WasteTemplate() {
           <FilterBox onFilter={handleFilterChange} />
         </div>
       </div>
-      <WasteList opexs={filteredWaste} refresh={fetchOpexData} />
+      <WasteList opexs={filteredWaste} refresh={fetchWasteData} />
     </>
   );
 }

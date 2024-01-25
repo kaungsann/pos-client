@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button, Select, SelectItem } from "@nextui-org/react";
 
-export default function ChoosePay({ totalCost, change, tax, subTotal }) {
+export default function ChoosePay({ totalCost, change, tax, subTotal, locId }) {
   const [display, setDisplay] = useState("");
   const [partner, setPartner] = useState([]);
   const [payslip, setPaySlip] = useState(false);
@@ -15,25 +15,11 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
   const [text, setText] = useState(null);
   const [order, setOrder] = useState([]);
   const [name, setName] = useState("");
-  const [location, setLocation] = useState([]);
-  const [Locate, setLocate] = useState("");
 
   const orderData = useSelector((state) => state.orderData);
   const user = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [discountId, setDiscountId] = useState("");
-  const [discount, setDiscount] = useState([]);
-  const [discountAmount, setDiscountAmount] = useState(0);
-
-  console.log("located ", Locate);
-
-  const handleDiscountChange = (e) => {
-    const selectedDiscount = discount.find((ds) => ds.id === e.target.value);
-    setDiscountId(e.target.value);
-    setDiscountAmount(selectedDiscount ? selectedDiscount.amount : 0);
-  };
 
   const dispatch = useDispatch();
   dispatch(add(true));
@@ -47,24 +33,8 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
     setPartner(filteredPartners);
     setName(resData.data[0].id);
   };
-  const getLocation = async () => {
-    let resData = await getApi("/location", token.accessToken);
-
-    const filteredLocations = resData.data.filter(
-      (locate) => locate.active === true
-    );
-    setLocation(filteredLocations);
-    setLocate(resData.data[0].id);
-  };
-
-  const getDiscount = async () => {
-    const resData = await getApi("/discount", token.accessToken);
-    const filteredDiscount = resData.data.filter((la) => la.active === true);
-    setDiscount(filteredDiscount);
-  };
 
   const createSaleOrder = async () => {
-    console.log("its is workibg");
     if (text === "" || display === "") {
       toast.error("You need to Pay  & amount");
       return;
@@ -73,11 +43,10 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
     const orderLines = [];
     orderData.forEach((item) => {
       const orderLine = {
-        product: item.id,
+        product: item._id,
         qty: item.quantity,
         tax: item.tax,
         unitPrice: item.salePrice,
-        discount: item.discount.id,
         subTotal: item.salePrice * item.quantity,
       };
 
@@ -93,11 +62,12 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
       orderLines.push(orderLine);
     });
 
-    console.log("sale line is a", orderLines);
-
     const data = {
       user: user._id,
-      location: Locate,
+      location:
+        user.role.name === "root" || user.role.name === "admin"
+          ? locId
+          : user.location,
       partner: name,
       // discount: discountId,
       taxTotal: totalCost,
@@ -118,28 +88,6 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
       setPaySlip(true);
     }
     setIsLoading(false);
-    //   try {
-    //     setIsLoading(true);
-    //     console.log("data is a", data);
-    //     let resData = await sendJsonToApi("/sale", data, token.accessToken);
-    //     console.log("res data is a", resData);
-
-    //     if (!resData.success) {
-    //       toast.error(resData.message);
-    //     }
-
-    //     if (resData.status) {
-    //       setIsLoading(false);
-    //       setOrder(resData.data);
-    //       toast.success(resData.message);
-    //       setPaySlip(true);
-    //     } else {
-    //       setIsLoading(false);
-    //     }
-    //   } catch (error) {
-    //     setIsLoading(false);
-    //     console.error("Error creating saleorder:", error);
-    //   }
   };
 
   const handleButtonClick = (value) => {
@@ -152,8 +100,6 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
   useEffect(() => {
     getPartner();
-    getLocation();
-    getDiscount();
   }, []);
 
   let pay = display - totalCost;
@@ -224,9 +170,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
             <span className="text-lg font-semibold text-slate-600">
               Total Due
             </span>
-            <h3 className="text-lg font-bold text-right">
-              {(totalCost - (discountAmount / 100) * totalCost).toFixed(2) ?? 0}
-            </h3>
+            <h3 className="text-lg font-bold text-right">{totalCost}</h3>
           </div>
 
           <div className="flex justify-between items-center">
@@ -250,105 +194,49 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
               </span>
             </div>
           </div>
-          {/* 
-          <div className="mt-2 flex justify-between">
-            <span className="text-lg font-semibold text-slate-600">
-              Discount
-            </span>
-            <h3 className="text-lg font-bold text-right">{discountAmount}%</h3>
-          </div> */}
 
-          {/* <Select
-            variant="bordered"
-            placeholder="Select a discount"
-            classNames={{
-              trigger: "font-bold w-full my-4 h-10",
-            }}
-            onChange={handleDiscountChange}
-          >
-            {discount.map((ds) => (
-              <SelectItem
-                key={ds.id}
-                value={ds.id}
-                startContent={ds.amount + "%"}
-              >
-                {ds.name}
-              </SelectItem>
-            ))}
-          </Select> */}
-          <div className=" justify-around grid grid-cols-2 gap-4">
-            <div>
-              {/* <Autocomplete
-                label="Customer"
-                placeholder="Names"
-                className="max-w-xs"
-                onChange={(e) => setName(e.target.value)}
-              >
-                {partner.length > 0 &&
-                  partner.map((pt) => (
-                    <AutocompleteItem
-                      key={pt.id}
-                      value={pt.id}
-                      className="hover:bg-cyan-300 hover:font-bold"
-                    >
-                      {pt.name}
-                    </AutocompleteItem>
-                  ))}
-              </Autocomplete> */}
+          <div className="flex justify-center w-full">
+            {/* {user.role.name === "root" || user.role.name === "admin" ? (
+              <>
+                <Select
+                  label="Location"
+                  name="location"
+                  placeholder="Select location"
+                  onChange={(e) => setLoca(e.target.value)} // Fix the function name here
+                  classNames={{
+                    base: "w-56",
+                    trigger: "h-10",
+                  }}
+                >
+                  {location.length > 0 &&
+                    location.map((loc) => (
+                      <SelectItem key={loc.id} value={loc.id}>
+                        {loc.name}
+                      </SelectItem>
+                    ))}
+                </Select>
+              </>
+            ) : null} */}
 
-              <Select
-                labelPlacement="outside"
-                label="Partner"
-                name="partner"
-                placeholder="Select partner"
-                onChange={(e) => setName(e.target.value)}
-                className="max-w-xs"
-              >
-                {partner.length > 0 &&
-                  partner.map((pt) => (
-                    <SelectItem key={pt.id} value={pt.id}>
-                      {pt.name}
-                    </SelectItem>
-                  ))}
-              </Select>
-            </div>
-
-            <div>
-              {/* <Autocomplete
-                label="Location"
-                placeholder="Select an option"
-                className="max-w-xs"
-                onChange={(e) => setLocate(e.target.value)}
-              >
-                {location.length > 0 &&
-                  location.map((loc) => (
-                    <AutocompleteItem
-                      key={loc.id}
-                      value={loc.id}
-                      className="hover:bg-cyan-300 hover:font-bold"
-                    >
-                      {loc.name}
-                    </AutocompleteItem>
-                  ))}
-              </Autocomplete> */}
-
-              <Select
-                labelPlacement="outside"
-                label="Location"
-                name="location"
-                placeholder="Select an location"
-                onChange={(e) => setLocate(e.target.value)}
-                className="max-w-xs"
-              >
-                {location.length > 0 &&
-                  location.map((loc) => (
-                    <SelectItem key={loc.id} value={loc.id}>
-                      {loc.name}
-                    </SelectItem>
-                  ))}
-              </Select>
-            </div>
+            <Select
+              label="Partner"
+              name="partner"
+              placeholder="Select partner"
+              onChange={(e) => setName(e.target.value)}
+              classNames={{
+                base: "w-56",
+                trigger: "h-10",
+              }}
+            >
+              {partner.length > 0 &&
+                partner.map((pt) => (
+                  <SelectItem key={pt.id} value={pt.id}>
+                    {pt.name}
+                  </SelectItem>
+                ))}
+            </Select>
           </div>
+
           <div className="calculator mt-8 flex justify-center">
             <div className="buttons  ">
               <div className="row">

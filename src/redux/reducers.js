@@ -66,7 +66,7 @@ const orderReducers = (state = [], { type, payload }) => {
       let { productId, discountId, discount } = payload;
 
       return state.map((item) => {
-        if (item.id === productId) {
+        if (item._id === productId) {
           return {
             ...item,
             discount: {
@@ -79,9 +79,9 @@ const orderReducers = (state = [], { type, payload }) => {
         return item;
       });
     }
+
     case "removeDiscountItem": {
       let { productID } = payload;
-
       return state.map((item) => {
         if (item.id === productID) {
           const { ...itemWithoutDiscount } = item;

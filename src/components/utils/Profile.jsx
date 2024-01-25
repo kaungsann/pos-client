@@ -106,35 +106,36 @@ export default function Profile() {
               </h3>
             </div>
 
-            {userInfo.role && userInfo.role.name == "admin" && (
-              <>
-                <div
-                  className={`flex py-2  mt-4 w-full items-center justify-start rounded-2xl ${
-                    activeSection === "company"
-                      ? "bg-blue-100 font-bold"
-                      : "text-slate-400"
-                  }`}
-                  onClick={handleCompanyRegister}
-                >
-                  <TiBusinessCard
-                    className={`text-2xl font-bold  mx-4 ${
+            {(userInfo.role && userInfo.role.name == "admin") ||
+              ("root" && (
+                <>
+                  <div
+                    className={`flex py-2  mt-4 w-full items-center justify-start rounded-2xl ${
                       activeSection === "company"
-                        ? "text-blue-500"
-                        : "text-slate-500"
+                        ? "bg-blue-100 font-bold"
+                        : "text-slate-400"
                     }`}
-                  />
-                  <h3
-                    className={`text-lg ${
-                      activeSection === "company"
-                        ? "text-slate-800 font-bold"
-                        : "text-slate-500"
-                    }`}
+                    onClick={handleCompanyRegister}
                   >
-                    Company Information
-                  </h3>
-                </div>
-              </>
-            )}
+                    <TiBusinessCard
+                      className={`text-2xl font-bold  mx-4 ${
+                        activeSection === "company"
+                          ? "text-blue-500"
+                          : "text-slate-500"
+                      }`}
+                    />
+                    <h3
+                      className={`text-lg ${
+                        activeSection === "company"
+                          ? "text-slate-800 font-bold"
+                          : "text-slate-500"
+                      }`}
+                    >
+                      Company Information
+                    </h3>
+                  </div>
+                </>
+              ))}
 
             <div
               className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${

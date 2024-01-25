@@ -5,7 +5,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import { Input, Progress, Button, Checkbox } from "@nextui-org/react";
+import {
+  Input,
+  Progress,
+  Button,
+  Checkbox,
+  Select,
+  SelectItem,
+} from "@nextui-org/react";
 
 export default function FixedCostCreateForm() {
   const navigate = useNavigate();
@@ -32,7 +39,7 @@ export default function FixedCostCreateForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
+
     setIsLoading(true);
     try {
       const response = await sendJsonToApi(
@@ -76,10 +83,11 @@ export default function FixedCostCreateForm() {
           type="submit"
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+            isLoading
               ? ""
               : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-            }`}
+          }`}
           onClick={handleSubmit}
         >
           Save
@@ -87,10 +95,11 @@ export default function FixedCostCreateForm() {
         <Button
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+            isLoading
               ? ""
               : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-            }`}
+          }`}
           onClick={() => navigate("/admin/fixed-cost/all")}
         >
           Discard
@@ -105,7 +114,7 @@ export default function FixedCostCreateForm() {
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
-                <Input
+                {/* <Input
                   type="text"
                   label="Name"
                   name="name"
@@ -115,7 +124,29 @@ export default function FixedCostCreateForm() {
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter fixed cost name..."
                   labelPlacement="outside"
-                />
+                /> */}
+                <Select
+                  labelPlacement="outside"
+                  label="FixedCost"
+                  name="name"
+                  placeholder="Select FixedCost Type"
+                  className="max-w-xs"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange(e)}
+                >
+                  <SelectItem key="rental" value="rental">
+                    Rental
+                  </SelectItem>
+                  <SelectItem key="insurance" value="insurance">
+                    Insurance
+                  </SelectItem>
+                  <SelectItem key="loan" value="loan">
+                    Loan
+                  </SelectItem>
+                  <SelectItem key="depreciation" value="depreciation">
+                    Depreciation
+                  </SelectItem>
+                </Select>
               </div>
               <div className="w-60">
                 <Input

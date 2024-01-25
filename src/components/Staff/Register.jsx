@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Progress, Select, SelectItem } from "@nextui-org/react";
-import { FormPostApi } from "../Api";
+import { FormPostApi, getApi } from "../Api";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +16,8 @@ export default function Register() {
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
+  const [locas, setLocas] = useState([]);
+  const [location, setLocation] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -45,11 +47,15 @@ export default function Register() {
     if (address) {
       formData.append("address", address);
     }
+    if (city) {
+      formData.append("location", location);
+    }
     // if (file) {
     //   formData.append("image", file);
     // }
     formData.append("username", name);
     formData.append("email", email);
+    formData.append("location", location);
     formData.append("password", password);
 
     let response = await FormPostApi("/user", formData, token.accessToken);
@@ -62,6 +68,16 @@ export default function Register() {
       toast.error(response.message);
     }
   };
+
+  const getLocation = async () => {
+    const resData = await getApi("/location", token.accessToken);
+    const filteredLocation = resData.data.filter((la) => la.active === true);
+    setLocas(filteredLocation);
+  };
+
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   return (
     <div>
@@ -80,7 +96,7 @@ export default function Register() {
 
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-          <h2 className="lg:text-xl font-bold ">Staff Edit</h2>
+          <h2 className="lg:text-xl font-bold ">Staff Create</h2>
           <div className="flex gap-3 ">
             <button
               type="submit"
@@ -125,6 +141,24 @@ export default function Register() {
                   labelPlacement="outside"
                 />
               </div>
+
+              <div className="w-60">
+                <Select
+                  labelPlacement="outside"
+                  label="Location"
+                  name="location"
+                  placeholder="Select an location"
+                  className="max-w-xs"
+                  onChange={(e) => setLocation(e.target.value)}
+                >
+                  {locas.map((ct) => (
+                    <SelectItem key={ct.id} value={ct.id}>
+                      {ct.name}
+                    </SelectItem>
+                  ))}
+                </Select>
+              </div>
+
               <div className="w-60">
                 <Input
                   type="text"

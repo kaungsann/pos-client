@@ -4,9 +4,13 @@ import PayBox from "../../utils/PayBox";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { GrNext } from "react-icons/gr";
 import { getApi } from "../../Api";
-import { Spinner } from "@nextui-org/react";
+import { Select, SelectItem, Spinner } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
-import { itemsAdd, updateItemQuantity } from "../../../redux/actions";
+import {
+  itemsAdd,
+  removeAllItems,
+  updateItemQuantity,
+} from "../../../redux/actions";
 import { removeData } from "../../../redux/actions";
 import { Icon } from "@iconify/react";
 
@@ -16,6 +20,10 @@ export default function PosItems() {
   const [categorys, setCategory] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [locations, setLocations] = useState([]);
+  const [loca, setLoca] = useState("");
+  const [loadingData, setLoadingData] = useState(false);
+
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +31,9 @@ export default function PosItems() {
 
   const itemsPerPage = 5;
 
-  const user = useSelector((state) => state.loginData);
+  const { location, role } = useSelector((state) => state.loginData);
+
+  console.log("user data is a", location);
 
   const token = useSelector((state) => state.IduniqueData);
   const selectProduct = useSelector((state) => state.orderData);
@@ -52,7 +62,7 @@ export default function PosItems() {
     if (resData.status) {
       setLoading(false);
       const filteredProduct = resData.data.filter((pd) => pd.active === true);
-      setProducts(filteredProduct);
+      // setProducts(filteredProduct);
     } else {
       setLoading(true);
     }
@@ -104,26 +114,84 @@ export default function PosItems() {
       }
     }
   };
+  const getLocation = async () => {
+    const resData = await getApi("/location", token.accessToken);
+    const filteredLocation = resData.data.filter((la) => la.active === true);
+    setLocations(filteredLocation);
+  };
+
+  const getStock = async () => {
+    setLoadingData(true);
+    const resData = await getApi("/stock", token.accessToken);
+
+    let selectedLocationId;
+    if (role.name === "user") {
+      setLoca(location);
+    }
+    if (loca === "") {
+      selectedLocationId = null;
+    } else {
+      selectedLocationId = loca;
+    }
+
+    const filteredStock = resData.data.filter(
+      (item) =>
+        item.active === true &&
+        (!selectedLocationId || item.location._id === selectedLocationId)
+    );
+
+    if (selectedLocationId !== null) {
+      setProducts([...filteredStock.map((item) => item.product)]);
+
+      dipatch(removeAllItems());
+    } else {
+      setProducts([]);
+      dipatch(removeAllItems());
+    }
+    setLoadingData(false);
+  };
 
   useEffect(() => {
     getProducts();
     getCategorysApi();
+    getLocation();
+    getStock();
+
     if (search) {
       handleBarcodeDetected(search);
     }
-  }, [search, user]);
+  }, [search, location, loca]);
+
+  console.log("product is a", products);
+  console.log("location id is a", loca);
 
   return (
     <>
-      <div
-        className={`flex w-full ${
-          user.role && user.role.name == "user" && "mt-2"
-        }`}
-      >
-        <div className="lg:w-2/3 md:w-2/4 shadow-sm bg-white overflow-y-scroll custom-scrollbar h-screen">
+      <div className={`flex w-full ${role && role.name == "user" && "mt-2"}`}>
+        <div className="lg:w-2/3 relative md:w-2/4 shadow-sm bg-white overflow-y-scroll custom-scrollbar h-screen">
           <div>
-            <div className="flex justify-between items-center p-4">
-              <h3 className="font-semibold text-xl w-full">Avaliable Items</h3>
+            <div className="flex justify-between items-center p-3">
+              <div className="flex items-center w-3/6">
+                <h3 className="font-semibold text-xl">Avaliable Items</h3>
+                {role.name === "root" || role.name === "admin" ? (
+                  <Select
+                    name="location"
+                    placeholder="Select a location"
+                    classNames={{
+                      base: "w-40 mx-4",
+                      trigger: "h-10",
+                    }}
+                    onChange={(e) => setLoca(e.target.value)}
+                  >
+                    {locations.map((ct) => (
+                      <SelectItem key={ct.id} value={ct.id}>
+                        {ct.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                ) : null}
+              </div>
+
               <div className="flex relative">
                 <input
                   ref={searchInputRef}
@@ -185,6 +253,17 @@ export default function PosItems() {
               )}
             </ul>
           </div>
+          {/* {loadingData && (
+            <div className="w-10/12 mx-auto mt-56 flex justify-center">
+              <Spinner size="lg" />
+            </div>
+          )} */}
+          {loadingData == false && products.length === 0 && (
+            <h2 className="text-center mt-36 text-xl text-slate-600 font-semibold">
+              Please Select a location
+            </h2>
+          )}
+
           <div className="flex flex-wrap w-full">
             {products.length > 0 ? (
               products
@@ -205,7 +284,7 @@ export default function PosItems() {
           </div>
         </div>
         <div className="p-3 h-screen w-1/3 bg-white rounded-sm shadow-md ml-2">
-          <PayBox />
+          <PayBox locationId={loca} />
         </div>
       </div>
     </>

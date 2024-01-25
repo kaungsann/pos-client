@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import { Input, Progress, Button } from "@nextui-org/react";
+import { Input, Progress, Button, Select, SelectItem } from "@nextui-org/react";
 
 export default function DiscountCreateForm() {
   const navigate = useNavigate();
@@ -18,14 +18,17 @@ export default function DiscountCreateForm() {
     name: "",
     amount: 0,
   });
+  console.log("formdata is ", formData);
 
   const handleInputChange = (e) => {
+    console.log("e", e);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
     try {
       const response = await sendJsonToApi(
         "/discount",
@@ -99,7 +102,7 @@ export default function DiscountCreateForm() {
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
-                <Input
+                {/* <Input
                   type="text"
                   label="Name"
                   name="name"
@@ -107,7 +110,24 @@ export default function DiscountCreateForm() {
                   onChange={(e) => handleInputChange(e)}
                   placeholder="enter discount name..."
                   labelPlacement="outside"
-                />
+                /> */}
+
+                <Select
+                  labelPlacement="outside"
+                  label="Discount"
+                  name="name"
+                  placeholder="Select Discount Type"
+                  className="max-w-xs"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange(e)}
+                >
+                  <SelectItem key="New Year Discount" value="New Year Discount">
+                    New Year Discount
+                  </SelectItem>
+                  <SelectItem key="Birthday Discount" value="Birthday Discount">
+                    Birthday Discount
+                  </SelectItem>
+                </Select>
               </div>
               <div className="w-60">
                 <Input

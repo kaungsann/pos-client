@@ -204,6 +204,7 @@ export default function SaleView() {
               <h3 className="font-bold text-slate-600 text-xl">Transactions</h3>
               <h4 className="text-lg font-bold text-slate-600">
                 {totalOrders}
+                {/* {orderLines.length} */}
               </h4>
             </div>
           </div>

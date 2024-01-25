@@ -5,7 +5,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import { Input, Progress, Button, Checkbox } from "@nextui-org/react";
+import {
+  Input,
+  Progress,
+  Button,
+  Checkbox,
+  SelectItem,
+  Select,
+} from "@nextui-org/react";
 
 export default function VariableCostCreateForm() {
   const navigate = useNavigate();
@@ -26,9 +33,9 @@ export default function VariableCostCreateForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleCheckboxChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.checked });
-  };
+  // const handleCheckboxChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.checked });
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -75,10 +82,11 @@ export default function VariableCostCreateForm() {
           type="submit"
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${isLoading
+          className={`font-bold rounded-sm shadow-sm flex items-center bg-white text-blue-700 border-blue-500 border-2 ${
+            isLoading
               ? ""
               : "hover:opacity-75 text-sm hover:text-white hover:bg-blue-700"
-            }`}
+          }`}
           onClick={handleSubmit}
         >
           Save
@@ -86,10 +94,11 @@ export default function VariableCostCreateForm() {
         <Button
           isDisabled={isLoading}
           isLoading={isLoading}
-          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${isLoading
+          className={`rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 text-sm ${
+            isLoading
               ? ""
               : "hover:opacity-75 hover:text-white hover:bg-red-500 font-bold"
-            }`}
+          }`}
           onClick={() => navigate("/admin/variable-cost/all")}
         >
           Discard
@@ -104,7 +113,7 @@ export default function VariableCostCreateForm() {
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
-                <Input
+                {/* <Input
                   type="text"
                   label="Name"
                   name="name"
@@ -114,7 +123,32 @@ export default function VariableCostCreateForm() {
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter fixed cost name..."
                   labelPlacement="outside"
-                />
+                /> */}
+                <Select
+                  labelPlacement="outside"
+                  label="VariableCost"
+                  name="name"
+                  placeholder="Select VariableCost Type"
+                  className="max-w-xs"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange(e)}
+                >
+                  <SelectItem key="utility" value="utility">
+                    Utility
+                  </SelectItem>
+                  <SelectItem key="sales commission" value="sales commission">
+                    Sales Commission
+                  </SelectItem>
+                  <SelectItem
+                    key="incentive or Bonus"
+                    value="incentive or Bonus"
+                  >
+                    Incentive or Bonus
+                  </SelectItem>
+                  <SelectItem key="packaging" value="packaging">
+                    Packaging
+                  </SelectItem>
+                </Select>
               </div>
               <div className="w-60">
                 <Input

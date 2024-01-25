@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableHeader,
@@ -13,12 +13,15 @@ import {
   DropdownItem,
   Chip,
   Pagination,
+  Spinner,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
 import { orderConfirmApi } from "../../Api";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "name",
@@ -52,6 +55,8 @@ export default function WasteList({ opexs, refresh }) {
     column: "age",
     direction: "ascending",
   });
+
+  const [loadingData, setLoadData] = useState(false);
   const [page, setPage] = React.useState(1);
 
   const navigate = useNavigate();
@@ -65,9 +70,19 @@ export default function WasteList({ opexs, refresh }) {
       `/waste/${id}?state=approved`,
       token.accessToken
     );
-    if (response.message === "Updated successfully!") {
+
+    if (response.success === false) {
+      toast.error(response.message);
+    } else {
+      setLoadData(false);
       refresh();
+      toast.success(response.message);
     }
+    // if (response.message === "Updated successfully!") {
+    //   setLoadData(false);
+    //   refresh();
+    // }
+    setLoadData(false);
   };
 
   const changeRejectOpex = async (id) => {
@@ -75,16 +90,27 @@ export default function WasteList({ opexs, refresh }) {
       `/waste/${id}?state=rejected`,
       token.accessToken
     );
-    if (response.message === "Updated successfully!") {
+
+    // if (response.message === "Updated successfully!") {
+    //   refresh();
+    // }
+    if (response.success === false) {
+      toast.error(response.message);
+    } else {
       refresh();
+      toast.success(response.message);
     }
+
+    setLoadData(false);
   };
 
   const handleChangeConfirm = (id) => {
+    setLoadData(true);
     changeConfirmOpex(id);
   };
 
   const handleChangeReject = (id) => {
+    setLoadData(true);
     changeRejectOpex(id);
   };
 
@@ -246,11 +272,6 @@ export default function WasteList({ opexs, refresh }) {
     }
   }, []);
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
-  }, []);
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -346,40 +367,59 @@ export default function WasteList({ opexs, refresh }) {
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
   return (
-    <Table
-      aria-label="Example table with custom cells, pagination and sorting"
-      isHeaderSticky
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      classNames={{
-        wrapper: "max-h-[382px]",
-      }}
-      selectedKeys={selectedKeys}
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <div className="relative">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <Table
+        aria-label="Example table with custom cells, pagination and sorting"
+        isHeaderSticky
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        classNames={{
+          wrapper: "max-h-[382px]",
+        }}
+        selectedKeys={selectedKeys}
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSortChange={setSortDescriptor}
+      >
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody emptyContent={"No users found"} items={sortedItems}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      {loadingData && (
+        <div className="absolute top-0 w-full h-screen flex items-center justify-center bg-slate-50 opacity-75">
+          <Spinner size="lg" />
+        </div>
+      )}
+    </div>
   );
 }

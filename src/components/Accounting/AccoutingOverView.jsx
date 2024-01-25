@@ -406,10 +406,10 @@ const AccoutingOverView = () => {
                 </div>
               ))}
             <div className="w-full flex justify-between">
-              <td className="border px-4 py-2 text-slate-600 font-semibold text-lg">
+              <td className="px-4 py-2 text-slate-600 font-semibold text-lg">
                 Total Balance
               </td>
-              <td className="border px-4 py-2 text-slate-600 font-semibold text-lg">
+              <td className="px-4 py-2 text-slate-600 font-semibold text-lg">
                 {account
                   .filter((acc) => !selectedKeys.has(acc.type))
                   .reduce((total, row) => total + row.balance, 0)
@@ -461,8 +461,8 @@ const AccoutingOverView = () => {
         </Dropdown>
       </div>
 
-      <table className="w-full border-2">
-        <thead className="flex justify-between border">
+      <table className="w-full">
+        <thead className="flex justify-between border-2">
           <th className="w-28"></th>
           {months.map((month, index) => (
             <th key={index} className="w-24 text-slate-500 text-lg my-2">
@@ -475,7 +475,7 @@ const AccoutingOverView = () => {
             totalYear[0].map((_, colIndex) => (
               <tr
                 key={colIndex}
-                className="p-3 flex items-center justify-between my-1 border-b-slate-300 border-2"
+                className="p-3 flex items-center justify-between my-1 border-2"
               >
                 <td className="w-28 text-center text-slate-400 text-md font-semibold">
                   {totalYear[0][colIndex].type}
@@ -488,7 +488,7 @@ const AccoutingOverView = () => {
                       color: rowData[colIndex].balance < 0 ? "red" : "black",
                     }}
                   >
-                    {rowData[colIndex].balance.toFixed()}
+                    {Math.abs(rowData[colIndex].balance).toFixed()}
                   </td>
                 ))}
               </tr>
