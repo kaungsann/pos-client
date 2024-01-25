@@ -7,11 +7,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Pie,
-  Cell,
-  PieChart,
   Legend,
-  Rectangle,
 } from "recharts";
 
 import { getApi } from "../../Api";
@@ -21,10 +17,11 @@ import { Icon } from "@iconify/react";
 
 export default function PurchaseView() {
   const [totalAmount, setTotalAmount] = useState(0);
+  const [totalAmountWithTax, setTotalAmountWithTax] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const [orderLines, setOrderLines] = useState([]);
-  const [popularProducts, setPopularProducts] = useState([]);
+  // const [popularProducts, setPopularProducts] = useState([]);
 
   const token = useSelector((state) => state.IduniqueData);
 
@@ -39,10 +36,10 @@ export default function PurchaseView() {
     if (resData.status) {
       setTotalAmount(resData.data.purchases.totalAmount);
       setTotalOrders(resData.data.purchases.totalOrders);
-
+      setTotalAmountWithTax(resData.data.purchases.totalAmountWithTax);
       setTotalItems(resData.data.purchases.totalItems);
       setOrderLines(resData.data.purchases.allLines);
-      setPopularProducts(resData.data.purchases.topProducts);
+      //setPopularProducts(resData.data.purchases.topProducts);
     }
   };
 
@@ -56,21 +53,135 @@ export default function PurchaseView() {
     (orderId) => orderLines.find((line) => line.orderId._id === orderId).orderId
   );
 
-  const lineChartData = orderLines.map((line) => {
-    return {
-      id: line._id,
-      orderRef: line.orderId.orderRef,
-      productId: line.product.name,
-      total: line.subTotal,
-    };
-  });
+  function calculateTotalCostByProduct() {
+    const groupedCostByProduct = orderLines.reduce(
+      (accumulator, currentValue) => {
+        const { product, subTotal } = currentValue;
+        const productName = product.name;
 
-  const COLORS = ["#96c3ea", "#88c3c7", "#b8bd85", "#8f90c9"];
+        if (!accumulator[productName]) {
+          accumulator[productName] = 0;
+        }
+
+        accumulator[productName] += subTotal;
+
+        return accumulator;
+      },
+      {}
+    );
+
+    const totalCostbyProduct = Object.keys(groupedCostByProduct).map(
+      (productName) => ({
+        name: productName,
+        total: groupedCostByProduct[productName],
+      })
+    );
+
+    return totalCostbyProduct;
+  }
+
+  function calculateTotalCostByVendor() {
+    const groupedCostByVendor = orderLines.reduce(
+      (accumulator, currentValue) => {
+        const { orderId, subTotal } = currentValue;
+        const vendorName = orderId.partner.name;
+
+        if (!accumulator[vendorName]) {
+          accumulator[vendorName] = 0;
+        }
+
+        accumulator[vendorName] += subTotal;
+
+        return accumulator;
+      },
+      {}
+    );
+
+    const totalCostbyProduct = Object.keys(groupedCostByVendor).map(
+      (vendorName) => ({
+        name: vendorName,
+        total: groupedCostByVendor[vendorName],
+      })
+    );
+
+    return totalCostbyProduct;
+  }
+
+  function calculateTotalQtyByProduct() {
+    const groupedQtyByProduct = orderLines.reduce(
+      (accumulator, currentValue) => {
+        const { product, qty } = currentValue;
+        const productName = product.name;
+
+        if (!accumulator[productName]) {
+          accumulator[productName] = 0;
+        }
+
+        accumulator[productName] += qty;
+
+        return accumulator;
+      },
+      {}
+    );
+
+    const totalCostbyProduct = Object.keys(groupedQtyByProduct).map(
+      (productName) => ({
+        name: productName,
+        qty: groupedQtyByProduct[productName],
+      })
+    );
+
+    return totalCostbyProduct;
+  }
+
+  function calculateTotalQtyByVendor() {
+    const groupedQtyByVendor = orderLines.reduce(
+      (accumulator, currentValue) => {
+        const { orderId, qty } = currentValue;
+        const vendorName = orderId.partner.name;
+
+        if (!accumulator[vendorName]) {
+          accumulator[vendorName] = 0;
+        }
+
+        accumulator[vendorName] += qty;
+
+        return accumulator;
+      },
+      {}
+    );
+
+    const totalCostbyProduct = Object.keys(groupedQtyByVendor).map(
+      (vendorName) => ({
+        name: vendorName,
+        qty: groupedQtyByVendor[vendorName],
+      })
+    );
+
+    return totalCostbyProduct;
+  }
+
+  const totalCostbyProduct = calculateTotalCostByProduct();
+  const totalCostbyVendor = calculateTotalCostByVendor();
+  const totalQtybyProduct = calculateTotalQtyByProduct();
+  const totalQtybyVendor = calculateTotalQtyByVendor();
+
+  // const lineChartData = orderLines.map((line) => {
+  //   return {
+  //     id: line._id,
+  //     orderRef: line.orderId.orderRef,
+  //     productId: line.product.name,
+  //     total: line.subTotal,
+  //   };
+  // });
 
   return (
     <>
       <div className="px-8 w-full">
-        <div className="w-full  flex justify-between">
+        <h1 className="text-xl font-bold text-slate-600 py-5">
+          Monthly Dashboard
+        </h1>
+        <div className="w-full flex justify-between">
           <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icon-park-solid:buy"
@@ -78,11 +189,23 @@ export default function PurchaseView() {
             />
 
             <div>
-              <h3 className="font-bold text-slate-600 text-xl">
+              <h3 className="font-bold text-slate-600 text-lg">
                 Total Cost <span className="text-sm">(Inc. Tax)</span>
               </h3>
               <h4 className="text-lg font-bold text-slate-600">
-                {totalAmount}
+                {totalAmountWithTax}
+              </h4>
+            </div>
+          </div>
+          <div className="px-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
+            <Icon
+              icon="icon-park-solid:buy"
+              className="text-4xl text-cyan-700 font-semibold"
+            />
+            <div>
+              <h3 className="font-bold text-slate-600 text-lg">Tax Total</h3>
+              <h4 className="text-lg font-bold text-slate-600">
+                {totalAmountWithTax - totalAmount}
               </h4>
             </div>
           </div>
@@ -93,7 +216,7 @@ export default function PurchaseView() {
             />
 
             <div className="">
-              <h3 className="font-bold text-slate-600 text-xl">Today Orders</h3>
+              <h3 className="font-bold text-slate-600 text-lg">Total Orders</h3>
               <h4 className="text-lg font-bold text-slate-600">
                 {totalOrders}
               </h4>
@@ -103,7 +226,9 @@ export default function PurchaseView() {
           <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon icon="fa:users" className="text-4xl text-[#8884d8]" />
             <div>
-              <h3 className="font-bold text-slate-600 text-xl">Vendors</h3>
+              <h3 className="font-bold text-slate-600 text-lg">
+                Total Vendors
+              </h3>
               <h4 className="text-lg font-bold text-slate-600">
                 {
                   new Set(
@@ -114,14 +239,14 @@ export default function PurchaseView() {
             </div>
           </div>
 
-          <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="fluent-mdl2:product-variant"
               className="text-4xl text-green-500"
             />
             <div>
-              <h3 className="font-bold text-slate-600 text-xl">
-                Product Purchased
+              <h3 className="font-bold text-slate-600 text-lg">
+                Purchased Quantities
               </h3>
               <h4 className="text-lg font-bold text-slate-600">{totalItems}</h4>
             </div>
@@ -131,13 +256,14 @@ export default function PurchaseView() {
           <div className="w-full flex my-4">
             <div className="w-3/5 bg-white p-2 rounded-md shadow-md">
               <h3 className="text-slate-500 font-semibold text-lg mb-6">
-                Daily Purchase Order Dashboard
+                Total Cost <span className="text-sm">(Inc. Tax)</span> by
+                Product
               </h3>
               <ResponsiveContainer height={300} className="mx-auto">
                 <BarChart
                   width={500}
                   height={300}
-                  data={lineChartData}
+                  data={totalCostbyProduct}
                   margin={{
                     top: 5,
                     right: 30,
@@ -146,20 +272,42 @@ export default function PurchaseView() {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="orderRef" />
+                  <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
 
-                  <Bar
-                    dataKey="total"
-                    fill="#82ca9d"
-                    activeBar={<Rectangle fill="gold" stroke="purple" />}
-                  />
+                  <Bar dataKey="total" fill="#82ca9d" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div className="items-center w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
+            <div className="w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
+              <h3 className="text-slate-500 font-semibold text-lg mb-6">
+                Total Cost <span className="text-sm">(Inc. Tax)</span> by Vendor
+              </h3>
+              <ResponsiveContainer height={300} className="mx-auto">
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={totalCostbyVendor}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+
+                  <Bar dataKey="total" fill="#82ca9d" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            {/* <div className="items-center w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
               <h1 className="text-slate-500 font-semibold text-lg mb-6">
                 All Time Purchased Product
               </h1>
@@ -210,28 +358,80 @@ export default function PurchaseView() {
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
+            </div> */}
+          </div>
+          <div className="w-full flex my-4">
+            <div className="w-3/5 bg-white p-2 rounded-md shadow-md">
+              <h3 className="text-slate-500 font-semibold text-lg mb-6">
+                Total Qty by Product
+              </h3>
+              <ResponsiveContainer height={200} className="mx-auto">
+                <BarChart
+                  width={500}
+                  height={200}
+                  data={totalQtybyProduct}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="qty" fill="#82ca9d" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
+              <h3 className="text-slate-500 font-semibold text-lg mb-6">
+                Total Qty by Vendor
+              </h3>
+              <ResponsiveContainer height={200} className="mx-auto">
+                <BarChart
+                  width={500}
+                  height={200}
+                  data={totalQtybyVendor}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="qty" fill="#82ca9d" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
           <div className="w-full flex">
             <div className="w-3/4 bg-white p-2 rounded-md shadow-md">
               <h2 className="text-slate-600 font-semibold text-lg mb-3">
-                Recents Purchase Orders
+                Recent Purchased Orders
               </h2>
               <table className="w-full mb-6">
                 <tr className="bg-[#e2e8f0]">
-                  <th className="lg:px-4 py-2 text-center text-slate-800">
+                  <th className="lg:px-4 py-2 text-center text-slate-500">
                     Customer Name
                   </th>
-                  <th className="lg:px-4 py-2 text-center text-slate-800">
+                  <th className="lg:px-4 py-2 text-center text-slate-500">
                     Order Date
                   </th>
-                  <th className="lg:px-4 py-2 text-center text-slate-800">
-                    Total
+                  <th className="lg:px-4 py-2 text-center text-slate-500">
+                    Total (Inc. Tax)
                   </th>
-                  <th className="lg:px-4 py-2 text-center text-slate-800">
+                  <th className="lg:px-4 py-2 text-center text-slate-500">
                     Address
                   </th>
-                  <th className="lg:px-4 py-2 text-center text-slate-800">
+                  <th className="lg:px-4 py-2 text-center text-slate-500">
                     Order Status
                   </th>
                 </tr>

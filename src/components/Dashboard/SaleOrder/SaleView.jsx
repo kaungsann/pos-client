@@ -179,7 +179,8 @@ export default function SaleView() {
   return (
     <>
       <div className="px-8 w-full">
-        <div className="w-full  flex justify-between">
+        <h1 className="text-xl font-bold text-slate-600 py-5">Monthly Dashboard</h1>
+        <div className="w-full flex justify-between">
           <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icon-park-solid:buy"
