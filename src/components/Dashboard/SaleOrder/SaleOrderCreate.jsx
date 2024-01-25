@@ -39,7 +39,7 @@ export default function SaleOrderCreate() {
   const [locations, setLocations] = useState([]);
   const [partners, setPartners] = useState([]);
   const [discounts, setDiscounts] = useState([]);
-  
+
   const [paymentType, setPaymentType] = useState("cash");
 
   const [refreshIconRotation, setRefreshIconRotation] = useState(false);
@@ -125,6 +125,14 @@ export default function SaleOrderCreate() {
 
     const data = {
       ...saleOrderData,
+      lines: saleOrderData.lines.map((line) => {
+        return {
+          ...line,
+          product: line.product.id,
+          discount: line.discount.id,
+          unitPrice: line.product.salePrice,
+        };
+      }),
       user: userData._id,
       state: "pending",
     };
@@ -261,8 +269,12 @@ export default function SaleOrderCreate() {
                     }}
                     className="max-w-xs"
                   >
-                    <SelectItem value="bank" key="bank">Bank</SelectItem>
-                    <SelectItem value="cash" key="cash">Cash</SelectItem>
+                    <SelectItem value="bank" key="bank">
+                      Bank
+                    </SelectItem>
+                    <SelectItem value="cash" key="cash">
+                      Cash
+                    </SelectItem>
                   </Select>
                 </div>
               </div>
@@ -283,7 +295,9 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                     label="Partner"
                     name="partner"
-                    selectedKeys={[saleOrderData.partner]?.filter(Boolean) || []}
+                    selectedKeys={
+                      [saleOrderData.partner]?.filter(Boolean) || []
+                    }
                     placeholder="Select partner"
                     onChange={(e) =>
                       dispatch(addCustomerToSaleOrder(e.target.value))
@@ -318,7 +332,9 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                     label="Location"
                     name="location"
-                    selectedKeys={[saleOrderData.location]?.filter(Boolean) || []}
+                    selectedKeys={
+                      [saleOrderData.location]?.filter(Boolean) || []
+                    }
                     placeholder="Select an location"
                     onChange={(e) =>
                       dispatch(addLocationToSaleOrder(e.target.value))

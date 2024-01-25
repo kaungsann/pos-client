@@ -189,7 +189,7 @@ export default function SaleTemplate() {
           </div>
         </div>
       </div>
-      <SaleList sales={filteredSale} />
+      <SaleList orders={filteredSale} />
     </>
   );
 }

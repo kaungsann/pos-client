@@ -14,18 +14,13 @@ import {
   Pagination,
   Chip,
 } from "@nextui-org/react";
-
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { orderConfirmApi } from "../../Api";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
 import ConfrimBox from "../../utils/ConfrimBox";
-
-const statusOptions = [
-  { name: "pending", uid: "pending" },
-  { name: "confirmed", uid: "confirmed" },
-];
 
 const INITIAL_VISIBLE_COLUMNS = [
   "scheduledate",
@@ -51,12 +46,10 @@ const columns = [
   { name: "Action", uid: "actions" },
 ];
 
-export default function PurchaseList({ purchases, refresh }) {
-  const [filterValue, setFilterValue] = React.useState("");
+export default function PurchaseList({ orders, refresh }) {
   const [confrimShowBox, setconfrimShowBox] = React.useState(false);
   const [ConfirmOrderId, setConfirmOrderId] = React.useState(null);
 
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
@@ -64,7 +57,6 @@ export default function PurchaseList({ purchases, refresh }) {
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
 
-  const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
@@ -72,12 +64,11 @@ export default function PurchaseList({ purchases, refresh }) {
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
-  const totalLine = purchases.length;
+  const totalLine = orders.length;
   const totalPages = Math.ceil(totalLine / rowsPerPage);
   const isFirstPage = page === 1;
   const isLastPage = page === totalPages;
 
-  const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return INITIAL_VISIBLE_COLUMNS;
@@ -88,24 +79,10 @@ export default function PurchaseList({ purchases, refresh }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredPurchase = [...purchases];
-
-    if (hasSearchFilter) {
-      filteredPurchase = filteredPurchase.filter((pur) =>
-        pur.partner.name.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    }
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredPurchase = filteredPurchase.filter((pur) =>
-        Array.from(statusFilter).includes(pur.state)
-      );
-    }
+    let filteredPurchase = [...orders];
 
     return filteredPurchase;
-  }, [purchases, filterValue, statusFilter]);
+  }, [orders]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -124,30 +101,30 @@ export default function PurchaseList({ purchases, refresh }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((purchases, columnKey) => {
-    const cellValue = purchases[columnKey];
+  const renderCell = React.useCallback((orders, columnKey) => {
+    const cellValue = orders[columnKey];
 
     switch (columnKey) {
       case "scheduledate":
-        return <h3> {format(new Date(purchases.orderDate), "yyyy-MM-dd")}</h3>;
+        return <h3> {format(new Date(orders.orderDate), "yyyy-MM-dd")}</h3>;
       case "name":
-        return <h3>{purchases.user?.username}</h3>;
+        return <h3>{orders.user?.username}</h3>;
       case "partner":
-        return <h3>{purchases.partner?.name}</h3>;
+        return <h3>{orders.partner?.name}</h3>;
       case "location":
-        return <h3>{purchases.location?.name}</h3>;
+        return <h3>{orders.location?.name}</h3>;
       case "orderref":
-        return <h3>{purchases.orderRef}</h3>;
+        return <h3>{orders.orderRef}</h3>;
       case "state":
         return (
           <div className="flex gap-4 w-24">
-            {purchases.state === "pending" ? (
+            {orders.state === "pending" ? (
               <Chip
                 color="danger"
                 variant="bordered"
                 className="bg-red-50 w-full"
               >
-                {purchases.state}
+                {orders.state}
               </Chip>
             ) : (
               <Chip
@@ -155,18 +132,18 @@ export default function PurchaseList({ purchases, refresh }) {
                 variant="bordered"
                 className="bg-green-50 px-2 w-full"
               >
-                {purchases.state}
+                {orders.state}
               </Chip>
             )}
           </div>
         );
 
       case "totalproduct":
-        return <h3>{purchases.lines.length}</h3>;
+        return <h3>{orders.lines.length}</h3>;
       case "taxtotal":
-        return <h3>{purchases.taxTotal.toFixed()}</h3>;
+        return <h3>{orders.taxTotal.toFixed()}</h3>;
       case "total":
-        return <h3>{purchases.total.toFixed()}</h3>;
+        return <h3>{orders.total.toFixed()}</h3>;
       case "actions":
         return (
           <div
@@ -183,7 +160,7 @@ export default function PurchaseList({ purchases, refresh }) {
                 <DropdownMenu aria-label="Dynamic Actions">
                   <DropdownItem
                     onPress={() => {
-                      navigate(`/admin/purchase/detail/${purchases.id}`);
+                      navigate(`/admin/purchase/detail/${orders.id}`);
                     }}
                   >
                     View
@@ -192,11 +169,11 @@ export default function PurchaseList({ purchases, refresh }) {
               </Dropdown>
             </div>
 
-            {purchases.state === "pending" && (
+            {orders.state === "pending" && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleConfirm(purchases.id);
+                  handleConfirm(orders.id);
                 }}
                 className="px-3 py-1 ml-2 text-white text-sm text-bold bg-blue-700  rounded-md hover:opacity-75"
               >
@@ -215,15 +192,6 @@ export default function PurchaseList({ purchases, refresh }) {
     setPage(1);
   }, []);
 
-  const onSearchChange = React.useCallback((value) => {
-    if (value) {
-      setFilterValue(value);
-      setPage(1);
-    } else {
-      setFilterValue("");
-    }
-  }, []);
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -231,7 +199,7 @@ export default function PurchaseList({ purchases, refresh }) {
           <div className="flex items-end">
             <h2 className="text-xl font-bold">Purchase Orders</h2>
             <h3 className="text-default-400 text-md pl-4">
-              Total {purchases.length}
+              Total {orders.length}
             </h3>
           </div>
 
@@ -273,22 +241,15 @@ export default function PurchaseList({ purchases, refresh }) {
       </div>
     );
   }, [
-    filterValue,
-    statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    purchases.length,
-    onSearchChange,
-    hasSearchFilter,
+    orders.length,
   ]);
 
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${totalLine} `}
         </span>
         <Pagination
           isCompact
@@ -319,7 +280,7 @@ export default function PurchaseList({ purchases, refresh }) {
         </div>
       </div>
     );
-  }, [selectedKeys, totalLine, page, isLastPage, isFirstPage, totalPages]);
+  }, [page, isLastPage, isFirstPage, totalPages]);
 
   const handleConfirm = (id) => {
     setconfrimShowBox(true);
@@ -364,7 +325,7 @@ export default function PurchaseList({ purchases, refresh }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Purchases found"} items={sortedItems}>
+        <TableBody emptyContent={"No Purchase Order found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -386,3 +347,8 @@ export default function PurchaseList({ purchases, refresh }) {
     </>
   );
 }
+
+PurchaseList.propTypes = {
+  orders: PropTypes.array,
+  refresh: PropTypes.func,
+};

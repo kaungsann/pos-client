@@ -14,16 +14,10 @@ import {
   Chip,
   Pagination,
 } from "@nextui-org/react";
-
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
-
-const statusOptions = [
-  { name: "pending", uid: "pending" },
-  { name: "confirmed", uid: "confirmed" },
-];
 
 const INITIAL_VISIBLE_COLUMNS = [
   "scheduledate",
@@ -49,24 +43,19 @@ const columns = [
   { name: "Action", uid: "actions" },
 ];
 
-export default function SaleList({ sales }) {
-  const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
+export default function SaleList({ orders }) {
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
 
   const navigate = useNavigate();
 
-  const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
-
-  const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return INITIAL_VISIBLE_COLUMNS;
@@ -77,24 +66,10 @@ export default function SaleList({ sales }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredSale = [...sales];
-
-    if (hasSearchFilter) {
-      filteredSale = filteredSale.filter((sale) =>
-        sale.partner.name.toLowerCase().includes(filterValue.toLowerCase())
-      );
-    }
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredSale = filteredSale.filter((sale) =>
-        Array.from(statusFilter).includes(sale.state)
-      );
-    }
+    let filteredSale = [...orders];
 
     return filteredSale;
-  }, [sales, filterValue, statusFilter]);
+  }, [orders]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -115,41 +90,41 @@ export default function SaleList({ sales }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((sales, columnKey) => {
-    const cellValue = sales[columnKey];
+  const renderCell = React.useCallback((orders, columnKey) => {
+    const cellValue = orders[columnKey];
 
     switch (columnKey) {
       case "scheduledate":
-        return <h3>{format(new Date(sales.orderDate), "yyyy-MM-dd")}</h3>;
+        return <h3>{format(new Date(orders.orderDate), "yyyy-MM-dd")}</h3>;
       case "name":
-        return <h3>{sales.user?.username}</h3>;
+        return <h3>{orders.user?.username}</h3>;
       case "partner":
-        return <h3>{sales.partner?.name}</h3>;
+        return <h3>{orders.partner?.name}</h3>;
       case "location":
-        return <h3>{sales.location?.name}</h3>;
+        return <h3>{orders.location?.name}</h3>;
       case "orderref":
-        return <h3>{sales.orderRef}</h3>;
+        return <h3>{orders.orderRef}</h3>;
 
       case "state":
         return (
           <div className="flex gap-4">
-            {sales.state === "pending" ? (
+            {orders.state === "pending" ? (
               <Chip color="danger" variant="bordered">
-                {sales.state}
+                {orders.state}
               </Chip>
             ) : (
               <Chip color="success" variant="bordered">
-                {sales.state}
+                {orders.state}
               </Chip>
             )}
           </div>
         );
       case "totalproduct":
-        return <h3>{sales.lines.length}</h3>;
+        return <h3>{orders.lines.length}</h3>;
       case "taxtotal":
-        return <h3>{sales.taxTotal.toFixed(2)}</h3>;
+        return <h3>{orders.taxTotal.toFixed(2)}</h3>;
       case "total":
-        return <h3>{sales.total.toFixed(2)}</h3>;
+        return <h3>{orders.total.toFixed(2)}</h3>;
       case "actions":
         return (
           <div
@@ -165,7 +140,7 @@ export default function SaleList({ sales }) {
               <DropdownMenu aria-label="action">
                 <DropdownItem
                   onPress={() => {
-                    navigate(`/admin/saleorders/detail/${sales.id}`);
+                    navigate(`/admin/saleorders/detail/${orders.id}`);
                   }}
                 >
                   View
@@ -177,7 +152,7 @@ export default function SaleList({ sales }) {
       default:
         return cellValue;
     }
-  }, []);
+  }, [navigate]);
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
@@ -196,15 +171,6 @@ export default function SaleList({ sales }) {
     setPage(1);
   }, []);
 
-  const onSearchChange = React.useCallback((value) => {
-    if (value) {
-      setFilterValue(value);
-      setPage(1);
-    } else {
-      setFilterValue("");
-    }
-  }, []);
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -212,7 +178,7 @@ export default function SaleList({ sales }) {
           <div className="flex items-end">
             <h2 className="text-xl font-bold">Sale Orders</h2>
             <h3 className="text-default-400 text-md pl-4">
-              Total {sales.length}
+              Total {orders.length}
             </h3>
           </div>
 
@@ -253,24 +219,12 @@ export default function SaleList({ sales }) {
         </div>
       </div>
     );
-  }, [
-    filterValue,
-    statusFilter,
-    visibleColumns,
-    onRowsPerPageChange,
-    sales.length,
-    onSearchChange,
-    hasSearchFilter,
-  ]);
+  }, [visibleColumns, onRowsPerPageChange, orders.length]);
 
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} `}
-        </span>
+        <span className="w-[30%] text-small text-default-400"></span>
         <Pagination
           isCompact
           showControls
@@ -300,7 +254,7 @@ export default function SaleList({ sales }) {
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [page, pages, onNextPage, onPreviousPage]);
 
   return (
     <>
@@ -328,7 +282,7 @@ export default function SaleList({ sales }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Sales found"} items={sortedItems}>
+        <TableBody emptyContent={"No orders found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -341,3 +295,7 @@ export default function SaleList({ sales }) {
     </>
   );
 }
+
+SaleList.propTypes = {
+  orders: PropTypes.array,
+};

@@ -292,7 +292,7 @@ export default function ProductList({ products, fetchProducts }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Products found"} items={sortedItems}>
+        <TableBody emptyContent={"No Product found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -320,4 +320,5 @@ export default function ProductList({ products, fetchProducts }) {
 
 ProductList.propTypes = {
   products: PropTypes.array,
+  fetchProducts: PropTypes.func,
 };
