@@ -46,24 +46,8 @@ export default function DiscountList({ discounts, refresh }) {
   const [page, setPage] = React.useState(1);
 
   const navigate = useNavigate();
-  const token = useSelector((state) => state.IduniqueData);
 
   const hasSearchFilter = Boolean(filterValue);
-
-  const deleteDiscounts = async () => {
-    const response = await deleteMultiple(
-      "/discount",
-      {
-        discountIds: [...selectedKeys],
-      },
-      token.accessToken
-    );
-
-    if (response.status) {
-      setSelectedKeys([]);
-      refresh();
-    }
-  };
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -226,14 +210,6 @@ export default function DiscountList({ discounts, refresh }) {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            {selectedKeys.size > 0 && selectedKeys !== "all" && (
-              <button
-                onClick={() => setShowDeleteBox(true)}
-                className="px-3 py-1.5 text-white bg-rose-500 rounded-md hover:opacity-75"
-              >
-                Delete
-              </button>
-            )}
           </div>
         </div>
       </div>
@@ -248,9 +224,6 @@ export default function DiscountList({ discounts, refresh }) {
     onSearchChange,
     hasSearchFilter,
   ]);
-  console.log("selectedKeys type:", typeof selectedKeys);
-
-  console.log("selected is a ", selectedKeys);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -258,7 +231,7 @@ export default function DiscountList({ discounts, refresh }) {
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            : `${selectedKeys.size} of ${filteredItems.length} `}
         </span>
         <Pagination
           isCompact
@@ -302,11 +275,9 @@ export default function DiscountList({ discounts, refresh }) {
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
         selectedKeys={selectedKeys}
-        selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
-        onSelectionChange={setSelectedKeys}
         onSortChange={(descriptor) => setSortDescriptor(descriptor)}
       >
         <TableHeader columns={headerColumns}>
