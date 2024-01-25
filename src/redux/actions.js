@@ -110,3 +110,39 @@ export const removeLineFromSaleOrder = (productID) => ({
 export const removeAllLinesFromSaleOrder = () => ({
   type: "removeAllLinesFromSaleOrder",
 });
+
+export const addDateToSaleOrder = (orderDate) => {
+  return {
+    type: "addDateToSaleOrder",
+    payload: {
+      orderDate,
+    },
+  };
+};
+
+export const addCustomerToSaleOrder = (customer) => {
+  return {
+    type: "addPartnerToSaleOrder",
+    payload: {
+      customer,
+    },
+  };
+};
+
+export const addLocationToSaleOrder = (location) => {
+  return {
+    type: "addLocationToSaleOrder",
+    payload: {
+      location,
+    },
+  };
+};
+
+export const addNoteToSaleOrder = (note) => {
+  return {
+    type: "addNoteToSaleOrder",
+    payload: {
+      note,
+    },
+  };
+};

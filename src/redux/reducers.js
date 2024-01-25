@@ -98,7 +98,7 @@ const orderReducers = (state = [], { type, payload }) => {
 };
 
 const INIT_SALEORDER_STATE = {
-  orderDate: new Date(),
+  orderDate: new Date().toISOString().split('T')[0],
   user: null,
   partner: null,
   location: null,
@@ -111,6 +111,22 @@ const INIT_SALEORDER_STATE = {
 
 const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
   switch (type) {
+    case "addDateToSaleOrder": {
+      let { orderDate } = payload;
+      return { ...state, orderDate };
+    }
+    case "addPartnerToSaleOrder": {
+      let { customer } = payload;
+      return { ...state, partner: customer };
+    }
+    case "addLocationToSaleOrder": {
+      let { location } = payload;
+      return { ...state, location: location };
+    }
+    case "addNoteToSaleOrder": {
+      let { note } = payload;
+      return { ...state, note: note };
+    }
     case "addLineToSaleOrder": {
       let { line } = payload;
 
@@ -178,10 +194,9 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
         ...state,
         lines: state.lines.filter((item) => item.product.id !== productID),
         total: state.total - lineToRemove.subTotal,
-        taxTotal: state.taxTotal - lineToRemove.taxTotal,
+        taxTotal: state.taxTotal - lineToRemove.subTaxTotal,
       };
     }
-
     case "removeAllLinesFromSaleOrder":
       return INIT_SALEORDER_STATE;
     default:

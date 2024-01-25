@@ -17,11 +17,10 @@ const persitedReducer = persistReducer(persistConfig, reducers);
 
 const store = createStore(
   persitedReducer,
-  applyMiddleware(thunk),
-  // typeof window !== "undefined"
-  //   ? window.__REDUX_DEVTOOLS_EXTENSION__ &&
-  //       window.__REDUX_DEVTOOLS_EXTENSION__()
-  //   : null
+  typeof window !== "undefined"
+    ? window.__REDUX_DEVTOOLS_EXTENSION__ &&
+        window.__REDUX_DEVTOOLS_EXTENSION__()
+    : null
 );
 
 const persistor = persistStore(store);

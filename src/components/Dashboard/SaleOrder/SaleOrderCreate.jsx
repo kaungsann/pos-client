@@ -14,7 +14,11 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import {
+  addCustomerToSaleOrder,
+  addDateToSaleOrder,
   addLineToSaleOrder,
+  addLocationToSaleOrder,
+  addNoteToSaleOrder,
   removeData,
   removeLineFromSaleOrder,
 } from "../../../redux/actions";
@@ -31,17 +35,12 @@ import {
 } from "@nextui-org/react";
 
 export default function SaleOrderCreate() {
-  let count = 0;
   const [products, setProducts] = useState([]);
   const [locations, setLocations] = useState([]);
   const [partners, setPartners] = useState([]);
   const [discounts, setDiscounts] = useState([]);
-
+  
   const [paymentType, setPaymentType] = useState("cash");
-  const [partner, setPartner] = useState("");
-  const [location, setLocation] = useState("");
-  const [date, setDate] = useState("");
-  const [note, setNote] = useState("");
 
   const [refreshIconRotation, setRefreshIconRotation] = useState(false);
   const [partIconRotation, setPartIconRotation] = useState(false);
@@ -126,12 +125,8 @@ export default function SaleOrderCreate() {
 
     const data = {
       ...saleOrderData,
-      orderDate: date,
       user: userData._id,
-      partner: partner,
-      location: location,
       state: "pending",
-      note: note,
     };
 
     console.log(data);
@@ -259,15 +254,15 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                     label="PaymentType"
                     name="payment"
-                    selectedKeys={[paymentType]}
+                    selectedKeys={[paymentType]?.filter(Boolean) || []}
                     placeholder="Select Payment Type"
                     onChange={(e) => {
                       setPaymentType(e.target.value);
                     }}
                     className="max-w-xs"
                   >
-                    <SelectItem value="bank">Bank</SelectItem>
-                    <SelectItem value="cash">Cash</SelectItem>
+                    <SelectItem value="bank" key="bank">Bank</SelectItem>
+                    <SelectItem value="cash" key="cash">Cash</SelectItem>
                   </Select>
                 </div>
               </div>
@@ -276,10 +271,10 @@ export default function SaleOrderCreate() {
                   type="date"
                   name="expiredAt"
                   label="Order Date"
+                  value={saleOrderData.orderDate}
                   placeholder="enter date"
                   labelPlacement="outside"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
+                  onChange={(e) => dispatch(addDateToSaleOrder(e.target.value))}
                 />
               </div>
               <div className="flex">
@@ -288,8 +283,11 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                     label="Partner"
                     name="partner"
+                    selectedKeys={[saleOrderData.partner]?.filter(Boolean) || []}
                     placeholder="Select partner"
-                    onChange={(e) => setPartner(e.target.value)}
+                    onChange={(e) =>
+                      dispatch(addCustomerToSaleOrder(e.target.value))
+                    }
                     className="max-w-xs"
                   >
                     {partners.map((p) => (
@@ -320,8 +318,11 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                     label="Location"
                     name="location"
+                    selectedKeys={[saleOrderData.location]?.filter(Boolean) || []}
                     placeholder="Select an location"
-                    onChange={(e) => setLocation(e.target.value)}
+                    onChange={(e) =>
+                      dispatch(addLocationToSaleOrder(e.target.value))
+                    }
                     className="max-w-xs"
                   >
                     {locations.map((ct) => (
@@ -351,8 +352,8 @@ export default function SaleOrderCreate() {
                   type="text"
                   label="Note"
                   name="note"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
+                  value={saleOrderData.note}
+                  onChange={(e) => dispatch(addNoteToSaleOrder(e.target.value))}
                   placeholder="Enter Note..."
                   labelPlacement="outside"
                 />
@@ -377,6 +378,7 @@ export default function SaleOrderCreate() {
                     label="Product"
                     name="product"
                     placeholder="Select Product"
+                    selectedKeys={[line.product.id]?.filter(Boolean) || []}
                     onChange={(e) => {
                       const selectedProduct = products.find(
                         (pt) => pt.id === e.target.value
@@ -568,13 +570,13 @@ export default function SaleOrderCreate() {
                   <TableColumn>Discount</TableColumn>
                   <TableColumn>Tax Total</TableColumn>
                   <TableColumn>Discount Total</TableColumn>
-                  <TableColumn>SubTotal</TableColumn>
+                  <TableColumn>SubTotal (Inc. Tax)</TableColumn>
                   <TableColumn>Delete</TableColumn>
                 </TableHeader>
                 <TableBody>
                   {saleOrderData.lines.length > 0 &&
                     saleOrderData.lines.map((line) => (
-                      <TableRow key={count + 1}>
+                      <TableRow key={line.product?.id}>
                         <TableCell>{line.product?.name}</TableCell>
                         <TableCell>{line.product?.barcode}</TableCell>
                         <TableCell>{line.product?.salePrice}</TableCell>
@@ -602,13 +604,13 @@ export default function SaleOrderCreate() {
             <div className="flex flex-col w-full">
               <div className="flex mt-8 justify-self-end">
                 <h1 className="text-lg font-semibold">
-                  Discount Total :{" "}
+                  Discount Total :
                   <span>{saleOrderData.discountTotal.toFixed(2) ?? 0}</span>
                 </h1>
               </div>
               <div className="flex mt-4 justify-self-end">
                 <h1 className="text-lg font-semibold">
-                  Tax Total :{" "}
+                  Tax Total :
                   <span>{saleOrderData.taxTotal.toFixed(2) ?? 0}</span>
                 </h1>
               </div>
