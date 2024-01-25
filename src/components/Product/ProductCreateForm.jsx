@@ -13,7 +13,6 @@ import axios from "axios";
 
 export default function ProductCreateForm() {
   const [categories, setCatgs] = useState([]);
-  const [taxs, setTaxs] = useState([]);
   const [isSelected, setIsSelected] = useState(false);
   const [selectFile, setSelectedFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -35,7 +34,6 @@ export default function ProductCreateForm() {
   };
   const [product, setProduct] = useState(productDoc);
   const [updateProduct, setUpdateProduct] = useState({});
-  const [discount, setDiscount] = useState([]);
 
   const token = useSelector((state) => state.IduniqueData);
   const navigate = useNavigate();
@@ -124,7 +122,7 @@ export default function ProductCreateForm() {
             dipatch(removeData(null));
           }
 
-          toast.error(message);
+          toast.error("Unexpected Error Occured");
         } else {
           navigate("/admin/products/all");
         }
@@ -169,41 +167,6 @@ export default function ProductCreateForm() {
 
       setCatgs(filteredCategory);
     };
-
-    const fetchTaxs = async () => {
-      const { data } = await axios.get(BASE_URL + `/tax`, {
-        headers: {
-          Authorization: `Bearer ${token.accessToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (data?.message == "Token Expire , Please Login Again") {
-        dipatch(removeData(null));
-      }
-      const filteredTax = data.data.filter((tx) => tx.active === true);
-
-      setTaxs(filteredTax);
-    };
-
-    const fetchDiscountData = async () => {
-      try {
-        const response = await axios.get(BASE_URL + `/discount`, {
-          headers: {
-            Authorization: `Bearer ${token.accessToken}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        const validDiscountFilter = response.data.data.filter(
-          (dis) => dis.active === true
-        );
-
-        setDiscount(validDiscountFilter);
-      } catch (error) {
-        console.error("Error fetching discount:", error);
-      }
-    };
-
     const fetchData = async () => {
       try {
         await fetchCategories();
@@ -211,12 +174,9 @@ export default function ProductCreateForm() {
         console.error("Error fetching products:", error);
       }
     };
-    fetchCategories();
-    fetchTaxs();
     fetchData();
-    fetchDiscountData();
   }, []);
-
+  
   return (
     <>
       <ToastContainer
@@ -329,9 +289,9 @@ export default function ProductCreateForm() {
                   name="category"
                   placeholder="Select category"
                   selectedKeys={
-                    product.category
-                      ? [product.category._id || product.category]
-                      : false
+                    [product.category?._id]?.filter(
+                      Boolean
+                    ) || []
                   }
                   onChange={(e) => inputChangeHandler(e)}
                 >
@@ -466,7 +426,7 @@ export default function ProductCreateForm() {
                   type="number"
                   name="marginProfit"
                   required
-                  label="Margin Profit"
+                  label="Margin Profit %"
                   value={product.marginProfit}
                   placeholder="0.00"
                   labelPlacement="outside"

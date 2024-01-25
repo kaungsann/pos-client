@@ -135,7 +135,7 @@ export default function ProductDetails() {
                         </div>
                         <div>
                           <h4 className="text-md text-slate-500">
-                            Expire-Date
+                            Expired Date
                           </h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
                             {product.expiredAt
@@ -161,7 +161,7 @@ export default function ProductDetails() {
                         </div>
                         <div>
                           <h4 className="text-md text-slate-500">
-                            Product-Ref
+                            Product Ref
                           </h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
                             {product.ref ? product.ref : "None"}
@@ -176,14 +176,14 @@ export default function ProductDetails() {
                           </h2>
                         </div>
                         <div className="my-6">
-                          <h4 className="text-md text-slate-500">Sale-Price</h4>
+                          <h4 className="text-md text-slate-500">Sale Price</h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
                             {product.salePrice ? product.salePrice : "None"}
                           </h2>
                         </div>
                         <div>
                           <h4 className="text-md text-slate-500">
-                            Purchase-Price
+                            Purchase Price (Cost)
                           </h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
                             {product.purchasePrice
@@ -194,7 +194,7 @@ export default function ProductDetails() {
                       </div>
                       <div>
                         <div>
-                          <h4 className="text-md text-slate-500">Profit</h4>
+                          <h4 className="text-md text-slate-500">Profit %</h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
                             {product.marginProfit
                               ? product.marginProfit

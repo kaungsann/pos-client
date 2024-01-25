@@ -48,7 +48,7 @@ export default function ProductList({ products, fetchProducts }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "name",
+    column: "",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -291,7 +291,7 @@ export default function ProductList({ products, fetchProducts }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Products found"} items={sortedItems}>
+        <TableBody emptyContent={"No Product found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -319,4 +319,5 @@ export default function ProductList({ products, fetchProducts }) {
 
 ProductList.propTypes = {
   products: PropTypes.array,
+  fetchProducts: PropTypes.func,
 };
