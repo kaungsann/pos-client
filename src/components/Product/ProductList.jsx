@@ -48,7 +48,7 @@ export default function ProductList({ products, fetchProducts }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "name",
+    column: "",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -94,7 +94,6 @@ export default function ProductList({ products, fetchProducts }) {
       },
       token.accessToken
     );
-    console.log("res data is a", response);
     if (response.status) {
       setSelectedKeys([]);
       fetchProducts();

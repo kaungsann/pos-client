@@ -68,7 +68,7 @@ export default function PurchaseList({ purchases, refresh }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "Order Date",
+    column: "",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);

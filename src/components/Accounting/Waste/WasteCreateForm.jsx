@@ -13,6 +13,8 @@ export default function WasteCreateForm() {
   const [location, setLocation] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [locationId, setLocationId] = useState("");
+
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
@@ -22,26 +24,32 @@ export default function WasteCreateForm() {
     ref: "",
     date: "",
     product: "",
-    location: "",
+    location: locationId,
     amount: null,
   });
-  console.log("res data is ", formData);
+  console.log("form data is ", formData);
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    // setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleCheckboxChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.checked });
+    const { name, value } = e.target;
+
+    if (name === "location") {
+      setLocationId(value);
+    }
+
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
+      const updatedFormData = { ...formData, location: locationId };
+
       const response = await sendJsonToApi(
         "/waste",
-        formData,
+        updatedFormData,
         token.accessToken
       );
 
@@ -62,20 +70,43 @@ export default function WasteCreateForm() {
     }
   };
 
+  const getStock = async () => {
+    const resData = await getApi("/stock", token.accessToken);
+
+    let selectedLocationId;
+
+    if (locationId === "") {
+      selectedLocationId = null;
+    } else {
+      selectedLocationId = locationId;
+    }
+
+    const filteredStock = resData.data.filter(
+      (item) =>
+        item.active === true &&
+        (!selectedLocationId || item.location._id === selectedLocationId)
+    );
+
+    if (selectedLocationId !== null) {
+      setProduct([...filteredStock.map((item) => item.product)]);
+    } else {
+      setProduct([]);
+    }
+  };
+
+  console.log("location id is a", locationId);
+  console.log("product in array is a", product);
+  console.log("location in array is a", location);
+
   useEffect(() => {
-    const getProduct = async () => {
-      const resData = await getApi("/product", token.accessToken);
-      const filteredProduct = resData.data.filter((pt) => pt.active === true);
-      setProduct(filteredProduct);
-    };
     const getLocation = async () => {
       const resData = await getApi("/location", token.accessToken);
       const filteredLocation = resData.data.filter((la) => la.active === true);
       setLocation(filteredLocation);
     };
-    getProduct();
+    getStock();
     getLocation();
-  }, []);
+  }, [locationId]);
 
   return (
     <>
@@ -128,15 +159,6 @@ export default function WasteCreateForm() {
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
-                {/* <Input
-                  type="text"
-                  label="Name"
-                  name="name"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange(e)}
-                  placeholder="Enter fixed cost name..."
-                  labelPlacement="outside"
-                /> */}
                 <Select
                   labelPlacement="outside"
                   label="Waste"
@@ -187,7 +209,7 @@ export default function WasteCreateForm() {
                 className="w-60"
               >
                 {product.map((pt) => (
-                  <SelectItem key={pt.id} value={pt.id}>
+                  <SelectItem key={pt._id} value={pt._id}>
                     {pt.name}
                   </SelectItem>
                 ))}
@@ -196,10 +218,10 @@ export default function WasteCreateForm() {
                 <Input
                   type="number"
                   name="amount"
-                  label="Amount"
+                  label="Quantity"
                   value={formData.amount}
                   onChange={(e) => handleInputChange(e)}
-                  placeholder="Enter amount..."
+                  placeholder="Enter quantity..."
                   labelPlacement="outside"
                 />
               </div>

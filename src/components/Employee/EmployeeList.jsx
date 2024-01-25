@@ -45,7 +45,7 @@ export default function EmployeeList({ employees, onDeleteSuccess }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "name",
+    column: "",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);

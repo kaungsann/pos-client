@@ -48,7 +48,7 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
