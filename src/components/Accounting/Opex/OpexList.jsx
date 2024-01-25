@@ -71,9 +71,13 @@ export default function OpexList({ opexs, refresh }) {
       `/opex/${id}?state=approved`,
       token.accessToken
     );
-    if (response.message === "Updated successfully!") {
+    if (response.success === false) {
+      toast.error(response.message);
+    } else {
       refresh();
+      toast.success(response.message);
     }
+    setLoadData(false);
   };
 
   const changeRejectOpex = async (id) => {

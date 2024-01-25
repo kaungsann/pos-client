@@ -33,7 +33,7 @@ export default function PosItems() {
 
   const { location, role } = useSelector((state) => state.loginData);
 
-  console.log("user data is a", location);
+  console.log("category id  is a", selectedCategory);
 
   const token = useSelector((state) => state.IduniqueData);
   const selectProduct = useSelector((state) => state.orderData);
@@ -61,7 +61,7 @@ export default function PosItems() {
     }
     if (resData.status) {
       setLoading(false);
-      const filteredProduct = resData.data.filter((pd) => pd.active === true);
+      //const filteredProduct = resData.data.filter((pd) => pd.active === true);
       // setProducts(filteredProduct);
     } else {
       setLoading(true);
@@ -253,11 +253,7 @@ export default function PosItems() {
               )}
             </ul>
           </div>
-          {/* {loadingData && (
-            <div className="w-10/12 mx-auto mt-56 flex justify-center">
-              <Spinner size="lg" />
-            </div>
-          )} */}
+
           {loadingData == false && products.length === 0 && (
             <h2 className="text-center mt-36 text-xl text-slate-600 font-semibold">
               Please Select a location
@@ -272,7 +268,7 @@ export default function PosItems() {
                 )
                 .filter((item) =>
                   selectedCategory
-                    ? item.category && item.category._id === selectedCategory
+                    ? item.category && item.category === selectedCategory
                     : true
                 )
                 .map((pd) => <Card key={pd.id} product={pd} />)
