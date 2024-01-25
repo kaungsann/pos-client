@@ -17,7 +17,7 @@ import { Icon } from "@iconify/react";
 
 export default function PurchaseView() {
   const [totalAmount, setTotalAmount] = useState(0);
-  const [totalAmountWithTax, setTotalAmountWithTax] = useState(0);
+  // const [totalAmountWithTax, setTotalAmountWithTax] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const [orderLines, setOrderLines] = useState([]);
@@ -36,7 +36,7 @@ export default function PurchaseView() {
     if (resData.status) {
       setTotalAmount(resData.data.purchases.totalAmount);
       setTotalOrders(resData.data.purchases.totalOrders);
-      setTotalAmountWithTax(resData.data.purchases.totalAmountWithTax);
+      // setTotalAmountWithTax(resData.data.purchases.totalAmountWithTax);
       setTotalItems(resData.data.purchases.totalItems);
       setOrderLines(resData.data.purchases.allLines);
       //setPopularProducts(resData.data.purchases.topProducts);
@@ -190,14 +190,14 @@ export default function PurchaseView() {
 
             <div>
               <h3 className="font-bold text-slate-600 text-lg">
-                Total Cost <span className="text-sm">(Inc. Tax)</span>
+                Total Cost
               </h3>
               <h4 className="text-lg font-bold text-slate-600">
-                {totalAmountWithTax}
+                {totalAmount}
               </h4>
             </div>
           </div>
-          <div className="px-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          {/* <div className="px-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icon-park-solid:buy"
               className="text-4xl text-cyan-700 font-semibold"
@@ -208,7 +208,7 @@ export default function PurchaseView() {
                 {totalAmountWithTax - totalAmount}
               </h4>
             </div>
-          </div>
+          </div> */}
           <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icons8:buy"
@@ -256,8 +256,7 @@ export default function PurchaseView() {
           <div className="w-full flex my-4">
             <div className="w-3/5 bg-white p-2 rounded-md shadow-md">
               <h3 className="text-slate-500 font-semibold text-lg mb-6">
-                Total Cost <span className="text-sm">(Inc. Tax)</span> by
-                Product
+                Total Cost by Product
               </h3>
               <ResponsiveContainer height={300} className="mx-auto">
                 <BarChart
@@ -283,7 +282,7 @@ export default function PurchaseView() {
             </div>
             <div className="w-2/5 ml-4 bg-white p-2 rounded-md shadow-md">
               <h3 className="text-slate-500 font-semibold text-lg mb-6">
-                Total Cost <span className="text-sm">(Inc. Tax)</span> by Vendor
+                Total Cost by Vendor
               </h3>
               <ResponsiveContainer height={300} className="mx-auto">
                 <BarChart
@@ -426,7 +425,7 @@ export default function PurchaseView() {
                     Order Date
                   </th>
                   <th className="lg:px-4 py-2 text-center text-slate-500">
-                    Total (Inc. Tax)
+                    Total Cost
                   </th>
                   <th className="lg:px-4 py-2 text-center text-slate-500">
                     Address
