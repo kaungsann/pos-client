@@ -91,20 +91,22 @@ export const removeDiscount = () => ({
   type: "removeDiscount",
 });
 
-export const addProduct = (product, discountValue, quantity) => {
+export const addLineToSaleOrder = (line) => {
   return {
-    type: "addProduct",
-    payload: { product, discountValue, quantity },
+    type: "addLineToSaleOrder",
+    payload: {
+      line,
+    },
   };
 };
 
-export const removeProduct = (productID) => ({
-  type: "removeSaleDiscountItem",
+export const removeLineFromSaleOrder = (productID) => ({
+  type: "removeLineFromSaleOrder",
   payload: {
     productID,
   },
 });
 
-export const removeAllSaleDiscount = () => ({
-  type: "removeAllDiscounts",
+export const removeAllLinesFromSaleOrder = () => ({
+  type: "removeAllLinesFromSaleOrder",
 });

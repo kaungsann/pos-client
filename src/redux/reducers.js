@@ -4,11 +4,6 @@ const initialState = {
   pageRefresh: false,
 };
 
-const initialStates = {
-  loginData: null,
-  IduniqueData: null,
-};
-
 const idReducers = (state = null, { type, payload }) => {
   switch (type) {
     case "idAdd":
@@ -89,7 +84,7 @@ const orderReducers = (state = [], { type, payload }) => {
       let { productID } = payload;
       return state.map((item) => {
         if (item.id === productID) {
-          const { discount, ...itemWithoutDiscount } = item;
+          const { ...itemWithoutDiscount } = item;
           return itemWithoutDiscount;
         }
         return item;
@@ -102,54 +97,93 @@ const orderReducers = (state = [], { type, payload }) => {
   }
 };
 
-const saleOrderDiscountReducers = (state = [], { type, payload }) => {
+const INIT_SALEORDER_STATE = {
+  orderDate: new Date(),
+  user: null,
+  partner: null,
+  location: null,
+  lines: [],
+  note: "",
+  taxTotal: 0,
+  discountTotal: 0,
+  total: 0,
+};
+
+const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
   switch (type) {
-    case "addProduct":
-      let { product, discountValue, quantity } = payload;
-      const existingProductIndex = state.findIndex(
-        (item) => item.id === product.id
+    case "addLineToSaleOrder": {
+      let { line } = payload;
+
+      const existingLineIndex = state.lines.findIndex(
+        (existingLine) => existingLine.product.id === line.product.id
       );
 
-      if (existingProductIndex !== -1) {
-        // If the product already exists in state, update the discountValue
-        return state.map((item, index) => {
-          if (index === existingProductIndex) {
-            return {
-              ...item,
-              discount: discountValue ? discountValue : {},
-              qty: (item.qty += parseInt(quantity)),
-            };
-          }
-          return item;
-        });
-      } else {
-        // If the product is not in state, add it with the discountValue
-        return [
+      if (existingLineIndex !== -1) {
+        const updatedLines = [...state.lines];
+        updatedLines[existingLineIndex] = {
+          ...updatedLines[existingLineIndex],
+          qty: updatedLines[existingLineIndex].qty + line.qty,
+          subTotal: updatedLines[existingLineIndex].subTotal + line.subTotal,
+          subTaxTotal:
+            updatedLines[existingLineIndex].subTaxTotal + line.subTaxTotal,
+          subDiscountTotal:
+            updatedLines[existingLineIndex].subDiscountTotal +
+            line.subDiscountTotal,
+        };
+
+        const newTotal = updatedLines.reduce(
+          (total, line) => total + line.subTotal,
+          0
+        );
+
+        const newTaxTotal = updatedLines.reduce(
+          (total, line) => total + line.subTaxTotal,
+          0
+        );
+
+        const newDiscountTotal = updatedLines.reduce(
+          (total, line) => total + line.subDiscountTotal,
+          0
+        );
+
+        return {
           ...state,
-          { ...product, discount: discountValue, qty: parseInt(quantity) },
-        ];
+          lines: updatedLines,
+          total: newTotal,
+          discountTotal: newDiscountTotal,
+          taxTotal: newTaxTotal,
+        };
+      } else {
+        const newTotal = state.total + line.subTotal;
+        const newTaxTotal = state.taxTotal + line.subTaxTotal;
+        const newDiscountTotal = state.discountTotal + line.subDiscountTotal;
+
+        return {
+          ...state,
+          lines: [...state.lines, line],
+          total: newTotal,
+          taxTotal: newTaxTotal,
+          discountTotal: newDiscountTotal,
+        };
       }
-    case "updateDiscount":
-      const { productIds, discountValues } = payload;
-      return state.map((item) => {
-        if (item.id === productID) {
-          return {
-            ...item,
-            discount: discountValues ? discountValues : {},
-            // Update other properties if needed
-          };
-        }
-        return item;
-      });
-
-    case "removeSaleDiscountItem":
+    }
+    case "removeLineFromSaleOrder": {
       let { productID } = payload;
-      // Remove the item with the specified productID
-      return state.filter((item) => item.id !== productID);
+      console.log(productID);
+      const lineToRemove = state.lines.find(
+        (line) => line.product.id === productID
+      );
 
-    case "removeAllDiscounts":
-      return [];
+      return {
+        ...state,
+        lines: state.lines.filter((item) => item.product.id !== productID),
+        total: state.total - lineToRemove.subTotal,
+        taxTotal: state.taxTotal - lineToRemove.taxTotal,
+      };
+    }
 
+    case "removeAllLinesFromSaleOrder":
+      return INIT_SALEORDER_STATE;
     default:
       return state;
   }
@@ -161,7 +195,7 @@ const reducers = combineReducers({
   orderData: orderReducers,
   orderCheck: orderValidReducers,
   refresh: refreshReducer,
-  discount: saleOrderDiscountReducers,
+  saleOrder: saleOrderReducer,
 });
 
 export default reducers;
