@@ -170,7 +170,7 @@ export default function AdjustmentList({ adjustments }) {
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${totalProducts} selected`}
+            : `${selectedKeys.size} of ${totalProducts} `}
         </span>
         <Pagination
           isCompact

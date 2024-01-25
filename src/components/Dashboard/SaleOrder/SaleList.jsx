@@ -202,11 +202,6 @@ export default function SaleList({ sales }) {
     }
   }, []);
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
-  }, []);
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -271,7 +266,7 @@ export default function SaleList({ sales }) {
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            : `${selectedKeys.size} of ${filteredItems.length} `}
         </span>
         <Pagination
           isCompact

@@ -285,7 +285,7 @@ export default function PurchaseList({ purchases, refresh }) {
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${totalLine} selected`}
+            : `${selectedKeys.size} of ${totalLine} `}
         </span>
         <Pagination
           isCompact
