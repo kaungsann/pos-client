@@ -98,7 +98,7 @@ const orderReducers = (state = [], { type, payload }) => {
 };
 
 const INIT_SALEORDER_STATE = {
-  orderDate: new Date().toISOString().split('T')[0],
+  orderDate: new Date().toISOString().split("T")[0],
   user: null,
   partner: null,
   location: null,
@@ -143,8 +143,7 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
           subTaxTotal:
             updatedLines[existingLineIndex].subTaxTotal + line.subTaxTotal,
           subDiscTotal:
-            updatedLines[existingLineIndex].subDiscTotal +
-            line.subDiscTotal,
+            updatedLines[existingLineIndex].subDiscTotal + line.subDiscTotal,
         };
 
         const newTotal = updatedLines.reduce(

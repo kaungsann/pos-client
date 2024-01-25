@@ -8,12 +8,8 @@ export default function Card({ product }) {
   const isHave = useSelector((state) => state.orderCheck);
 
   const addCard = (product) => {
-    console.log("product card is a", product);
     if (!isHave) {
       const existingProduct = products.find((pd) => pd._id === product._id);
-
-      console.log("exist prodct", existingProduct);
-
       if (existingProduct) {
         dispatch(
           updateItemQuantity(
