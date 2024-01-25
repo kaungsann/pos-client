@@ -153,8 +153,6 @@ function WasteTemplate() {
     [waste, filteredKeywords]
   );
 
-  console.log("waste is a", waste);
-
   return (
     <>
       <div className="flex justify-between items-center my-3">

@@ -286,7 +286,7 @@ export default function WareHouseList({ warehouses }) {
   return (
     <>
       <Table
-        aria-label="Example table with custom cells, pagination and sorting"
+        aria-label="Warehouse Table"
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"

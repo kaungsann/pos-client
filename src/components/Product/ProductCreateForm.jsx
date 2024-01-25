@@ -328,11 +328,12 @@ export default function ProductCreateForm() {
                   label="Category"
                   name="category"
                   placeholder="Select category"
-                  selectedKeys={
-                    product.category
-                      ? [product.category._id || product.category]
-                      : false
-                  }
+                  // selectedKeys={
+                  //   product.category
+                  //     ? [product.category._id || product.category]
+                  //     : false
+                  // }
+                  selectedKeys={product.category ? [product.category._id] : []}
                   onChange={(e) => inputChangeHandler(e)}
                 >
                   {categories.map((ct) => (
@@ -416,6 +417,7 @@ export default function ProductCreateForm() {
                   // selectedKeys={
                   //   product.tax ? [product.tax.id || product.tax] : false
                   // }
+                     // selectedKeys={product.tax || []}
                   selectionMode="multiple"
                   onChange={(e) => inputChangeHandler(e)}
                   className="max-w-xs"

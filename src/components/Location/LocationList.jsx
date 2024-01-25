@@ -108,14 +108,17 @@ export default function LocationList({ locations, refresh }) {
         </User>
       ),
       actions: () => (
-        <div className="relative flex justify-start items-center gap-2">
+        <div
+          className="relative flex justify-start items-center gap-2"
+          aria-label="Dynamic Actions"
+        >
           <Dropdown>
             <DropdownTrigger>
               <Button isIconOnly size="sm" variant="light">
                 <Icon icon="fluent:grid-dots-28-regular" />
               </Button>
             </DropdownTrigger>
-            <DropdownMenu>
+            <DropdownMenu aria-label="Dynamic Actions">
               <DropdownItem
                 onPress={() => {
                   navigate(`/admin/locations/detail/${location.id}`);

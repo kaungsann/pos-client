@@ -104,7 +104,6 @@ export default function SaleView() {
       `/orders/totals?startDate=${todayDate.toString()}`,
       token.accessToken
     );
-    console.log("res data is a", resData);
     if (resData.status) {
       setTotalAmount(resData.data.sales.totalAmountWithTax);
       setTotalOrders(resData.data.sales.totalOrders);
@@ -128,7 +127,6 @@ export default function SaleView() {
   const todayStock = stock.filter(
     (stk) => format(new Date(stk.updatedAt), "MM-dd-yyyy") === todayDate
   );
-  console.log("orderlines res data is a", orderLines);
 
   const orderList =
     orderLines && orderLines.length > 0
@@ -137,10 +135,6 @@ export default function SaleView() {
             orderLines.find((line) => line.orderId?._id === orderId)?.orderId
         )
       : [];
-
-  console.log("orderlist is a", orderList);
-
-  console.log("orderlines isa ", orderLines);
 
   useEffect(() => {
     // Count the quantity sold for each product
@@ -312,7 +306,7 @@ export default function SaleView() {
                     Order Date
                   </th>
                   <th className="lg:px-4 py-2 text-center text-slate-800">
-                    Order Total
+                    Total
                   </th>
                   <th className="lg:px-4 py-2 text-center text-slate-800">
                     Address

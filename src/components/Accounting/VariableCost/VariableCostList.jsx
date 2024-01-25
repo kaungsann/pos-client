@@ -201,7 +201,10 @@ export default function VeriableCostList({ opexs, refresh }) {
         return <h3>{format(new Date(opexs.createdAt), "yyyy-MM-dd")}</h3>;
       case "actions":
         return (
-          <div className="flex justify-between items-center">
+          <div
+            className="flex justify-between items-center"
+            aria-label="action"
+          >
             <div className="relative flex justify-start items-center gap-2">
               <Dropdown>
                 <DropdownTrigger>
@@ -209,7 +212,7 @@ export default function VeriableCostList({ opexs, refresh }) {
                     <Icon icon="fluent:grid-dots-28-regular" />
                   </Button>
                 </DropdownTrigger>
-                <DropdownMenu>
+                <DropdownMenu aria-label="action">
                   <DropdownItem
                     onPress={() => {
                       navigate(`/admin/variable-cost/detail/${opexs.id}`);

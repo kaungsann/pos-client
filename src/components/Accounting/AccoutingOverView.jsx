@@ -241,7 +241,7 @@ const AccoutingOverView = () => {
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <Listbox>
+              <Listbox aria-label="Select an option">
                 <ListboxItem
                   className=" rounded-sm"
                   onClick={() => handleDateSelection("This Weekend")}
@@ -321,6 +321,7 @@ const AccoutingOverView = () => {
         <h2 className="text-xl text-slate-600 font-semibold mb-6">
           Statement Report
         </h2>
+
         <table className="w-full bg-white rounded-sm shadow-md">
           <tbody>
             {[
@@ -334,11 +335,8 @@ const AccoutingOverView = () => {
               .map((type) => account.find((acc) => acc.type === type))
               .filter((acc) => acc && !selectedKeys.has(acc.type))
               .map((acc, index) => (
-                <div
-                  key={index}
-                  className="w-full px-4 py-1.5 hover:bg-slate-100 border-b-gray-200 border-b-2"
-                >
-                  <tr className="flex justify-between items-center">
+                <React.Fragment key={index}>
+                  <tr className="flex justify-between items-center p-3">
                     <td className="text-slate-500 font-semibold items-center">
                       {acc.type}
                       {acc.subRow && acc.subRow.length > 0 && (
@@ -373,9 +371,9 @@ const AccoutingOverView = () => {
                       <td className="w-full">
                         {acc.subRow && acc.subRow.length > 0 && (
                           <>
-                            {acc.subRow.map((sub, index) => (
+                            {acc.subRow.map((sub, subIndex) => (
                               <div
-                                key={index}
+                                key={subIndex}
                                 className="flex w-full justify-between my-2 hover:bg-blue-100 p-2 text-slate-500 font-semibold"
                               >
                                 <h2 className="mx-6 text-slate-600">
@@ -403,9 +401,9 @@ const AccoutingOverView = () => {
                       </td>
                     </tr>
                   )}
-                </div>
+                </React.Fragment>
               ))}
-            <div className="w-full flex justify-between">
+            <tr className="w-full flex justify-between">
               <td className="px-4 py-2 text-slate-600 font-semibold text-lg">
                 Total Balance
               </td>
@@ -415,7 +413,7 @@ const AccoutingOverView = () => {
                   .reduce((total, row) => total + row.balance, 0)
                   .toFixed()}
               </td>
-            </div>
+            </tr>
           </tbody>
         </table>
       </div>
