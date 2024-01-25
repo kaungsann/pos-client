@@ -57,7 +57,7 @@ export default function SaleOrderCreate() {
     discount: { id: "", amount: 0 },
     subTotal: 0,
     subTaxTotal: 0,
-    subDiscountTotal: 0,
+    subDiscTotal: 0,
   };
   const [line, setLine] = useState(INIT_LINE_STATE);
 
@@ -445,7 +445,7 @@ export default function SaleOrderCreate() {
                                 (prev.product.salePrice * prev.product.tax) /
                                   100) *
                               qty,
-                            subDiscountTotal:
+                            subDiscTotal:
                               ((prev.product.salePrice * prev.discount.amount) /
                                 100) *
                               qty,
@@ -477,7 +477,7 @@ export default function SaleOrderCreate() {
                             return {
                               ...prev,
                               discount: selectedDiscount,
-                              subDiscountTotal:
+                              subDiscTotal:
                                 ((prev.product.salePrice *
                                   selectedDiscount.amount) /
                                   100) *
@@ -539,9 +539,9 @@ export default function SaleOrderCreate() {
                   <Input
                     type="number"
                     label="Discount Total"
-                    name="subDiscountTotal"
+                    name="subDiscTotal"
                     isDisabled
-                    value={line.subDiscountTotal}
+                    value={line.subDiscTotal}
                     placeholder="Tax"
                     labelPlacement="outside"
                   />
@@ -584,7 +584,7 @@ export default function SaleOrderCreate() {
                         <TableCell>{line.tax.toFixed(2)}</TableCell>
                         <TableCell>{line.discount?.amount}</TableCell>
                         <TableCell>{line.subTaxTotal}</TableCell>
-                        <TableCell>{line.subDiscountTotal}</TableCell>
+                        <TableCell>{line.subDiscTotal}</TableCell>
                         <TableCell>{line.subTotal}</TableCell>
                         <TableCell>
                           <BsTrash

@@ -142,9 +142,9 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
           subTotal: updatedLines[existingLineIndex].subTotal + line.subTotal,
           subTaxTotal:
             updatedLines[existingLineIndex].subTaxTotal + line.subTaxTotal,
-          subDiscountTotal:
-            updatedLines[existingLineIndex].subDiscountTotal +
-            line.subDiscountTotal,
+          subDiscTotal:
+            updatedLines[existingLineIndex].subDiscTotal +
+            line.subDiscTotal,
         };
 
         const newTotal = updatedLines.reduce(
@@ -158,7 +158,7 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
         );
 
         const newDiscountTotal = updatedLines.reduce(
-          (total, line) => total + line.subDiscountTotal,
+          (total, line) => total + line.subDiscTotal,
           0
         );
 
@@ -172,7 +172,7 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
       } else {
         const newTotal = state.total + line.subTotal;
         const newTaxTotal = state.taxTotal + line.subTaxTotal;
-        const newDiscountTotal = state.discountTotal + line.subDiscountTotal;
+        const newDiscountTotal = state.discountTotal + line.subDiscTotal;
 
         return {
           ...state,
