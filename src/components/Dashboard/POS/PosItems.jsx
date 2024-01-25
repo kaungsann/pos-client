@@ -33,8 +33,6 @@ export default function PosItems() {
 
   const { location, role } = useSelector((state) => state.loginData);
 
-  console.log("category id  is a", selectedCategory);
-
   const token = useSelector((state) => state.IduniqueData);
   const selectProduct = useSelector((state) => state.orderData);
   const dipatch = useDispatch();
@@ -161,9 +159,6 @@ export default function PosItems() {
       handleBarcodeDetected(search);
     }
   }, [search, location, loca]);
-
-  console.log("product is a", products);
-  console.log("location id is a", loca);
 
   return (
     <>

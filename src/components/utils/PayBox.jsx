@@ -100,16 +100,14 @@ export default function PayBox({ locationId }) {
   });
 
   const totalCost = subTotal + totalTax;
-  console.log("exist redux pd ", product);
-  const handleDiscountAdd = (name, amount, Id, item) => {
-    console.log("handle discount click", item);
 
+  const handleDiscountAdd = (name, amount, Id, item) => {
     const selectedDiscount = {
       name: name,
       id: Id,
       amount: parseInt(amount, 10),
     };
-    console.log("discount ", selectedDiscount);
+
     const existingProduct = product.find((pd) => pd._id === item._id);
 
     if (existingProduct) {

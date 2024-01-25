@@ -19,6 +19,7 @@ import {
   addLineToSaleOrder,
   addLocationToSaleOrder,
   addNoteToSaleOrder,
+  removeAllLinesFromSaleOrder,
   removeData,
   removeLineFromSaleOrder,
 } from "../../../redux/actions";
@@ -41,6 +42,7 @@ export default function SaleOrderCreate() {
   const [discounts, setDiscounts] = useState([]);
 
   const [paymentType, setPaymentType] = useState("cash");
+  const [locationId, setLocationId] = useState("");
 
   const [refreshIconRotation, setRefreshIconRotation] = useState(false);
   const [partIconRotation, setPartIconRotation] = useState(false);
@@ -112,6 +114,8 @@ export default function SaleOrderCreate() {
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
+  console.log("slae order data is a", saleOrderData);
+
   const createProductApi = async () => {
     setIsLoading(true);
 
@@ -128,7 +132,7 @@ export default function SaleOrderCreate() {
       lines: saleOrderData.lines.map((line) => {
         const modifiedLine = {
           ...line,
-          product: line.product.id,
+          product: line.product._id,
           unitPrice: line.product.salePrice,
         };
         if (line.discount && line.discount.id) {
@@ -141,8 +145,8 @@ export default function SaleOrderCreate() {
       user: userData._id,
       state: "pending",
     };
-    
-    console.log(data);
+
+    console.log("data", data);
 
     try {
       let resData = await sendJsonToApi("/sale", data, token.accessToken);
@@ -175,11 +179,11 @@ export default function SaleOrderCreate() {
     setLocations(filteredLocation);
   }, [token.accessToken]);
 
-  const getProduct = useCallback(async () => {
-    const resData = await getApi("/product", token.accessToken);
-    const filteredProduct = resData.data.filter((pt) => pt.active === true);
-    setProducts(filteredProduct);
-  }, [token.accessToken]);
+  // const getProduct = useCallback(async () => {
+  //   const resData = await getApi("/product", token.accessToken);
+  //   const filteredProduct = resData.data.filter((pt) => pt.active === true);
+  //   setProducts(filteredProduct);
+  // }, [token.accessToken]);
 
   const getPartner = useCallback(async () => {
     const resData = await getApi("/partner", token.accessToken);
@@ -195,6 +199,25 @@ export default function SaleOrderCreate() {
     setDiscounts(filteredDiscount);
   }, [token.accessToken]);
 
+  const getStock = useCallback(
+    async (selectedLocationId) => {
+      const resData = await getApi("/stock", token.accessToken);
+
+      const filteredStock = resData.data.filter(
+        (item) =>
+          item.active === true &&
+          (!selectedLocationId || item.location._id === selectedLocationId)
+      );
+
+      if (selectedLocationId !== null) {
+        setProducts([...filteredStock.map((item) => item.product)]);
+      } else {
+        setProducts([]);
+      }
+    },
+    [token.accessToken]
+  );
+
   const handleAddProduct = () => {
     if (line.product == null) {
       toast.error("you need to selecte the product and add quantity");
@@ -208,9 +231,17 @@ export default function SaleOrderCreate() {
   useEffect(() => {
     getLocation();
     getPartner();
-    getProduct();
+    // getProduct();
     getDiscount();
-  }, [getLocation, getPartner, getProduct, getDiscount]);
+  }, [getLocation, getPartner, getDiscount]);
+
+  useEffect(() => {
+    getStock(locationId);
+  }, [getStock, locationId]);
+
+  console.log("product array is", products);
+
+  console.log("lines array is", saleOrderData);
 
   return (
     <>
@@ -342,7 +373,10 @@ export default function SaleOrderCreate() {
                     }
                     placeholder="Select an location"
                     onChange={(e) =>
-                      dispatch(addLocationToSaleOrder(e.target.value))
+                      dispatch(
+                        addLocationToSaleOrder(e.target.value),
+                        setLocationId(e.target.value)
+                      )
                     }
                     className="max-w-xs"
                   >
@@ -399,11 +433,12 @@ export default function SaleOrderCreate() {
                     label="Product"
                     name="product"
                     placeholder="Select Product"
-                    selectedKeys={[line.product.id]?.filter(Boolean) || []}
+                    selectedKeys={[line.product._id]?.filter(Boolean) || []}
                     onChange={(e) => {
                       const selectedProduct = products.find(
-                        (pt) => pt.id === e.target.value
+                        (pt) => pt._id === e.target.value
                       );
+                      console.log("selectedProduct", selectedProduct);
                       if (selectedProduct) {
                         setLine((prev) => {
                           return {
@@ -431,7 +466,7 @@ export default function SaleOrderCreate() {
                     className="max-w-xs"
                   >
                     {products.map((pt) => (
-                      <SelectItem key={pt.id} value={pt.id}>
+                      <SelectItem key={pt._id} value={pt._id}>
                         {pt.name}
                       </SelectItem>
                     ))}
@@ -597,7 +632,7 @@ export default function SaleOrderCreate() {
                 <TableBody>
                   {saleOrderData.lines.length > 0 &&
                     saleOrderData.lines.map((line) => (
-                      <TableRow key={line.product?.id}>
+                      <TableRow key={line.product?._id}>
                         <TableCell>{line.product?.name}</TableCell>
                         <TableCell>{line.product?.barcode}</TableCell>
                         <TableCell>{line.product?.salePrice}</TableCell>
@@ -612,7 +647,7 @@ export default function SaleOrderCreate() {
                             className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
                             onClick={() =>
                               dispatch(
-                                removeLineFromSaleOrder(line.product?.id)
+                                removeAllLinesFromSaleOrder(line.product?._id)
                               )
                             }
                           />
