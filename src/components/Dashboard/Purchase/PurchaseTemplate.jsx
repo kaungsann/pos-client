@@ -189,7 +189,7 @@ export default function PurchaseTemplate() {
           </div>
         </div>
       </div>
-      <PurchaseList purchases={filteredPurchase} refresh={fetchPurchaseData} />
+      <PurchaseList orders={filteredPurchase} refresh={fetchPurchaseData} />
     </>
   );
 }
