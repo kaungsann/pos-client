@@ -230,7 +230,9 @@ function PersonalEdit() {
               ref={fileInputRef}
               onChange={handleFileInputChange}
             />
-            <span className="text-white font-semibold text-md">Upload</span>
+            <span className="text-white cursor-pointer font-semibold text-md">
+              Upload
+            </span>
           </div>
         </div>
 

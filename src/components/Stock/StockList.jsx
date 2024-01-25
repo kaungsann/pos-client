@@ -32,7 +32,7 @@ export default function StockList({ stocks }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "name",
+    column: "",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -152,7 +152,7 @@ export default function StockList({ stocks }) {
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${totalStocks} selected`}
+            : `${selectedKeys.size} of ${totalStocks} `}
         </span>
         <Pagination
           isCompact

@@ -94,7 +94,6 @@ export default function ProductList({ products, fetchProducts }) {
       },
       token.accessToken
     );
-    console.log("res data is a", response);
     if (response.status) {
       setSelectedKeys([]);
       fetchProducts();

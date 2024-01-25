@@ -38,7 +38,7 @@ export default function LocationList({ locations, refresh }) {
 
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "name",
+    column: "",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);

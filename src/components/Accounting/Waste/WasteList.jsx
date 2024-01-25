@@ -52,7 +52,7 @@ export default function WasteList({ opexs, refresh }) {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "",
     direction: "ascending",
   });
 
@@ -78,10 +78,7 @@ export default function WasteList({ opexs, refresh }) {
       refresh();
       toast.success(response.message);
     }
-    // if (response.message === "Updated successfully!") {
-    //   setLoadData(false);
-    //   refresh();
-    // }
+
     setLoadData(false);
   };
 
@@ -91,9 +88,6 @@ export default function WasteList({ opexs, refresh }) {
       token.accessToken
     );
 
-    // if (response.message === "Updated successfully!") {
-    //   refresh();
-    // }
     if (response.success === false) {
       toast.error(response.message);
     } else {
@@ -333,7 +327,7 @@ export default function WasteList({ opexs, refresh }) {
         <span className="w-[30%] text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            : `${selectedKeys.size} of ${filteredItems.length} `}
         </span>
         <Pagination
           isCompact
@@ -405,7 +399,7 @@ export default function WasteList({ opexs, refresh }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No users found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

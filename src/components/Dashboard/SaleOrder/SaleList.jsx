@@ -52,7 +52,7 @@ export default function SaleList({ orders }) {
 
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "total",
+    column: "",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);

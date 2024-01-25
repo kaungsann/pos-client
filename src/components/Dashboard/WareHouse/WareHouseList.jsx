@@ -53,7 +53,7 @@ export default function WareHouseList({ warehouses }) {
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "name",
+    column: "",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);

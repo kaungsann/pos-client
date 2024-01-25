@@ -59,7 +59,7 @@ export default function Profile() {
   return (
     <>
       <div
-        className={`flex mb-8 cursor-pointer ${
+        className={`flex mb-8 ${
           userInfo.role && userInfo.role.name == "user" ? "mt-3" : ""
         }`}
       >
@@ -81,7 +81,7 @@ export default function Profile() {
           </div>
           <div className="w-full mt-6">
             <div
-              className={`flex w-full py-2 items-center justify-start rounded-2xl ${
+              className={`flex w-full cursor-pointer py-2 items-center justify-start rounded-2xl ${
                 activeSection === "personal"
                   ? "bg-blue-100 font-bold"
                   : "text-slate-400"
@@ -110,7 +110,7 @@ export default function Profile() {
               ("root" && (
                 <>
                   <div
-                    className={`flex py-2  mt-4 w-full items-center justify-start rounded-2xl ${
+                    className={`flex py-2  mt-4 cursor-pointer w-full items-center justify-start rounded-2xl ${
                       activeSection === "company"
                         ? "bg-blue-100 font-bold"
                         : "text-slate-400"
@@ -138,7 +138,7 @@ export default function Profile() {
               ))}
 
             <div
-              className={`flex w-full mt-4 py-2 items-center justify-start rounded-2xl ${
+              className={`flex w-full cursor-pointer mt-4 py-2 items-center justify-start rounded-2xl ${
                 logout ? "bg-blue-100 font-bold" : "text-slate-400"
               }}`}
               onClick={() => {
