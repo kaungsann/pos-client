@@ -126,17 +126,22 @@ export default function SaleOrderCreate() {
     const data = {
       ...saleOrderData,
       lines: saleOrderData.lines.map((line) => {
-        return {
+        const modifiedLine = {
           ...line,
           product: line.product.id,
-          discount: line.discount.id,
           unitPrice: line.product.salePrice,
         };
+        if (line.discount && line.discount.id) {
+          modifiedLine.discount = line.discount.id;
+        } else {
+          delete modifiedLine.discount;
+        }
+        return modifiedLine;
       }),
       user: userData._id,
       state: "pending",
     };
-
+    
     console.log(data);
 
     try {
