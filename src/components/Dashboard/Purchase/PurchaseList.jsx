@@ -146,7 +146,10 @@ export default function PurchaseList({ orders, refresh }) {
         return <h3>{orders.total.toFixed()}</h3>;
       case "actions":
         return (
-          <div className="flex justify-between items-center">
+          <div
+            className="flex justify-between items-center"
+            aria-label="Dynamic Actions"
+          >
             <div className="relative flex justify-start items-center gap-2">
               <Dropdown>
                 <DropdownTrigger>
@@ -154,7 +157,7 @@ export default function PurchaseList({ orders, refresh }) {
                     <Icon icon="fluent:grid-dots-28-regular" />
                   </Button>
                 </DropdownTrigger>
-                <DropdownMenu>
+                <DropdownMenu aria-label="Dynamic Actions">
                   <DropdownItem
                     onPress={() => {
                       navigate(`/admin/purchase/detail/${orders.id}`);

@@ -108,15 +108,19 @@ export default function CategoryList({ categories, refresh }) {
         </User>
       ),
       actions: () => (
-        <div className="relative flex justify-start items-center gap-2">
-          <Dropdown>
-            <DropdownTrigger>
+        <div
+          className="relative flex justify-start items-center gap-2"
+          aria-label="action"
+        >
+          <Dropdown aria-label="action">
+            <DropdownTrigger tabIndex={0}>
               <Button isIconOnly size="sm" variant="light">
                 <Icon icon="fluent:grid-dots-28-regular" />
               </Button>
             </DropdownTrigger>
-            <DropdownMenu>
+            <DropdownMenu aria-label="action">
               <DropdownItem
+                aria-label={category.name}
                 onPress={() => {
                   navigate(`/admin/categorys/detail/${category.id}`);
                 }}
@@ -124,6 +128,7 @@ export default function CategoryList({ categories, refresh }) {
                 View
               </DropdownItem>
               <DropdownItem
+                aria-label={category.name}
                 onPress={() => {
                   navigate(`/admin/categorys/edit/${category.id}`);
                 }}
@@ -171,15 +176,17 @@ export default function CategoryList({ categories, refresh }) {
                 </DropdownTrigger>
               </div>
               <DropdownMenu
-                disallowEmptySelection
                 aria-label="Table Columns"
+                disallowEmptySelection
                 closeOnSelect={false}
                 selectedKeys={visibleColumns}
                 selectionMode="multiple"
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid}>{column.name}</DropdownItem>
+                  <DropdownItem key={column.uid} aria-label={column.name}>
+                    {column.name}
+                  </DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>
@@ -239,7 +246,7 @@ export default function CategoryList({ categories, refresh }) {
   return (
     <>
       <Table
-        aria-label="Example table with custom cells, pagination and sorting"
+        aria-label="Category Table"
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"

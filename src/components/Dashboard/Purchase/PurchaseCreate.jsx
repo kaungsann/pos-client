@@ -79,6 +79,7 @@ export default function SaleOrderCreate() {
 
   const createProductApi = async () => {
     setIsLoading(true);
+
     if (saleOrderLines.length === 0) {
       toast.error("You need to select products before saving");
 

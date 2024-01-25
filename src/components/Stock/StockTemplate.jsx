@@ -85,8 +85,6 @@ export default function StockTemplate() {
     [filteredKeywords, stocks]
   );
 
-  console.log("stocks isa", stocks);
-
   return (
     <div>
       <div className="flex justify-between items-center my-3">

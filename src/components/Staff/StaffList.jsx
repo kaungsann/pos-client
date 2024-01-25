@@ -142,14 +142,17 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
         );
       case "actions":
         return (
-          <div className="relative flex justify-start items-center gap-2">
+          <div
+            className="relative flex justify-start items-center gap-2"
+            aria-label="action"
+          >
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
                   <Icon icon="fluent:grid-dots-28-regular" />
                 </Button>
               </DropdownTrigger>
-              <DropdownMenu>
+              <DropdownMenu aria-label="action">
                 <DropdownItem
                   onPress={() => {
                     navigate(`/admin/user/detail/${staffs._id}`);

@@ -27,7 +27,6 @@ export default function WasteCreateForm() {
     location: locationId,
     amount: null,
   });
-  console.log("form data is ", formData);
 
   const handleInputChange = (e) => {
     // setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,8 +51,6 @@ export default function WasteCreateForm() {
         updatedFormData,
         token.accessToken
       );
-
-      console.log("res data is ", response);
 
       if (response.message === "Token Expire , Please Login Again")
         dipatch(removeData(null));
@@ -93,10 +90,6 @@ export default function WasteCreateForm() {
       setProduct([]);
     }
   };
-
-  console.log("location id is a", locationId);
-  console.log("product in array is a", product);
-  console.log("location in array is a", location);
 
   useEffect(() => {
     const getLocation = async () => {

@@ -131,14 +131,17 @@ export default function ProductList({ products, fetchProducts }) {
           <h1>{product.salePrice ? product.salePrice.toFixed() : "None"}</h1>
         ),
         actions: () => (
-          <div className="relative flex justify-start items-center gap-2">
+          <div
+            className="relative flex justify-start items-center gap-2"
+            aria-label="action"
+          >
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
                   <Icon icon="fluent:grid-dots-28-regular" />
                 </Button>
               </DropdownTrigger>
-              <DropdownMenu>
+              <DropdownMenu aria-label="action">
                 <DropdownItem
                   onPress={() => {
                     navigate(`/admin/products/detail/${product.id}`);
@@ -264,7 +267,7 @@ export default function ProductList({ products, fetchProducts }) {
   return (
     <>
       <Table
-        aria-label="Example table with custom cells, pagination and sorting"
+        aria-label="Product Table"
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
@@ -272,12 +275,11 @@ export default function ProductList({ products, fetchProducts }) {
         selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
+        onSelectionChange={setSelectedKeys}
+        onSortChange={(descriptor) => setSortDescriptor(descriptor)}
         classNames={{
           wrapper: "max-h-[382px]",
         }}
-        topContentPlacement="outside"
-        onSelectionChange={setSelectedKeys}
-        onSortChange={(descriptor) => setSortDescriptor(descriptor)}
       >
         <TableHeader columns={headerColumns}>
           {(column) => (

@@ -18,10 +18,8 @@ export default function DiscountCreateForm() {
     name: "",
     amount: 0,
   });
-  console.log("formdata is ", formData);
 
   const handleInputChange = (e) => {
-    console.log("e", e);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 

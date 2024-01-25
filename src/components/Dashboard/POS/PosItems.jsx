@@ -181,6 +181,7 @@ export default function PosItems() {
                       base: "w-40 mx-4",
                       trigger: "h-10",
                     }}
+                    aria-label="Select a location"
                     onChange={(e) => setLoca(e.target.value)}
                   >
                     {locations.map((ct) => (
@@ -268,7 +269,7 @@ export default function PosItems() {
                 )
                 .filter((item) =>
                   selectedCategory
-                    ? item.category && item.category === selectedCategory
+                    ? item.category && item.category._id === selectedCategory
                     : true
                 )
                 .map((pd) => <Card key={pd.id} product={pd} />)

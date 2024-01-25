@@ -58,13 +58,6 @@ export default function OverView() {
         token.accessToken
       );
 
-      console.log(
-        "res data is a",
-        `/orders/totals?startDate=${StartDate}&endDate=${endDate}`
-      );
-
-      console.log(" data is a", resData);
-
       if (resData.status) {
         setText(
           StartDate && endDate ? `${StartDate} to ${endDate}` : "This Month"

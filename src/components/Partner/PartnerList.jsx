@@ -118,14 +118,17 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
       isCustomer: () => <h1>{partner.isCustomer ? "Yes" : "No"}</h1>,
       isCompany: () => <h1>{partner.isCompany ? "Yes" : "No"}</h1>,
       actions: () => (
-        <div className="relative flex justify-start items-center gap-2">
+        <div
+          className="relative flex justify-start items-center gap-2"
+          aria-label="action"
+        >
           <Dropdown>
             <DropdownTrigger>
               <Button isIconOnly size="sm" variant="light">
                 <Icon icon="fluent:grid-dots-28-regular" />
               </Button>
             </DropdownTrigger>
-            <DropdownMenu>
+            <DropdownMenu aria-label="action">
               <DropdownItem
                 onPress={() => {
                   navigate(`/admin/partners/detail/${partner.id}`);

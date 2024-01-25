@@ -176,7 +176,7 @@ export default function ProductCreateForm() {
     };
     fetchData();
   }, []);
-  
+
   return (
     <>
       <ToastContainer
@@ -288,11 +288,7 @@ export default function ProductCreateForm() {
                   label="Category"
                   name="category"
                   placeholder="Select category"
-                  selectedKeys={
-                    [product.category?._id]?.filter(
-                      Boolean
-                    ) || []
-                  }
+                  selectedKeys={[product.category?._id]?.filter(Boolean) || []}
                   onChange={(e) => inputChangeHandler(e)}
                 >
                   {categories.map((ct) => (
@@ -376,6 +372,7 @@ export default function ProductCreateForm() {
                   // selectedKeys={
                   //   product.tax ? [product.tax.id || product.tax] : false
                   // }
+                     // selectedKeys={product.tax || []}
                   selectionMode="multiple"
                   onChange={(e) => inputChangeHandler(e)}
                   className="max-w-xs"
