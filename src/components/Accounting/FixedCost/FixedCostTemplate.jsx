@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import { BASE_URL } from "../../Api";
@@ -154,7 +154,6 @@ function FixedCostTemplate() {
     [opex, filteredKeywords]
   );
 
-
   return (
     <>
       <div className="flex justify-between items-center my-3">
@@ -171,7 +170,7 @@ function FixedCostTemplate() {
           >
             Add
           </Button>
-          <FilterBox onFilter={handleFilterChange} />
+          <FilterBox onFilter={handleFilterChange} context="amount" />
         </div>
       </div>
       <FixedCostList opexs={filteredFixedCost} refresh={fetchOpexData} />

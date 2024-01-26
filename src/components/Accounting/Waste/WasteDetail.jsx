@@ -76,9 +76,9 @@ export default function WasteDetail() {
                         </h2>
                       </div>
                       <div className="my-6">
-                        <h4 className="text-md text-slate-500">Amount</h4>
+                        <h4 className="text-md text-slate-500">Quantity</h4>
                         <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                          {detail[0].amount ? detail[0].amount : "none"}
+                          {detail[0].quantity ? detail[0].quantity : "none"}
                         </h2>
                       </div>
                     </div>
@@ -87,7 +87,7 @@ export default function WasteDetail() {
                     <div>
                       <h4 className="text-md text-slate-500">Location</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].amount ? detail[0].amount : "none"}
+                        {detail[0].location ? detail[0].location.name : "none"}
                       </h2>
                     </div>
                     <div className="my-6">

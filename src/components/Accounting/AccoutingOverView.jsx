@@ -362,9 +362,7 @@ const AccoutingOverView = () => {
                         </button>
                       )}
                     </td>
-                    <td className="text-slate-600 font-bold">
-                      {acc.balance.toFixed()}
-                    </td>
+                    <td className="text-slate-600 font-bold">{acc.balance}</td>
                   </tr>
                   {expandedIndex === index && (
                     <tr className="w-full flex flex-col">
@@ -380,20 +378,29 @@ const AccoutingOverView = () => {
                                   {sub.type}
                                 </h2>
                                 <h2 className="mx-6 text-slate-600">
-                                  {sub.amount.toFixed()}
+                                  {sub.quantity ? sub.quantity : sub.amount}
                                 </h2>
                               </div>
                             ))}
                             <tr className="w-full flex justify-between bg-slate-200 text-slate-700 font-bold">
                               <td className="px-4 py-2">Total</td>
                               <td className="px-4 py-2">
-                                {/* Calculate the total outside of the subRow mapping */}
-                                {acc.subRow &&
+                                {/* {acc.subRow &&
                                   acc.subRow.length > 0 &&
                                   acc.subRow.reduce(
                                     (total, row) => total + row.amount,
                                     0
-                                  )}
+                                  )} */}
+
+                                {acc.subRow &&
+                                  acc.subRow.length > 0 &&
+                                  acc.subRow.reduce((total, row) => {
+                                    if (row.quantity) {
+                                      return row.quantity + total;
+                                    } else {
+                                      return row.amount + total;
+                                    }
+                                  }, 0)}
                               </td>
                             </tr>
                           </>
@@ -403,13 +410,21 @@ const AccoutingOverView = () => {
                   )}
                 </React.Fragment>
               ))}
+
             <tr className="w-full flex justify-between">
               <td className="px-4 py-2 text-slate-600 font-semibold text-lg">
                 Total Balance
               </td>
               <td className="px-4 py-2 text-slate-600 font-semibold text-lg">
-                {account
-                  .filter((acc) => !selectedKeys.has(acc.type))
+                {[
+                  "Gross Sale",
+                  "Opex",
+                  "Waste",
+                  "Fixed Cost",
+                  "Variable Cost",
+                  "Purchase Cost",
+                ]
+                  .map((type) => account.find((acc) => acc.type === type))
                   .reduce((total, row) => total + row.balance, 0)
                   .toFixed()}
               </td>

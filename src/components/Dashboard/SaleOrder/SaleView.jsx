@@ -15,7 +15,13 @@ import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { removeData } from "../../../redux/actions";
-import { Spinner } from "@nextui-org/react";
+import {
+  Button,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Spinner,
+} from "@nextui-org/react";
 
 export default function SaleView() {
   const [stock, setStock] = useState([]);
@@ -221,88 +227,146 @@ export default function SaleView() {
           Daily Dashboard
         </h1>
         <div className="w-full flex justify-between">
-          <div className="px-2 py-4 w-48 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 mr-1.5 w-60 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="solar:money-bag-bold-duotone"
               color="#3d417a"
-              className="text-4xl text-cyan-700 font-semibold"
+              className="text-3xl text-cyan-700 font-semibold"
             />
-            <div className="">
-              <h3 className="font-bold text-slate-600 text-lg">Gross Sales</h3>
-              <h4 className="text-lg font-bold text-slate-600">
+            <div className="ml-2">
+              <div className="flex items-center">
+                <h3 className="font-bold text-slate-600 text-md">
+                  Gross Sales
+                </h3>
+                <Popover placement="top">
+                  <Popover placement="top" offset={20} showArrow>
+                    <PopoverTrigger>
+                      <Icon icon="lucide:info" className="text-sm ml-0.5" />
+                    </PopoverTrigger>
+                    <PopoverContent className="rounded-md">
+                      <div className="px-1 py-2">
+                        <div className="text-tiny">
+                          This is the popover content
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </Popover>
+              </div>
+
+              <h4 className="text-md font-bold text-slate-600 text-center">
                 {totalGrossSale}
               </h4>
             </div>
           </div>
-          <div className="px-2 py-4 w-48 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 mr-1.5 w-52 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="mdi:ticket-percent-outline"
               color="#75273c"
-              className="text-4xl text-cyan-700 font-semibold"
+              className="text-3xl text-cyan-700 font-semibold"
             />
             <div>
-              <h3 className="font-bold text-slate-600 text-lg">Tax Total</h3>
-              <h4 className="text-lg font-bold text-slate-600">{totalTax}</h4>
+              <h3 className="font-bold text-slate-600 text-md">Tax Total</h3>
+              <h4 className="text-md font-bold text-slate-600 text-center">
+                {totalTax}
+              </h4>
             </div>
           </div>
-          <div className="px-2 py-4 w-48 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 mr-1.5 w-52 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="ic:twotone-discount"
               color="#3b6664"
-              className="text-4xl text-blue-700 font-semibold"
+              className="text-2xl text-blue-700 font-semibold"
             />
             <div className="">
-              <h3 className="font-bold text-slate-600 text-lg">Discounts</h3>
-              <h4 className="text-lg font-bold text-slate-600">
+              <h3 className="font-bold text-slate-600 text-md">Discounts</h3>
+              <h4 className="text-md font-bold text-slate-600 text-center">
                 {totalDiscount}
               </h4>
             </div>
           </div>
-          <div className="px-2 py-4 w-48 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 mr-1.5 w-56 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icons8:buy"
-              className="text-5xl text-blue-700 font-semibold"
+              className="text-3xl text-blue-700 font-semibold"
             />
-            <div className="">
-              <h3 className="font-bold text-slate-600 text-lg">Net Sales</h3>
-              <h4 className="text-lg font-bold text-slate-600">
-                {totalGrossSale - totalDiscount}
+
+            <div className="ml-1.5">
+              <div className="flex items-center">
+                <h3 className="font-bold text-slate-600 text-md">Net Sales</h3>
+                <Popover placement="top">
+                  <Popover placement="top" offset={20} showArrow>
+                    <PopoverTrigger>
+                      <Icon icon="lucide:info" className="text-sm ml-0.5" />
+                    </PopoverTrigger>
+                    <PopoverContent className="rounded-md">
+                      <div className="px-1 py-2">
+                        <div className="text-tiny">
+                          This is the net sale content
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </Popover>
+              </div>
+
+              <h4 className="text-md font-bold text-slate-600 text-center">
+                {/* {totalGrossSale - totalDiscount} */}
               </h4>
             </div>
           </div>
-          <div className="px-2 py-4 w-48 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 mr-1.5 w-60 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="fluent-emoji-high-contrast:money-bag"
               color="#8a882b"
-              className="text-4xl text-blue-700 font-semibold"
+              className="text-3xl text-blue-700 font-semibold"
             />
-            <div className="">
-              <h3 className="font-bold text-slate-600 text-lg">Gross Profit</h3>
-              <h4 className="text-lg font-bold text-slate-600">
+
+            <div className="ml-1.5">
+              <div className="flex items-center">
+                <h3 className="font-bold text-slate-600 text-md">
+                  Gross Profit
+                </h3>
+                <Popover placement="top">
+                  <Popover placement="top" offset={20} showArrow>
+                    <PopoverTrigger>
+                      <Icon icon="lucide:info" className="text-sm ml-0.5" />
+                    </PopoverTrigger>
+                    <PopoverContent className="rounded-md">
+                      <div className="px-1 py-2">
+                        <div className="text-tiny">
+                          This is theGross Profite content
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </Popover>
+              </div>
+
+              <h4 className="text-md font-bold text-slate-600 text-center">
                 {totalGrossProfit}
               </h4>
             </div>
           </div>
-          <div className="px-2 py-4 w-48 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 mr-1.5 w-52 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icons8:buy"
-              className="text-5xl text-blue-700 font-semibold"
+              className="text-3xl text-blue-700 font-semibold"
             />
 
             <div className="">
-              <h3 className="font-bold text-slate-600 text-lg">Total Orders</h3>
-              <h4 className="text-lg font-bold text-slate-600">
+              <h3 className="font-bold text-slate-600 text-md">Total Orders</h3>
+              <h4 className="text-md font-bold text-slate-600 text-center">
                 {totalOrders}
               </h4>
             </div>
           </div>
-          <div className="px-2 py-4 w-48 flex items-center bg-white justify-evenly rounded-md shadow-md">
-            <Icon icon="fa:users" className="text-3xl text-[#8884d8]" />
+
+          <div className="px-3 mr-1.5 w-52 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
+            <Icon icon="fa:users" className="text-2xl text-[#8884d8]" />
             <div>
-              <h3 className="font-bold text-slate-600 text-lg">
-                Customers
-              </h3>
-              <h4 className="text-lg font-bold text-slate-600">
+              <h3 className="font-bold text-slate-600 text-md">Customers</h3>
+              <h4 className="text-md font-bold text-slate-600 text-center">
                 {
                   new Set(
                     orderList.map((line) => line.partner && line.partner._id)
@@ -312,15 +376,17 @@ export default function SaleView() {
             </div>
           </div>
 
-          <div className="px-2 py-4 w-48 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 mr-1.5 w-52 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="fluent-mdl2:product-variant"
-              className="text-4xl text-green-500"
+              className="text-2xl text-green-500"
             />
 
             <div>
-              <h3 className="font-bold text-slate-600 text-lg">Items Sold</h3>
-              <h4 className="text-lg font-bold text-slate-600">{totalItems}</h4>
+              <h3 className="font-bold text-slate-600 text-md">Items Sold</h3>
+              <h4 className="text-md font-bold text-slate-600 text-center">
+                {totalItems}
+              </h4>
             </div>
           </div>
         </div>

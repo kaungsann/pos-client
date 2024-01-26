@@ -14,7 +14,7 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-const FilterBox = ({ onFilter }) => {
+const FilterBox = ({ onFilter, context }) => {
   const [date, setDate] = useState("");
   const [ref, setRef] = useState("");
   const [created, setCreated] = useState("");
@@ -34,7 +34,7 @@ const FilterBox = ({ onFilter }) => {
       date,
       state,
       created,
-      amount: {
+      [context]: {
         value: amount,
         comparison: totalComparison,
       },
@@ -55,7 +55,7 @@ const FilterBox = ({ onFilter }) => {
       date: "",
       state: "",
       created: "",
-      amount: {
+      [context]: {
         value: "",
         comparison: "",
       },
@@ -128,7 +128,7 @@ const FilterBox = ({ onFilter }) => {
                   onChange={(e) => setRef(e.target.value)}
                 />
                 <div className="container flex flex-col">
-                  <span className=" text-sm  mx-1 mb-2">Amount</span>
+                  <span className=" text-sm  mx-1 mb-2">{context}</span>
                   <div className="flex gap-2">
                     <Input
                       type="number"
@@ -137,9 +137,9 @@ const FilterBox = ({ onFilter }) => {
                       onChange={(e) => setMount(e.target.value)}
                       value={amount || ""}
                       radius="sm"
-                      placeholder="Enter amount"
+                      placeholder={`Enter ${context}`}
                       size="md"
-                      label="Amount"
+                      label={context}
                     />
                     <Select
                       variant="bordered"

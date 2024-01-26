@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   Modal,
@@ -13,6 +13,8 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { getApi } from "../Api";
+import { useSelector } from "react-redux";
 
 const FilterBox = ({ onFilter }) => {
   const [location, setLocation] = useState("");
@@ -20,9 +22,13 @@ const FilterBox = ({ onFilter }) => {
   const [onhand, setOnHand] = useState("");
   const [onHandComparison, setOnHandComparison] = useState("");
 
+  const [locations, setLocations] = useState([]);
+
   const [isFilterActive, setIsFilterActive] = useState(false);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const token = useSelector((state) => state.IduniqueData);
 
   const handleFilterClick = () => {
     setIsFilterActive(!isFilterActive);
@@ -51,6 +57,18 @@ const FilterBox = ({ onFilter }) => {
     });
   };
 
+  useEffect(() => {
+    const getLocation = async () => {
+      const resData = await getApi("/location", token.accessToken);
+      const filteredLocation = resData.data.filter((la) => la.active === true);
+      setLocations(filteredLocation);
+    };
+
+    getLocation();
+  }, []);
+
+  console.log("location name ", location);
+
   return (
     <>
       <Button
@@ -74,20 +92,22 @@ const FilterBox = ({ onFilter }) => {
               </ModalHeader>
               <ModalBody>
                 <div className="flex justify-between">
-                  <Input
-                    type="text"
-                    label="Location"
-                    placeholder="Enter location name"
+                  <Select
                     labelPlacement="outside"
-                    onChange={(e) => setLocation(e.target.value)}
-                    value={location}
+                    label="Location"
+                    name="location"
                     variant="bordered"
-                    radius="sm"
-                    size="md"
-                  />
+                    placeholder="Select an Location"
+                    onChange={(e) => setLocation(e.target.value)}
+                  >
+                    {locations.map((loc) => (
+                      <SelectItem key={loc.name} value={loc.name}>
+                        {loc.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
                 </div>
                 <div className="container flex flex-col mt-2">
-                
                   <div className="flex gap-2">
                     <Input
                       type="number"

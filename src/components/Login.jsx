@@ -116,7 +116,7 @@ export default function Login() {
                   >
                     Password
                   </label>
-                  <div className="text-sm">
+                  {/* <div className="text-sm">
                     <Link to="/forget-password">
                       <a
                         href="#"
@@ -125,7 +125,7 @@ export default function Login() {
                         Forgot password?
                       </a>
                     </Link>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="mt-2 relative">
                   {hidden ? (

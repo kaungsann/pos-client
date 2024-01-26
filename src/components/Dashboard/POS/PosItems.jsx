@@ -33,6 +33,8 @@ export default function PosItems() {
 
   const { location, role } = useSelector((state) => state.loginData);
 
+  console.log("category id  is a", selectedCategory);
+
   const token = useSelector((state) => state.IduniqueData);
   const selectProduct = useSelector((state) => state.orderData);
   const dipatch = useDispatch();
@@ -160,6 +162,9 @@ export default function PosItems() {
     }
   }, [search, location, loca]);
 
+  console.log("product is a", products);
+  console.log("location id is a", loca);
+
   return (
     <>
       <div className={`flex w-full ${role && role.name == "user" && "mt-2"}`}>
@@ -176,7 +181,6 @@ export default function PosItems() {
                       base: "w-40 mx-4",
                       trigger: "h-10",
                     }}
-                    aria-label="Select a location"
                     onChange={(e) => setLoca(e.target.value)}
                   >
                     {locations.map((ct) => (
@@ -264,7 +268,7 @@ export default function PosItems() {
                 )
                 .filter((item) =>
                   selectedCategory
-                    ? item.category && item.category._id === selectedCategory
+                    ? item.category && item.category === selectedCategory
                     : true
                 )
                 .map((pd) => <Card key={pd.id} product={pd} />)
