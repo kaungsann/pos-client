@@ -21,6 +21,7 @@ export default function PurchaseView() {
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const [orderLines, setOrderLines] = useState([]);
+  const [totalQty, setTotalQty] = useState(0);
   // const [popularProducts, setPopularProducts] = useState([]);
 
   const token = useSelector((state) => state.IduniqueData);
@@ -39,6 +40,7 @@ export default function PurchaseView() {
       // setTotalAmountWithTax(resData.data.purchases.totalAmountWithTax);
       setTotalItems(resData.data.purchases.totalItems);
       setOrderLines(resData.data.purchases.allLines);
+      setTotalQty(resData.data.purchases.totalQty);
       //setPopularProducts(resData.data.purchases.topProducts);
     }
   };
@@ -189,9 +191,7 @@ export default function PurchaseView() {
             />
 
             <div>
-              <h3 className="font-bold text-slate-600 text-lg">
-                Total Cost
-              </h3>
+              <h3 className="font-bold text-slate-600 text-lg">Total Cost</h3>
               <h4 className="text-lg font-bold text-slate-600">
                 {totalAmount}
               </h4>
@@ -246,9 +246,21 @@ export default function PurchaseView() {
             />
             <div>
               <h3 className="font-bold text-slate-600 text-lg">
-                Purchased Quantities
+                Total Products
               </h3>
               <h4 className="text-lg font-bold text-slate-600">{totalItems}</h4>
+            </div>
+          </div>
+          <div className="px-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
+            <Icon
+              icon="fluent-mdl2:product-variant"
+              className="text-4xl text-green-500"
+            />
+            <div>
+              <h3 className="font-bold text-slate-600 text-lg">
+                Total Quantity
+              </h3>
+              <h4 className="text-lg font-bold text-slate-600">{totalQty}</h4>
             </div>
           </div>
         </div>

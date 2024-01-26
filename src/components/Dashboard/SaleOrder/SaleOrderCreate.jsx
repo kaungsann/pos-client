@@ -263,7 +263,12 @@ export default function SaleOrderCreate() {
             </Button>
 
             <Link to="/admin/saleOrders/all">
-              <Button onClick={dispatch(removeAllLinesFromSaleOrder())} className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
+              <Button
+                onClick={() => {
+                  dispatch(removeAllLinesFromSaleOrder());
+                }}
+                className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5"
+              >
                 Discard
               </Button>
             </Link>
@@ -353,7 +358,7 @@ export default function SaleOrderCreate() {
                     label="Location"
                     name="location"
                     selectedKeys={
-                      [saleOrderData.location?.id]?.filter(Boolean) || []
+                      [saleOrderData.location]?.filter(Boolean) || []
                     }
                     placeholder="Select an location"
                     onChange={(e) => {
