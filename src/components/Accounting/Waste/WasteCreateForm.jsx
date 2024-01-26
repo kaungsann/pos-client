@@ -162,8 +162,11 @@ export default function WasteCreateForm() {
                   value={formData.name}
                   onChange={(e) => handleInputChange(e)}
                 >
-                  <SelectItem key="p&l" value="l">
+                  <SelectItem key="p&l" value="p&l">
                     P & L
+                  </SelectItem>
+                  <SelectItem key="m&c" value="m&c">
+                    M&C
                   </SelectItem>
                 </Select>
               </div>
