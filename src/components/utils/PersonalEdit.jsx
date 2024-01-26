@@ -31,6 +31,7 @@ function PersonalEdit() {
     email: "",
     address: "",
     image: "",
+    location: "",
     city: "",
     birthdate: "",
     gender: "",
@@ -52,8 +53,11 @@ function PersonalEdit() {
   const fileInputRef = useRef(null);
   const { id } = useParams();
   const token = useSelector((state) => state.IduniqueData);
+  const user = useSelector((state) => state.loginData);
   const dispatch = useDispatch();
-  const isPageRefreshed = useSelector((state) => state.pageRefresh);
+
+  console.log("user location is a ", user);
+  //const isPageRefreshed = useSelector((state) => state.pageRefresh);
 
   const dipatch = useDispatch();
 
@@ -90,6 +94,7 @@ function PersonalEdit() {
       if (isSelected) {
         formData.append("image", selectFile);
       }
+      formData.append("location", user.location);
 
       for (let key in updateInfo) {
         formData.append(key, updateInfo[key]);
@@ -116,7 +121,7 @@ function PersonalEdit() {
         }
       } catch (error) {
         console.error("Error fetching admin info:", error);
-        toast.error(error.message);
+        toast.error(error.response.data.message);
       } finally {
         setIsSelected(false);
         setSelectedImage(null);
