@@ -27,7 +27,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "name",
   "ref",
   "date",
-  "amount",
+  "quantity",
   "state",
   "created",
   "actions",
@@ -37,7 +37,7 @@ const columns = [
   { name: "Name", uid: "name", sortable: true },
   { name: "Ref", uid: "ref", sortable: true },
   { name: "Date", uid: "date", sortable: true },
-  { name: "Amount", uid: "amount" },
+  { name: "Quantity", uid: "quantity" },
   { name: "State", uid: "state", sortable: true },
   { name: "Create-Date", uid: "created", sortable: true },
   { name: "Action", uid: "actions" },
@@ -165,8 +165,8 @@ export default function WasteList({ opexs, refresh }) {
         return <h3>{opexs.ref}</h3>;
       case "date":
         return <h3>{format(new Date(opexs.date), "yyyy-MM-dd")}</h3>;
-      case "amount":
-        return <h3>{opexs.amount}</h3>;
+      case "quantity":
+        return <h3>{opexs.quantity}</h3>;
       case "state":
         return (
           <div className="flex gap-4 w-24">

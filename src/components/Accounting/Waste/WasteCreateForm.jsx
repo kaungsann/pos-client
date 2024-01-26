@@ -25,7 +25,7 @@ export default function WasteCreateForm() {
     date: "",
     product: "",
     location: locationId,
-    amount: null,
+    quantity: 0,
   });
 
   const handleInputChange = (e) => {
@@ -43,6 +43,7 @@ export default function WasteCreateForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log("form data is a", formData);
     try {
       const updatedFormData = { ...formData, location: locationId };
 
@@ -210,9 +211,9 @@ export default function WasteCreateForm() {
               <div className="w-60">
                 <Input
                   type="number"
-                  name="amount"
+                  name="quantity"
                   label="Quantity"
-                  value={formData.amount}
+                  value={formData.quantity}
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter quantity..."
                   labelPlacement="outside"

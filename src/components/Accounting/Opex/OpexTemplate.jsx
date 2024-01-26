@@ -170,7 +170,7 @@ function OpexTemplate() {
           >
             Add
           </Button>
-          <FilterBox onFilter={handleFilterChange} />
+          <FilterBox onFilter={handleFilterChange} context="amount" />
         </div>
       </div>
       <OpexList opexs={filteredOpex} refresh={fetchOpexData} />

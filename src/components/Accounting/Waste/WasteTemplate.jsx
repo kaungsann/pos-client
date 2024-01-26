@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "../FixedCost/FilterBox";
 import { BASE_URL } from "../../Api";
@@ -22,7 +22,7 @@ function WasteTemplate() {
     date: "",
     state: "",
     createdAt: "",
-    amount: {
+    quantity: {
       value: 0,
       comparison: "",
     },
@@ -63,7 +63,8 @@ function WasteTemplate() {
   const filteredWaste = useMemo(
     () =>
       waste.filter((op) => {
-        const { name, ref, date, amount, state, createdAt } = filteredKeywords;
+        const { name, ref, date, quantity, state, createdAt } =
+          filteredKeywords;
 
         const isName = () => {
           if (!name) {
@@ -76,14 +77,16 @@ function WasteTemplate() {
 
           return false;
         };
-        const isMount = () => {
-          if (!op.amount || !amount.comparison) return true;
+        const isQuantity = () => {
+          if (!op.quantity || !quantity.comparison) return true;
 
-          const QTY = op.amount || 0;
+          const QTY = op.quantity || 0;
 
           return (
-            (amount.comparison === COMPARISION.LESS && QTY < amount.value) ||
-            (amount.comparison === COMPARISION.GREATER && QTY > amount.value)
+            (quantity.comparison === COMPARISION.LESS &&
+              QTY < quantity.value) ||
+            (quantity.comparison === COMPARISION.GREATER &&
+              QTY > quantity.value)
           );
         };
         const isState = () => {
@@ -143,7 +146,7 @@ function WasteTemplate() {
         return (
           op.name.toLowerCase().includes(name.toLowerCase()) &&
           isName() &&
-          isMount() &&
+          isQuantity() &&
           isState() &&
           isCreated() &&
           isDate() &&
@@ -169,7 +172,7 @@ function WasteTemplate() {
           >
             Add
           </Button>
-          <FilterBox onFilter={handleFilterChange} />
+          <FilterBox onFilter={handleFilterChange} context="quantity" />
         </div>
       </div>
       <WasteList opexs={filteredWaste} refresh={fetchWasteData} />

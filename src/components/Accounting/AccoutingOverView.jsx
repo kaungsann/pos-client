@@ -362,9 +362,7 @@ const AccoutingOverView = () => {
                         </button>
                       )}
                     </td>
-                    <td className="text-slate-600 font-bold">
-                      {acc.balance.toFixed()}
-                    </td>
+                    <td className="text-slate-600 font-bold">{acc.balance}</td>
                   </tr>
                   {expandedIndex === index && (
                     <tr className="w-full flex flex-col">
@@ -380,7 +378,7 @@ const AccoutingOverView = () => {
                                   {sub.type}
                                 </h2>
                                 <h2 className="mx-6 text-slate-600">
-                                  {sub.amount.toFixed()}
+                                  {sub.amount}
                                 </h2>
                               </div>
                             ))}
@@ -403,6 +401,7 @@ const AccoutingOverView = () => {
                   )}
                 </React.Fragment>
               ))}
+
             <tr className="w-full flex justify-between">
               <td className="px-4 py-2 text-slate-600 font-semibold text-lg">
                 Total Balance
