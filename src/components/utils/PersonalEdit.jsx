@@ -56,7 +56,6 @@ function PersonalEdit() {
   const user = useSelector((state) => state.loginData);
   const dispatch = useDispatch();
 
-  console.log("user location is a ", user);
   //const isPageRefreshed = useSelector((state) => state.pageRefresh);
 
   const dipatch = useDispatch();

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { BASE_URL, getApi } from "../Api";
+import { BASE_URL } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../redux/actions";
 import { BiSolidUser } from "react-icons/bi";
@@ -44,7 +43,7 @@ export default function Profile() {
           },
         });
         if (data?.message == "Token Expire , Please Login Again") {
-          dipatch(removeData(null));
+          dispatch(removeData(null));
         }
 
         setUserInfo(data.data[0]);
@@ -183,7 +182,7 @@ export default function Profile() {
           text="Do you want to logout. Pls confirm it"
           onDelete={() => {
             dispatch(removeData(null));
-            dispatch(clearUserStorage());
+            // dispatch(clearUserStorage());
           }}
         />
       )}

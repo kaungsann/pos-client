@@ -425,7 +425,7 @@ const AccoutingOverView = () => {
                   "Purchase Cost",
                 ]
                   .map((type) => account.find((acc) => acc.type === type))
-                  .reduce((total, row) => total + row.balance, 0)
+                  .reduce((total, row) => total + (row ? row.balance : 0), 0)
                   .toFixed()}
               </td>
             </tr>
