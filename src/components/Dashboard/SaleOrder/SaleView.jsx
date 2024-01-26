@@ -263,7 +263,6 @@ export default function SaleView() {
               icon="icons8:buy"
               className="text-5xl text-blue-700 font-semibold"
             />
-
             <div className="">
               <h3 className="font-bold text-slate-600 text-lg">Net Sales</h3>
               <h4 className="text-lg font-bold text-slate-600">
@@ -297,7 +296,6 @@ export default function SaleView() {
               </h4>
             </div>
           </div>
-
           <div className="px-2 py-4 w-48 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon icon="fa:users" className="text-3xl text-[#8884d8]" />
             <div>

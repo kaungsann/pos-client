@@ -24,10 +24,11 @@ import ConfrimBox from "../../utils/ConfrimBox";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "scheduledate",
-  "name",
+  "user",
   "partner",
   "location",
   "state",
+  "totalqty",
   "total",
   "orderref",
   "actions",
@@ -35,12 +36,12 @@ const INITIAL_VISIBLE_COLUMNS = [
 
 const columns = [
   { name: "Schedule-Date", uid: "scheduledate" },
-  { name: "Name", uid: "name" },
+  { name: "User", uid: "user" },
   { name: "Partner", uid: "partner", sortable: true },
   { name: "Location", uid: "location", sortable: true },
   { name: "State", uid: "state" },
-  { name: "TotalProduct", uid: "totalproduct", sortable: true },
-  { name: "TaxTotal", uid: "taxtotal", sortable: true },
+  { name: "Item", uid: "totalproduct", sortable: true },
+  { name: "Total Qty", uid: "totalqty", sortable: true },
   { name: "Total", uid: "total", sortable: true },
   { name: "OrderRef", uid: "orderref" },
   { name: "Action", uid: "actions" },
@@ -68,7 +69,6 @@ export default function PurchaseList({ orders, refresh }) {
   const totalPages = Math.ceil(totalLine / rowsPerPage);
   const isFirstPage = page === 1;
   const isLastPage = page === totalPages;
-
 
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return INITIAL_VISIBLE_COLUMNS;
@@ -107,7 +107,7 @@ export default function PurchaseList({ orders, refresh }) {
     switch (columnKey) {
       case "scheduledate":
         return <h3> {format(new Date(orders.orderDate), "yyyy-MM-dd")}</h3>;
-      case "name":
+      case "user":
         return <h3>{orders.user?.username}</h3>;
       case "partner":
         return <h3>{orders.partner?.name}</h3>;
@@ -140,10 +140,17 @@ export default function PurchaseList({ orders, refresh }) {
 
       case "totalproduct":
         return <h3>{orders.lines.length}</h3>;
-      case "taxtotal":
-        return <h3>{orders.taxTotal.toFixed()}</h3>;
+      case "totalqty":
+        return (
+          <h3>
+            {orders.lines.reduce(
+              (accumulator, currentValue) => accumulator + currentValue.qty,
+              0
+            )}
+          </h3>
+        );
       case "total":
-        return <h3>{orders.total.toFixed()}</h3>;
+        return <h3>{orders.total - orders.taxTotal}</h3>;
       case "actions":
         return (
           <div
@@ -240,17 +247,12 @@ export default function PurchaseList({ orders, refresh }) {
         </div>
       </div>
     );
-  }, [
-    visibleColumns,
-    onRowsPerPageChange,
-    orders.length,
-  ]);
+  }, [visibleColumns, onRowsPerPageChange, orders.length]);
 
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
-        </span>
+        <span className="w-[30%] text-small text-default-400"></span>
         <Pagination
           isCompact
           showControls
