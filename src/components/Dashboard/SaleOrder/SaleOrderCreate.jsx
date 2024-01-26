@@ -21,7 +21,6 @@ import {
   addNoteToSaleOrder,
   removeAllLinesFromSaleOrder,
   removeData,
-  removeLineFromSaleOrder,
 } from "../../../redux/actions";
 import { Icon } from "@iconify/react";
 
@@ -42,7 +41,7 @@ export default function SaleOrderCreate() {
   const [discounts, setDiscounts] = useState([]);
 
   const [paymentType, setPaymentType] = useState("cash");
-  const [locationId, setLocationId] = useState("");
+  const [stock, setStock] = useState([]);
 
   const [refreshIconRotation, setRefreshIconRotation] = useState(false);
   const [partIconRotation, setPartIconRotation] = useState(false);
@@ -114,8 +113,6 @@ export default function SaleOrderCreate() {
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  console.log("slae order data is a", saleOrderData);
-
   const createProductApi = async () => {
     setIsLoading(true);
 
@@ -145,8 +142,6 @@ export default function SaleOrderCreate() {
       user: userData._id,
       state: "pending",
     };
-
-    console.log("data", data);
 
     try {
       let resData = await sendJsonToApi("/sale", data, token.accessToken);
@@ -179,12 +174,6 @@ export default function SaleOrderCreate() {
     setLocations(filteredLocation);
   }, [token.accessToken]);
 
-  // const getProduct = useCallback(async () => {
-  //   const resData = await getApi("/product", token.accessToken);
-  //   const filteredProduct = resData.data.filter((pt) => pt.active === true);
-  //   setProducts(filteredProduct);
-  // }, [token.accessToken]);
-
   const getPartner = useCallback(async () => {
     const resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
@@ -199,24 +188,28 @@ export default function SaleOrderCreate() {
     setDiscounts(filteredDiscount);
   }, [token.accessToken]);
 
-  const getStock = useCallback(
-    async (selectedLocationId) => {
-      const resData = await getApi("/stock", token.accessToken);
+  const getStock = useCallback(async () => {
+    const resData = await getApi("/stock", token.accessToken);
+    const filteredStock = resData.data.filter((la) => la.active === true);
 
-      const filteredStock = resData.data.filter(
-        (item) =>
-          item.active === true &&
-          (!selectedLocationId || item.location._id === selectedLocationId)
-      );
+    function getUniqueLocations(data) {
+      const uniqueLocations = {};
+      const result = [];
 
-      if (selectedLocationId !== null) {
-        setProducts([...filteredStock.map((item) => item.product)]);
-      } else {
-        setProducts([]);
-      }
-    },
-    [token.accessToken]
-  );
+      data.forEach((item) => {
+        const { _id, name } = item.location;
+        if (!uniqueLocations[_id]) {
+          uniqueLocations[_id] = true;
+          result.push({ _id, name });
+        }
+      });
+
+      return result;
+    }
+
+    setLocations(getUniqueLocations(filteredStock));
+    setStock(filteredStock);
+  }, [token.accessToken]);
 
   const handleAddProduct = () => {
     if (line.product == null) {
@@ -229,19 +222,10 @@ export default function SaleOrderCreate() {
   };
 
   useEffect(() => {
-    getLocation();
     getPartner();
-    // getProduct();
+    getStock();
     getDiscount();
-  }, [getLocation, getPartner, getDiscount]);
-
-  useEffect(() => {
-    getStock(locationId);
-  }, [getStock, locationId]);
-
-  console.log("product array is", products);
-
-  console.log("lines array is", saleOrderData);
+  }, [getPartner, getDiscount, getStock]);
 
   return (
     <>
@@ -279,7 +263,7 @@ export default function SaleOrderCreate() {
             </Button>
 
             <Link to="/admin/saleOrders/all">
-              <Button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
+              <Button onClick={dispatch(removeAllLinesFromSaleOrder())} className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
                 Discard
               </Button>
             </Link>
@@ -369,19 +353,20 @@ export default function SaleOrderCreate() {
                     label="Location"
                     name="location"
                     selectedKeys={
-                      [saleOrderData.location]?.filter(Boolean) || []
+                      [saleOrderData.location?.id]?.filter(Boolean) || []
                     }
                     placeholder="Select an location"
-                    onChange={(e) =>
-                      dispatch(
-                        addLocationToSaleOrder(e.target.value),
-                        setLocationId(e.target.value)
-                      )
-                    }
+                    onChange={(e) => {
+                      const products = stock
+                        .filter((item) => item.location._id === e.target.value)
+                        .map((item) => ({ ...item.product }));
+                      setProducts(products);
+                      dispatch(addLocationToSaleOrder(e.target.value));
+                    }}
                     className="max-w-xs"
                   >
                     {locations.map((ct) => (
-                      <SelectItem key={ct.id} value={ct.id}>
+                      <SelectItem key={ct._id} value={ct._id}>
                         {ct.name}
                       </SelectItem>
                     ))}
@@ -433,12 +418,12 @@ export default function SaleOrderCreate() {
                     label="Product"
                     name="product"
                     placeholder="Select Product"
+                    isDisabled={!products.length}
                     selectedKeys={[line.product._id]?.filter(Boolean) || []}
                     onChange={(e) => {
                       const selectedProduct = products.find(
                         (pt) => pt._id === e.target.value
                       );
-                      console.log("selectedProduct", selectedProduct);
                       if (selectedProduct) {
                         setLine((prev) => {
                           return {
@@ -523,6 +508,8 @@ export default function SaleOrderCreate() {
                       labelPlacement="outside"
                       label="Discount"
                       name="discount"
+                      isDisabled={!discounts.length}
+                      selectedKeys={[line.discount.id]?.filter(Boolean) || []}
                       placeholder="Select an discount"
                       onChange={(e) => {
                         const selectedDiscount = discounts.find(
@@ -660,13 +647,13 @@ export default function SaleOrderCreate() {
             <div className="flex flex-col w-full">
               <div className="flex mt-8 justify-self-end">
                 <h1 className="text-lg font-semibold">
-                  Discount Total :
+                  Total Discount :{" "}
                   <span>{saleOrderData.discountTotal.toFixed(2) ?? 0}</span>
                 </h1>
               </div>
               <div className="flex mt-4 justify-self-end">
                 <h1 className="text-lg font-semibold">
-                  Tax Total :
+                  Total Tax :{" "}
                   <span>{saleOrderData.taxTotal.toFixed(2) ?? 0}</span>
                 </h1>
               </div>
