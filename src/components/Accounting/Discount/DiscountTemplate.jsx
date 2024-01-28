@@ -1,15 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import SearchCompo from "../../utils/SearchCompo";
+//import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import DiscountList from "./DiscountList";
 import { BASE_URL } from "../../Api";
-import { Button } from "@nextui-org/react";
+import { Button, Select, SelectItem } from "@nextui-org/react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function DiscountTemplate() {
   const [discount, setDiscount] = useState([]);
+  const [selectedDiscountType, setSelectedDiscountType] = useState("");
 
   const COMPARISION = {
     LESS: "LESS",
@@ -100,23 +101,55 @@ function DiscountTemplate() {
             return discountDate === createdAt;
           }
         };
+        const isDiscountType = () => {
+          if (
+            !selectedDiscountType ||
+            typeof selectedDiscountType !== "string" ||
+            !dis.name
+          ) {
+            return true;
+          }
+
+          return dis.name
+            .toLowerCase()
+            .includes(selectedDiscountType.toLowerCase());
+        };
+
         return (
           dis.name.toLowerCase().includes(name.toLocaleLowerCase()) &&
           isName() &&
           isDiscountRate() &&
-          isDate()
+          isDate() &&
+          isDiscountType()
         );
       }),
-    [discount, filteredKeywords]
+    [discount, filteredKeywords, selectedDiscountType]
   );
 
   return (
     <>
       <div className="flex justify-between items-center my-3">
-        <SearchCompo
+        {/* <SearchCompo
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
-        />
+        /> */}
+
+        <Select
+          labelPlacement="outside"
+          label="Discount"
+          name="name"
+          placeholder="Select Discount Type"
+          className="max-w-xs"
+          value={selectedDiscountType}
+          onChange={(e) => setSelectedDiscountType(e.target.value)}
+        >
+          <SelectItem key="New Year Discount" value="New Year Discount">
+            New Year Discount
+          </SelectItem>
+          <SelectItem key="Birthday Discount" value="Birthday Discount">
+            Birthday Discount
+          </SelectItem>
+        </Select>
 
         <div className="flex">
           <Button

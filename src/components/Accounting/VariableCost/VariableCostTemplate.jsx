@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import SearchCompo from "../../utils/SearchCompo";
+//import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "../FixedCost/FilterBox";
 import { BASE_URL } from "../../Api";
-import { Button } from "@nextui-org/react";
+import { Button, Select, SelectItem } from "@nextui-org/react";
 
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import VeriableCostList from "./VariableCostList";
 
 function VariableCostTemplate() {
   const [opex, setOpex] = useState([]);
+  const [selectedVariableCostType, setSelectedVariableCostType] = useState("");
 
   const COMPARISION = {
     LESS: "LESS",
@@ -141,6 +142,20 @@ function VariableCostTemplate() {
           return false;
         };
 
+        const isVariableCostType = () => {
+          if (
+            !selectedVariableCostType ||
+            typeof selectedVariableCostType !== "string" ||
+            !op.name
+          ) {
+            return true;
+          }
+
+          return op.name
+            .toLowerCase()
+            .includes(selectedVariableCostType.toLowerCase());
+        };
+
         return (
           op.name.toLowerCase().includes(name.toLowerCase()) &&
           isName() &&
@@ -148,19 +163,43 @@ function VariableCostTemplate() {
           isState() &&
           isCreated() &&
           isDate() &&
-          isRef()
+          isRef() &&
+          isVariableCostType()
         );
       }),
-    [opex, filteredKeywords]
+    [opex, filteredKeywords, selectedVariableCostType]
   );
 
   return (
     <>
       <div className="flex justify-between items-center my-3">
-        <SearchCompo
+        {/* <SearchCompo
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
-        />
+        /> */}
+
+        <Select
+          labelPlacement="outside"
+          label="VariableCost"
+          name="name"
+          placeholder="Select VariableCost Type"
+          className="max-w-xs"
+          value={selectedVariableCostType}
+          onChange={(e) => setSelectedVariableCostType(e.target.value)}
+        >
+          <SelectItem key="utility" value="utility">
+            Utility
+          </SelectItem>
+          <SelectItem key="sales commission" value="sales commission">
+            Sales Commission
+          </SelectItem>
+          <SelectItem key="incentive or Bonus" value="incentive or Bonus">
+            Incentive or Bonus
+          </SelectItem>
+          <SelectItem key="packaging" value="packaging">
+            Packaging
+          </SelectItem>
+        </Select>
 
         <div className="flex">
           <Button

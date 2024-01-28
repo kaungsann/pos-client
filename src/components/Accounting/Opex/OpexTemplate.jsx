@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import SearchCompo from "../../utils/SearchCompo";
+//import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import OpexList from "./OpexList";
 import { BASE_URL } from "../../Api";
-import { Button } from "@nextui-org/react";
+import { Button, Select, SelectItem } from "@nextui-org/react";
 
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 function OpexTemplate() {
   const [opex, setOpex] = useState([]);
+  const [selectedOpexType, setSelectedOpexType] = useState("");
 
   const COMPARISION = {
     LESS: "LESS",
@@ -141,6 +142,18 @@ function OpexTemplate() {
           return false;
         };
 
+        const isOpexType = () => {
+          if (
+            !selectedOpexType ||
+            typeof selectedOpexType !== "string" ||
+            !op.name
+          ) {
+            return true;
+          }
+
+          return op.name.toLowerCase().includes(selectedOpexType.toLowerCase());
+        };
+
         return (
           op.name.toLowerCase().includes(name.toLowerCase()) &&
           isName() &&
@@ -148,19 +161,49 @@ function OpexTemplate() {
           isState() &&
           isCreated() &&
           isDate() &&
-          isRef()
+          isRef() &&
+          isOpexType()
         );
       }),
-    [opex, filteredKeywords]
+    [opex, filteredKeywords, selectedOpexType]
   );
 
   return (
     <>
       <div className="flex justify-between items-center my-3">
-        <SearchCompo
+        {/* <SearchCompo
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
-        />
+        /> */}
+
+        <Select
+          labelPlacement="outside"
+          label="Opex"
+          name="name"
+          placeholder="Select Opex Type"
+          className="max-w-xs"
+          value={selectedOpexType}
+          onChange={(e) => setSelectedOpexType(e.target.value)}
+        >
+          <SelectItem key="fuel" value="fuel">
+            Fuel
+          </SelectItem>
+          <SelectItem key="salary" value="salary">
+            Salary
+          </SelectItem>
+          <SelectItem key="incentive or Bonus" value="incentive or Bonus">
+            Incentive or Bonus
+          </SelectItem>
+          <SelectItem key="maintaince & repair" value="maintaince & repair">
+            Mantaince & Repair
+          </SelectItem>
+          <SelectItem key="software & License" value="software & License">
+            Software & License
+          </SelectItem>
+          <SelectItem key="3rd party hiring" value="3rd party hiring">
+            3rd party hiring
+          </SelectItem>
+        </Select>
 
         <div className="flex">
           <Button

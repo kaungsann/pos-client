@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import SearchCompo from "../../utils/SearchCompo";
+//import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "../FixedCost/FilterBox";
 import { BASE_URL } from "../../Api";
-import { Button } from "@nextui-org/react";
+import { Button, Select, SelectItem } from "@nextui-org/react";
 import WasteList from "./WasteList";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 function WasteTemplate() {
   const [waste, setWaste] = useState([]);
+  const [selectedWasteType, setSelectedWasteType] = useState("");
 
   const COMPARISION = {
     LESS: "LESS",
@@ -142,6 +143,19 @@ function WasteTemplate() {
           }
           return false;
         };
+        const isWasteType = () => {
+          if (
+            !selectedWasteType ||
+            typeof selectedWasteType !== "string" ||
+            !op.name
+          ) {
+            return true;
+          }
+
+          return op.name
+            .toLowerCase()
+            .includes(selectedWasteType.toLowerCase());
+        };
 
         return (
           op.name.toLowerCase().includes(name.toLowerCase()) &&
@@ -150,19 +164,37 @@ function WasteTemplate() {
           isState() &&
           isCreated() &&
           isDate() &&
-          isRef()
+          isRef() &&
+          isWasteType()
         );
       }),
-    [waste, filteredKeywords]
+    [waste, filteredKeywords, selectedWasteType]
   );
 
   return (
     <>
       <div className="flex justify-between items-center my-3">
-        <SearchCompo
+        {/* <SearchCompo
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
-        />
+        /> */}
+
+        <Select
+          labelPlacement="outside"
+          label="Waste"
+          name="name"
+          placeholder="Select Waste Type"
+          className="max-w-xs"
+          value={selectedWasteType}
+          onChange={(e) => setSelectedWasteType(e.target.value)}
+        >
+          <SelectItem key="p&l" value="p&l">
+            P & L
+          </SelectItem>
+          <SelectItem key="m&c" value="m&c">
+            M&C
+          </SelectItem>
+        </Select>
 
         <div className="flex">
           <Button

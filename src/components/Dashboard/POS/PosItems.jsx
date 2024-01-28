@@ -31,9 +31,7 @@ export default function PosItems() {
 
   const itemsPerPage = 5;
 
-  const { location, role } = useSelector((state) => state.loginData);
-
-  console.log("category id  is a", selectedCategory);
+  const user = useSelector((state) => state.loginData);
 
   const token = useSelector((state) => state.IduniqueData);
   const selectProduct = useSelector((state) => state.orderData);
@@ -123,11 +121,11 @@ export default function PosItems() {
   const getStock = async () => {
     setLoadingData(true);
     const resData = await getApi("/stock", token.accessToken);
-
+    console.log("res data is a", resData);
     let selectedLocationId;
-    if (role.name === "user") {
+    if (user.role.name === "user") {
       setLoca(location);
-    }
+    } 
     if (loca === "") {
       selectedLocationId = null;
     } else {
@@ -150,7 +148,6 @@ export default function PosItems() {
     }
     setLoadingData(false);
   };
-
   useEffect(() => {
     getProducts();
     getCategorysApi();
@@ -162,18 +159,19 @@ export default function PosItems() {
     }
   }, [search, location, loca]);
 
-  console.log("product is a", products);
-  console.log("location id is a", loca);
-
   return (
     <>
-      <div className={`flex w-full ${role && role.name == "user" && "mt-2"}`}>
+      <div
+        className={`flex w-full ${
+          user.role && user.role.name == "user" && "mt-2"
+        }`}
+      >
         <div className="lg:w-2/3 relative md:w-2/4 shadow-sm bg-white overflow-y-scroll custom-scrollbar h-screen">
           <div>
             <div className="flex justify-between items-center p-3">
               <div className="flex items-center w-3/6">
                 <h3 className="font-semibold text-xl">Avaliable Items</h3>
-                {role.name === "root" || role.name === "admin" ? (
+                {user.role.name === "root" || user.role.name === "admin" ? (
                   <Select
                     name="location"
                     placeholder="Select a location"

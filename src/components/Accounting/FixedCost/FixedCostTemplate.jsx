@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import SearchCompo from "../../utils/SearchCompo";
+//import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import { BASE_URL } from "../../Api";
-import { Button } from "@nextui-org/react";
+import { Button, Select, SelectItem } from "@nextui-org/react";
 
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -11,6 +11,7 @@ import FixedCostList from "./FilterCostList";
 
 function FixedCostTemplate() {
   const [opex, setOpex] = useState([]);
+  const [selectedFixCostType, setSelectedFixCostType] = useState("");
 
   const COMPARISION = {
     LESS: "LESS",
@@ -141,6 +142,20 @@ function FixedCostTemplate() {
           return false;
         };
 
+        const isFixCostType = () => {
+          if (
+            !selectedFixCostType ||
+            typeof selectedFixCostType !== "string" ||
+            !op.name
+          ) {
+            return true;
+          }
+
+          return op.name
+            .toLowerCase()
+            .includes(selectedFixCostType.toLowerCase());
+        };
+
         return (
           op.name.toLowerCase().includes(name.toLowerCase()) &&
           isName() &&
@@ -148,19 +163,43 @@ function FixedCostTemplate() {
           isState() &&
           isCreated() &&
           isDate() &&
-          isRef()
+          isRef() &&
+          isFixCostType()
         );
       }),
-    [opex, filteredKeywords]
+    [opex, filteredKeywords, selectedFixCostType]
   );
 
   return (
     <>
       <div className="flex justify-between items-center my-3">
-        <SearchCompo
+        {/* <SearchCompo
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
-        />
+        /> */}
+
+        <Select
+          labelPlacement="outside"
+          label="Discount"
+          name="name"
+          placeholder="Select Discount Type"
+          className="max-w-xs"
+          value={selectedFixCostType}
+          onChange={(e) => setSelectedFixCostType(e.target.value)}
+        >
+          <SelectItem key="rental" value="rental">
+            Rental
+          </SelectItem>
+          <SelectItem key="insurance" value="insurance">
+            Insurance
+          </SelectItem>
+          <SelectItem key="loan" value="loan">
+            Loan
+          </SelectItem>
+          <SelectItem key="depreciation" value="depreciation">
+            Depreciation
+          </SelectItem>
+        </Select>
 
         <div className="flex">
           <Button

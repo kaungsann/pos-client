@@ -1,18 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendJsonToApi } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import {
-  Input,
-  Progress,
-  Button,
-  Checkbox,
-  SelectItem,
-  Select,
-} from "@nextui-org/react";
+import { Input, Progress, Button, SelectItem, Select } from "@nextui-org/react";
 
 export default function VariableCostCreateForm() {
   const navigate = useNavigate();
