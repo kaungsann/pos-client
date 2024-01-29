@@ -1,58 +1,65 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { getApi, PathData } from "../Api";
-import { useDispatch, useSelector } from "react-redux";
+import { BASE_URL } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { removeData } from "../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { removeData } from "../../../redux/actions";
 import { Input } from "@nextui-org/react";
+import axios from "axios";
 
-export default function CategoryEdit() {
-  let [name, setName] = useState("");
-  const token = useSelector((state) => state.IduniqueData);
+export default function UomCatCreate() {
+  const [name, setName] = useState("");
   const navigate = useNavigate();
-  const { id } = useParams();
+  const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
 
-  const getCategory = async () => {
+  const createUomCategoryApi = async () => {
     try {
-      const response = await getApi(`/category/${id}`, token.accessToken);
-      if (response.message == "Token Expire , Please Login Again") {
-        dipatch(removeData(null));
-      }
-      setName(response.data[0].name);
-    } catch (error) {
-      console.error("Error fetching category:", error);
-    }
-  };
+      const { data } = await axios.post(
+        BASE_URL + "/uomCategory",
+        { name },
+        {
+          headers: {
+            Authorization: `Bearer ${token.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  const editCategoryApi = async () => {
-    const data = {};
-    if (name) {
-      data.name = name;
-    }
-    try {
-      let resData = await PathData(`/category/${id}`, data, token.accessToken);
+      if (!data.status) {
+        if (
+          (<datalist></datalist>)?.message ==
+          "Token Expire , Please Login Again"
+        ) {
+          dipatch(removeData(null));
+        }
 
-      if (resData.status) {
-        navigate("/admin/categorys/all");
+        toast.error(data.data.message);
       } else {
-        toast.error(resData.message);
+        navigate("/admin/uom-category/all");
       }
     } catch (error) {
-      console.error("Error creating category:", error);
+      console.error("Error creating uom category:", error);
     }
   };
 
-  const handleSubmit = (e) => {
+  const onSubmitHandler = (e) => {
     e.preventDefault();
-    editCategoryApi();
+
+    if (!name.trim()) {
+      toast.error("Please enter a uom category name.");
+      return;
+    }
+
+    createUomCategoryApi();
   };
 
-  useEffect(() => {
-    getCategory();
-  }, []);
+  const onChangeHandler = (e) => {
+    const value = e.target.value;
+    setName(value);
+  };
 
   return (
     <>
@@ -68,18 +75,19 @@ export default function CategoryEdit() {
         pauseOnHover
         theme="light"
       />
+
       <div className="container mt-2">
         <div className="flex flex-row justify-between my-4 max-w-6xl">
-          <h2 className="lg:text-xl font-bold ">Category edit</h2>
+          <h2 className="lg:text-xl font-bold ">UOM Category </h2>
           <div className="flex gap-3 ">
             <button
               type="submit"
               className="font-bold rounded-sm shadow-sm flex items-center text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
-              onClick={handleSubmit}
+              onClick={onSubmitHandler}
             >
               Save
             </button>
-            <Link to="/admin/categorys/all">
+            <Link to="/admin/uom-category/all">
               <button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
                 Discard
               </button>
@@ -87,7 +95,10 @@ export default function CategoryEdit() {
           </div>
         </div>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
-          <form className="flex justify-between gap-10 p-5">
+          <form
+            className="flex justify-between gap-10 p-5"
+            onSubmit={onSubmitHandler}
+          >
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
                 <Input
@@ -95,8 +106,8 @@ export default function CategoryEdit() {
                   label="Name"
                   name="name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter product name..."
+                  onChange={onChangeHandler}
+                  placeholder="Enter uom category name..."
                   labelPlacement="outside"
                 />
               </div>

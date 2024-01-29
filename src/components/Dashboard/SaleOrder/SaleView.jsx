@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import { removeData } from "../../../redux/actions";
 import {
-  Button,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -313,7 +312,7 @@ export default function SaleView() {
               </div>
 
               <h4 className="text-md font-bold text-slate-600 text-center">
-                {/* {totalGrossSale - totalDiscount} */}
+                {totalGrossSale - totalDiscount}
               </h4>
             </div>
           </div>
