@@ -131,7 +131,7 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
       let { line } = payload;
 
       const existingLineIndex = state.lines.findIndex(
-        (existingLine) => existingLine.product.id === line.product.id
+        (existingLine) => existingLine.product._id === line.product._id
       );
 
       if (existingLineIndex !== -1) {
@@ -186,12 +186,12 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
       let { productID } = payload;
       console.log(productID);
       const lineToRemove = state.lines.find(
-        (line) => line.product.id === productID
+        (line) => line.product._id === productID
       );
 
       return {
         ...state,
-        lines: state.lines.filter((item) => item.product.id !== productID),
+        lines: state.lines.filter((item) => item.product._id !== productID),
         total: state.total - lineToRemove.subTotal,
         taxTotal: state.taxTotal - lineToRemove.subTaxTotal,
       };

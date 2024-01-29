@@ -21,6 +21,7 @@ import {
   addNoteToSaleOrder,
   removeAllLinesFromSaleOrder,
   removeData,
+  removeLineFromSaleOrder,
 } from "../../../redux/actions";
 import { Icon } from "@iconify/react";
 
@@ -212,8 +213,8 @@ export default function SaleOrderCreate() {
   }, [token.accessToken]);
 
   const handleAddProduct = () => {
-    if (line.product == null) {
-      toast.error("you need to selecte the product and add quantity");
+    if (!line.product || !line.product._id) {
+      toast.error("Please select a product before adding it to the sale order");
       return;
     }
 
@@ -639,7 +640,7 @@ export default function SaleOrderCreate() {
                             className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
                             onClick={() =>
                               dispatch(
-                                removeAllLinesFromSaleOrder(line.product?._id)
+                                removeLineFromSaleOrder(line.product?._id)
                               )
                             }
                           />
