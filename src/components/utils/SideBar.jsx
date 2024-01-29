@@ -1055,6 +1055,26 @@ export default function SideBar() {
                   </li>
                   <li
                     className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                      location.pathname === "/admin/uom-category/all" ||
+                      location.pathname === "/admin/uom-category/create" ||
+                      location.pathname === `/admin/uom-category/edit/${id}` ||
+                      location.pathname === `/admin/uom-category/detail/${id}`
+                        ? "text-white bg-slate-300 "
+                        : ""
+                    }}`}
+                    onClick={() => {
+                      navigate("/admin/uom-category/all"), clostHandleList();
+                    }}
+                  >
+                    <Icon
+                      icon="carbon:category-new-each"
+                      className="text-slate-500 text-2xl"
+                    />
+
+                    <h3 className="ml-2">UOM-Cat</h3>
+                  </li>
+                  <li
+                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
                       location.pathname === "/admin/stock/all" ||
                       location.pathname === "/admin/stock/create" ||
                       location.pathname === `/admin/stock/edit/${id}` ||
