@@ -66,7 +66,10 @@ import DiscountEdit from "./components/Accounting/Discount/DiscountEdit";
 import UomCatTemplate from "./components/Dashboard/UOMCat/UomCatTemplate";
 import UomCatCreate from "./components/Dashboard/UOMCat/UomCatCreate";
 import UomCatEdit from "./components/Dashboard/UOMCat/UomCatEdit";
-import UomDetail from "./components/Dashboard/UOMCat/UomDetail";
+import UomTemplate from "./components/Dashboard/UOM/UomTemplate";
+import UomCreate from "./components/Dashboard/UOM/UomCreate";
+import UomEdit from "./components/Dashboard/UOM/UomEdit";
+import UomDetail from "./components/Dashboard/UOM/UomDetail";
 
 function App() {
   return (
@@ -148,10 +151,17 @@ function App() {
               <Route path="create" element={<PurchaseCreate />} />
               <Route path="detail/:id" element={<PurchaseDetail />} />
             </Route>
+
             <Route path="uom-category">
               <Route path="all" element={<UomCatTemplate />} />
               <Route path="create" element={<UomCatCreate />} />
               <Route path="edit/:id" element={<UomCatEdit />} />
+              <Route path="detail/:id" element={<UomDetail />} />
+            </Route>
+            <Route path="uom">
+              <Route path="all" element={<UomTemplate />} />
+              <Route path="create" element={<UomCreate />} />
+              <Route path="edit/:id" element={<UomEdit />} />
               <Route path="detail/:id" element={<UomDetail />} />
             </Route>
             <Route path="products">
