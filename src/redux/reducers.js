@@ -203,6 +203,103 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
   }
 };
 
+const INIT_PURCHASEORDER_STATE = {
+  orderDate: new Date().toISOString().split("T")[0],
+  user: null,
+  partner: null,
+  location: null,
+  lines: [],
+  note: "",
+  taxTotal: 0,
+  total: 0,
+};
+
+const purchaseOrderReducer = (
+  state = INIT_PURCHASEORDER_STATE,
+  { type, payload }
+) => {
+  switch (type) {
+    case "addDateToPurchaseOrder": {
+      let { orderDate } = payload;
+      return { ...state, orderDate };
+    }
+    case "addPartnerToPurchaseOrder": {
+      let { customer } = payload;
+      return { ...state, partner: customer };
+    }
+    case "addLocationToPurchaseOrder": {
+      let { location } = payload;
+      return { ...state, location: location };
+    }
+    case "addNoteToPurchaseOrder": {
+      let { note } = payload;
+      return { ...state, note: note };
+    }
+    case "addLineToPurchaseOrder": {
+      let { line } = payload;
+
+      const existingLineIndex = state.lines.findIndex(
+        (existingLine) => existingLine.product.id === line.product.id
+      );
+
+      if (existingLineIndex !== -1) {
+        const updatedLines = [...state.lines];
+        updatedLines[existingLineIndex] = {
+          ...updatedLines[existingLineIndex],
+          qty: updatedLines[existingLineIndex].qty + line.qty,
+          subTotal: updatedLines[existingLineIndex].subTotal + line.subTotal,
+          subTaxTotal:
+            updatedLines[existingLineIndex].subTaxTotal + line.subTaxTotal,
+        };
+
+        const newTotal = updatedLines.reduce(
+          (total, line) => total + line.subTotal,
+          0
+        );
+
+        const newTaxTotal = updatedLines.reduce(
+          (total, line) => total + line.subTaxTotal,
+          0
+        );
+
+        return {
+          ...state,
+          lines: updatedLines,
+          total: newTotal,
+          taxTotal: newTaxTotal,
+        };
+      } else {
+        const newTotal = state.total + line.subTotal;
+        const newTaxTotal = state.taxTotal + line.subTaxTotal;
+
+        return {
+          ...state,
+          lines: [...state.lines, line],
+          total: newTotal,
+          taxTotal: newTaxTotal,
+        };
+      }
+    }
+    case "removeLineFromPurchaseOrder": {
+      let { productID } = payload;
+      const lineToRemove = state.lines.find(
+        (line) => line.product.id === productID
+      );
+
+      return {
+        ...state,
+        lines: state.lines.filter((item) => item.product.id !== productID),
+        total: state.total - lineToRemove.subTotal,
+        taxTotal: state.taxTotal - lineToRemove.subTaxTotal,
+      };
+    }
+    case "removeAllLinesFromPurchaseOrder":
+      return INIT_PURCHASEORDER_STATE;
+    default:
+      return state;
+  }
+};
+
 const reducers = combineReducers({
   IduniqueData: idReducers,
   loginData: userReducers,
@@ -210,6 +307,7 @@ const reducers = combineReducers({
   orderCheck: orderValidReducers,
   refresh: refreshReducer,
   saleOrder: saleOrderReducer,
+  purchaseOrder: purchaseOrderReducer,
 });
 
 export default reducers;

@@ -146,3 +146,59 @@ export const addNoteToSaleOrder = (note) => {
     },
   };
 };
+
+export const addDateToPurchaseOrder = (orderDate) => {
+  return {
+    type: "addDateToPurchaseOrder",
+    payload: {
+      orderDate,
+    },
+  };
+};
+
+export const addCustomerToPurchaseOrder = (customer) => {
+  return {
+    type: "addPartnerToPurchaseOrder",
+    payload: {
+      customer,
+    },
+  };
+};
+
+export const addLocationToPurchaseOrder = (location) => {
+  return {
+    type: "addLocationToPurchaseOrder",
+    payload: {
+      location,
+    },
+  };
+};
+
+export const addNoteToPurchaseOrder = (note) => {
+  return {
+    type: "addNoteToPurchaseOrder",
+    payload: {
+      note,
+    },
+  };
+};
+
+export const addLineToPurchaseOrder = (line) => {
+  return {
+    type: "addLineToPurchaseOrder",
+    payload: {
+      line,
+    },
+  };
+};
+
+export const removeLineFromPurchaseOrder = (productID) => ({
+  type: "removeLineFromPurchaseOrder",
+  payload: {
+    productID,
+  },
+});
+
+export const removeAllLinesFromPurchaseOrder = () => ({
+  type: "removeAllLinesFromPurchaseOrder",
+});

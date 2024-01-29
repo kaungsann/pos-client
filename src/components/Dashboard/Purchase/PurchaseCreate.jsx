@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { getApi, sendJsonToApi } from "../../Api";
@@ -6,8 +6,23 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
-import { removeData } from "../../../redux/actions";
-import { Input, Select, SelectItem, Button, Progress } from "@nextui-org/react";
+import {
+  Input,
+  Select,
+  SelectItem,
+  TableCell,
+  TableRow,
+} from "@nextui-org/react";
+import {
+  addCustomerToPurchaseOrder,
+  addDateToPurchaseOrder,
+  addLineToPurchaseOrder,
+  addLocationToPurchaseOrder,
+  addNoteToPurchaseOrder,
+  removeAllLinesFromPurchaseOrder,
+  removeData,
+  removeLineFromPurchaseOrder,
+} from "../../../redux/actions";
 import { Icon } from "@iconify/react";
 
 import {
@@ -15,39 +30,36 @@ import {
   TableHeader,
   TableColumn,
   TableBody,
-  TableRow,
-  TableCell,
   Divider,
+  Button,
+  Progress,
 } from "@nextui-org/react";
 
-export default function SaleOrderCreate() {
-  const [product, setProduct] = useState([]);
-  const [location, setLocation] = useState([]);
-  const [part, setPart] = useState([]);
-  const [partner, setPartner] = useState("");
-  const [loca, setLoca] = useState("");
-  const [state, setState] = useState("pending");
-  const [note, setNote] = useState("");
-  const [selectedOption, setSelectedOption] = React.useState("default");
+export default function PurchaseCreate() {
+  const [products, setProducts] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [partners, setPartners] = useState([]);
+
+  const [paymentType, setPaymentType] = useState("cash");
 
   const [refreshIconRotation, setRefreshIconRotation] = useState(false);
   const [partIconRotation, setPartIconRotation] = useState(false);
-
-  const [item, setItem] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [pd, setPd] = useState("default");
-  const [quantity, setQuantity] = useState(0);
-  const [Tax, setTax] = useState(0);
-  const [unitPrice, setUnitPrice] = useState(0);
-  const [saleOrderLines, setSaleOrderLines] = useState([]);
-  const [date, setDate] = useState("");
-  const [totalTax, setTotalTax] = useState(0);
-  const [totalCost, setTotalCost] = useState(0);
-  const navigate = useNavigate();
-  const userData = useSelector((state) => state.loginData);
-  const token = useSelector((state) => state.IduniqueData);
-  const dipatch = useDispatch();
+  const INIT_LINE_STATE = {
+    product: {
+      id: "",
+      name: "",
+      salePrice: 0,
+    },
+    qty: 0,
+    tax: 0,
+    subTotal: 0,
+    subTaxTotal: 0,
+  };
+  const [line, setLine] = useState(INIT_LINE_STATE);
+
+  const dispatch = useDispatch();
 
   const handlePartnerButtonClick = () => {
     const url = "/admin/partners/create";
@@ -77,36 +89,37 @@ export default function SaleOrderCreate() {
     }, 500);
   };
 
+  const navigate = useNavigate();
+
+  const userData = useSelector((state) => state.loginData);
+  const purchaseOrderData = useSelector((state) => state.purchaseOrder);
+  const token = useSelector((state) => state.IduniqueData);
+  const dipatch = useDispatch();
+
   const createProductApi = async () => {
     setIsLoading(true);
 
-    if (saleOrderLines.length === 0) {
+    if (purchaseOrderData.lines.length == 0) {
       toast.error("You need to select products before saving");
-
       setTimeout(() => {
         setIsLoading(false);
       }, 1000);
-
       return;
     }
 
     const data = {
-      orderDate: date,
+      ...purchaseOrderData,
+      lines: purchaseOrderData.lines.map((line) => {
+        const modifiedLine = {
+          ...line,
+          product: line.product.id,
+          unitPrice: line.product.salePrice,
+        };
+
+        return modifiedLine;
+      }),
       user: userData._id,
-      partner: partner,
-      location: loca,
-      lines: saleOrderLines.map((line) => ({
-        product: line.product.id,
-        qty: line.qty,
-        tax: line.tax,
-        unitPrice: line.unitPrice,
-        subTotal: line.subTotal,
-      })),
-      state: state,
-      note: note,
-      // payment: payment,
-      taxTotal: totalTax,
-      total: totalCost,
+      state: "pending",
     };
 
     try {
@@ -114,126 +127,61 @@ export default function SaleOrderCreate() {
       if (resData.message == "Token Expire , Please Login Again") {
         dipatch(removeData(null));
       }
-
       if (resData.status) {
         setIsLoading(false);
         toast(resData.message);
         navigate("/admin/purchase/all");
       } else {
-        setIsLoading(false);
         toast.error(resData.message);
+        setIsLoading(false);
       }
     } catch (error) {
       setIsLoading(false);
-      toast.warn(error.message, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error(error.message);
     }
     setIsLoading(false);
   };
+
   const handleSubmit = (e) => {
-    setIsLoading(true);
     e.preventDefault();
     createProductApi();
   };
-  const getLocation = async () => {
+
+  const getLocation = useCallback(async () => {
     const resData = await getApi("/location", token.accessToken);
     const filteredLocation = resData.data.filter((la) => la.active === true);
-    setLocation(filteredLocation);
-  };
-  const getProduct = async () => {
-    const resData = await getApi("/product", token.accessToken);
-    const filteredProduct = resData.data.filter((pt) => pt.active === true);
-    setProduct(filteredProduct);
-  };
-  const getPartner = async () => {
+    setLocations(filteredLocation);
+  }, [token.accessToken]);
+
+  const getPartner = useCallback(async () => {
     const resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCustomer === false && partner.active === true
+      (partner) => partner.isCustomer === true && partner.active === true
     );
-    setPart(filteredPartners);
-  };
+    setPartners(filteredPartners);
+  }, [token.accessToken]);
+
+  const getProduct = useCallback(async () => {
+    const resData = await getApi("/product", token.accessToken);
+    const filteredProducts = resData.data.filter((pd) => pd.active === true);
+    setProducts(filteredProducts);
+  }, [token.accessToken]);
 
   const handleAddProduct = () => {
-    if (pd === "" || parseInt(quantity) === 0 || quantity === "") {
-      toast.error("you need to selecte the product and add quantity");
+    if (!line.product || !line.product.id) {
+      toast.error("Please select a product before adding it to the sale order");
       return;
     }
 
-    const selectedProduct = product.find((pt) => pt.id === pd);
-    const existingProductIndex = saleOrderLines.findIndex(
-      (line) => line.product.id === pd
-    );
-
-    if (existingProductIndex !== -1) {
-      // Product already exists in the array, update the values
-      const updatedSaleOrderLines = [...saleOrderLines];
-      const existingLine = updatedSaleOrderLines[existingProductIndex];
-
-      // Calculate the updated quantity
-      const updatedQuantity = existingLine.qty + parseInt(quantity);
-
-      existingLine.qty = updatedQuantity;
-      existingLine.tax =
-        (selectedProduct.tax / 100) * updatedQuantity * unitPrice;
-      existingLine.unitPrice = unitPrice;
-      existingLine.subTotal = unitPrice * updatedQuantity;
-
-      setSaleOrderLines(updatedSaleOrderLines);
-    } else {
-      // Product doesn't exist in the array, add a new line
-      const subTotal = unitPrice * quantity;
-
-      const newSaleOrderLine = {
-        product: item,
-        qty: parseInt(quantity),
-        tax: (selectedProduct.tax / 100) * quantity * unitPrice,
-        unitPrice: unitPrice,
-        subTotal: subTotal,
-      };
-
-      setSaleOrderLines([...saleOrderLines, newSaleOrderLine]);
-    }
-
-    // Reset input values
-    setPd(options[0]); // Assuming options is an array of product IDs
-    setQuantity(0);
-    setTax(0);
-    setUnitPrice(0);
-  };
-
-  const removeProduct = (id) => {
-    // Filter out the product with the specified id
-    const updatedSaleOrderLines = saleOrderLines.filter(
-      (line) => line.product.id !== id
-    );
-    setSaleOrderLines(updatedSaleOrderLines);
+    dispatch(addLineToPurchaseOrder(line));
+    setLine(INIT_LINE_STATE);
   };
 
   useEffect(() => {
-    let calculatedTotalTax = 0;
-    let calculatedSubTotal = 0;
-
-    saleOrderLines.forEach((sel) => {
-      calculatedTotalTax += sel.tax;
-      calculatedSubTotal += sel.unitPrice * sel.qty;
-    });
-
-    setTotalTax(calculatedTotalTax);
-    setTotalCost(calculatedSubTotal + calculatedTotalTax);
-    getLocation();
     getPartner();
     getProduct();
-  }, [saleOrderLines]);
-
-  let count = 0;
+    getLocation();
+  }, [getPartner, getProduct]);
 
   return (
     <>
@@ -251,8 +199,9 @@ export default function SaleOrderCreate() {
       />
 
       <div className="container mt-2">
-        <div className="flex flex-row justify-between my-4 max-w-7xl">
+        <div className="flex flex-row justify-between my-5">
           <h2 className="lg:text-xl font-bold">Create Purchase Order</h2>
+
           <div className="flex gap-3">
             <Button
               type="submit"
@@ -269,15 +218,20 @@ export default function SaleOrderCreate() {
               Save
             </Button>
 
-            <Link to="/admin/purchase/all">
-              <Button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
+            <Link to="/admin/saleOrders/all">
+              <Button
+                onClick={() => {
+                  dispatch(removeAllLinesFromPurchaseOrder());
+                }}
+                className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5"
+              >
                 Discard
               </Button>
             </Link>
           </div>
         </div>
 
-        <div className="container bg-white p-5 rounded-lg max-w-7xl">
+        <div className="container bg-white p-5 rounded-lg">
           {isLoading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />
           )}
@@ -289,16 +243,19 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                     label="PaymentType"
                     name="payment"
-                    value={selectedOption}
+                    selectedKeys={[paymentType]?.filter(Boolean) || []}
                     placeholder="Select Payment Type"
                     onChange={(e) => {
-                      setSelectedOption(e.target.value);
+                      setPaymentType(e.target.value);
                     }}
                     className="max-w-xs"
                   >
-                    {/* Replace dynamic data with fixed options */}
-                    <SelectItem value="bank">Bank</SelectItem>
-                    <SelectItem value="cash">Cash</SelectItem>
+                    <SelectItem value="bank" key="bank">
+                      Bank
+                    </SelectItem>
+                    <SelectItem value="cash" key="cash">
+                      Cash
+                    </SelectItem>
                   </Select>
                 </div>
               </div>
@@ -307,28 +264,36 @@ export default function SaleOrderCreate() {
                   type="date"
                   name="expiredAt"
                   label="Order Date"
+                  value={purchaseOrderData.orderDate}
                   placeholder="enter date"
                   labelPlacement="outside"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
+                  onChange={(e) =>
+                    dispatch(addDateToPurchaseOrder(e.target.value))
+                  }
                 />
               </div>
               <div className="flex">
-                <div className="w-60 flex justify-between items-center relative">
+                <div className="w-60 flex justify-between relative">
                   <Select
                     labelPlacement="outside"
                     label="Partner"
                     name="partner"
+                    selectedKeys={
+                      [purchaseOrderData.partner]?.filter(Boolean) || []
+                    }
                     placeholder="Select partner"
-                    onChange={(e) => setPartner(e.target.value)}
+                    onChange={(e) =>
+                      dispatch(addCustomerToPurchaseOrder(e.target.value))
+                    }
                     className="max-w-xs"
                   >
-                    {part.map((ct) => (
-                      <SelectItem key={ct.id} value={ct.id}>
-                        {ct.name}
+                    {partners.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>
+                        {p.name}
                       </SelectItem>
                     ))}
                   </Select>
+
                   <Icon
                     onClick={handlePartnerButtonClick}
                     icon="icomoon-free:new-tab"
@@ -345,16 +310,21 @@ export default function SaleOrderCreate() {
               </div>
 
               <div className="flex">
-                <div className="w-60  flex justify-between relative">
+                <div className="w-60 flex justify-between relative">
                   <Select
                     labelPlacement="outside"
                     label="Location"
                     name="location"
+                    selectedKeys={
+                      [purchaseOrderData.location]?.filter(Boolean) || []
+                    }
                     placeholder="Select an location"
-                    onChange={(e) => setLoca(e.target.value)}
+                    onChange={(e) => {
+                      dispatch(addLocationToPurchaseOrder(e.target.value));
+                    }}
                     className="max-w-xs"
                   >
-                    {location.map((ct) => (
+                    {locations.map((ct) => (
                       <SelectItem key={ct.id} value={ct.id}>
                         {ct.name}
                       </SelectItem>
@@ -367,7 +337,6 @@ export default function SaleOrderCreate() {
                     className="text-lg absolute top-0 right-0 hover:opacity-70 text-slate-500 font-semibold"
                   />
                 </div>
-
                 <Icon
                   onClick={handleLocalRefreshIcon}
                   icon="ic:baseline-refresh"
@@ -378,38 +347,22 @@ export default function SaleOrderCreate() {
               </div>
 
               <div className="w-60">
-                <Select
-                  labelPlacement="outside"
-                  label="State"
-                  name="state"
-                  value={state}
-                  placeholder="State"
-                  defaultSelectedKeys={["pending"]}
-                  onChange={(e) => setState(e.target.value)}
-                  className="max-w-xs"
-                >
-                  {/* Replace dynamic data with fixed options */}
-                  <SelectItem defaultSelectedKeys value="pending" key="pending">
-                    Pending
-                  </SelectItem>
-                </Select>
-              </div>
-              <div className="w-60">
                 <Input
                   type="text"
                   label="Note"
                   name="note"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  placeholder="Enter Note name..."
+                  value={purchaseOrderData.note}
+                  onChange={(e) =>
+                    dispatch(addNoteToPurchaseOrder(e.target.value))
+                  }
+                  placeholder="Enter Note..."
                   labelPlacement="outside"
                 />
               </div>
             </div>
             <Divider />
             <div className="flex items-center w-full justify-between">
-              <h3 className="text-lg font-semibold">Order Products</h3>
-
+              <h3 className="text-lg font-semibold">Select Products</h3>
               <button
                 onClick={handleAddProduct}
                 className="font-bold rounded-sm shadow-sm flex items-center bg-slate-50 text-blue-700 border-blue-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-blue-700 px-3 py-1.5"
@@ -418,7 +371,6 @@ export default function SaleOrderCreate() {
                 Add
               </button>
             </div>
-
             <form onSubmit={handleAddProduct} className="flex justify-between">
               <div className="flex flex-wrap gap-8">
                 <div className="w-60">
@@ -426,62 +378,132 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                     label="Product"
                     name="product"
-                    value={pd}
                     placeholder="Select Product"
+                    isDisabled={!products.length}
+                    selectedKeys={[line.product.id]?.filter(Boolean) || []}
                     onChange={(e) => {
-                      setPd(e.target.value);
-                      const selectedProduct = product.find(
+                      const selectedProduct = products.find(
                         (pt) => pt.id === e.target.value
                       );
                       if (selectedProduct) {
-                        setUnitPrice(selectedProduct.salePrice);
-                        setQuantity(1);
-                        setTax(selectedProduct.tax);
-                        setItem(selectedProduct);
+                        setLine((prev) => {
+                          return {
+                            ...prev,
+                            product: selectedProduct,
+                            qty: 1,
+                            tax:
+                              (selectedProduct.salePrice *
+                                selectedProduct.tax) /
+                              100,
+                            subTotal:
+                              (selectedProduct.salePrice +
+                                (selectedProduct.salePrice *
+                                  selectedProduct.tax) /
+                                  100) *
+                              1,
+                            subTaxTotal:
+                              (selectedProduct.salePrice *
+                                selectedProduct.tax) /
+                              100,
+                          };
+                        });
                       }
                     }}
                     className="max-w-xs"
                   >
-                    {product.map((pt) => (
+                    {products.map((pt) => (
                       <SelectItem key={pt.id} value={pt.id}>
                         {pt.name}
                       </SelectItem>
                     ))}
                   </Select>
                 </div>
-                <div className="w-60">
+                <div className="w-20">
+                  <Input
+                    type="number"
+                    label="Unit Price"
+                    name="salePrice"
+                    isDisabled
+                    value={line.product?.salePrice}
+                    placeholder="Tax"
+                    labelPlacement="outside"
+                  />
+                </div>
+                <div className="w-20">
                   <Input
                     type="number"
                     label="Qty"
                     name="qty"
-                    value={quantity}
+                    value={line.qty}
                     onChange={(e) => {
-                      setQuantity(e.target.value);
+                      const qty = parseInt(e.target.value);
+                      if (qty > 0) {
+                        setLine((prev) => {
+                          return {
+                            ...prev,
+                            qty: qty,
+                            subTotal:
+                              (prev.product.salePrice +
+                                (prev.product.salePrice * prev.product.tax) /
+                                  100) *
+                              qty,
+                            subDiscTotal:
+                              ((prev.product.salePrice * prev.discount.amount) /
+                                100) *
+                              qty,
+                            subTaxTotal:
+                              ((prev.product.salePrice * prev.product.tax) /
+                                100) *
+                              qty,
+                          };
+                        });
+                      }
                     }}
                     placeholder="Enter Qty..."
                     labelPlacement="outside"
                   />
                 </div>
-                <div className="w-60">
+
+                <div className="w-20">
                   <Input
                     type="number"
                     label="Tax"
                     name="tax"
                     isDisabled
-                    value={(Tax * quantity) / 100}
-                    onChange={(e) => setTax(e.target.value)}
+                    value={line.tax}
                     placeholder="Tax"
                     labelPlacement="outside"
                   />
                 </div>
-                <div className="w-60">
+                <div className="w-20">
                   <Input
                     type="number"
-                    label="SubTotal"
+                    label="Tax Total"
+                    name="subTaxTotal"
+                    isDisabled
+                    value={line.subTaxTotal}
+                    placeholder="Tax"
+                    labelPlacement="outside"
+                  />
+                </div>
+                <div className="w-23">
+                  <Input
+                    type="number"
+                    label="Discount Total"
+                    name="subDiscTotal"
+                    isDisabled
+                    value={line.subDiscTotal}
+                    placeholder="Tax"
+                    labelPlacement="outside"
+                  />
+                </div>
+                <div className="w-32">
+                  <Input
+                    type="number"
+                    label="Subtotal (Inc. Tax)"
                     name="subTotal"
                     isDisabled
-                    value={unitPrice * quantity}
-                    onChange={(e) => setTotalCost(e.target.value)}
+                    value={line.subTotal}
                     placeholder="SubTotal"
                     labelPlacement="outside"
                   />
@@ -493,42 +515,53 @@ export default function SaleOrderCreate() {
                 <TableHeader className="header-cell bg-blue-500 text-white">
                   <TableColumn>Name</TableColumn>
                   <TableColumn>Barcode</TableColumn>
-                  <TableColumn>Tax</TableColumn>
-                  <TableColumn>Qty</TableColumn>
                   <TableColumn>Unit Price</TableColumn>
-                  <TableColumn>SubTotal</TableColumn>
+                  <TableColumn>Qty</TableColumn>
+                  <TableColumn>Tax</TableColumn>
+                  <TableColumn>Discount</TableColumn>
+                  <TableColumn>Tax Total</TableColumn>
+                  <TableColumn>Discount Total</TableColumn>
+                  <TableColumn>SubTotal (Inc. Tax)</TableColumn>
                   <TableColumn>Delete</TableColumn>
                 </TableHeader>
                 <TableBody>
-                  {saleOrderLines.map((line) => (
-                    <TableRow key={count + 1}>
-                      <TableCell>{line.product.name}</TableCell>
-                      <TableCell>{line.product.barcode}</TableCell>
-                      <TableCell>{line.tax.toFixed(2)}</TableCell>
-                      <TableCell>{line.qty}</TableCell>
-                      <TableCell>{line.unitPrice}</TableCell>
-                      <TableCell>{line.subTotal}</TableCell>
-
-                      <TableCell>
-                        <BsTrash
-                          className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
-                          onClick={() => removeProduct(line.product.id)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {purchaseOrderData.lines.length > 0 &&
+                    purchaseOrderData.lines.map((line) => (
+                      <TableRow key={line.product?._id}>
+                        <TableCell>{line.product?.name}</TableCell>
+                        <TableCell>{line.product?.barcode}</TableCell>
+                        <TableCell>{line.product?.salePrice}</TableCell>
+                        <TableCell>{line.qty}</TableCell>
+                        <TableCell>{line.tax.toFixed(2)}</TableCell>
+                        <TableCell>{line.discount?.amount}</TableCell>
+                        <TableCell>{line.subTaxTotal}</TableCell>
+                        <TableCell>{line.subDiscTotal}</TableCell>
+                        <TableCell>{line.subTotal}</TableCell>
+                        <TableCell>
+                          <BsTrash
+                            className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
+                            onClick={() =>
+                              dispatch(
+                                removeLineFromPurchaseOrder(line.product?.id)
+                              )
+                            }
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </div>
-            <div className="flex flex-col">
-              <div className="flex mt-8 justify-self-end">
+            <div className="flex flex-col w-full">
+              <div className="flex mt-4 justify-self-end">
                 <h1 className="text-lg font-semibold">
-                  TaxTotal : <span>{totalTax.toFixed(2) ?? 0}</span>
+                  Total Tax :{" "}
+                  <span>{purchaseOrderData.taxTotal.toFixed(2) ?? 0}</span>
                 </h1>
               </div>
               <div className="flex mt-4 justify-self-end">
                 <h1 className="text-lg font-semibold">
-                  Total : <span>{totalCost.toFixed(2) ?? 0}</span>
+                  Total : <span>{purchaseOrderData.total.toFixed(2) ?? 0}</span>
                 </h1>
               </div>
             </div>
