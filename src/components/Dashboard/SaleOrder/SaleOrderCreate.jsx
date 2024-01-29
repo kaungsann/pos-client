@@ -208,6 +208,13 @@ export default function SaleOrderCreate() {
       return result;
     }
 
+    if (saleOrderData.location) {
+      const filterProducts = filteredStock
+        .filter((item) => item.location._id === saleOrderData.location)
+        .map((item) => ({ ...item.product }));
+      setProducts(filterProducts);
+    }
+
     setLocations(getUniqueLocations(filteredStock));
     setStock(filteredStock);
   }, [token.accessToken]);
@@ -222,24 +229,14 @@ export default function SaleOrderCreate() {
     setLine(INIT_LINE_STATE);
   };
 
-  const handleLocation = useCallback(async () => {
-    const filteredProducts = stock
-      .filter((item) => item.location._id === saleOrderData.location)
-      .map((item) => ({ ...item.product }));
-
-    setProducts(filteredProducts);
-  }, [saleOrderData.location, stock]);
-
   useEffect(() => {
     getPartner();
     getDiscount();
   }, [getPartner, getDiscount]);
 
   useEffect(() => {
-    console.log("Location changed:", saleOrderData.location);
     getStock();
-    handleLocation();
-  }, [saleOrderData.location, getStock, handleLocation]);
+  }, [getStock]);
 
   return (
     <>
@@ -376,6 +373,10 @@ export default function SaleOrderCreate() {
                     }
                     placeholder="Select an location"
                     onChange={(e) => {
+                      const products = stock
+                        .filter((item) => item.location._id === e.target.value)
+                        .map((item) => ({ ...item.product }));
+                      setProducts(products);
                       dispatch(addLocationToSaleOrder(e.target.value));
                     }}
                     className="max-w-xs"
