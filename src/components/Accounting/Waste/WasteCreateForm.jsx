@@ -25,13 +25,27 @@ export default function WasteCreateForm() {
     date: "",
     product: "",
     location: locationId,
-    quantity: 0,
+    quantity: 1,
+    amount: 0,
   });
 
   const handleInputChange = (e) => {
     // setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const { name, value } = e.target;
+
+    if (name === "product") {
+      let filterProduct = product.find((pd) => pd._id === value);
+
+      let totalPrice = filterProduct.salePrice * formData.quantity;
+      console.log("total price is  a", totalPrice);
+
+      setFormData({
+        ...formData,
+        amount: totalPrice,
+      });
+      return;
+    }
 
     if (name === "location") {
       setLocationId(value);
@@ -102,7 +116,7 @@ export default function WasteCreateForm() {
     getLocation();
   }, [locationId]);
 
-  console.log("product is a", product);
+  console.log("form data is a", formData);
 
   return (
     <>
@@ -154,35 +168,23 @@ export default function WasteCreateForm() {
           )}
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
-              <div className="w-60">
-                <Select
-                  labelPlacement="outside"
-                  label="Waste"
-                  name="name"
-                  placeholder="Select Waste Type"
-                  className="max-w-xs"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange(e)}
-                >
-                  <SelectItem key="p&l" value="p&l">
-                    P & L
-                  </SelectItem>
-                  <SelectItem key="m&c" value="m&c">
-                    M&C
-                  </SelectItem>
-                </Select>
-              </div>
-              <div className="w-60">
-                <Input
-                  type="text"
-                  name="remark"
-                  label="Remark"
-                  value={formData.remark}
-                  onChange={(e) => handleInputChange(e)}
-                  placeholder="Enter remark..."
-                  labelPlacement="outside"
-                />
-              </div>
+              <Select
+                labelPlacement="outside"
+                label="Waste"
+                name="name"
+                placeholder="Select Waste Type"
+                className="w-60"
+                value={formData.name}
+                onChange={(e) => handleInputChange(e)}
+              >
+                <SelectItem key="p&l" value="p&l">
+                  P & L
+                </SelectItem>
+                <SelectItem key="m&c" value="m&c">
+                  M&C
+                </SelectItem>
+              </Select>
+
               <Select
                 labelPlacement="outside"
                 label="Location"
@@ -198,6 +200,7 @@ export default function WasteCreateForm() {
                   </SelectItem>
                 ))}
               </Select>
+
               <Select
                 labelPlacement="outside"
                 label="Product"
@@ -213,6 +216,7 @@ export default function WasteCreateForm() {
                   </SelectItem>
                 ))}
               </Select>
+
               <div className="w-60">
                 <Input
                   type="number"
@@ -221,6 +225,29 @@ export default function WasteCreateForm() {
                   value={formData.quantity}
                   onChange={(e) => handleInputChange(e)}
                   placeholder="Enter quantity..."
+                  labelPlacement="outside"
+                />
+              </div>
+
+              <div className="w-60">
+                <Input
+                  type="number"
+                  name="amount"
+                  label="Amount"
+                  value={formData.amount}
+                  placeholder="Enter amount..."
+                  labelPlacement="outside"
+                />
+              </div>
+
+              <div className="w-60">
+                <Input
+                  type="text"
+                  name="remark"
+                  label="Remark"
+                  value={formData.remark}
+                  onChange={(e) => handleInputChange(e)}
+                  placeholder="Enter remark..."
                   labelPlacement="outside"
                 />
               </div>
