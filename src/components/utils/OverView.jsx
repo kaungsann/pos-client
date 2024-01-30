@@ -295,6 +295,8 @@ export default function OverView() {
     );
   };
 
+  console.log(popularPurchaseProducts);
+
   return (
     <>
       {loading ? (

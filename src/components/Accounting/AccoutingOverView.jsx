@@ -194,6 +194,8 @@ const AccoutingOverView = () => {
     fetchYearlyData();
   }, [token, handleDateSelection, handleAccountYearly]);
 
+  console.log(totalYear);
+
   return (
     <>
       <div className="flex items-center mb-6">
@@ -328,6 +330,7 @@ const AccoutingOverView = () => {
               "Gross Sale",
               "Opex",
               "Waste",
+              "Discount",
               "Fixed Cost",
               "Variable Cost",
               "Purchase Cost",
@@ -362,7 +365,9 @@ const AccoutingOverView = () => {
                         </button>
                       )}
                     </td>
-                    <td className="text-slate-600 font-bold">{acc.balance}</td>
+                    <td className="text-slate-600 font-bold">
+                      {acc.balance.toLocaleString()}
+                    </td>
                   </tr>
                   {expandedIndex === index && (
                     <tr className="w-full flex flex-col">
@@ -394,13 +399,15 @@ const AccoutingOverView = () => {
 
                                 {acc.subRow &&
                                   acc.subRow.length > 0 &&
-                                  acc.subRow.reduce((total, row) => {
-                                    if (row.quantity) {
-                                      return row.quantity + total;
-                                    } else {
-                                      return row.amount + total;
-                                    }
-                                  }, 0)}
+                                  acc.subRow
+                                    .reduce((total, row) => {
+                                      if (row.quantity) {
+                                        return row.quantity + total;
+                                      } else {
+                                        return row.amount + total;
+                                      }
+                                    }, 0)
+                                    .toLocaleString()}
                               </td>
                             </tr>
                           </>
@@ -420,13 +427,14 @@ const AccoutingOverView = () => {
                   "Gross Sale",
                   "Opex",
                   "Waste",
+                  "Discount",
                   "Fixed Cost",
                   "Variable Cost",
                   "Purchase Cost",
                 ]
                   .map((type) => account.find((acc) => acc.type === type))
                   .reduce((total, row) => total + (row ? row.balance : 0), 0)
-                  .toFixed()}
+                  .toLocaleString()}
               </td>
             </tr>
           </tbody>
@@ -497,11 +505,8 @@ const AccoutingOverView = () => {
                   <td
                     key={rowIndex}
                     className="w-24 text-center"
-                    style={{
-                      color: rowData[colIndex].balance < 0 ? "red" : "black",
-                    }}
                   >
-                    {Math.abs(rowData[colIndex].balance).toFixed()}
+                    {rowData[colIndex] ? rowData[colIndex].balance : 0}
                   </td>
                 ))}
               </tr>
