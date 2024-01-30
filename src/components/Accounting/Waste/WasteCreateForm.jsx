@@ -29,9 +29,33 @@ export default function WasteCreateForm() {
     amount: 0,
   });
 
-  const handleInputChange = (e) => {
-    // setFormData({ ...formData, [e.target.name]: e.target.value });
+  // const handleInputChange = (e) => {
+  //   // setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  //   const { name, value } = e.target;
+
+  //   if (name === "product") {
+  //     let filterProduct = product.find((pd) => pd._id === value);
+
+  //     let totalPrice = filterProduct.salePrice * formData.quantity;
+
+  //     setFormData({
+  //       ...formData,
+  //       product: value,
+  //       amount: totalPrice,
+  //     });
+
+  //     return;
+  //   }
+
+  //   if (name === "location") {
+  //     setLocationId(value);
+  //   }
+
+  //   setFormData({ ...formData, [name]: value });
+  // };
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "product") {
@@ -44,15 +68,21 @@ export default function WasteCreateForm() {
         product: value,
         amount: totalPrice,
       });
+    } else if (name === "quantity") {
+      let totalPrice = formData.product
+        ? product.find((pd) => pd._id === formData.product).salePrice * value
+        : 0;
 
-      return;
-    }
-
-    if (name === "location") {
+      setFormData({
+        ...formData,
+        quantity: value,
+        amount: totalPrice,
+      });
+    } else if (name === "location") {
       setLocationId(value);
+    } else {
+      setFormData({ ...formData, [name]: value });
     }
-
-    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
