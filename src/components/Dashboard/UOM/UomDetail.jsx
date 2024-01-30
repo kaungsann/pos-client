@@ -50,7 +50,7 @@ export default function UomDetail() {
                 <h1 className="text-2xl mt-8 font-bold text-slate-600">
                   Unit Of Measurement Information
                 </h1>
-                <Link to={`/admin/uom/edit/${detail[0]._id}`}>
+                <Link to={`/admin/uom/edit/${detail[0].id}`}>
                   <Icon
                     icon="mdi:edit"
                     className="text-xl hover:opacity-75 text-slate-500 font-semibold"
@@ -58,36 +58,30 @@ export default function UomDetail() {
                 </Link>
               </div>
 
-              <div className="my-4 flex p-4 items-center border-b-2 ">
-                <div className="flex  w-full bg-orange-100">
-                  <div className="flex items-center justify-evenly w-full">
-                    <div>
-                      <h4 className="text-md text-slate-500">Name</h4>
-                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].name ? detail[0].name.toUpperCase() : ""}
-                      </h2>
-                    </div>
-                    <div className="my-6">
-                      <h4 className="text-md text-slate-500">Ref-Type</h4>
-                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].refType ? detail[0].refType : "none"}
-                      </h2>
-                    </div>
-                  </div>
-                  <div className="flex mx-8 items-center justify-evenly w-fullx">
-                    <div>
-                      <h4 className="text-md text-slate-500">Ratio</h4>
-                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].ratio ? detail[0].ratio : 0}
-                      </h2>
-                    </div>
-                    <div className="my-6">
-                      <h4 className="text-md text-slate-500">Uom-Category</h4>
-                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].uomCatg ? detail[0].uomCatg : "none"}
-                      </h2>
-                    </div>
-                  </div>
+              <div className="flex mt-8 justify-between items-center">
+                <div className="w-48">
+                  <h4 className="text-md text-slate-500">Name</h4>
+                  <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                    {detail[0].name ? detail[0].name.toUpperCase() : ""}
+                  </h2>
+                </div>
+                <div className="w-48">
+                  <h4 className="text-md text-slate-500">Ref-Type</h4>
+                  <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                    {detail[0].refType ? detail[0].refType : "none"}
+                  </h2>
+                </div>
+                <div className="w-48">
+                  <h4 className="text-md text-slate-500">Ratio</h4>
+                  <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                    {detail[0].ratio ? detail[0].ratio : 0}
+                  </h2>
+                </div>
+                <div className="w-48">
+                  <h4 className="text-md text-slate-500">Uom-Category</h4>
+                  <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                    {detail[0].uomCatg ? detail[0].uomCatg.name : "none"}
+                  </h2>
                 </div>
               </div>
             </div>

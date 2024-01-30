@@ -82,7 +82,7 @@ export default function UomEdit() {
           name: uomData.name,
           ratio: uomData.ratio,
           refType: uomData.refType,
-          uomCatg: uomData.uomCatg,
+          uomCatg: uomData.uomCatg._id,
         });
       } catch (error) {
         console.error("Error fetching uom:", error);
@@ -115,8 +115,10 @@ export default function UomEdit() {
     getUom();
   }, []);
 
-  console.log("uom cat is a", uomCats);
-  console.log("uom  is a", uom);
+  console.log("uom form data is a", uom);
+
+  // console.log("uom cat is a", uomCats);
+  // console.log("uom  is a", uom);
 
   return (
     <>
@@ -197,7 +199,9 @@ export default function UomEdit() {
                   name="refType"
                   placeholder="Select Ref-Type"
                   className="max-w-xs"
-                  value={uom.refType}
+                  selectedKeys={
+                    uom.refType ? [uom.refType || uom.refType] : false
+                  }
                   onChange={(e) => inputChangeHandler(e)}
                 >
                   <SelectItem key="reference" value="reference">
@@ -218,7 +222,9 @@ export default function UomEdit() {
                 name="uomCatg"
                 required
                 placeholder="Select an Uom Category"
-                value={uom.uomCatg}
+                selectedKeys={
+                  uom.uomCatg ? [uom.uomCatg._id || uom.uomCatg] : false
+                }
                 onChange={(e) => inputChangeHandler(e)}
                 className="w-60"
               >

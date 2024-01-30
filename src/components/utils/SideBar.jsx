@@ -1086,10 +1086,7 @@ export default function SideBar() {
                       navigate("/admin/uom/all"), clostHandleList();
                     }}
                   >
-                    <Icon
-                      icon="carbon:category-new-each"
-                      className="text-slate-500 text-2xl"
-                    />
+                    <Icon icon="ph:ruler" className="text-slate-500 text-2xl" />
 
                     <h3 className="ml-2">UOM</h3>
                   </li>
