@@ -447,10 +447,6 @@ export default function PurchaseCreate() {
                                 (prev.product.salePrice * prev.product.tax) /
                                   100) *
                               qty,
-                            subDiscTotal:
-                              ((prev.product.salePrice * prev.discount.amount) /
-                                100) *
-                              qty,
                             subTaxTotal:
                               ((prev.product.salePrice * prev.product.tax) /
                                 100) *
@@ -518,9 +514,7 @@ export default function PurchaseCreate() {
                   <TableColumn>Unit Price</TableColumn>
                   <TableColumn>Qty</TableColumn>
                   <TableColumn>Tax</TableColumn>
-                  <TableColumn>Discount</TableColumn>
                   <TableColumn>Tax Total</TableColumn>
-                  <TableColumn>Discount Total</TableColumn>
                   <TableColumn>SubTotal (Inc. Tax)</TableColumn>
                   <TableColumn>Delete</TableColumn>
                 </TableHeader>
@@ -533,9 +527,7 @@ export default function PurchaseCreate() {
                         <TableCell>{line.product?.salePrice}</TableCell>
                         <TableCell>{line.qty}</TableCell>
                         <TableCell>{line.tax.toFixed(2)}</TableCell>
-                        <TableCell>{line.discount?.amount}</TableCell>
                         <TableCell>{line.subTaxTotal}</TableCell>
-                        <TableCell>{line.subDiscTotal}</TableCell>
                         <TableCell>{line.subTotal}</TableCell>
                         <TableCell>
                           <BsTrash

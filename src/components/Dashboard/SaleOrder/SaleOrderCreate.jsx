@@ -48,21 +48,6 @@ export default function SaleOrderCreate() {
   const [partIconRotation, setPartIconRotation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const INIT_LINE_STATE = {
-    product: {
-      id: "",
-      name: "",
-      salePrice: 0,
-    },
-    qty: 0,
-    tax: 0,
-    discount: { id: "", amount: 0 },
-    subTotal: 0,
-    subTaxTotal: 0,
-    subDiscTotal: 0,
-  };
-  const [line, setLine] = useState(INIT_LINE_STATE);
-
   const dispatch = useDispatch();
 
   const handlePartnerButtonClick = () => {
@@ -113,6 +98,21 @@ export default function SaleOrderCreate() {
   const saleOrderData = useSelector((state) => state.saleOrder);
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
+
+  const INIT_LINE_STATE = {
+    product: {
+      id: "",
+      name: "",
+      salePrice: 0,
+    },
+    qty: 0,
+    tax: 0,
+    discount: { id: "", amount: 0 },
+    subTotal: 0,
+    subTaxTotal: 0,
+    subDiscTotal: 0,
+  };
+  const [line, setLine] = useState(INIT_LINE_STATE);
 
   const createProductApi = async () => {
     setIsLoading(true);
@@ -237,6 +237,8 @@ export default function SaleOrderCreate() {
   useEffect(() => {
     getStock();
   }, [getStock]);
+
+  console.log("sale order data is ", saleOrderData);
 
   return (
     <>

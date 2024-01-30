@@ -48,6 +48,9 @@ import { Icon } from "@iconify/react";
 export default function OverView() {
   const [loading, setLoading] = useState(false);
 
+  const [location, setLocation] = useState([]);
+  const [locationId, setLocationId] = useState("");
+
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -268,6 +271,16 @@ export default function OverView() {
     getTotals();
   }, [startDate, endDate]);
 
+  useEffect(() => {
+    const getLocation = async () => {
+      const resData = await getApi("/location", token.accessToken);
+      const filteredLocation = resData.data.filter((la) => la.active === true);
+      setLocation(filteredLocation);
+    };
+
+    getLocation();
+  }, []);
+
   const COLORS = ["#A2C3DB", "#8871A0", "#8AAF22", "#DCB12D", "#3F9F9F"];
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
@@ -295,6 +308,12 @@ export default function OverView() {
     );
   };
 
+  console.log("filter locaton name is", locationId);
+
+  const addLocationId = (e) => {
+    console.log("e is a", e.targe.value);
+  };
+
   return (
     <>
       {loading ? (
@@ -305,6 +324,38 @@ export default function OverView() {
         <div className="relative">
           <div className="flex justify-end mb-3">
             <div className="flex w-full justify-center items-center">
+              <Popover
+                placement="bottom"
+                classNames={{
+                  base: ["p-0 rounded-sm"],
+                  content: ["p-0 mx-2 rounded-sm"],
+                }}
+              >
+                <PopoverTrigger>
+                  <Button
+                    size="sm"
+                    className="rounded-sm ml-3 transition shadow-sm flex items-centertext-[#4338ca] border-[#4338ca] hover:bg-[#4338ca]
+                 border-2 hover:opacity-75 text-sm hover:text-white bg-white  font-bold px-3 py-1.5`"
+                  >
+                    <Icon icon="tdesign:location" className="text-md" />
+                    <span className="text-sm ml-1">Filter</span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <Listbox aria-label="Select location">
+                    {location.map((loc) => (
+                      <ListboxItem
+                        className="rounded-none"
+                        key={loc.id}
+                        value={loc.id}
+                        onClick={(e) => setLocationId(e.target.value)}
+                      >
+                        {loc.name}
+                      </ListboxItem>
+                    ))}
+                  </Listbox>
+                </PopoverContent>
+              </Popover>
               <Popover
                 placement="bottom"
                 classNames={{
