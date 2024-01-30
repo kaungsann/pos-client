@@ -308,11 +308,7 @@ export default function OverView() {
     );
   };
 
-  console.log("filter locaton name is", locationId);
-
-  const addLocationId = (e) => {
-    console.log("e is a", e.targe.value);
-  };
+  console.log(popularPurchaseProducts);
 
   return (
     <>

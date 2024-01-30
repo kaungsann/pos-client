@@ -75,39 +75,47 @@ const AccoutingOverView = () => {
       const currentDate = new Date();
 
       switch (option) {
-        case "This Weekend":
+        case "This Weekend": {
           const startOfWeekend = startOfWeek(currentDate, { weekStartsOn: 6 }); // Saturday
           const endOfWeekend = endOfWeek(currentDate, { weekStartsOn: 6 }); // Sunday
           setStartDate(format(startOfWeekend, "MM-dd-yyyy"));
           setEndDate(format(endOfWeekend, "MM-dd-yyyy"));
           setText("This Weekend");
           break;
-        case "This Month":
+        }
+        case "This Month": {
           setStartDate(format(startOfMonth(currentDate), "MM-dd-yyyy"));
           setEndDate(format(endOfMonth(currentDate), "MM-dd-yyyy"));
           // setText(format(addMonths(currentDate, -1), "MMMM"));
           setText(format(currentDate, "MMMM"));
           break;
-        case "This Year":
+        }
+
+        case "This Year": {
           setStartDate(format(startOfYear(currentDate), "MM-dd-yyyy"));
           setEndDate(format(endOfYear(currentDate), "MM-dd-yyyy"));
           setText(new Date().getFullYear());
           break;
-        case "Last Month":
+        }
+
+        case "Last Month": {
           const lastMonthStartDate = startOfMonth(subMonths(currentDate, 1));
           const lastMonthEndDate = endOfMonth(subMonths(currentDate, 1));
           setStartDate(format(lastMonthStartDate, "MM-dd-yyyy"));
           setEndDate(format(lastMonthEndDate, "MM-dd-yyyy"));
           setText(format(lastMonthStartDate, "MMMM"));
           break;
-        case "Last Year":
+        }
+
+        case "Last Year": {
           const lastYearStartDate = startOfYear(subYears(currentDate, 1));
           const lastYearEndDate = endOfYear(subYears(currentDate, 1));
           setStartDate(format(lastYearStartDate, "MM-dd-yyyy"));
           setEndDate(format(lastYearEndDate, "MM-dd-yyyy"));
           setText(format(lastYearStartDate, "yyyy"));
           break;
-        case "Last Quarter":
+        }
+        case "Last Quarter": {
           const lastQuarterStartDate = startOfQuarter(
             subQuarters(currentDate, 1)
           );
@@ -121,6 +129,7 @@ const AccoutingOverView = () => {
             )}`
           );
           break;
+        }
 
         default:
           break;
@@ -193,6 +202,8 @@ const AccoutingOverView = () => {
     fetchAccountData();
     fetchYearlyData();
   }, [token, handleDateSelection, handleAccountYearly]);
+
+  console.log(totalYear);
 
   return (
     <>
@@ -328,6 +339,7 @@ const AccoutingOverView = () => {
               "Gross Sale",
               "Opex",
               "Waste",
+              "Discount",
               "Fixed Cost",
               "Variable Cost",
               "Purchase Cost",
@@ -362,7 +374,9 @@ const AccoutingOverView = () => {
                         </button>
                       )}
                     </td>
-                    <td className="text-slate-600 font-bold">{acc.balance}</td>
+                    <td className="text-slate-600 font-bold">
+                      {acc.balance.toLocaleString()}
+                    </td>
                   </tr>
                   {expandedIndex === index && (
                     <tr className="w-full flex flex-col">
@@ -394,13 +408,15 @@ const AccoutingOverView = () => {
 
                                 {acc.subRow &&
                                   acc.subRow.length > 0 &&
-                                  acc.subRow.reduce((total, row) => {
-                                    if (row.quantity) {
-                                      return row.quantity + total;
-                                    } else {
-                                      return row.amount + total;
-                                    }
-                                  }, 0)}
+                                  acc.subRow
+                                    .reduce((total, row) => {
+                                      if (row.quantity) {
+                                        return row.quantity + total;
+                                      } else {
+                                        return row.amount + total;
+                                      }
+                                    }, 0)
+                                    .toLocaleString()}
                               </td>
                             </tr>
                           </>
@@ -420,13 +436,14 @@ const AccoutingOverView = () => {
                   "Gross Sale",
                   "Opex",
                   "Waste",
+                  "Discount",
                   "Fixed Cost",
                   "Variable Cost",
                   "Purchase Cost",
                 ]
                   .map((type) => account.find((acc) => acc.type === type))
                   .reduce((total, row) => total + (row ? row.balance : 0), 0)
-                  .toFixed()}
+                  .toLocaleString()}
               </td>
             </tr>
           </tbody>
@@ -494,14 +511,8 @@ const AccoutingOverView = () => {
                   {totalYear[0][colIndex].type}
                 </td>
                 {totalYear.map((rowData, rowIndex) => (
-                  <td
-                    key={rowIndex}
-                    className="w-24 text-center"
-                    style={{
-                      color: rowData[colIndex].balance < 0 ? "red" : "black",
-                    }}
-                  >
-                    {Math.abs(rowData[colIndex].balance).toFixed()}
+                  <td key={rowIndex} className="w-24 text-center">
+                    {rowData[colIndex] ? rowData[colIndex].balance : 0}
                   </td>
                 ))}
               </tr>

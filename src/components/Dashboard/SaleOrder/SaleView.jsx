@@ -236,7 +236,7 @@ export default function SaleView() {
             />
             <div className="ml-2">
               <div className="flex items-center">
-                <h3 className="font-bold text-slate-600 text-md">
+                <h3 className="font-bold text-slate-600 text-md me-2">
                   Gross Sales
                 </h3>
                 <Popover placement="top">
@@ -247,7 +247,7 @@ export default function SaleView() {
                     <PopoverContent className="rounded-md">
                       <div className="px-1 py-2">
                         <div className="text-tiny">
-                          This is the popover content
+                          The sum of all sales before discounts and taxes
                         </div>
                       </div>
                     </PopoverContent>
@@ -294,7 +294,7 @@ export default function SaleView() {
 
             <div className="ml-1.5">
               <div className="flex items-center">
-                <h3 className="font-bold text-slate-600 text-md">Net Sales</h3>
+                <h3 className="font-bold text-slate-600 text-md me-2">Net Sales</h3>
                 <Popover placement="top">
                   <Popover placement="top" offset={20} showArrow>
                     <PopoverTrigger>
@@ -303,7 +303,7 @@ export default function SaleView() {
                     <PopoverContent className="rounded-md">
                       <div className="px-1 py-2">
                         <div className="text-tiny">
-                          This is the net sale content
+                          Gross sales minus discounts
                         </div>
                       </div>
                     </PopoverContent>
@@ -325,7 +325,7 @@ export default function SaleView() {
 
             <div className="ml-1.5">
               <div className="flex items-center">
-                <h3 className="font-bold text-slate-600 text-md">
+                <h3 className="font-bold text-slate-600 text-md me-2">
                   Gross Profit
                 </h3>
                 <Popover placement="top">
@@ -336,7 +336,7 @@ export default function SaleView() {
                     <PopoverContent className="rounded-md">
                       <div className="px-1 py-2">
                         <div className="text-tiny">
-                          This is theGross Profite content
+                          Net sales minus cost of goods
                         </div>
                       </div>
                     </PopoverContent>
