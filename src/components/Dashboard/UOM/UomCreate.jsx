@@ -30,10 +30,30 @@ export default function UomCreate() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: name === "uomCatg" ? value : value,
-    }));
+    if (name === "refType" && value === "reference") {
+      setFormData((prevData) => ({
+        ...prevData,
+        ratio: 1,
+        refType: value,
+      }));
+    } else if (name === "refType" && value === "bigger") {
+      setFormData((prevData) => ({
+        ...prevData,
+        ratio: 0,
+        refType: value,
+      }));
+    } else if (name === "refType" && value === "smaller") {
+      setFormData((prevData) => ({
+        ...prevData,
+        ratio: 0,
+        refType: value,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -66,6 +86,8 @@ export default function UomCreate() {
     };
     getUomCats();
   }, []);
+
+  console.log("formdata is a", formData);
 
   return (
     <>
