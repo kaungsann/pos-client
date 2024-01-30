@@ -70,6 +70,7 @@ import UomTemplate from "./components/Dashboard/UOM/UomTemplate";
 import UomCreate from "./components/Dashboard/UOM/UomCreate";
 import UomEdit from "./components/Dashboard/UOM/UomEdit";
 import UomDetail from "./components/Dashboard/UOM/UomDetail";
+import UomCatDetail from "./components/Dashboard/UOMCat/UomCatDetail";
 
 function App() {
   return (
@@ -156,7 +157,7 @@ function App() {
               <Route path="all" element={<UomCatTemplate />} />
               <Route path="create" element={<UomCatCreate />} />
               <Route path="edit/:id" element={<UomCatEdit />} />
-              <Route path="detail/:id" element={<UomDetail />} />
+              <Route path="detail/:id" element={<UomCatDetail />} />
             </Route>
             <Route path="uom">
               <Route path="all" element={<UomTemplate />} />

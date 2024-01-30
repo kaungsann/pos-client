@@ -35,6 +35,7 @@ export default function WasteCreateForm() {
     const { name, value } = e.target;
 
     if (name === "product") {
+      setFormData({ ...formData, [name]: value });
       let filterProduct = product.find((pd) => pd._id === value);
 
       let totalPrice = filterProduct.salePrice * formData.quantity;
@@ -44,6 +45,7 @@ export default function WasteCreateForm() {
         ...formData,
         amount: totalPrice,
       });
+
       return;
     }
 

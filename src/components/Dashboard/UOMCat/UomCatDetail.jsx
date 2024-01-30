@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getApi } from "../../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
 import { Icon } from "@iconify/react";
 import { Spinner } from "@nextui-org/react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getApi } from "../../Api";
 
-export default function UomDetail() {
+export default function UomCatDetail() {
   const { id } = useParams();
   const [detail, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  console.log("id is a", id);
 
   const token = useSelector((state) => state.IduniqueData);
   const dispatch = useDispatch();
@@ -21,7 +25,7 @@ export default function UomDetail() {
     try {
       let resData = await getApi(`/uomCategory/${id}`, token.accessToken);
 
-      if (resData.message === "Token Expire , Please Login Again") {
+      if (resData.message === "Session expired") {
         dispatch(removeData(null));
       }
 
@@ -29,6 +33,7 @@ export default function UomDetail() {
         setLoading(false);
         setDetails(resData.data);
       } else {
+        toast.error(resData.message);
         throw new Error("Data not found");
       }
     } catch (error) {
@@ -43,6 +48,18 @@ export default function UomDetail() {
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="flex justify-between">
         <div className="flex gap-2">
           <Link

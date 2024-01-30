@@ -985,7 +985,7 @@ export default function SideBar() {
             />
           </div>
 
-          <div className="border-t flex p-3">
+          <div className="border-t flex p-2">
             <div
               className="
               flex flex-col justify-between
@@ -1151,7 +1151,7 @@ export default function SideBar() {
             </div>
           </div>
 
-          <div className="border-t flex p-3">
+          <div className="border-t flex p-2">
             <div
               className="flex flex-col justify-between w-full
               overflow-hidden duration-1000 transition-all"
@@ -1215,7 +1215,7 @@ export default function SideBar() {
             </div>
           </div>
 
-          <div className="border-t flex p-3">
+          <div className="border-t flex p-2">
             <div
               className="flex flex-col justify-between w-full
               overflow-hidden duration-1000 transition-all "
@@ -1278,7 +1278,7 @@ export default function SideBar() {
             </div>
           </div>
 
-          <div className="border-t flex p-3">
+          <div className="border-t flex p-2">
             <div
               className="flex flex-col justify-between w-full
               overflow-hidden duration-1000 transition-all"
@@ -1351,7 +1351,7 @@ export default function SideBar() {
             </div>
           </div>
 
-          <div className="border-t flex p-3">
+          <div className="border-t flex p-2">
             <div
               className="flex flex-col justify-between w-full
                  overflow-hidden duration-1000 transition-all "

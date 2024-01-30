@@ -21,7 +21,7 @@ export default function UomDetail() {
 
     console.log("res data is ", resData);
 
-    if (resData.message == "Token Expire , Please Login Again") {
+    if (resData.message == "Session expired") {
       dipatch(removeData(null));
     }
     if (resData.status) {
