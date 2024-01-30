@@ -179,11 +179,12 @@ function VariableCostTemplate() {
         /> */}
 
         <Select
-          labelPlacement="outside"
-          label="VariableCost"
           name="name"
-          placeholder="Select VariableCost Type"
-          className="max-w-xs"
+          placeholder="Select Type"
+          classNames={{
+            base: "max-w-xs",
+            trigger: "h-10 py-3 rounded-md",
+          }}
           value={selectedVariableCostType}
           onChange={(e) => setSelectedVariableCostType(e.target.value)}
         >

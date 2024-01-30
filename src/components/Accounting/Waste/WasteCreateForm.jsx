@@ -102,6 +102,8 @@ export default function WasteCreateForm() {
     getLocation();
   }, [locationId]);
 
+  console.log("product is a", product);
+
   return (
     <>
       <ToastContainer

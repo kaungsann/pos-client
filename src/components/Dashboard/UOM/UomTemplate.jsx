@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 //import FilterBox from "./FilterBox";
 import { BASE_URL } from "../../Api";
-import { Button, Select, SelectItem } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";

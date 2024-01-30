@@ -179,11 +179,12 @@ function FixedCostTemplate() {
         /> */}
 
         <Select
-          labelPlacement="outside"
-          label="Discount"
           name="name"
-          placeholder="Select Discount Type"
-          className="max-w-xs"
+          placeholder="Select Type"
+          classNames={{
+            base: "max-w-xs",
+            trigger: "h-10 py-3 rounded-md",
+          }}
           value={selectedFixCostType}
           onChange={(e) => setSelectedFixCostType(e.target.value)}
         >

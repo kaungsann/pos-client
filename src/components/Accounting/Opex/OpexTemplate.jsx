@@ -177,11 +177,12 @@ function OpexTemplate() {
         /> */}
 
         <Select
-          labelPlacement="outside"
-          label="Opex"
           name="name"
-          placeholder="Select Opex Type"
-          className="max-w-xs"
+          placeholder="Select Type"
+          classNames={{
+            base: "max-w-xs",
+            trigger: "h-10 py-3 rounded-md",
+          }}
           value={selectedOpexType}
           onChange={(e) => setSelectedOpexType(e.target.value)}
         >

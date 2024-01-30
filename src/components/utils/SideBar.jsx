@@ -1071,7 +1071,7 @@ export default function SideBar() {
                       className="text-slate-500 text-2xl"
                     />
 
-                    <h3 className="ml-2">UOM-Cat</h3>
+                    <h3 className="ml-2">UOM Catg</h3>
                   </li>
                   <li
                     className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
@@ -1193,7 +1193,7 @@ export default function SideBar() {
                       icon="icons8:buy"
                       className="text-slate-500 text-xl"
                     />
-                    <span className="ml-3"> Purchase</span>
+                    <span className="ml-3"> Purchase Orders</span>
                   </li>
                   <li
                     className={`p-1 px-3 flex items-center rounded-sm text-md hover:bg-slate-100 text-slate-500 ${
@@ -1258,7 +1258,7 @@ export default function SideBar() {
                       className="text-slate-500 text-xl"
                     />
 
-                    <span className="ml-3">SaleOrders</span>
+                    <span className="ml-3">Sale Orders</span>
                   </li>
                   <li
                     className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${

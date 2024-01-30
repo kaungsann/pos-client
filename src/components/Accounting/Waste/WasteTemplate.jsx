@@ -180,11 +180,12 @@ function WasteTemplate() {
         /> */}
 
         <Select
-          labelPlacement="outside"
-          label="Waste"
           name="name"
-          placeholder="Select Waste Type"
-          className="max-w-xs"
+          placeholder="Select Type"
+          classNames={{
+            base: "max-w-xs",
+            trigger: "h-10 py-3 rounded-md",
+          }}
           value={selectedWasteType}
           onChange={(e) => setSelectedWasteType(e.target.value)}
         >
