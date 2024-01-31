@@ -16,8 +16,8 @@ export default function Register() {
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
-  const [locas, setLocas] = useState([]);
-  const [location, setLocation] = useState("");
+  const [locations, setLocations] = useState([]);
+  const [locationId, setLocationId] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -47,16 +47,16 @@ export default function Register() {
     if (address) {
       formData.append("address", address);
     }
-    if (city) {
-      formData.append("location", location);
-    }
+
     // if (file) {
     //   formData.append("image", file);
     // }
     formData.append("username", name);
     formData.append("email", email);
-    formData.append("location", location);
+    formData.append("location", locationId);
     formData.append("password", password);
+
+    console.log("formadata is a", formData);
 
     let response = await FormPostApi("/user", formData, token.accessToken);
 
@@ -72,7 +72,7 @@ export default function Register() {
   const getLocation = async () => {
     const resData = await getApi("/location", token.accessToken);
     const filteredLocation = resData.data.filter((la) => la.active === true);
-    setLocas(filteredLocation);
+    setLocations(filteredLocation);
   };
 
   useEffect(() => {
@@ -149,9 +149,9 @@ export default function Register() {
                   name="location"
                   placeholder="Select an location"
                   className="max-w-xs"
-                  onChange={(e) => setLocation(e.target.value)}
+                  onChange={(e) => setLocationId(e.target.value)}
                 >
-                  {locas.map((ct) => (
+                  {locations.map((ct) => (
                     <SelectItem key={ct.id} value={ct.id}>
                       {ct.name}
                     </SelectItem>
