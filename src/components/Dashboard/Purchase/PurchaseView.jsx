@@ -33,6 +33,10 @@ export default function PurchaseView() {
       `/orders/totals?startDate=${todayDate.toString()}`,
       token.accessToken
     );
+    console.log(
+      "purchase view is",
+      `/orders/totals?startDate=${todayDate.toString()}`
+    );
 
     if (resData.status) {
       setTotalAmount(resData.data.purchases.totalAmount);

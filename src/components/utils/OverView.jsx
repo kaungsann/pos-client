@@ -539,10 +539,10 @@ export default function OverView() {
                   </div>
                 </div>
                 <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-yellow-100 rounded-md">
+                  <div className="p-4 bg-violet-300 rounded-md">
                     <Icon
-                      icon="tdesign:undertake-transaction"
-                      className="text-4xl text-yellow-600 font-extrabold"
+                      icon="solar:sale-linear"
+                      className="text-4xl text-violet-600 font-extrabold"
                     />
                   </div>
                   <div className="px-3">
@@ -555,10 +555,10 @@ export default function OverView() {
                   </div>
                 </div>
                 <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-yellow-100 rounded-md">
+                  <div className="p-4 bg-pink-100 rounded-md">
                     <Icon
-                      icon="tdesign:undertake-transaction"
-                      className="text-4xl text-yellow-600 font-extrabold"
+                      icon="la:cart-arrow-down"
+                      className="text-4xl text-rose-600 font-extrabold"
                     />
                   </div>
                   <div className="px-3">
@@ -606,10 +606,10 @@ export default function OverView() {
                   </div>
                 </div>
                 <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-yellow-100 rounded-md">
+                  <div className="p-4 bg-[#d9f99d] rounded-md">
                     <Icon
-                      icon="tdesign:undertake-transaction"
-                      className="text-4xl text-yellow-600 font-extrabold"
+                      icon="fluent-mdl2:product"
+                      className="text-4xl text-[#8AAF22] font-extrabold"
                     />
                   </div>
                   <div className="px-3">
@@ -622,10 +622,10 @@ export default function OverView() {
                   </div>
                 </div>
                 <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-yellow-100 rounded-md">
+                  <div className="p-4 bg-orange-100 rounded-md">
                     <Icon
-                      icon="tdesign:undertake-transaction"
-                      className="text-4xl text-yellow-600 font-extrabold"
+                      icon="fluent-mdl2:product-variant"
+                      className="text-4xl text-orange-600"
                     />
                   </div>
                   <div className="px-3">
@@ -685,10 +685,10 @@ export default function OverView() {
               {/* Monthly Sales */}
               <div className=" my-3 px-4 flex">
                 <div className="flex items-center w-2/4	">
-                  <div className="p-4 bg-orange-200 rounded-md">
+                  <div className="p-4 bg-[#d9f99d] rounded-md">
                     <Icon
-                      icon="fluent-mdl2:product-variant"
-                      className="text-4xl text-orange-600"
+                      icon="fluent-mdl2:product"
+                      className="text-4xl text-[#8AAF22] font-extrabold"
                     />
                   </div>
                   <div className="mx-3">
