@@ -31,14 +31,14 @@ let INITIAL_VISIBLE_COLUMNS = [
 ];
 
 let columns = [
-  { name: "OrderDate", uid: "orderdate" },
+  { name: "Order Date", uid: "orderdate" },
   { name: "Name", uid: "name" },
   { name: "Partner", uid: "partner" },
   { name: "Location", uid: "location" },
-  { name: "PaymentStatus", uid: "paymentstatus" },
+  { name: "Payment Status", uid: "paymentstatus" },
   { name: "State", uid: "state" },
-  { name: "TotalProduct", uid: "totalproduct", sortable: true },
-  { name: "TaxTotal", uid: "taxtotal", sortable: true },
+  { name: "Total Product", uid: "totalproduct", sortable: true },
+  { name: "Tax Total", uid: "taxtotal", sortable: true },
   { name: "Total", uid: "total", sortable: true },
 ];
 
@@ -309,7 +309,7 @@ export default function WareHouseList({ warehouses }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No warehouse found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record"} items={sortedItems}>
           {(item) => (
             <TableRow key={item._id}>
               {(columnKey) => (

@@ -269,7 +269,7 @@ export default function CategoryList({ categories, refresh }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No category found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

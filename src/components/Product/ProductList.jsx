@@ -31,9 +31,9 @@ const columns = [
   { name: "Tax", uid: "tax", sortable: true },
   { name: "Sale Price", uid: "salePrice", sortable: true },
   { name: "Purchase Price", uid: "purchasePrice", sortable: true },
-  { name: "Min-Stock Qty", uid: "minStockQty", sortable: true },
+  { name: "Min Stock Qty", uid: "minStockQty", sortable: true },
   { name: "Ref", uid: "ref" },
-  { name: "Barcode", uid: "barcode" },
+  { name: "Bar Code", uid: "barcode" },
   { name: "Actions", uid: "actions" },
 ];
 
@@ -292,7 +292,7 @@ export default function ProductList({ products, fetchProducts }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Product found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

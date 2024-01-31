@@ -387,9 +387,11 @@ export default function OverView() {
               </Popover> */}
               <Select
                 aria-label="location"
+                variant="bordered"
+                color="success"
                 name="location"
                 classNames={{
-                  base: "w-60",
+                  base: "w-52",
                   trigger: "h-10 py-3 rounded-md",
                 }}
                 selectedKeys={[locationId]?.filter(Boolean) || []}
@@ -513,8 +515,8 @@ export default function OverView() {
                   </div>
                 </PopoverContent>
               </Popover>
-              <div className="w-56 flex shadow-sm justify-center px-3 mx-3 py-1 bg-white border-2 text-center rounded-sm">
-                <h4 className="text-slate-500 items-center font-semibold">
+              <div className="w-56 flex shadow-sm justify-center px-3 mx-3 py-1 bg-white border-2 text-center rounded-sm ring-2 ring-purple-500  ring-offset-slate-50 dark:ring-offset-slate-900">
+                <h4 className="text-slate-500 items-center font-semibold ">
                   {selectedDate ?? "None"}
                 </h4>
               </div>

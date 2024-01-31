@@ -31,14 +31,14 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 const columns = [
-  { name: "Schedule-Date", uid: "scheduledate" },
+  { name: "Schedule Date", uid: "scheduledate" },
   { name: "Name", uid: "name" },
   { name: "Partner", uid: "partner" },
   { name: "Location", uid: "location" },
   { name: "State", uid: "state" },
-  { name: "TotalProduct", uid: "totalproduct" },
-  { name: "TaxTotal", uid: "taxtotal", sortable: true },
-  { name: "OrderRef", uid: "orderref" },
+  { name: "Total Product", uid: "totalproduct" },
+  { name: "Tax Total", uid: "taxtotal", sortable: true },
+  { name: "Order Ref", uid: "orderref" },
   { name: "Total", uid: "total", sortable: true },
   { name: "Action", uid: "actions" },
 ];
@@ -90,69 +90,72 @@ export default function SaleList({ orders }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((orders, columnKey) => {
-    const cellValue = orders[columnKey];
+  const renderCell = React.useCallback(
+    (orders, columnKey) => {
+      const cellValue = orders[columnKey];
 
-    switch (columnKey) {
-      case "scheduledate":
-        return <h3>{format(new Date(orders.orderDate), "yyyy-MM-dd")}</h3>;
-      case "name":
-        return <h3>{orders.user?.username}</h3>;
-      case "partner":
-        return <h3>{orders.partner?.name}</h3>;
-      case "location":
-        return <h3>{orders.location?.name}</h3>;
-      case "orderref":
-        return <h3>{orders.orderRef}</h3>;
+      switch (columnKey) {
+        case "scheduledate":
+          return <h3>{format(new Date(orders.orderDate), "yyyy-MM-dd")}</h3>;
+        case "name":
+          return <h3>{orders.user?.username}</h3>;
+        case "partner":
+          return <h3>{orders.partner?.name}</h3>;
+        case "location":
+          return <h3>{orders.location?.name}</h3>;
+        case "orderref":
+          return <h3>{orders.orderRef}</h3>;
 
-      case "state":
-        return (
-          <div className="flex gap-4">
-            {orders.state === "pending" ? (
-              <Chip color="danger" variant="bordered">
-                {orders.state}
-              </Chip>
-            ) : (
-              <Chip color="success" variant="bordered">
-                {orders.state}
-              </Chip>
-            )}
-          </div>
-        );
-      case "totalproduct":
-        return <h3>{orders.lines.length}</h3>;
-      case "taxtotal":
-        return <h3>{orders.taxTotal.toFixed(2)}</h3>;
-      case "total":
-        return <h3>{orders.total.toFixed(2)}</h3>;
-      case "actions":
-        return (
-          <div
-            className="relative flex justify-start items-center gap-2"
-            aria-label="action"
-          >
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <Icon icon="fluent:grid-dots-28-regular" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="action">
-                <DropdownItem
-                  onPress={() => {
-                    navigate(`/admin/saleorders/detail/${orders.id}`);
-                  }}
-                >
-                  View
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
-      default:
-        return cellValue;
-    }
-  }, [navigate]);
+        case "state":
+          return (
+            <div className="flex gap-4">
+              {orders.state === "pending" ? (
+                <Chip color="danger" variant="bordered">
+                  {orders.state}
+                </Chip>
+              ) : (
+                <Chip color="success" variant="bordered">
+                  {orders.state}
+                </Chip>
+              )}
+            </div>
+          );
+        case "totalproduct":
+          return <h3>{orders.lines.length}</h3>;
+        case "taxtotal":
+          return <h3>{orders.taxTotal.toFixed(2)}</h3>;
+        case "total":
+          return <h3>{orders.total.toFixed(2)}</h3>;
+        case "actions":
+          return (
+            <div
+              className="relative flex justify-start items-center gap-2"
+              aria-label="action"
+            >
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button isIconOnly size="sm" variant="light">
+                    <Icon icon="fluent:grid-dots-28-regular" />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="action">
+                  <DropdownItem
+                    onPress={() => {
+                      navigate(`/admin/saleorders/detail/${orders.id}`);
+                    }}
+                  >
+                    View
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          );
+        default:
+          return cellValue;
+      }
+    },
+    [navigate]
+  );
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
@@ -282,7 +285,7 @@ export default function SaleList({ orders }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No orders found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
