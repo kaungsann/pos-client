@@ -40,6 +40,7 @@ export default function SaleOrderCreate() {
   const [locations, setLocations] = useState([]);
   const [partners, setPartners] = useState([]);
   const [discounts, setDiscounts] = useState([]);
+  const [uoms, setUoms] = useState([]);
 
   const [paymentType, setPaymentType] = useState("cash");
   const [stock, setStock] = useState([]);
@@ -106,6 +107,7 @@ export default function SaleOrderCreate() {
       salePrice: 0,
     },
     qty: 0,
+    uom: { id: "", name: "", ratio: 1 },
     tax: 0,
     discount: { id: "", amount: 0 },
     subTotal: 0,
@@ -131,6 +133,7 @@ export default function SaleOrderCreate() {
         const modifiedLine = {
           ...line,
           product: line.product._id,
+          uom: line.uom.id,
           unitPrice: line.product.salePrice,
         };
         if (line.discount && line.discount.id) {
@@ -219,6 +222,13 @@ export default function SaleOrderCreate() {
     setStock(filteredStock);
   }, [token.accessToken]);
 
+  const getUOM = useCallback(async () => {
+    const resData = await getApi("/uom", token.accessToken);
+    const filteredUoms = resData.data.filter((la) => la.active === true);
+
+    setUoms(filteredUoms);
+  }, [token.accessToken]);
+
   const handleAddProduct = () => {
     if (!line.product || !line.product._id) {
       toast.error("Please select a product before adding it to the sale order");
@@ -232,13 +242,9 @@ export default function SaleOrderCreate() {
   useEffect(() => {
     getPartner();
     getDiscount();
-  }, [getPartner, getDiscount]);
-
-  useEffect(() => {
     getStock();
-  }, [getStock]);
-
-  console.log("sale order data is ", saleOrderData);
+    getUOM();
+  }, [getPartner, getDiscount, getStock, getUOM]);
 
   return (
     <>
@@ -448,6 +454,7 @@ export default function SaleOrderCreate() {
                             ...prev,
                             product: selectedProduct,
                             qty: 1,
+                            uom: { id: "", name: "", ratio: 1 },
                             tax:
                               (selectedProduct.salePrice *
                                 selectedProduct.tax) /
@@ -486,7 +493,7 @@ export default function SaleOrderCreate() {
                     labelPlacement="outside"
                   />
                 </div>
-                <div className="w-20">
+                <div className="w-16">
                   <Input
                     type="number"
                     label="Qty"
@@ -503,15 +510,15 @@ export default function SaleOrderCreate() {
                               (prev.product.salePrice +
                                 (prev.product.salePrice * prev.product.tax) /
                                   100) *
-                              qty,
+                              (qty * prev.uom.ratio),
                             subDiscTotal:
                               ((prev.product.salePrice * prev.discount.amount) /
                                 100) *
-                              qty,
+                              (qty * prev.uom.ratio),
                             subTaxTotal:
                               ((prev.product.salePrice * prev.product.tax) /
                                 100) *
-                              qty,
+                              (qty * prev.uom.ratio),
                           };
                         });
                       }
@@ -519,6 +526,47 @@ export default function SaleOrderCreate() {
                     placeholder="Enter Qty..."
                     labelPlacement="outside"
                   />
+                </div>
+                <div className="w-40">
+                  <Select
+                    labelPlacement="outside"
+                    label="UOM"
+                    name="uom"
+                    selectedKeys={[line.uom.id]?.filter(Boolean) || []}
+                    placeholder="Select an measurement"
+                    onChange={(e) => {
+                      const selectedUOM = uoms.find(
+                        (uom) => uom.id === e.target.value
+                      );
+                      if (selectedUOM) {
+                        setLine((prev) => {
+                          return {
+                            ...prev,
+                            uom: selectedUOM,
+                            subTotal:
+                              (prev.product.salePrice +
+                                (prev.product.salePrice * prev.product.tax) /
+                                  100) *
+                              (prev.qty * selectedUOM.ratio),
+                            subDiscTotal:
+                              ((prev.product.salePrice * prev.discount.amount) /
+                                100) *
+                              (prev.qty * selectedUOM.ratio),
+                            subTaxTotal:
+                              ((prev.product.salePrice * prev.product.tax) /
+                                100) *
+                              (prev.qty * selectedUOM.ratio),
+                          };
+                        });
+                      }
+                    }}
+                  >
+                    {uoms.map((uom) => (
+                      <SelectItem key={uom.id} value={uom.id}>
+                        {uom.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
                 </div>
                 <div className="flex">
                   <div className="flex w-60 justify-between relative">
@@ -569,7 +617,7 @@ export default function SaleOrderCreate() {
                   <Icon
                     onClick={handleDiscontRefresh}
                     icon="ic:baseline-refresh"
-                    className={`mt-10 mx-3 text-xl text-slate-600 font-semibold hover:opacity-70 duration-1000 transition-all ${
+                    className={`mt-10 mx-2 text-xl text-slate-600 font-semibold hover:opacity-70 duration-1000 transition-all ${
                       partIconRotation ? "rotate-[360deg]" : "rotate-0"
                     }`}
                   />
@@ -592,14 +640,14 @@ export default function SaleOrderCreate() {
                     name="subTaxTotal"
                     isDisabled
                     value={line.subTaxTotal}
-                    placeholder="Tax"
+                    placeholder="Tax Total"
                     labelPlacement="outside"
                   />
                 </div>
-                <div className="w-23">
+                <div className="w-20">
                   <Input
                     type="number"
-                    label="Discount Total"
+                    label="Dis Total"
                     name="subDiscTotal"
                     isDisabled
                     value={line.subDiscTotal}
@@ -627,6 +675,7 @@ export default function SaleOrderCreate() {
                   <TableColumn>Barcode</TableColumn>
                   <TableColumn>Unit Price</TableColumn>
                   <TableColumn>Qty</TableColumn>
+                  <TableColumn>UOM</TableColumn>
                   <TableColumn>Tax</TableColumn>
                   <TableColumn>Discount</TableColumn>
                   <TableColumn>Tax Total</TableColumn>
@@ -637,11 +686,12 @@ export default function SaleOrderCreate() {
                 <TableBody>
                   {saleOrderData.lines.length > 0 &&
                     saleOrderData.lines.map((line) => (
-                      <TableRow key={line.product?._id}>
+                      <TableRow key={`${line.product?.id}-${line.uom?.id}`}>
                         <TableCell>{line.product?.name}</TableCell>
                         <TableCell>{line.product?.barcode}</TableCell>
                         <TableCell>{line.product?.salePrice}</TableCell>
                         <TableCell>{line.qty}</TableCell>
+                        <TableCell>{line.uom?.name}</TableCell>
                         <TableCell>{line.tax.toFixed(2)}</TableCell>
                         <TableCell>{line.discount?.amount}</TableCell>
                         <TableCell>{line.subTaxTotal}</TableCell>
@@ -652,7 +702,7 @@ export default function SaleOrderCreate() {
                             className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
                             onClick={() =>
                               dispatch(
-                                removeLineFromSaleOrder(line.product?._id)
+                                removeLineFromSaleOrder(line.product?._id, line.uom?.id)
                               )
                             }
                           />

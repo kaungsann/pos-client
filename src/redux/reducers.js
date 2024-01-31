@@ -131,7 +131,9 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
       let { line } = payload;
 
       const existingLineIndex = state.lines.findIndex(
-        (existingLine) => existingLine.product._id === line.product._id
+        (existingLine) =>
+          existingLine.product._id === line.product._id &&
+          existingLine.uom.id === line.uom.id
       );
 
       if (existingLineIndex !== -1) {
@@ -183,15 +185,17 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
       }
     }
     case "removeLineFromSaleOrder": {
-      let { productID } = payload;
+      let { productID, uomID } = payload;
       console.log(productID);
       const lineToRemove = state.lines.find(
-        (line) => line.product._id === productID
+        (line) => line.product._id === productID && line.uom.id === uomID
       );
 
       return {
         ...state,
-        lines: state.lines.filter((item) => item.product._id !== productID),
+        lines: state.lines.filter(
+          (item) => item.product._id !== productID || item.uom.id !== uomID
+        ),
         total: state.total - lineToRemove.subTotal,
         taxTotal: state.taxTotal - lineToRemove.subTaxTotal,
       };
@@ -239,7 +243,9 @@ const purchaseOrderReducer = (
       let { line } = payload;
 
       const existingLineIndex = state.lines.findIndex(
-        (existingLine) => existingLine.product.id === line.product.id
+        (existingLine) =>
+          existingLine.product.id === line.product.id &&
+          existingLine.uom.id === line.uom.id
       );
 
       if (existingLineIndex !== -1) {
@@ -281,14 +287,19 @@ const purchaseOrderReducer = (
       }
     }
     case "removeLineFromPurchaseOrder": {
-      let { productID } = payload;
+      let { productID, uomID } = payload;
+
       const lineToRemove = state.lines.find(
-        (line) => line.product.id === productID
+        (line) => line.product.id === productID && line.uom.id === uomID
       );
 
       return {
         ...state,
-        lines: state.lines.filter((item) => item.product.id !== productID),
+        lines: state.lines.filter(
+          (item) =>
+            item.product.id !== productID ||
+            item.uom.id !== uomID
+        ),
         total: state.total - lineToRemove.subTotal,
         taxTotal: state.taxTotal - lineToRemove.subTaxTotal,
       };

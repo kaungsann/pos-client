@@ -39,6 +39,7 @@ export default function PurchaseCreate() {
   const [products, setProducts] = useState([]);
   const [locations, setLocations] = useState([]);
   const [partners, setPartners] = useState([]);
+  const [uoms, setUoms] = useState([]);
 
   const [paymentType, setPaymentType] = useState("cash");
 
@@ -53,6 +54,7 @@ export default function PurchaseCreate() {
       salePrice: 0,
     },
     qty: 0,
+    uom: { id: "", name: "", ratio: 1 },
     tax: 0,
     subTotal: 0,
     subTaxTotal: 0,
@@ -113,6 +115,7 @@ export default function PurchaseCreate() {
         const modifiedLine = {
           ...line,
           product: line.product.id,
+          uom: line.uom.id,
           unitPrice: line.product.salePrice,
         };
 
@@ -167,6 +170,13 @@ export default function PurchaseCreate() {
     setProducts(filteredProducts);
   }, [token.accessToken]);
 
+  const getUOM = useCallback(async () => {
+    const resData = await getApi("/uom", token.accessToken);
+    const filteredUoms = resData.data.filter((la) => la.active === true);
+
+    setUoms(filteredUoms);
+  }, [token.accessToken]);
+
   const handleAddProduct = () => {
     if (!line.product || !line.product.id) {
       toast.error("Please select a product before adding it to the sale order");
@@ -181,7 +191,8 @@ export default function PurchaseCreate() {
     getPartner();
     getProduct();
     getLocation();
-  }, [getPartner, getProduct]);
+    getUOM();
+  }, [getPartner, getProduct, getLocation, getUOM]);
 
   return (
     <>
@@ -391,6 +402,7 @@ export default function PurchaseCreate() {
                             ...prev,
                             product: selectedProduct,
                             qty: 1,
+                            uom: { id: "", name: "", ratio: 1 },
                             tax:
                               (selectedProduct.salePrice *
                                 selectedProduct.tax) /
@@ -446,11 +458,11 @@ export default function PurchaseCreate() {
                               (prev.product.salePrice +
                                 (prev.product.salePrice * prev.product.tax) /
                                   100) *
-                              qty,
+                              (qty * prev.uom.ratio),
                             subTaxTotal:
                               ((prev.product.salePrice * prev.product.tax) /
                                 100) *
-                              qty,
+                              (qty * prev.uom.ratio),
                           };
                         });
                       }
@@ -459,7 +471,43 @@ export default function PurchaseCreate() {
                     labelPlacement="outside"
                   />
                 </div>
-
+                <div className="w-40">
+                  <Select
+                    labelPlacement="outside"
+                    label="UOM"
+                    name="uom"
+                    selectedKeys={[line.uom.id]?.filter(Boolean) || []}
+                    placeholder="Select an measurement"
+                    onChange={(e) => {
+                      const selectedUOM = uoms.find(
+                        (uom) => uom.id === e.target.value
+                      );
+                      if (selectedUOM) {
+                        setLine((prev) => {
+                          return {
+                            ...prev,
+                            uom: selectedUOM,
+                            subTotal:
+                              (prev.product.salePrice +
+                                (prev.product.salePrice * prev.product.tax) /
+                                  100) *
+                              (prev.qty * selectedUOM.ratio),
+                            subTaxTotal:
+                              ((prev.product.salePrice * prev.product.tax) /
+                                100) *
+                              (prev.qty * selectedUOM.ratio),
+                          };
+                        });
+                      }
+                    }}
+                  >
+                    {uoms.map((uom) => (
+                      <SelectItem key={uom.id} value={uom.id}>
+                        {uom.name}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
                 <div className="w-20">
                   <Input
                     type="number"
@@ -513,6 +561,7 @@ export default function PurchaseCreate() {
                   <TableColumn>Barcode</TableColumn>
                   <TableColumn>Unit Price</TableColumn>
                   <TableColumn>Qty</TableColumn>
+                  <TableColumn>UOM</TableColumn>
                   <TableColumn>Tax</TableColumn>
                   <TableColumn>Tax Total</TableColumn>
                   <TableColumn>SubTotal (Inc. Tax)</TableColumn>
@@ -521,11 +570,12 @@ export default function PurchaseCreate() {
                 <TableBody>
                   {purchaseOrderData.lines.length > 0 &&
                     purchaseOrderData.lines.map((line) => (
-                      <TableRow key={line.product?._id}>
+                      <TableRow key={`${line.product?.id}-${line.uom?.id}`}>
                         <TableCell>{line.product?.name}</TableCell>
                         <TableCell>{line.product?.barcode}</TableCell>
                         <TableCell>{line.product?.salePrice}</TableCell>
                         <TableCell>{line.qty}</TableCell>
+                        <TableCell>{line.uom?.name}</TableCell>
                         <TableCell>{line.tax.toFixed(2)}</TableCell>
                         <TableCell>{line.subTaxTotal}</TableCell>
                         <TableCell>{line.subTotal}</TableCell>
@@ -534,7 +584,7 @@ export default function PurchaseCreate() {
                             className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
                             onClick={() =>
                               dispatch(
-                                removeLineFromPurchaseOrder(line.product?.id)
+                                removeLineFromPurchaseOrder(line.product?.id, line.uom?.id)
                               )
                             }
                           />
