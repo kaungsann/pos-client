@@ -268,7 +268,7 @@ export default function UomCatList({ categories, refresh }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No category found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record"} items={sortedItems}>
           {(item) => (
             <TableRow key={item._id}>
               {(columnKey) => (

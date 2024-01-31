@@ -208,7 +208,7 @@ export default function StockList({ stocks }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Stocks found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

@@ -1435,7 +1435,7 @@ export default function SideBar() {
                       className="tet-slate-500 text-xl"
                     />
 
-                    <span className="ml-3">Fixed-Cost</span>
+                    <span className="ml-3">Fixed Cost</span>
                   </li>
                   <li
                     className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
@@ -1455,7 +1455,7 @@ export default function SideBar() {
                       className="tet-slate-500 text-xl"
                     />
 
-                    <span className="ml-3"> Variable-Cost</span>
+                    <span className="ml-3"> Variable Cost</span>
                   </li>
                   <li
                     className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${

@@ -111,6 +111,12 @@ export default function LocationDetail() {
                       : ""}
                   </h3>
                 </div>
+                <div className="flex justify-between items-center">
+                  <h4>Location Id</h4>
+                  <h3 className="font-medium">
+                    {detail[0].id ? detail[0].id : "none"}
+                  </h3>
+                </div>
               </div>
             </div>
           </div>

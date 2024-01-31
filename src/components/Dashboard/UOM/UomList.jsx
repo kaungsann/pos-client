@@ -30,9 +30,9 @@ const INITIAL_VISIBLE_COLUMNS = [
 
 const columns = [
   { name: "Name", uid: "name", sortable: true },
-  { name: "RefType", uid: "refType" },
+  { name: "Ref Type", uid: "refType" },
   { name: "Ratio", uid: "ratio", sortable: true },
-  { name: "Create-Date", uid: "created" },
+  { name: "Created Date", uid: "created" },
   { name: "Category", uid: "category" },
   { name: "Action", uid: "actions" },
 ];
@@ -286,7 +286,7 @@ export default function UomList({ units }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Record Found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

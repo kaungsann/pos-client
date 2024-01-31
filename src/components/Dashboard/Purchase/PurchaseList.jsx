@@ -35,7 +35,7 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 const columns = [
-  { name: "Schedule-Date", uid: "scheduledate" },
+  { name: "Schedule Date", uid: "scheduledate" },
   { name: "User", uid: "user" },
   { name: "Partner", uid: "partner", sortable: true },
   { name: "Location", uid: "location", sortable: true },
@@ -43,7 +43,7 @@ const columns = [
   { name: "Item", uid: "totalproduct", sortable: true },
   { name: "Total Qty", uid: "totalqty", sortable: true },
   { name: "Total", uid: "total", sortable: true },
-  { name: "OrderRef", uid: "orderref" },
+  { name: "Order Ref", uid: "orderref" },
   { name: "Action", uid: "actions" },
 ];
 
@@ -327,7 +327,7 @@ export default function PurchaseList({ orders, refresh }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Purchase Order found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

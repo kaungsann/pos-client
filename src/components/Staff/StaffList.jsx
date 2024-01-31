@@ -350,7 +350,7 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No staffs found"} items={sortedItems}>
+        <TableBody emptyContent={"No Record"} items={sortedItems}>
           {(item) => (
             <TableRow key={item._id}>
               {(columnKey) => (
