@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-//import SearchCompo from "../../utils/SearchCompo";
+import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import DiscountList from "./DiscountList";
 import { BASE_URL } from "../../Api";
@@ -129,12 +129,12 @@ function DiscountTemplate() {
   return (
     <>
       <div className="flex justify-between items-center my-3">
-        {/* <SearchCompo
+        <SearchCompo
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
-        /> */}
+        />
 
-        <Select
+        {/* <Select
           name="name"
           placeholder="Select Discount Type"
           classNames={{
@@ -150,7 +150,7 @@ function DiscountTemplate() {
           <SelectItem key="Birthday Discount" value="Birthday Discount">
             Birthday Discount
           </SelectItem>
-        </Select>
+        </Select> */}
 
         <div className="flex">
           <Button

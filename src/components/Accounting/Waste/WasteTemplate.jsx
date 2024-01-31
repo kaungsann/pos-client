@@ -183,7 +183,7 @@ function WasteTemplate() {
           name="name"
           placeholder="Select Type"
           classNames={{
-            base: "max-w-xs",
+            base: "w-60",
             trigger: "h-10 py-3 rounded-md",
           }}
           value={selectedWasteType}
