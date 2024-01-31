@@ -111,6 +111,7 @@ export default function UomTemplate() {
     [units, filteredKeywords]
   );
 
+  console.log(units);
   return (
     <>
       <div className="flex justify-between items-center my-3">
@@ -118,23 +119,6 @@ export default function UomTemplate() {
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
         />
-        {/* 
-        <Select
-          labelPlacement="outside"
-          label="Discount"
-          name="name"
-          placeholder="Select Discount Type"
-          className="max-w-xs"
-          value={selectedDiscountType}
-          onChange={(e) => setSelectedDiscountType(e.target.value)}
-        >
-          <SelectItem key="New Year Discount" value="New Year Discount">
-            New Year Discount
-          </SelectItem>
-          <SelectItem key="Birthday Discount" value="Birthday Discount">
-            Birthday Discount
-          </SelectItem>
-        </Select> */}
 
         <div className="flex">
           <Button
@@ -147,7 +131,7 @@ export default function UomTemplate() {
           {/* <FilterBox onFilter={handleFilterChange} /> */}
         </div>
       </div>
-      <UomList unit={filteredUnitOfMeasure} refresh={fetchUomData} />
+      <UomList units={filteredUnitOfMeasure} />
     </>
   );
 }

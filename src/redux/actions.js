@@ -100,10 +100,11 @@ export const addLineToSaleOrder = (line) => {
   };
 };
 
-export const removeLineFromSaleOrder = (productID) => ({
+export const removeLineFromSaleOrder = (productID, uomID) => ({
   type: "removeLineFromSaleOrder",
   payload: {
     productID,
+    uomID
   },
 });
 
@@ -192,10 +193,11 @@ export const addLineToPurchaseOrder = (line) => {
   };
 };
 
-export const removeLineFromPurchaseOrder = (productID) => ({
+export const removeLineFromPurchaseOrder = (productID, uomID) => ({
   type: "removeLineFromPurchaseOrder",
   payload: {
     productID,
+    uomID
   },
 });
 
