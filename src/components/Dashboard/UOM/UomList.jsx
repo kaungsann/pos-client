@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   Table,
   TableHeader,
@@ -17,8 +18,6 @@ import { Icon } from "@iconify/react";
 import { format } from "date-fns";
 
 import { useNavigate } from "react-router-dom";
-import DeleteAlert from "../../utils/DeleteAlert";
-import getUnixTime from "date-fns/getUnixTime/index.js";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "name",
@@ -26,6 +25,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "refType",
   "created",
   "actions",
+  "category",
 ];
 
 const columns = [
@@ -33,17 +33,15 @@ const columns = [
   { name: "RefType", uid: "refType" },
   { name: "Ratio", uid: "ratio", sortable: true },
   { name: "Create-Date", uid: "created" },
+  { name: "Category", uid: "category" },
   { name: "Action", uid: "actions" },
 ];
 
-export default function UomList({ unit, refresh }) {
+export default function UomList({ units }) {
   const [filterValue, setFilterValue] = React.useState("");
-  const [showDeleteBox, setShowDeleteBox] = React.useState(false);
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
-  const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "",
@@ -64,24 +62,15 @@ export default function UomList({ unit, refresh }) {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredOpex = [...unit];
+    let filteredOpex = [...units];
 
     if (hasSearchFilter) {
       filteredOpex = filteredOpex.filter((op) =>
         op.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredOpex = filteredOpex.filter((op) =>
-        Array.from(statusFilter).includes(op.state)
-      );
-    }
-
     return filteredOpex;
-  }, [unit, filterValue, statusFilter]);
+  }, [units, filterValue]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -114,6 +103,8 @@ export default function UomList({ unit, refresh }) {
         return <h3>{unit.ratio}</h3>;
       case "created":
         return <h3>{format(new Date(unit.createdAt), "yyyy-MM-dd")}</h3>;
+      case "category":
+        return <h3>{unit.uomCatg?.name}</h3>;
       case "actions":
         return (
           <div
@@ -187,7 +178,7 @@ export default function UomList({ unit, refresh }) {
           <div className="flex items-end">
             <h2 className="text-xl font-bold">Unit Of Measurement</h2>
             <h3 className="text-default-400 text-md pl-4">
-              Total {unit.length}
+              Total {units.length}
             </h3>
           </div>
           <div className="flex items-center">
@@ -227,11 +218,9 @@ export default function UomList({ unit, refresh }) {
     );
   }, [
     filterValue,
-    statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    unit.length,
-    selectedKeys,
+    units.length,
     onSearchChange,
     hasSearchFilter,
   ]);
@@ -239,11 +228,7 @@ export default function UomList({ unit, refresh }) {
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} `}
-        </span>
+        <span className="w-[30%] text-small text-default-400"></span>
         <Pagination
           isCompact
           showControls
@@ -273,7 +258,7 @@ export default function UomList({ unit, refresh }) {
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [items.length, page, pages, hasSearchFilter]);
 
   return (
     <>
@@ -285,7 +270,6 @@ export default function UomList({ unit, refresh }) {
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
-        selectedKeys={selectedKeys}
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
@@ -315,3 +299,7 @@ export default function UomList({ unit, refresh }) {
     </>
   );
 }
+
+UomList.propTypes = {
+  units: PropTypes.array,
+};
