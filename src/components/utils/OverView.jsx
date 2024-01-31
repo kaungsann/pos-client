@@ -87,7 +87,7 @@ export default function OverView() {
       let apiUrl = `/orders/totals`;
 
       if (locationId) {
-        apiUrl += `?location=${locationId}`;
+        apiUrl += `?locationId=${locationId}`;
       }
 
       if (startDate && endDate) {
@@ -120,7 +120,7 @@ export default function OverView() {
         setTotalPurchaseItems(resData.data.purchases.totalItems);
         setPurchaseLines(resData.data.purchases.allLines);
         setPopularPurchaseProducts(resData.data.purchases.topProducts);
-        setLowStock(resData.data.lowStock);
+        setLowStock(resData.data.inventory.lowStockProducts);
         setTotalGrossSale(resData.data.sales.totalGrossSale);
         setTotalGrossProfit(resData.data.sales.totalGrossProfit);
         setTotalDiscount(resData.data.sales.totalDiscount);
