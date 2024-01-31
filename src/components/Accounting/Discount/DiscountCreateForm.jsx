@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import { Input, Progress, Button, Select, SelectItem } from "@nextui-org/react";
+import { Input, Progress, Button } from "@nextui-org/react";
 
 export default function DiscountCreateForm() {
   const navigate = useNavigate();
@@ -100,7 +100,7 @@ export default function DiscountCreateForm() {
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
-                {/* <Input
+                <Input
                   type="text"
                   label="Name"
                   name="name"
@@ -108,9 +108,9 @@ export default function DiscountCreateForm() {
                   onChange={(e) => handleInputChange(e)}
                   placeholder="enter discount name..."
                   labelPlacement="outside"
-                /> */}
+                />
 
-                <Select
+                {/* <Select
                   labelPlacement="outside"
                   label="Discount"
                   name="name"
@@ -125,7 +125,7 @@ export default function DiscountCreateForm() {
                   <SelectItem key="Birthday Discount" value="Birthday Discount">
                     Birthday Discount
                   </SelectItem>
-                </Select>
+                </Select> */}
               </div>
               <div className="w-60">
                 <Input

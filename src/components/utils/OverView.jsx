@@ -36,6 +36,8 @@ import {
   Listbox,
   ListboxItem,
   Spinner,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 
 import { getApi } from "../Api";
@@ -327,6 +329,8 @@ export default function OverView() {
     );
   };
 
+  console.log("location id is a", locationId);
+
   return (
     <>
       {loading ? (
@@ -336,20 +340,18 @@ export default function OverView() {
       ) : (
         <div className="relative">
           <div className="flex justify-end mb-3">
-            {locationId ? (
+            {/* {locationId ? (
               <h1 className="font-bold w-48 text-slate-500 text-xl">
                 {" ( " +
                   location.find((loc) => loc.id === locationId)?.name +
                   " ) "}
               </h1>
             ) : (
-              <h1 className="font-bold w-48 text-slate-500 text-xl">
-                Choose Location
-              </h1>
-            )}
+              <h1 className="font-bold w-48 text-slate-500 text-xl"></h1>
+            )} */}
 
             <div className="flex w-full justify-center items-center">
-              <Popover
+              {/* <Popover
                 placement="bottom"
                 classNames={{
                   base: ["p-0 rounded-sm"],
@@ -382,7 +384,28 @@ export default function OverView() {
                     ))}
                   </Listbox>
                 </PopoverContent>
-              </Popover>
+              </Popover> */}
+              <Select
+                aria-label="location"
+                name="location"
+                classNames={{
+                  base: "w-60",
+                  trigger: "h-10 py-3 rounded-md",
+                }}
+                selectedKeys={[locationId]?.filter(Boolean) || []}
+                placeholder="Select an location"
+                onChange={(e) => setLocationId(e.target.value)}
+              >
+                {location.map((loc) => (
+                  <SelectItem
+                    className="rounded-none"
+                    key={loc.id}
+                    value={loc.id}
+                  >
+                    {loc.name}
+                  </SelectItem>
+                ))}
+              </Select>
               <Popover
                 placement="bottom"
                 classNames={{

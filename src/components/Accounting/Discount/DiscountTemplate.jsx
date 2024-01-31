@@ -135,11 +135,12 @@ function DiscountTemplate() {
         /> */}
 
         <Select
-          labelPlacement="outside"
-          label="Discount"
           name="name"
           placeholder="Select Discount Type"
-          className="max-w-xs"
+          classNames={{
+            base: "w-60",
+            trigger: "h-10 py-3 rounded-md",
+          }}
           value={selectedDiscountType}
           onChange={(e) => setSelectedDiscountType(e.target.value)}
         >
