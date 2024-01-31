@@ -3,8 +3,6 @@ import {
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -29,7 +27,6 @@ import {
   addDays,
   addMonths,
   addYears,
-  set,
 } from "date-fns";
 import {
   Popover,
@@ -74,6 +71,7 @@ export default function OverView() {
   const [totalSalePerDay, setTotalSalePerDay] = useState([]);
   const [popularSaleProducts, setPopularSaleProducts] = useState([]);
   const [saleLines, setSaleLines] = useState([]);
+  const [lowStock, setLowStock] = useState([]);
   const [selectedDate, setSelectedDate] = useState("Monthly");
   const [customDateRange, setCustomDateRange] = useState({
     startDate: "",
@@ -84,13 +82,34 @@ export default function OverView() {
     try {
       setLoading(true);
 
-      let resData = await getApi(
-        `/orders/totals?startDate=${startDate}&endDate=${endDate}`,
-        token.accessToken
-      );
+      let apiUrl = `/orders/totals`;
 
+      if (locationId) {
+        apiUrl += `?location=${locationId}`;
+      }
+
+      if (startDate && endDate) {
+        apiUrl += `${
+          locationId ? "&" : "?"
+        }startDate=${startDate}&endDate=${endDate}`;
+      }
+
+      let resData = await getApi(apiUrl, token.accessToken);
+
+      // startDate=${startDate}&endDate=${endDate}
+      // let resData = await getApi(
+      //   `/orders/totals?location=65b0c67aee63cb06433d4e96`,
+      //   token.accessToken
+      // );
+
+      console.log(
+        "api is a",
+        (apiUrl += `${
+          locationId ? "&" : "?"
+        }startDate=${startDate}&endDate=${endDate}`)
+      );
       if (resData.status) {
-        console.log("resdata", resData.data);
+        console.log("resdata overview", resData.data);
 
         setTotalPurchaseAmount(resData.data.purchases.totalAmount);
         setTotalPurchaseOrders(resData.data.purchases.totalOrders);
@@ -99,7 +118,7 @@ export default function OverView() {
         setTotalPurchaseItems(resData.data.purchases.totalItems);
         setPurchaseLines(resData.data.purchases.allLines);
         setPopularPurchaseProducts(resData.data.purchases.topProducts);
-
+        setLowStock(resData.data.lowStock);
         setTotalGrossSale(resData.data.sales.totalGrossSale);
         setTotalGrossProfit(resData.data.sales.totalGrossProfit);
         setTotalDiscount(resData.data.sales.totalDiscount);
@@ -269,7 +288,7 @@ export default function OverView() {
 
   useEffect(() => {
     getTotals();
-  }, [startDate, endDate]);
+  }, [startDate, endDate, locationId]);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -308,8 +327,6 @@ export default function OverView() {
     );
   };
 
-  console.log(popularPurchaseProducts);
-
   return (
     <>
       {loading ? (
@@ -319,6 +336,18 @@ export default function OverView() {
       ) : (
         <div className="relative">
           <div className="flex justify-end mb-3">
+            {locationId ? (
+              <h1 className="font-bold w-48 text-slate-500 text-xl">
+                {" ( " +
+                  location.find((loc) => loc.id === locationId)?.name +
+                  " ) "}
+              </h1>
+            ) : (
+              <h1 className="font-bold w-48 text-slate-500 text-xl">
+                Choose Location
+              </h1>
+            )}
+
             <div className="flex w-full justify-center items-center">
               <Popover
                 placement="bottom"
@@ -338,13 +367,15 @@ export default function OverView() {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent>
-                  <Listbox aria-label="Select location">
+                  <Listbox
+                    aria-label="Select location"
+                    onAction={(key) => setLocationId(key)}
+                  >
                     {location.map((loc) => (
                       <ListboxItem
                         className="rounded-none"
                         key={loc.id}
                         value={loc.id}
-                        onClick={(e) => setLocationId(e.target.value)}
                       >
                         {loc.name}
                       </ListboxItem>
@@ -779,7 +810,7 @@ export default function OverView() {
             </div>
           </div>
           <div className="flex my-4">
-            <div className="w-4/5 bg-white rounded-lg shadow-md p-4">
+            <div className="w-3/5 bg-white rounded-lg shadow-md p-4">
               <h2 className="text-slate-600 text-lg font-semibold my-3">
                 Sales - Purchases Qty by Product
               </h2>
@@ -812,6 +843,40 @@ export default function OverView() {
                   />
                 </BarChart>
               </ResponsiveContainer>
+            </div>
+            <div className="w-2/5 bg-white rounded-lg shadow-md p-4">
+              <h2 className="text-slate-600 text-lg font-semibold my-3">
+                Low Stock Qty
+              </h2>
+              <ResponsiveContainer height={300} width="100%">
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={lowStock}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar
+                    dataKey="onHand"
+                    fill="#82ca9d"
+                    activeBar={<Rectangle fill="pink" stroke="blue" />}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+              {/* <ResponsiveContainer width="100%" height={300}>
+                <BarChart width={500} height={300} data={lowStock}>
+                  <Bar dataKey="onHand" fill="#8884d8" />
+                </BarChart>
+              </ResponsiveContainer> */}
             </div>
           </div>
         </div>
