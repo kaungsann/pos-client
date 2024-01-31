@@ -1067,7 +1067,7 @@ export default function SideBar() {
                     }}
                   >
                     <Icon
-                      icon="carbon:category-new-each"
+                      icon="carbon:category"
                       className="text-slate-500 text-2xl"
                     />
 
