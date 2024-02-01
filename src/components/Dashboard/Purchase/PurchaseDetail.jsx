@@ -86,6 +86,9 @@ export default function SaleOrderDetail() {
     purchaselines();
   }, []);
 
+  console.log("purchase orders  ", detail);
+  console.log("purchase lines ", lines);
+
   return (
     <>
       {error ? (

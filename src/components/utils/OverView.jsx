@@ -90,6 +90,10 @@ export default function OverView() {
         apiUrl += `?locationId=${locationId}`;
       }
 
+      if (!locationId || locationId === "Overall View") {
+        apiUrl = "/orders/totals";
+      }
+
       if (startDate && endDate) {
         apiUrl += `${
           locationId ? "&" : "?"
@@ -398,6 +402,13 @@ export default function OverView() {
                 placeholder="Select an location"
                 onChange={(e) => setLocationId(e.target.value)}
               >
+                <SelectItem
+                  className="rounded-none"
+                  key="Overall View"
+                  value="Overall View"
+                >
+                  Overall View
+                </SelectItem>
                 {location.map((loc) => (
                   <SelectItem
                     className="rounded-none"

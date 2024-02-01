@@ -28,6 +28,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "partner",
   "location",
   "state",
+  "totalproduct",
   "totalqty",
   "total",
   "orderref",
