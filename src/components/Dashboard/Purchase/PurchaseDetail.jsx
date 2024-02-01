@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  getKeyValue,
   Spinner,
 } from "@nextui-org/react";
 import { removeData } from "../../../redux/actions";
@@ -25,17 +24,14 @@ export default function SaleOrderDetail() {
   const dispatch = useDispatch();
 
   const columns = [
-    { key: "name", label: "Name", align: "center" },
-    { key: "tax", label: "Tax", align: "center" },
-    { key: "qty", label: "Stock Qty", align: "center" },
-    { key: "unitPrice", label: "Unit Price", align: "center" },
-    { key: "subTotal", label: "Subtotal", align: "center" },
+    { name: "Name", uid: "name" },
+    { name: "Unit Price", uid: "unitprice" },
+    { name: "Uom", uid: "uom" },
+    { name: "Uom Ratio", uid: "uomratio", sortable: true },
+    { name: "Tax", uid: "tax" },
+    { name: "Qty", uid: "qty", sortable: true },
+    { name: "SubTotal", uid: "subtotal", sortable: true },
   ];
-
-  const getProductName = (item) => {
-    const productName = item.product && item.product.name;
-    return productName || "N/A";
-  };
 
   const singlePurchaseOrder = async () => {
     setLoading(true);
@@ -86,8 +82,29 @@ export default function SaleOrderDetail() {
     purchaselines();
   }, []);
 
-  console.log("purchase orders  ", detail);
-  console.log("purchase lines ", lines);
+  const renderCell = useCallback((lines, columnKey) => {
+    const cellValue = lines[columnKey];
+
+    switch (columnKey) {
+      case "name":
+        return <h3>{lines.product.name}</h3>;
+      case "unitprice":
+        return <h3>{lines.unitPrice}</h3>;
+      case "uom":
+        return <h3>{lines.uom.name}</h3>;
+      case "uomratio":
+        return <h3>{lines.uom.ratio}</h3>;
+      case "tax":
+        return <h3>{lines.tax}</h3>;
+      case "qty":
+        return <h3>{lines.qty}</h3>;
+      case "subtotal":
+        return <h3>{lines.subTotal}</h3>;
+
+      default:
+        return cellValue;
+    }
+  }, []);
 
   return (
     <>
@@ -171,40 +188,26 @@ export default function SaleOrderDetail() {
                   </div>
                 </div>
               </div>
-              <h2 className="text-xl font-bold text-slate-600">
+              <h2 className="text-xl font-bold text-slate-600 mb-4">
                 Order Products
               </h2>
               <Table
-                isStriped
-                aria-label="Order Lines Table"
-                className="my-custom-table "
+                aria-label="Example table with custom cells, pagination and sorting"
+                isHeaderSticky
+                classNames={{
+                  wrapper: "max-h-[382px]",
+                }}
               >
                 <TableHeader columns={columns}>
                   {(column) => (
-                    <TableColumn
-                      key={column.key}
-                      align={column.align}
-                      className="header-cell bg-blue-500 text-white"
-                    >
-                      {column.label}
-                    </TableColumn>
+                    <TableColumn key={column.uid}>{column.name}</TableColumn>
                   )}
                 </TableHeader>
-                <TableBody items={lines || []}>
+                <TableBody emptyContent={"No records"} items={lines}>
                   {(item) => (
-                    <TableRow key={item.orderId._id} className="table-row">
+                    <TableRow key={item.id}>
                       {(columnKey) => (
-                        <TableCell
-                          key={columnKey}
-                          align={
-                            columns.find((col) => col.key === columnKey)?.align
-                          }
-                          className="table-cell"
-                        >
-                          {columnKey === "name"
-                            ? getProductName(item)
-                            : getKeyValue(item, columnKey)}
-                        </TableCell>
+                        <TableCell>{renderCell(item, columnKey)}</TableCell>
                       )}
                     </TableRow>
                   )}

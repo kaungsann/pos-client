@@ -80,7 +80,7 @@ export default function UomCreate() {
       setUomCats(filteredLocation);
     };
     getUomCats();
-  }, []);
+  }, [token.accessToken]);
 
   console.log("formdata is a", formData);
 
