@@ -410,7 +410,7 @@ export default function OverView() {
                   key="Overall View"
                   value="Overall View"
                 >
-                  View All Location
+                  All Location
                 </SelectItem>
                 {location.map((loc) => (
                   <SelectItem
