@@ -84,10 +84,19 @@ export default function SaleView() {
     }
   };
 
+  // useEffect(() => {
+  //   getStockApi();
+  //   getTotals();
+  // }, []);
+
   useEffect(() => {
-    getStockApi();
-    getTotals();
-  }, []);
+    const fetchData = async () => {
+      await getStockApi();
+      await getTotals();
+    };
+
+    fetchData();
+  }, [getStockApi, getTotals]);
 
   const currentStock = stock.filter(
     (stk) => format(new Date(stk.updatedAt), "MM-dd-yyyy") === todayDate

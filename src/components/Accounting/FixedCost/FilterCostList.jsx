@@ -397,7 +397,7 @@ export default function FixedCostList({ opexs, refresh }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Record"} items={sortedItems}>
+        <TableBody emptyContent={"No records"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

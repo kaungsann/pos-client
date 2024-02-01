@@ -110,6 +110,8 @@ export default function OverView() {
           locationId ? "&" : "?"
         }startDate=${startDate}&endDate=${endDate}`)
       );
+
+      console.log("res overview data is ", resData);
       if (resData.status) {
         console.log("resdata overview", resData.data);
 
@@ -328,8 +330,6 @@ export default function OverView() {
       </text>
     );
   };
-
-  console.log("location id is a", locationId);
 
   return (
     <>
