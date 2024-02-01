@@ -7,6 +7,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
+  Spinner,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import PropTypes from "prop-types";
@@ -20,6 +21,7 @@ const ExcelImportButton = ({ token, apiEndpoint, onSuccess, templateLink }) => {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const [selectedFileName, setSelectedFileName] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -34,6 +36,7 @@ const ExcelImportButton = ({ token, apiEndpoint, onSuccess, templateLink }) => {
   };
 
   const onSubmitHandler = async () => {
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("excel", selectedFile);
 
@@ -45,17 +48,20 @@ const ExcelImportButton = ({ token, apiEndpoint, onSuccess, templateLink }) => {
         },
       });
       if (response.status) {
+        setIsLoading(false);
         setSelectedFileName(null);
         setSelectedFile(null);
         onClose();
         onSuccess();
-        toast.success(response.message);
+        toast.success(response.data.message);
       } else {
-        toast.error(response.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
+      toast.error(error.response.data.message);
       console.error("Error uploading file:", error);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -87,6 +93,15 @@ const ExcelImportButton = ({ token, apiEndpoint, onSuccess, templateLink }) => {
           <ModalHeader className="flex flex-col gap-1">
             Import Excel
           </ModalHeader>
+          <h1
+            onClick={() => {
+              setSelectedFile(null);
+              setSelectedFileName("");
+            }}
+            className="text-sm font-semibold text-slate-500 text-end mr-8 cursor-pointer hover:opacity-80"
+          >
+            Clear File
+          </h1>
           <ModalBody>
             <div
               onClick={() => uploadRef.current.click()}
@@ -120,9 +135,19 @@ const ExcelImportButton = ({ token, apiEndpoint, onSuccess, templateLink }) => {
                 Download Template
               </a>
               <button
-                className="w-3/6 flex justify-center ml-3 font-bold text-center rounded-sm shadow-sm items-center border-blue-500 border-2 hover:opacity-75 text-sm text-white bg-blue-500 px-3 py-1.5"
+                className={`w-3/6 relative flex justify-center ml-3 font-bold text-center rounded-sm shadow-sm items-center border-blue-500 border-2 hover:opacity-75 text-sm text-white bg-blue-500 px-3 py-1.5 ${
+                  isLoading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={isLoading}
                 onClick={() => onSubmitHandler()}
               >
+                {isLoading && (
+                  <Spinner
+                    size="sm"
+                    color="#22d3ee"
+                    className="absolute top-0 bottom-0 font-bold right-0 left-0"
+                  />
+                )}
                 Submit
               </button>
             </div>
