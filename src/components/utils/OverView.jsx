@@ -86,8 +86,15 @@ export default function OverView() {
 
       let apiUrl = `/orders/totals`;
 
+      if (locationId === "Overall View") {
+        setLocationId("");
+      }
+
       if (locationId) {
         apiUrl += `?locationId=${locationId}`;
+      }
+      if (!locationId) {
+        apiUrl = "/orders/totals";
       }
 
       if (startDate && endDate) {
@@ -110,6 +117,8 @@ export default function OverView() {
           locationId ? "&" : "?"
         }startDate=${startDate}&endDate=${endDate}`)
       );
+
+      console.log("res overview data is ", resData);
       if (resData.status) {
         console.log("resdata overview", resData.data);
 
@@ -329,8 +338,6 @@ export default function OverView() {
     );
   };
 
-  console.log("location id is a", locationId);
-
   return (
     <>
       {loading ? (
@@ -398,6 +405,13 @@ export default function OverView() {
                 placeholder="Select an location"
                 onChange={(e) => setLocationId(e.target.value)}
               >
+                <SelectItem
+                  className="rounded-none"
+                  key="Overall View"
+                  value="Overall View"
+                >
+                  All Location
+                </SelectItem>
                 {location.map((loc) => (
                   <SelectItem
                     className="rounded-none"

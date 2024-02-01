@@ -286,7 +286,7 @@ export default function UomList({ units }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Record"} items={sortedItems}>
+        <TableBody emptyContent={"No records"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

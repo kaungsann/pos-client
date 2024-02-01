@@ -84,10 +84,19 @@ export default function SaleView() {
     }
   };
 
+  // useEffect(() => {
+  //   getStockApi();
+  //   getTotals();
+  // }, []);
+
   useEffect(() => {
-    getStockApi();
-    getTotals();
-  }, []);
+    const fetchData = async () => {
+      await getStockApi();
+      await getTotals();
+    };
+
+    fetchData();
+  }, [getStockApi, getTotals]);
 
   const currentStock = stock.filter(
     (stk) => format(new Date(stk.updatedAt), "MM-dd-yyyy") === todayDate
@@ -228,32 +237,31 @@ export default function SaleView() {
           Daily Dashboard
         </h1>
         <div className="w-full flex justify-between">
-          <div className="px-3 mr-1.5 w-60 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 relative mr-1.5 w-64 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="solar:money-bag-bold-duotone"
               color="#3d417a"
               className="text-3xl text-cyan-700 font-semibold"
             />
+            <Popover placement="top">
+              <Popover placement="top" offset={12} showArrow>
+                <PopoverTrigger>
+                  <Icon
+                    icon="lucide:info"
+                    className="text-sm ml-0.5 absolute top-2 right-2"
+                  />
+                </PopoverTrigger>
+                <PopoverContent className="rounded-md">
+                  <div className="px-1 py-2">
+                    <div className="text-tiny">
+                      The sum of all sales before discounts and taxes
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </Popover>
             <div className="ml-2">
-              <div className="flex items-center">
-                <h3 className="font-bold text-slate-600 text-md me-2">
-                  Gross Sales
-                </h3>
-                <Popover placement="top">
-                  <Popover placement="top" offset={20} showArrow>
-                    <PopoverTrigger>
-                      <Icon icon="lucide:info" className="text-sm ml-0.5" />
-                    </PopoverTrigger>
-                    <PopoverContent className="rounded-md">
-                      <div className="px-1 py-2">
-                        <div className="text-tiny">
-                          The sum of all sales before discounts and taxes
-                        </div>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </Popover>
-              </div>
+              <h3 className="font-bold text-slate-600 text-md ">Gross Sales</h3>
 
               <h4 className="text-md font-bold text-slate-600 text-center">
                 {totalGrossSale}
@@ -286,29 +294,32 @@ export default function SaleView() {
               </h4>
             </div>
           </div>
-          <div className="px-3 mr-1.5 w-56 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 relative mr-1.5 w-56 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icons8:buy"
               className="text-3xl text-blue-700 font-semibold"
             />
+            <Popover placement="top">
+              <Popover placement="top" offset={12} showArrow>
+                <PopoverTrigger>
+                  <Icon
+                    icon="lucide:info"
+                    className="text-sm ml-0.5 absolute top-2 right-2"
+                  />
+                </PopoverTrigger>
+                <PopoverContent className="rounded-md">
+                  <div className="px-1 py-2">
+                    <div className="text-tiny">Gross sales minus discounts</div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </Popover>
 
             <div className="ml-1.5">
               <div className="flex items-center">
-                <h3 className="font-bold text-slate-600 text-md me-2">Net Sales</h3>
-                <Popover placement="top">
-                  <Popover placement="top" offset={20} showArrow>
-                    <PopoverTrigger>
-                      <Icon icon="lucide:info" className="text-sm ml-0.5" />
-                    </PopoverTrigger>
-                    <PopoverContent className="rounded-md">
-                      <div className="px-1 py-2">
-                        <div className="text-tiny">
-                          Gross sales minus discounts
-                        </div>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </Popover>
+                <h3 className="font-bold text-slate-600 text-md me-2">
+                  Net Sales
+                </h3>
               </div>
 
               <h4 className="text-md font-bold text-slate-600 text-center">
@@ -316,33 +327,33 @@ export default function SaleView() {
               </h4>
             </div>
           </div>
-          <div className="px-3 mr-1.5 w-60 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 relative mr-1.5 w-60 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="fluent-emoji-high-contrast:money-bag"
               color="#8a882b"
               className="text-3xl text-blue-700 font-semibold"
             />
-
+            <Popover placement="top">
+              <Popover placement="top" offset={12} showArrow>
+                <PopoverTrigger>
+                  <Icon
+                    icon="lucide:info"
+                    className="text-sm ml-0.5 absolute top-2 right-2"
+                  />
+                </PopoverTrigger>
+                <PopoverContent className="rounded-md">
+                  <div className="px-1 py-2">
+                    <div className="text-tiny">
+                      Net sales minus cost of goods
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </Popover>
             <div className="ml-1.5">
-              <div className="flex items-center">
-                <h3 className="font-bold text-slate-600 text-md me-2">
-                  Gross Profit
-                </h3>
-                <Popover placement="top">
-                  <Popover placement="top" offset={20} showArrow>
-                    <PopoverTrigger>
-                      <Icon icon="lucide:info" className="text-sm ml-0.5" />
-                    </PopoverTrigger>
-                    <PopoverContent className="rounded-md">
-                      <div className="px-1 py-2">
-                        <div className="text-tiny">
-                          Net sales minus cost of goods
-                        </div>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </Popover>
-              </div>
+              <h3 className="font-bold text-slate-600 text-md me-2">
+                Gross Profit
+              </h3>
 
               <h4 className="text-md font-bold text-slate-600 text-center">
                 {totalGrossProfit}

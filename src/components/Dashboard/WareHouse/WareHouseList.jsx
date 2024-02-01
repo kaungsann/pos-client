@@ -309,7 +309,7 @@ export default function WareHouseList({ warehouses }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Record"} items={sortedItems}>
+        <TableBody emptyContent={"No records"} items={sortedItems}>
           {(item) => (
             <TableRow key={item._id}>
               {(columnKey) => (

@@ -36,16 +36,11 @@ export default function UomCreate() {
         ratio: 1,
         refType: value,
       }));
-    } else if (name === "refType" && value === "bigger") {
-      setFormData((prevData) => ({
-        ...prevData,
-        ratio: 0,
-        refType: value,
-      }));
     } else if (name === "refType" && value === "smaller") {
+      const newRatio = Math.max(0, Math.min(formData.ratio / 10, 0.9));
       setFormData((prevData) => ({
         ...prevData,
-        ratio: 0,
+        ratio: newRatio,
         refType: value,
       }));
     } else {
@@ -85,7 +80,7 @@ export default function UomCreate() {
       setUomCats(filteredLocation);
     };
     getUomCats();
-  }, []);
+  }, [token.accessToken]);
 
   console.log("formdata is a", formData);
 

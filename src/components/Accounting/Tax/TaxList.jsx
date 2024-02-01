@@ -282,7 +282,7 @@ export default function TaxList({ taxs, refresh }) {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No Record"} items={sortedItems}>
+      <TableBody emptyContent={"No records"} items={sortedItems}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (

@@ -28,6 +28,7 @@ const INITIAL_VISIBLE_COLUMNS = [
   "partner",
   "location",
   "state",
+  "totalproduct",
   "totalqty",
   "total",
   "orderref",
@@ -327,7 +328,7 @@ export default function PurchaseList({ orders, refresh }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Record"} items={sortedItems}>
+        <TableBody emptyContent={"No records"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

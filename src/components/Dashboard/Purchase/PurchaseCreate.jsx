@@ -124,7 +124,6 @@ export default function PurchaseCreate() {
       user: userData._id,
       state: "pending",
     };
-
     try {
       let resData = await sendJsonToApi("/purchase", data, token.accessToken);
       if (resData.message == "Token Expire , Please Login Again") {
@@ -584,7 +583,10 @@ export default function PurchaseCreate() {
                             className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
                             onClick={() =>
                               dispatch(
-                                removeLineFromPurchaseOrder(line.product?.id, line.uom?.id)
+                                removeLineFromPurchaseOrder(
+                                  line.product?.id,
+                                  line.uom?.id
+                                )
                               )
                             }
                           />

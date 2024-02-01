@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getApi } from "../../Api";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,18 +26,14 @@ export default function SaleOrderDetail() {
   const dispatch = useDispatch();
 
   const columns = [
-    { key: "name", label: "Name", align: "center" },
-    { key: "tax", label: "Tax", align: "center" },
-    { key: "qty", label: "Stock Qty", align: "center" },
-    { key: "unitPrice", label: "Unit Price", align: "center" },
-    { key: "subTotal", label: "Subtotal", align: "center" },
-    { key: "discount", label: "Discount", align: "center" },
+    { name: "Name", uid: "name" },
+    { name: "Unit Price", uid: "unitprice" },
+    { name: "Uom", uid: "uom" },
+    { name: "Uom Ratio", uid: "uomratio", sortable: true },
+    { name: "Tax", uid: "tax" },
+    { name: "Qty", uid: "qty", sortable: true },
+    { name: "SubTotal", uid: "subtotal", sortable: true },
   ];
-
-  const getProductName = (item) => {
-    const productName = item.product && item.product.name;
-    return productName || "N/A";
-  };
 
   const singleSaleOrder = async () => {
     setLoading(true);
@@ -84,6 +80,30 @@ export default function SaleOrderDetail() {
       setLoading(false);
     }
   };
+
+  const renderCell = useCallback((lines, columnKey) => {
+    const cellValue = lines[columnKey];
+
+    switch (columnKey) {
+      case "name":
+        return <h3>{lines.product.name}</h3>;
+      case "unitprice":
+        return <h3>{lines.unitPrice}</h3>;
+      case "uom":
+        return <h3>{lines.uom.name}</h3>;
+      case "uomratio":
+        return <h3>{lines.uom.ratio}</h3>;
+      case "tax":
+        return <h3>{lines.tax}</h3>;
+      case "qty":
+        return <h3>{lines.qty}</h3>;
+      case "subtotal":
+        return <h3>{lines.subTotal}</h3>;
+
+      default:
+        return cellValue;
+    }
+  }, []);
 
   useEffect(() => {
     saleLinesApi();
@@ -194,84 +214,29 @@ export default function SaleOrderDetail() {
               <h2 className="text-xl font-bold text-slate-600 mb-6">
                 Order Products
               </h2>
-              {/* <Table
-                isStriped
-                aria-label="Order Lines Table"
-                className="my-custom-table "
+
+              <Table
+                aria-label="Example table with custom cells, pagination and sorting"
+                isHeaderSticky
+                classNames={{
+                  wrapper: "max-h-[382px]",
+                }}
               >
                 <TableHeader columns={columns}>
                   {(column) => (
-                    <TableColumn
-                      key={column.key}
-                      align={column.align}
-                      className="header-cell bg-blue-500 text-white"
-                    >
-                      {column.label}
-                    </TableColumn>
+                    <TableColumn key={column.uid}>{column.name}</TableColumn>
                   )}
                 </TableHeader>
-                <TableBody items={lines || []}>
+                <TableBody emptyContent={"No records"} items={lines}>
                   {(item) => (
-                    <TableRow key={item.orderId._id} className="table-row">
+                    <TableRow key={item.id}>
                       {(columnKey) => (
-                        <TableCell
-                          key={columnKey}
-                          align={
-                            columns.find((col) => col.key === columnKey)?.align
-                          }
-                          className="table-cell"
-                        >
-                          {columnKey === "name"
-                            ? getProductName(item)
-                            : getKeyValue(item, columnKey)}
-                        </TableCell>
+                        <TableCell>{renderCell(item, columnKey)}</TableCell>
                       )}
                     </TableRow>
                   )}
                 </TableBody>
-              </Table> */}
-              <table className="w-full">
-                <thead className="w-full">
-                  <tr className="bg-blue-600 text-white">
-                    <th className="lg:px-4 py-2 text-center">Name</th>
-                    <th className="lg:px-4 py-2 text-center">Tax</th>
-                    <th className="lg:px-4 py-2 text-center">Qty</th>
-                    <th className="lg:px-4 py-2 text-center">unitPrice</th>
-                    <th className="lg:px-4 py-2 text-center">SubTotal</th>
-                    <th className="lg:px-4 py-2 text-center">Discount</th>
-                  </tr>
-                </thead>
-                <tbody className="mt-4">
-                  {lines.map((line, index) => (
-                    <tr key={index}>
-                      <td className="py-2 text-center text-slate-600 font-semibold">
-                        {line.product.name}
-                      </td>
-                      <td className="py-2 text-center text-slate-600 font-semibold">
-                        {line.tax}
-                      </td>
-                      <td className="py-2 text-center text-slate-600 font-semibold">
-                        {line.qty}
-                      </td>
-                      <td className="py-2 text-center text-slate-600 font-semibold">
-                        {line.unitPrice}
-                      </td>
-                      <td className="py-2 text-center text-slate-600 font-semibold">
-                        {line.subTotal}
-                      </td>
-                      <td className="py-2 text-center text-slate-600 font-semibold">
-                        {line.discount &&
-                          line.discount.name +
-                            " " +
-                            " ( " +
-                            line.discount.amount +
-                            "%" +
-                            " ) "}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              </Table>
             </div>
           </div>
         </div>

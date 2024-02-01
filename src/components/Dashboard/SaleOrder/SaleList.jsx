@@ -36,7 +36,8 @@ const columns = [
   { name: "Partner", uid: "partner" },
   { name: "Location", uid: "location" },
   { name: "State", uid: "state" },
-  { name: "Total Product", uid: "totalproduct" },
+  { name: "Item", uid: "totalproduct", sortable: true },
+  { name: "Total Qty", uid: "totalqty", sortable: true },
   { name: "Tax Total", uid: "taxtotal", sortable: true },
   { name: "Order Ref", uid: "orderref" },
   { name: "Total", uid: "total", sortable: true },
@@ -122,6 +123,15 @@ export default function SaleList({ orders }) {
           );
         case "totalproduct":
           return <h3>{orders.lines.length}</h3>;
+        case "totalqty":
+          return (
+            <h3>
+              {orders.lines.reduce(
+                (accumulator, currentValue) => accumulator + currentValue.qty,
+                0
+              )}
+            </h3>
+          );
         case "taxtotal":
           return <h3>{orders.taxTotal.toFixed(2)}</h3>;
         case "total":
@@ -285,7 +295,7 @@ export default function SaleList({ orders }) {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No Record"} items={sortedItems}>
+        <TableBody emptyContent={"No records"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
