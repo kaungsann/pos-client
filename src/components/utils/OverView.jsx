@@ -86,11 +86,14 @@ export default function OverView() {
 
       let apiUrl = `/orders/totals`;
 
+      if (locationId === "Overall View") {
+        setLocationId("");
+      }
+
       if (locationId) {
         apiUrl += `?locationId=${locationId}`;
       }
-
-      if (!locationId || locationId === "Overall View") {
+      if (!locationId) {
         apiUrl = "/orders/totals";
       }
 
@@ -407,7 +410,7 @@ export default function OverView() {
                   key="Overall View"
                   value="Overall View"
                 >
-                  Overall View
+                  View All Location
                 </SelectItem>
                 {location.map((loc) => (
                   <SelectItem
