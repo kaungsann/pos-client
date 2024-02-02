@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 
 export default function ConfrimBox({ comfirmHandle, close, refresh }) {
   const handleConfirm = () => {
@@ -51,3 +51,8 @@ export default function ConfrimBox({ comfirmHandle, close, refresh }) {
     </>
   );
 }
+ConfrimBox.propTypes = {
+  comfirmHandle: PropTypes.func,
+  close: PropTypes.func,
+  refresh: PropTypes.func,
+};

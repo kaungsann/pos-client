@@ -3,14 +3,13 @@ import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import DiscountList from "./DiscountList";
 import { BASE_URL } from "../../Api";
-import { Button, Select, SelectItem } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function DiscountTemplate() {
   const [discount, setDiscount] = useState([]);
-  const [selectedDiscountType, setSelectedDiscountType] = useState("");
 
   const COMPARISION = {
     LESS: "LESS",
@@ -101,29 +100,15 @@ function DiscountTemplate() {
             return discountDate === createdAt;
           }
         };
-        const isDiscountType = () => {
-          if (
-            !selectedDiscountType ||
-            typeof selectedDiscountType !== "string" ||
-            !dis.name
-          ) {
-            return true;
-          }
-
-          return dis.name
-            .toLowerCase()
-            .includes(selectedDiscountType.toLowerCase());
-        };
 
         return (
           dis.name.toLowerCase().includes(name.toLocaleLowerCase()) &&
           isName() &&
           isDiscountRate() &&
-          isDate() &&
-          isDiscountType()
+          isDate()
         );
       }),
-    [discount, filteredKeywords, selectedDiscountType]
+    [discount, filteredKeywords]
   );
 
   return (
@@ -133,24 +118,6 @@ function DiscountTemplate() {
           keyword={filteredKeywords.name}
           onSearch={handleFilterChange}
         />
-
-        {/* <Select
-          name="name"
-          placeholder="Select Discount Type"
-          classNames={{
-            base: "w-60",
-            trigger: "h-10 py-3 rounded-md",
-          }}
-          value={selectedDiscountType}
-          onChange={(e) => setSelectedDiscountType(e.target.value)}
-        >
-          <SelectItem key="New Year Discount" value="New Year Discount">
-            New Year Discount
-          </SelectItem>
-          <SelectItem key="Birthday Discount" value="Birthday Discount">
-            Birthday Discount
-          </SelectItem>
-        </Select> */}
 
         <div className="flex">
           <Button

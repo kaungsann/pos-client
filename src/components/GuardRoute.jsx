@@ -1,6 +1,6 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 function GuardRouter({ children }) {
   const userData = useSelector((state) => state.loginData);
@@ -13,3 +13,7 @@ function GuardRouter({ children }) {
 }
 
 export default GuardRouter;
+
+GuardRouter.propTypes = {
+  children: PropTypes.object,
+};

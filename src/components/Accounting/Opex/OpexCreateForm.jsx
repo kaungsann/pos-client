@@ -1,18 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendJsonToApi } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { removeData } from "../../../redux/actions";
-import {
-  Input,
-  Progress,
-  Button,
-  Checkbox,
-  Select,
-  SelectItem,
-} from "@nextui-org/react";
+import { Input, Progress, Button, Select, SelectItem } from "@nextui-org/react";
 
 export default function OpexCreateForm() {
   const navigate = useNavigate();
@@ -31,10 +24,6 @@ export default function OpexCreateForm() {
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleCheckboxChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.checked });
   };
 
   const handleSubmit = async (e) => {
@@ -113,17 +102,6 @@ export default function OpexCreateForm() {
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
-                {/* <Input
-                  type="text"
-                  label="Name"
-                  name="name"
-                  value={formData.name}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
-                  onChange={(e) => handleInputChange(e)}
-                  placeholder="Enter Partner name..."
-                  labelPlacement="outside"
-                /> */}
                 <Select
                   labelPlacement="outside"
                   label="Opex"

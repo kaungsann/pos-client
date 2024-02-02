@@ -12,7 +12,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  getKeyValue,
 } from "@nextui-org/react";
 
 export default function SaleOrderDetail() {
@@ -192,20 +191,6 @@ export default function SaleOrderDetail() {
                         {detail[0].state}
                       </h2>
                     </div>
-                    {/* <div className="my-6">
-                      <h4 className="text-md text-slate-500">Discount</h4>
-                      <div className="flex">
-                        <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                          {detail[0].discount ? detail[0].discount.amount : "0"}
-                          %
-                        </h2>
-                        <h2 className="text-md ml-4 text-slate-600 mt-1 font-semibold">
-                          {detail[0].discount.name
-                            ? "(" + detail[0].discount.name + ")"
-                            : ""}
-                        </h2>
-                      </div>
-                    </div> */}
                   </div>
                 </div>
               </div>

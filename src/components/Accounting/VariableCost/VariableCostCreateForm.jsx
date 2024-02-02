@@ -26,10 +26,6 @@ export default function VariableCostCreateForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const handleCheckboxChange = (e) => {
-  //   setFormData({ ...formData, [e.target.name]: e.target.checked });
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -106,17 +102,6 @@ export default function VariableCostCreateForm() {
           <form className="flex justify-between gap-10 p-5">
             <div className="flex flex-wrap gap-8">
               <div className="w-60">
-                {/* <Input
-                  type="text"
-                  label="Name"
-                  name="name"
-                  value={formData.name}
-                  // color={isInvalid ? "danger" : "success"}
-                  // errorMessage={isInvalid && "Please enter a valid email"}
-                  onChange={(e) => handleInputChange(e)}
-                  placeholder="Enter fixed cost name..."
-                  labelPlacement="outside"
-                /> */}
                 <Select
                   labelPlacement="outside"
                   label="VariableCost"

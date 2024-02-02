@@ -5,7 +5,6 @@ import { removeData, pageRefresh } from "../../redux/actions";
 import { AiOutlinePlus } from "react-icons/ai";
 import axios from "axios";
 import { BASE_URL } from "../Api";
-import user from "../../assets/icon.png";
 
 import {
   Input,

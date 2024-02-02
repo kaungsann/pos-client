@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-//import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
 import OpexList from "./OpexList";
 import { BASE_URL } from "../../Api";
@@ -171,11 +170,6 @@ function OpexTemplate() {
   return (
     <>
       <div className="flex justify-between items-center my-3">
-        {/* <SearchCompo
-          keyword={filteredKeywords.name}
-          onSearch={handleFilterChange}
-        /> */}
-
         <Select
           name="name"
           placeholder="Select Type"

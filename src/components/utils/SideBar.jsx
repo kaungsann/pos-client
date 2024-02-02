@@ -1,40 +1,40 @@
 import { Icon } from "@iconify/react";
 import logo from "../../assets/logo.png";
-import invent from "../../assets/inv.png";
-import pur from "../../assets/buyy.png";
-import sal from "../../assets/sell.png";
-import customer from "../../assets/stakeholder.png";
-import accountant from "../../assets/accounting.png";
-import { useState } from "react";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Listbox,
-  ListboxItem,
-} from "@nextui-org/react";
+// import invent from "../../assets/inv.png";
+// import pur from "../../assets/buyy.png";
+// import sal from "../../assets/sell.png";
+// import customer from "../../assets/stakeholder.png";
+// import accountant from "../../assets/accounting.png";
+//import { useState } from "react";
+// import {
+//   Popover,
+//   PopoverTrigger,
+//   PopoverContent,
+//   Listbox,
+//   ListboxItem,
+// } from "@nextui-org/react";
 
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 export default function SideBar() {
   const location = useLocation();
   const { id } = useParams();
-  const [expanded, setExpanded] = useState(false);
-  const [inventory, setInventory] = useState(false);
-  const [purchase, setPurchase] = useState(false);
-  const [sale, setSale] = useState(false);
-  const [skate, setSkate] = useState(false);
-  const [account, setAccount] = useState(false);
+  // const [expanded, setExpanded] = useState(false);
+  // const [inventory, setInventory] = useState(false);
+  // const [purchase, setPurchase] = useState(false);
+  // const [sale, setSale] = useState(false);
+  // const [skate, setSkate] = useState(false);
+  // const [account, setAccount] = useState(false);
 
   const navigate = useNavigate();
 
-  const clostHandleList = () => {
-    setInventory(false), setPurchase(false);
-    setSale(false);
-    setSkate(false);
-    setAccount(false);
-    setExpanded(false);
-  };
+  // const clostHandleList = () => {
+  //   setInventory(false), setPurchase(false);
+  //   setSale(false);
+  //   setSkate(false);
+  //   setAccount(false);
+  //   setExpanded(false);
+  // };
 
   return (
     <>
@@ -202,7 +202,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/products/all"), clostHandleList();
+                        navigate("/admin/products/all");
                       }}
                     >
                       <Icon
@@ -222,7 +222,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/categorys/all"), clostHandleList();
+                        navigate("/admin/categorys/all");
                       }}
                     >
                       <Icon
@@ -242,7 +242,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/stock/all"), clostHandleList();
+                        navigate("/admin/stock/all");
                       }}
                     >
                       <Icon
@@ -259,7 +259,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/adjustment/view"), clostHandleList();
+                        navigate("/admin/adjustment/view");
                       }}
                     >
                       <Icon
@@ -279,7 +279,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/locations/all"), clostHandleList();
+                        navigate("/admin/locations/all");
                       }}
                     >
                       <Icon
@@ -385,7 +385,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/purchase/view"), clostHandleList();
+                        navigate("/admin/purchase/view");
                       }}
                     >
                       <Icon
@@ -404,7 +404,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/purchase/all"), clostHandleList();
+                        navigate("/admin/purchase/all");
                       }}
                     >
                       <Icon
@@ -421,7 +421,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/customers/vendors"), clostHandleList();
+                        navigate("/admin/customers/vendors");
                       }}
                     >
                       <Icon icon="ph:user" className="text-slate-500 text-xl" />
@@ -524,7 +524,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/saleorders/view"), clostHandleList();
+                        navigate("/admin/saleorders/view");
                       }}
                     >
                       <Icon
@@ -542,7 +542,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/saleorders/all"), clostHandleList();
+                        navigate("/admin/saleorders/all");
                       }}
                     >
                       <Icon
@@ -559,7 +559,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/customers/all"), clostHandleList();
+                        navigate("/admin/customers/all");
                       }}
                     >
                       <Icon icon="ph:user" className="text-slate-500 text-xl" />
@@ -662,7 +662,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/partners/all"), clostHandleList();
+                        navigate("/admin/partners/all");
                       }}
                     >
                       <Icon
@@ -682,7 +682,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/employee/all"), clostHandleList();
+                        navigate("/admin/employee/all");
                       }}
                     >
                       <Icon
@@ -701,7 +701,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/user/all"), clostHandleList();
+                        navigate("/admin/user/all");
                       }}
                     >
                       <Icon
@@ -836,7 +836,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/account/overview"), clostHandleList();
+                        navigate("/admin/account/overview");
                       }}
                     >
                       <Icon
@@ -856,7 +856,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/discount/all"), clostHandleList();
+                        navigate("/admin/discount/all");
                       }}
                     >
                       <Icon
@@ -876,7 +876,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/tax/all"), clostHandleList();
+                        navigate("/admin/tax/all");
                       }}
                     >
                       <Icon
@@ -896,7 +896,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/opex/all"), clostHandleList();
+                        navigate("/admin/opex/all");
                       }}
                     >
                       <Icon
@@ -916,7 +916,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/fixed-cost/all"), clostHandleList();
+                        navigate("/admin/fixed-cost/all");
                       }}
                     >
                       <Icon
@@ -938,7 +938,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/variable-cost/all"), clostHandleList();
+                        navigate("/admin/variable-cost/all");
                       }}
                     >
                       <Icon
@@ -958,7 +958,7 @@ export default function SideBar() {
                           : ""
                       }}`}
                       onClick={() => {
-                        navigate("/admin/waste/all"), clostHandleList();
+                        navigate("/admin/waste/all");
                       }}
                     >
                       <Icon
@@ -1004,7 +1004,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/inventory/overview"), clostHandleList();
+                      navigate("/admin/inventory/overview");
                     }}
                   >
                     <Icon
@@ -1023,7 +1023,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/products/all"), clostHandleList();
+                      navigate("/admin/products/all");
                     }}
                   >
                     <Icon
@@ -1043,7 +1043,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/categorys/all"), clostHandleList();
+                      navigate("/admin/categorys/all");
                     }}
                   >
                     <Icon
@@ -1063,7 +1063,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/uom-category/all"), clostHandleList();
+                      navigate("/admin/uom-category/all");
                     }}
                   >
                     <Icon
@@ -1083,7 +1083,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/uom/all"), clostHandleList();
+                      navigate("/admin/uom/all");
                     }}
                   >
                     <Icon icon="ph:ruler" className="text-slate-500 text-2xl" />
@@ -1100,7 +1100,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/stock/all"), clostHandleList();
+                      navigate("/admin/stock/all");
                     }}
                   >
                     <Icon
@@ -1117,7 +1117,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/adjustment/view"), clostHandleList();
+                      navigate("/admin/adjustment/view");
                     }}
                   >
                     <Icon
@@ -1137,7 +1137,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/locations/all"), clostHandleList();
+                      navigate("/admin/locations/all");
                     }}
                   >
                     <Icon
@@ -1167,7 +1167,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/purchase/view"), clostHandleList();
+                      navigate("/admin/purchase/view");
                     }}
                   >
                     <Icon
@@ -1186,7 +1186,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/purchase/all"), clostHandleList();
+                      navigate("/admin/purchase/all");
                     }}
                   >
                     <Icon
@@ -1203,7 +1203,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/customers/vendors"), clostHandleList();
+                      navigate("/admin/customers/vendors");
                     }}
                   >
                     <Icon icon="ph:user" className="text-slate-500 text-xl" />
@@ -1232,7 +1232,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/saleorders/view"), clostHandleList();
+                      navigate("/admin/saleorders/view");
                     }}
                   >
                     <Icon
@@ -1250,7 +1250,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/saleorders/all"), clostHandleList();
+                      navigate("/admin/saleorders/all");
                     }}
                   >
                     <Icon
@@ -1267,7 +1267,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/customers/all"), clostHandleList();
+                      navigate("/admin/customers/all");
                     }}
                   >
                     <Icon icon="ph:user" className="text-slate-500 text-xl" />
@@ -1297,7 +1297,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/partners/all"), clostHandleList();
+                      navigate("/admin/partners/all");
                     }}
                   >
                     <Icon
@@ -1317,7 +1317,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/employee/all"), clostHandleList();
+                      navigate("/admin/employee/all");
                     }}
                   >
                     <Icon
@@ -1336,7 +1336,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/user/all"), clostHandleList();
+                      navigate("/admin/user/all");
                     }}
                   >
                     <Icon
@@ -1367,7 +1367,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/account/overview"), clostHandleList();
+                      navigate("/admin/account/overview");
                     }}
                   >
                     <Icon
@@ -1387,7 +1387,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/discount/all"), clostHandleList();
+                      navigate("/admin/discount/all");
                     }}
                   >
                     <Icon
@@ -1407,7 +1407,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/opex/all"), clostHandleList();
+                      navigate("/admin/opex/all");
                     }}
                   >
                     <Icon
@@ -1427,7 +1427,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/fixed-cost/all"), clostHandleList();
+                      navigate("/admin/fixed-cost/all");
                     }}
                   >
                     <Icon
@@ -1447,7 +1447,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/variable-cost/all"), clostHandleList();
+                      navigate("/admin/variable-cost/all");
                     }}
                   >
                     <Icon
@@ -1467,7 +1467,7 @@ export default function SideBar() {
                         : ""
                     }}`}
                     onClick={() => {
-                      navigate("/admin/waste/all"), clostHandleList();
+                      navigate("/admin/waste/all");
                     }}
                   >
                     <Icon

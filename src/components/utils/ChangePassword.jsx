@@ -1,9 +1,9 @@
-import React from "react";
 import { useState } from "react";
 import { PathData } from "../Api";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PropTypes from "prop-types";
 
 export default function ChangePassword({ close, id }) {
   const [password, setPassword] = useState("");
@@ -99,3 +99,8 @@ export default function ChangePassword({ close, id }) {
     </>
   );
 }
+
+ChangePassword.propTypes = {
+  close: PropTypes.func,
+  id: PropTypes.string,
+};

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   Table,
   TableHeader,
@@ -211,11 +212,6 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
     }
   }, []);
 
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
-  }, []);
-
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
@@ -377,3 +373,8 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
     </>
   );
 }
+
+StaffList.propTypes = {
+  staffs: PropTypes.array,
+  onDeleteSuccess: PropTypes.func,
+};

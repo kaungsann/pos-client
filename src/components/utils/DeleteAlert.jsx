@@ -1,6 +1,6 @@
-import React from "react";
+import PropTypes from "prop-types";
 
-export default function DeleteAlert({ cancel, onDelete, catId, logout, text }) {
+export default function DeleteAlert({ cancel, onDelete, text }) {
   return (
     <div className="absolute z-50 top-0">
       <div
@@ -58,3 +58,8 @@ export default function DeleteAlert({ cancel, onDelete, catId, logout, text }) {
     </div>
   );
 }
+DeleteAlert.propTypes = {
+  cancel: PropTypes.func,
+  onDelete: PropTypes.func,
+  text: PropTypes.text,
+};

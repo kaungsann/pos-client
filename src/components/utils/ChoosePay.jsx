@@ -6,6 +6,7 @@ import { getApi, sendJsonToApi } from "../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button, Select, SelectItem } from "@nextui-org/react";
+import PropTypes from "prop-types";
 
 export default function ChoosePay({ totalCost, change, tax, subTotal, locId }) {
   const [display, setDisplay] = useState("");
@@ -339,3 +340,11 @@ export default function ChoosePay({ totalCost, change, tax, subTotal, locId }) {
     </>
   );
 }
+
+ChoosePay.propTypes = {
+  totalCost: PropTypes.number,
+  change: PropTypes.func,
+  tax: PropTypes.number,
+  subTotal: PropTypes.number,
+  locId: PropTypes.string,
+};

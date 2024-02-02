@@ -30,6 +30,7 @@ import "../../App.css";
 import ChoosePay from "./ChoosePay";
 import { BASE_URL } from "../Api";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 export default function PayBox({ locationId }) {
   const [payment, setPayment] = useState(false);
@@ -320,3 +321,7 @@ export default function PayBox({ locationId }) {
     </>
   );
 }
+
+PayBox.propTypes = {
+  locationId: PropTypes.string,
+};

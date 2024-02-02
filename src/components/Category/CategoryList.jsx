@@ -297,4 +297,5 @@ export default function CategoryList({ categories, refresh }) {
 
 CategoryList.propTypes = {
   categories: PropTypes.array,
+  refresh: PropTypes.func,
 };

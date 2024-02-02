@@ -1,7 +1,7 @@
-import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { itemsAdd, updateItemQuantity } from "../../redux/actions";
 import img from "../../assets/product.svg/";
+import PropTypes from "prop-types";
 export default function Card({ product }) {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.orderData);
@@ -42,3 +42,7 @@ export default function Card({ product }) {
     </>
   );
 }
+
+Card.propTypes = {
+  product: PropTypes.object,
+};

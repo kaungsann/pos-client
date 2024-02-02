@@ -309,4 +309,5 @@ export default function EmployeeList({ employees, onDeleteSuccess }) {
 
 EmployeeList.propTypes = {
   employees: PropTypes.array,
+  onDeleteSuccess: PropTypes.func,
 };

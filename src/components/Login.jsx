@@ -1,6 +1,6 @@
 import { useState } from "react";
 import logo from "../assets/text.jpeg";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { addData, idAdd } from "../redux/actions";
 import { useDispatch } from "react-redux";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";

@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PropTypes from "prop-types";
 
 const INITIAL_VISIBLE_COLUMNS = [
   "name",
@@ -416,3 +417,8 @@ export default function OpexList({ opexs, refresh }) {
     </div>
   );
 }
+
+OpexList.propTypes = {
+  opexs: PropTypes.array,
+  refresh: PropTypes.func,
+};

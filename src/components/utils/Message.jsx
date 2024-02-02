@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { GoAlertFill } from "react-icons/go";
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
 export default function Message({ message }) {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
@@ -29,3 +30,7 @@ export default function Message({ message }) {
     </div>
   );
 }
+
+Message.propTypes = {
+  message: PropTypes.string,
+};

@@ -1,8 +1,6 @@
-import { applyMiddleware, legacy_createStore as createStore } from "redux";
+import { legacy_createStore as createStore } from "redux";
 
 import reducers from "./reducers";
-
-import thunk from "redux-thunk";
 
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";

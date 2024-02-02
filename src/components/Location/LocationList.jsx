@@ -293,4 +293,5 @@ export default function LocationList({ locations, refresh }) {
 
 LocationList.propTypes = {
   locations: PropTypes.array,
+  refresh: PropTypes.func,
 };

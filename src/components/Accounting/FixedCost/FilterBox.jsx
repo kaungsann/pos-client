@@ -182,6 +182,7 @@ const FilterBox = ({ onFilter, context }) => {
 
 FilterBox.propTypes = {
   onFilter: PropTypes.func,
+  context: PropTypes.string,
 };
 
 export default FilterBox;

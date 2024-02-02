@@ -6,7 +6,6 @@ import { removeData } from "../../redux/actions";
 import { getApi } from "../Api";
 
 import { format } from "date-fns";
-import FadeLoader from "react-spinners/FadeLoader";
 import user from "../../assets/icon.png";
 import { Spinner } from "@nextui-org/react";
 

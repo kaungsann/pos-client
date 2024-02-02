@@ -8,6 +8,7 @@ import { removeData } from "../../redux/actions";
 import { BASE_URL } from "../Api";
 import axios from "axios";
 import { Button, Input, Progress } from "@nextui-org/react";
+import PropTypes from "prop-types";
 
 export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
   const CompanyDoc = {
@@ -275,3 +276,9 @@ export default function EditBusinessInfo({ reBack, companyId, getInfo }) {
     </div>
   );
 }
+
+EditBusinessInfo.propTypes = {
+  reBack: PropTypes.func,
+  getInfo: PropTypes.func,
+  companyId: PropTypes.text,
+};

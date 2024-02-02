@@ -29,32 +29,6 @@ export default function WasteCreateForm() {
     amount: 0,
   });
 
-  // const handleInputChange = (e) => {
-  //   // setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  //   const { name, value } = e.target;
-
-  //   if (name === "product") {
-  //     let filterProduct = product.find((pd) => pd._id === value);
-
-  //     let totalPrice = filterProduct.salePrice * formData.quantity;
-
-  //     setFormData({
-  //       ...formData,
-  //       product: value,
-  //       amount: totalPrice,
-  //     });
-
-  //     return;
-  //   }
-
-  //   if (name === "location") {
-  //     setLocationId(value);
-  //   }
-
-  //   setFormData({ ...formData, [name]: value });
-  // };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 

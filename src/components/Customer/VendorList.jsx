@@ -21,6 +21,7 @@ import { deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import DeleteAlert from "../utils/DeleteAlert";
+import PropTypes from "prop-types";
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "phone", "actions"];
 
@@ -138,12 +139,7 @@ export default function VendorList({ vendors, onDeleteSuccess }) {
         return <h3>{format(new Date(vendors.createdAt), "yyyy-MM-dd")}</h3>;
       case "status":
         return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[vendors.phone]}
-            size="sm"
-            variant="flat"
-          >
+          <Chip className="capitalize" size="sm" variant="flat">
             {cellValue}
           </Chip>
         );
@@ -369,3 +365,8 @@ export default function VendorList({ vendors, onDeleteSuccess }) {
     </>
   );
 }
+
+VendorList.propTypes = {
+  vendors: PropTypes.array,
+  onDeleteSuccess: PropTypes.func,
+};

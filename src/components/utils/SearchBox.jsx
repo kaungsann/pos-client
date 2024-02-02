@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 import { Input } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
@@ -22,3 +22,9 @@ export default function SearchBox({ onClear, changeValue, value, text }) {
     </div>
   );
 }
+SearchBox.propTypes = {
+  onClear: PropTypes.func,
+  changeValue: PropTypes.func,
+  text: PropTypes.string,
+  value: PropTypes.string,
+};

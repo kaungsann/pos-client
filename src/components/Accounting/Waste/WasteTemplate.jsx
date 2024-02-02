@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-//import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "../FixedCost/FilterBox";
 import { BASE_URL } from "../../Api";
 import { Button, Select, SelectItem } from "@nextui-org/react";
@@ -174,11 +173,6 @@ function WasteTemplate() {
   return (
     <>
       <div className="flex justify-between items-center my-3">
-        {/* <SearchCompo
-          keyword={filteredKeywords.name}
-          onSearch={handleFilterChange}
-        /> */}
-
         <Select
           name="name"
           placeholder="Select Type"

@@ -17,10 +17,11 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL, deleteMultiple } from "../Api";
+import { deleteMultiple } from "../Api";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import DeleteAlert from "../utils/DeleteAlert";
+import PropTypes from "prop-types";
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "phone", "actions"];
 
@@ -138,12 +139,7 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
         return <h3>{format(new Date(customers.createdAt), "yyyy-MM-dd")}</h3>;
       case "status":
         return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[customers.phone]}
-            size="sm"
-            variant="flat"
-          >
+          <Chip className="capitalize" size="sm" variant="flat">
             {cellValue}
           </Chip>
         );
@@ -207,11 +203,6 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
     } else {
       setFilterValue("");
     }
-  }, []);
-
-  const onClear = React.useCallback(() => {
-    setFilterValue("");
-    setPage(1);
   }, []);
 
   const topContent = React.useMemo(() => {
@@ -373,3 +364,8 @@ export default function CustomerList({ customers, onDeleteSuccess }) {
     </>
   );
 }
+
+CustomerList.propTypes = {
+  customers: PropTypes.array,
+  onDeleteSuccess: PropTypes.func,
+};

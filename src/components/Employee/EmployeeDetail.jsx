@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { removeData } from "../../redux/actions";
-import FadeLoader from "react-spinners/FadeLoader";
 import { getApi } from "../Api";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";

@@ -23,10 +23,6 @@ export default function UomCreate() {
     uomCatg: "",
   });
 
-  // const handleInputChange = (e) => {
-  //   setFormData({ ...formData, [e.target.name]: e.target.value });
-  // };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 

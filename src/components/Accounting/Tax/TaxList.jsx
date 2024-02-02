@@ -11,14 +11,12 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Chip,
   Pagination,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
-import { orderConfirmApi } from "../../Api";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "taxrate", "created", "actions"];
 
@@ -29,7 +27,7 @@ const columns = [
   { name: "Action", uid: "actions" },
 ];
 
-export default function TaxList({ taxs, refresh }) {
+export default function TaxList({ taxs }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
@@ -294,3 +292,7 @@ export default function TaxList({ taxs, refresh }) {
     </Table>
   );
 }
+
+TaxList.propTypes = {
+  taxs: PropTypes.array,
+};

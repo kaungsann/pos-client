@@ -23,18 +23,6 @@ import { Icon } from "@iconify/react";
 import DeleteAlert from "./utils/DeleteAlert";
 import { capitalize } from "./utils/utils";
 
-// const columns = [
-//   { name: "Name", uid: "name", sortable: true },
-//   { name: "Expired Date", uid: "expiredAt", sortable: true },
-//   { name: "Tax", uid: "tax", sortable: true },
-//   { name: "Sale Price", uid: "salePrice", sortable: true },
-//   { name: "Purchase Price", uid: "purchasePrice", sortable: true },
-//   { name: "Min-Stock Qty", uid: "minStockQty", sortable: true },
-//   { name: "Ref", uid: "ref" },
-//   { name: "Barcode", uid: "barcode" },
-//   { name: "Actions", uid: "actions" },
-// ];
-
 export default function ListTemplate({ items, columns, options }) {
   const [showDeleteBox, setShowDeleteBox] = useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));

@@ -303,4 +303,5 @@ export default function PartnerList({ partners, onDeleteSuccess }) {
 
 PartnerList.propTypes = {
   partners: PropTypes.array,
+  onDeleteSuccess: PropTypes.func,
 };

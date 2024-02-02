@@ -15,11 +15,9 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { format } from "date-fns";
-
 import { useNavigate } from "react-router-dom";
-import { deleteMultiple } from "../../Api";
-import { useSelector } from "react-redux";
 import DeleteAlert from "../../utils/DeleteAlert";
+import PropTypes from "prop-types";
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "amount", "created", "actions"];
 
@@ -30,7 +28,7 @@ const columns = [
   { name: "Action", uid: "actions" },
 ];
 
-export default function DiscountList({ discounts, refresh }) {
+export default function DiscountList({ discounts }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [showDeleteBox, setShowDeleteBox] = React.useState(false);
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -319,3 +317,6 @@ export default function DiscountList({ discounts, refresh }) {
     </>
   );
 }
+DiscountList.propTypes = {
+  discounts: PropTypes.array,
+};

@@ -4,6 +4,7 @@ import { useReactToPrint } from "react-to-print";
 import { removeAllItems } from "../../redux/actions";
 import { Button } from "@nextui-org/react";
 import { getApi } from "../Api";
+import PropTypes from "prop-types";
 
 export default function PaySlip({
   change,
@@ -159,3 +160,13 @@ export default function PaySlip({
     </>
   );
 }
+
+PaySlip.propTypes = {
+  total: PropTypes.number,
+  cash: PropTypes.number,
+  pay: PropTypes.number,
+  tax: PropTypes.number,
+  sub: PropTypes.number,
+  order: PropTypes.array,
+  change: PropTypes.func,
+};

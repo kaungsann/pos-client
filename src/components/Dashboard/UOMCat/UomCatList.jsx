@@ -296,4 +296,5 @@ export default function UomCatList({ categories, refresh }) {
 
 UomCatList.propTypes = {
   categories: PropTypes.array,
+  refresh: PropTypes.func,
 };

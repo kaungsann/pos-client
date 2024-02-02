@@ -18,7 +18,6 @@ export default function PosItems() {
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
   const [categorys, setCategory] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const [locations, setLocations] = useState([]);
   const [loca, setLoca] = useState("");
@@ -50,21 +49,6 @@ export default function PosItems() {
       setCurrentPage(prevPage);
     }
   };
-
-  // const getProducts = async () => {
-  //   setLoading(true);
-  //   let resData = await getApi("/product", token.accessToken);
-  //   if (resData.message == "Token Expire , Please Login Again") {
-  //     dipatch(removeData(null));
-  //   }
-  //   if (resData.status) {
-  //     setLoading(false);
-  //     //const filteredProduct = resData.data.filter((pd) => pd.active === true);
-  //     // setProducts(filteredProduct);
-  //   } else {
-  //     setLoading(true);
-  //   }
-  // };
 
   const getCategorysApi = async () => {
     let resData = await getApi("/category", token.accessToken);
@@ -121,11 +105,11 @@ export default function PosItems() {
   const getStock = async () => {
     setLoadingData(true);
     const resData = await getApi("/stock", token.accessToken);
-    
+
     let selectedLocationId;
     if (user.role.name === "user") {
       setLoca(location);
-    } 
+    }
     if (loca === "") {
       selectedLocationId = null;
     } else {
@@ -272,7 +256,7 @@ export default function PosItems() {
                 .map((pd) => <Card key={pd.id} product={pd} />)
             ) : (
               <div className="w-10/12 mx-auto  mt-40 flex justify-center">
-                {loading && <Spinner size="lg" />}
+                {loadingData && <Spinner size="lg" />}
               </div>
             )}
           </div>
