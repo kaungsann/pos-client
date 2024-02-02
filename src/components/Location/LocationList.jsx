@@ -24,7 +24,8 @@ import DeleteAlert from "../utils/DeleteAlert";
 
 const columns = [
   { name: "Name", uid: "name", sortable: true },
-  { name: "Short Name", uid: "code" },
+  { name: "Code", uid: "code" },
+  { name: "Short Name", uid: "shortName" },
   { name: "Actions", uid: "actions" },
 ];
 

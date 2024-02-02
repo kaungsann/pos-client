@@ -60,7 +60,7 @@ export default function LocationDetail() {
         </div>
       ) : detail && detail.length > 0 ? (
         <div className="container my-5">
-          <h2 className="lg:text-xl font-bold my-2">Locations Information</h2>
+          <h2 className="lg:text-xl font-bold my-2">Location Information</h2>
           <div className="container bg-white p-5 rounded-lg max-w-6xl">
             <div className="flex">
               <div className="ml-auto">
@@ -82,12 +82,12 @@ export default function LocationDetail() {
                 <div className="flex justify-between items-center">
                   <h4>Short Name</h4>
                   <h3 className="font-medium">
-                    {detail[0].code ? detail[0].code : ""}
+                    {detail[0].shortName ? detail[0].shortName : ""}
                   </h3>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <h4>Created Date</h4>
+                  <h4>Creation Date</h4>
                   <h3 className="font-medium">
                     {detail[0].createdAt
                       ? new Date(detail[0].createdAt).toLocaleDateString()
@@ -112,9 +112,9 @@ export default function LocationDetail() {
                   </h3>
                 </div>
                 <div className="flex justify-between items-center">
-                  <h4>Location Id</h4>
+                  <h4>Code</h4>
                   <h3 className="font-medium">
-                    {detail[0].id ? detail[0].id : "none"}
+                    {detail[0].code ? detail[0].code : "none"}
                   </h3>
                 </div>
               </div>
