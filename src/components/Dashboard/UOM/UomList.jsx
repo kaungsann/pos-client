@@ -32,7 +32,7 @@ const columns = [
   { name: "Name", uid: "name", sortable: true },
   { name: "Ref Type", uid: "refType" },
   { name: "Ratio", uid: "ratio", sortable: true },
-  { name: "Created Date", uid: "created" },
+  { name: "Creation Date", uid: "created" },
   { name: "Category", uid: "category" },
   { name: "Action", uid: "actions" },
 ];

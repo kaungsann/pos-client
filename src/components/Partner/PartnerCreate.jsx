@@ -118,7 +118,7 @@ export default function PartnerCreate() {
                   // color={isInvalid ? "danger" : "success"}
                   // errorMessage={isInvalid && "Please enter a valid email"}
                   onChange={(e) => handleInputChange(e)}
-                  placeholder="Enter Partner name..."
+                  placeholder="Enter name..."
                   labelPlacement="outside"
                 />
               </div>
@@ -140,7 +140,7 @@ export default function PartnerCreate() {
                   label="Phone"
                   value={formData.phone}
                   onChange={(e) => handleInputChange(e)}
-                  placeholder="Enter Phone..."
+                  placeholder="Enter phone..."
                   labelPlacement="outside"
                 />
               </div>

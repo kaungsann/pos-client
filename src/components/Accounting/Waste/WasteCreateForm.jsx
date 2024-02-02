@@ -175,7 +175,7 @@ export default function WasteCreateForm() {
                 labelPlacement="outside"
                 label="Waste"
                 name="name"
-                placeholder="Select Waste Type"
+                placeholder="Select type"
                 className="w-60"
                 value={formData.name}
                 onChange={(e) => handleInputChange(e)}
@@ -193,7 +193,7 @@ export default function WasteCreateForm() {
                 label="Location"
                 name="location"
                 required
-                placeholder="Select an Location"
+                placeholder="Select an location"
                 onChange={(e) => handleInputChange(e)}
                 className="w-60"
               >

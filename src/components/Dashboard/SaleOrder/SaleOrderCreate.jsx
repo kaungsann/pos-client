@@ -325,8 +325,8 @@ export default function SaleOrderCreate() {
               <div className="w-60">
                 <Input
                   type="date"
-                  name="expiredAt"
-                  label="Order Date"
+                  name="date"
+                  label="Scheduled Date"
                   value={saleOrderData.orderDate}
                   placeholder="enter date"
                   labelPlacement="outside"

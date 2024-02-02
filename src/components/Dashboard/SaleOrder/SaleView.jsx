@@ -375,7 +375,7 @@ export default function SaleView() {
           <div className="px-3 mr-1.5 w-52 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon icon="fa:users" className="text-2xl text-[#8884d8]" />
             <div>
-              <h3 className="font-bold text-slate-600 text-md">Customers</h3>
+              <h3 className="font-bold text-slate-600 text-md">Customer</h3>
               <h4 className="text-md font-bold text-slate-600 text-center">
                 {
                   new Set(

@@ -68,7 +68,7 @@ export default function Admin() {
                   }}`}
                 />
               </Link>
-              {(user.role && user.role.name === "admin") ||
+              {/* {(user.role && user.role.name === "admin") ||
               user.role?.name === "root" ? (
                 <Link to="/admin/warehouse">
                   <Icon
@@ -79,7 +79,7 @@ export default function Admin() {
                     }`}
                   />
                 </Link>
-              ) : null}
+              ) : null} */}
             </>
 
             <div

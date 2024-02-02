@@ -123,7 +123,7 @@ export default function Register() {
                   name="name"
                   value={name}
                   onChange={(e) => setname(e.target.value)}
-                  placeholder="Enter Staff name..."
+                  placeholder="Enter name..."
                   labelPlacement="outside"
                 />
               </div>
@@ -135,7 +135,7 @@ export default function Register() {
                   label="Email"
                   value={email}
                   onChange={(e) => setemail(e.target.value)}
-                  placeholder="Enter Email..."
+                  placeholder="Enter email..."
                   labelPlacement="outside"
                 />
               </div>
@@ -164,7 +164,7 @@ export default function Register() {
                   label="Address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Enter Address..."
+                  placeholder="Enter address..."
                   labelPlacement="outside"
                 />
               </div>
@@ -187,7 +187,7 @@ export default function Register() {
                   label="Phone"
                   value={phone}
                   onChange={(e) => setphone(e.target.value)}
-                  placeholder="Enter Phone..."
+                  placeholder="Enter phone..."
                   labelPlacement="outside"
                 />
               </div>
@@ -198,7 +198,7 @@ export default function Register() {
                   label="City"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  placeholder="Enter City..."
+                  placeholder="Enter city..."
                   labelPlacement="outside"
                 />
               </div>
@@ -208,7 +208,7 @@ export default function Register() {
                     labelPlacement="outside"
                     label="Gender"
                     name="gender"
-                    placeholder="Select Gender"
+                    placeholder="Select gender"
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}
                     className="max-w-xs"

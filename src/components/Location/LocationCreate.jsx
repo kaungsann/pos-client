@@ -11,7 +11,7 @@ import axios from "axios";
 
 export default function LocationCreate() {
   const [name, setName] = useState("");
-  const [code, setCode] = useState("");
+  const [shortName, setShortName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ export default function LocationCreate() {
     try {
       const { data } = await axios.post(
         BASE_URL + "/location",
-        { name, code },
+        { name, shortName },
         {
           headers: {
             Authorization: `Bearer ${token.accessToken}`,
@@ -60,7 +60,7 @@ export default function LocationCreate() {
       return;
     }
 
-    if (!code.trim()) {
+    if (!shortName.trim()) {
       toast.error("Please enter a short name.");
       setTimeout(() => {
         setIsLoading(false);
@@ -133,9 +133,9 @@ export default function LocationCreate() {
                 <Input
                   type="text"
                   label="Short Name"
-                  name="code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
+                  name="shortName"
+                  value={shortName}
+                  onChange={(e) => setShortName(e.target.value)}
                   placeholder="Enter short name..."
                   labelPlacement="outside"
                 />

@@ -40,7 +40,7 @@ const columns = [
   { name: "Date", uid: "date", sortable: true },
   { name: "Amount", uid: "amount" },
   { name: "State", uid: "state", sortable: true },
-  { name: "Create-Date", uid: "created", sortable: true },
+  { name: "Creation Date", uid: "created", sortable: true },
   { name: "Action", uid: "actions" },
 ];
 
@@ -271,7 +271,7 @@ export default function FixedCostList({ opexs, refresh }) {
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <div className="flex items-end ml-3">
-            <h2 className="text-xl font-bold">Fixed-Cost</h2>
+            <h2 className="text-xl font-bold">Fixed Cost</h2>
             <h3 className="text-default-400 text-md pl-4">
               Total {opexs.length}
             </h3>

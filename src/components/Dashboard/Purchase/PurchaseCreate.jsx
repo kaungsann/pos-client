@@ -273,7 +273,7 @@ export default function PurchaseCreate() {
                 <Input
                   type="date"
                   name="expiredAt"
-                  label="Order Date"
+                  label="Scheduled Date"
                   value={purchaseOrderData.orderDate}
                   placeholder="enter date"
                   labelPlacement="outside"

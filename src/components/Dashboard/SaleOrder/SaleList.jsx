@@ -31,11 +31,11 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 const columns = [
-  { name: "Schedule Date", uid: "scheduledate" },
+  { name: "Scheduled Date", uid: "scheduledate" },
   { name: "Name", uid: "name" },
   { name: "Partner", uid: "partner" },
   { name: "Location", uid: "location" },
-  { name: "State", uid: "state" },
+  { name: "Status", uid: "state" },
   { name: "Item", uid: "totalproduct", sortable: true },
   { name: "Total Qty", uid: "totalqty", sortable: true },
   { name: "Tax Total", uid: "taxtotal", sortable: true },
