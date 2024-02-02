@@ -106,7 +106,7 @@ export default function DiscountCreateForm() {
                   name="name"
                   value={formData.name}
                   onChange={(e) => handleInputChange(e)}
-                  placeholder="enter discount name..."
+                  placeholder="Enter discount name..."
                   labelPlacement="outside"
                 />
 

@@ -125,7 +125,7 @@ export default function UomCreate() {
         </Button>
       </div>
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Uom Create</h2>
+        <h2 className="lg:text-xl font-bold my-2">Measurement Unit (UOM) Create</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           {isLoading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />
@@ -139,7 +139,7 @@ export default function UomCreate() {
                   name="name"
                   value={formData.name}
                   onChange={(e) => handleInputChange(e)}
-                  placeholder="enter uom name..."
+                  placeholder="Enter uom name..."
                   labelPlacement="outside"
                 />
               </div>
@@ -150,7 +150,7 @@ export default function UomCreate() {
                   label="Ratio"
                   value={formData.ratio}
                   onChange={(e) => handleInputChange(e)}
-                  placeholder="enter ratio..."
+                  placeholder="Enter ratio..."
                   labelPlacement="outside"
                 />
               </div>

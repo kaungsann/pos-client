@@ -48,7 +48,7 @@ export default function FixedCostDetail() {
             <div>
               <div className="flex">
                 <h1 className="text-2xl font-bold text-slate-600">
-                  Fixed-Cost Information
+                  Fixed Cost Information
                 </h1>
               </div>
 

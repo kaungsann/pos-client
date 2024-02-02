@@ -28,7 +28,7 @@ const columns = [
   { name: "Name", uid: "name", sortable: true },
   { name: "Phone", uid: "phone", sortable: true },
   { name: "Address", uid: "address" },
-  { name: "CreateDate", uid: "create" },
+  { name: "Creation Date", uid: "create" },
   { name: "City", uid: "city" },
   { name: "Company", uid: "company" },
   { name: "Actions", uid: "actions" },

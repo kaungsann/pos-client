@@ -26,7 +26,7 @@ const INITIAL_VISIBLE_COLUMNS = ["name", "amount", "created", "actions"];
 const columns = [
   { name: "Name", uid: "name", sortable: true },
   { name: "Amount", uid: "amount", sortable: true },
-  { name: "Create-Date", uid: "created" },
+  { name: "Creation Date", uid: "created" },
   { name: "Action", uid: "actions" },
 ];
 

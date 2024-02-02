@@ -106,7 +106,7 @@ export default function FixedCostCreateForm() {
         </Button>
       </div>
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">FixedCost Create</h2>
+        <h2 className="lg:text-xl font-bold my-2">Fixed Cost Create</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           {isLoading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />
@@ -127,9 +127,9 @@ export default function FixedCostCreateForm() {
                 /> */}
                 <Select
                   labelPlacement="outside"
-                  label="FixedCost"
+                  label="Fixed Cost"
                   name="name"
-                  placeholder="Select FixedCost Type"
+                  placeholder="Select type"
                   className="max-w-xs"
                   value={formData.name}
                   onChange={(e) => handleInputChange(e)}

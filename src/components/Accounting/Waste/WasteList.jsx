@@ -38,8 +38,8 @@ const columns = [
   { name: "Ref", uid: "ref", sortable: true },
   { name: "Date", uid: "date", sortable: true },
   { name: "Quantity", uid: "quantity" },
-  { name: "State", uid: "state", sortable: true },
-  { name: "Create-Date", uid: "created", sortable: true },
+  { name: "Status", uid: "state", sortable: true },
+  { name: "Creation Date", uid: "created", sortable: true },
   { name: "Action", uid: "actions" },
 ];
 

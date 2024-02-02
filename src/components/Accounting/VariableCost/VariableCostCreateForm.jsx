@@ -98,7 +98,7 @@ export default function VariableCostCreateForm() {
         </Button>
       </div>
       <div className="container mt-2">
-        <h2 className="lg:text-xl font-bold my-2">Variable-Cost Create</h2>
+        <h2 className="lg:text-xl font-bold my-2">Variable Cost Create</h2>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
           {isLoading && (
             <Progress size="sm" isIndeterminate aria-label="Loading..." />
@@ -119,9 +119,9 @@ export default function VariableCostCreateForm() {
                 /> */}
                 <Select
                   labelPlacement="outside"
-                  label="VariableCost"
+                  label="Variable Cost"
                   name="name"
-                  placeholder="Select VariableCost Type"
+                  placeholder="Select type"
                   className="max-w-xs"
                   value={formData.name}
                   onChange={(e) => handleInputChange(e)}

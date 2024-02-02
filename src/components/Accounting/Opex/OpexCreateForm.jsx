@@ -128,7 +128,7 @@ export default function OpexCreateForm() {
                   labelPlacement="outside"
                   label="Opex"
                   name="name"
-                  placeholder="Select Opex Type"
+                  placeholder="Select type"
                   className="max-w-xs"
                   value={formData.name}
                   onChange={(e) => handleInputChange(e)}

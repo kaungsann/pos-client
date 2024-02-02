@@ -839,7 +839,7 @@ export default function OverView() {
             </div>
           </div>
           <div className="flex my-4">
-            <div className="w-3/5 bg-white rounded-lg shadow-md p-4">
+            <div className="w-3/5 bg-white rounded-lg shadow-md p-4 mr-2">
               <h2 className="text-slate-600 text-lg font-semibold my-3">
                 Sales - Purchases Qty by Product
               </h2>
@@ -873,9 +873,9 @@ export default function OverView() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div className="w-2/5 bg-white rounded-lg shadow-md p-4">
+            <div className="w-2/5 bg-white rounded-lg shadow-md p-4 ml-1">
               <h2 className="text-slate-600 text-lg font-semibold my-3">
-                Low Stock Qty
+                Low Stock Qty by Product
               </h2>
               <ResponsiveContainer height={300} width="100%">
                 <BarChart

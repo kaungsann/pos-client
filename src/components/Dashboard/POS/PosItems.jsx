@@ -254,7 +254,7 @@ export default function PosItems() {
 
           {loadingData == false && products.length === 0 && (
             <h2 className="text-center mt-36 text-xl text-slate-600 font-semibold">
-              Please Select a location
+              Please select a location
             </h2>
           )}
 

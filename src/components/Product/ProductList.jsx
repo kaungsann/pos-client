@@ -30,10 +30,10 @@ const columns = [
   { name: "Expired Date", uid: "expiredAt", sortable: true },
   { name: "Tax", uid: "tax", sortable: true },
   { name: "Sale Price", uid: "salePrice", sortable: true },
-  { name: "Purchase Price", uid: "purchasePrice", sortable: true },
+  { name: "Cost", uid: "purchasePrice", sortable: true },
   { name: "Min Stock Qty", uid: "minStockQty", sortable: true },
-  { name: "Ref", uid: "ref" },
-  { name: "Bar Code", uid: "barcode" },
+  { name: "Ref (SKU)", uid: "ref" },
+  { name: "Barcode", uid: "barcode" },
   { name: "Actions", uid: "actions" },
 ];
 

@@ -272,7 +272,7 @@ export default function ProductCreateForm() {
                 <Input
                   type="text"
                   name="ref"
-                  label="Product Ref"
+                  label="Product Ref (SKU)"
                   value={product.ref}
                   onChange={(e) => inputChangeHandler(e)}
                   placeholder="Enter reference..."

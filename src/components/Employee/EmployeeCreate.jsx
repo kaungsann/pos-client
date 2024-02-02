@@ -118,7 +118,7 @@ export default function EmployeeCreate() {
                   name="name"
                   value={formData.name}
                   onChange={(e) => handleInputChange(e)}
-                  placeholder="Enter Employee name..."
+                  placeholder="Enter name..."
                   labelPlacement="outside"
                 />
               </div>
@@ -141,7 +141,7 @@ export default function EmployeeCreate() {
                   label="Phone"
                   value={formData.phone}
                   onChange={(e) => handleInputChange(e)}
-                  placeholder="Enter Phone..."
+                  placeholder="Enter phone..."
                   labelPlacement="outside"
                 />
               </div>
@@ -180,7 +180,7 @@ export default function EmployeeCreate() {
               <div className="w-60 my-2">
                 <Select
                   label="Gender"
-                  placeholder="Select Gender"
+                  placeholder="Select gender"
                   labelPlacement="outside"
                   className="max-w-xs"
                   id="gender"
