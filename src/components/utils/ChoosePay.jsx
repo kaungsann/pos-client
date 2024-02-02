@@ -220,9 +220,9 @@ export default function ChoosePay({ totalCost, change, tax, subTotal, locId }) {
             ) : null} */}
 
             <Select
-              label="Partner"
+              label="Customer"
               name="partner"
-              placeholder="Select partner"
+              placeholder="Select customer"
               onChange={(e) => setName(e.target.value)}
               classNames={{
                 base: "w-56",
