@@ -19,8 +19,6 @@ export default function UomDetail() {
     setLoading(true);
     let resData = await getApi(`/uom/${id}`, token.accessToken);
 
-    console.log("res data is ", resData);
-
     if (resData.message == "Session expired") {
       dipatch(removeData(null));
     }

@@ -88,7 +88,7 @@ export default function WasteCreateForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("form data is a", formData);
+
     try {
       const updatedFormData = { ...formData, location: locationId };
 
@@ -146,8 +146,6 @@ export default function WasteCreateForm() {
     getStock();
     getLocation();
   }, [locationId]);
-
-  console.log("form data is a", formData);
 
   return (
     <>

@@ -158,7 +158,7 @@ export default function PurchaseCreate() {
   const getPartner = useCallback(async () => {
     const resData = await getApi("/partner", token.accessToken);
     const filteredPartners = resData.data.filter(
-      (partner) => partner.isCustomer === true && partner.active === true
+      (partner) => partner.isCustomer === false && partner.active === true
     );
     setPartners(filteredPartners);
   }, [token.accessToken]);

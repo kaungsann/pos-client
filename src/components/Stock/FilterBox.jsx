@@ -67,8 +67,6 @@ const FilterBox = ({ onFilter }) => {
     getLocation();
   }, []);
 
-  console.log("location name ", location);
-
   return (
     <>
       <Button

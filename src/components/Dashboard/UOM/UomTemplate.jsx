@@ -111,7 +111,6 @@ export default function UomTemplate() {
     [units, filteredKeywords]
   );
 
-  console.log(units);
   return (
     <>
       <div className="flex justify-between items-center my-3">

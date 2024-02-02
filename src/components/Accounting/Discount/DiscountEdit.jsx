@@ -36,7 +36,6 @@ export default function DiscountEdit() {
     setIsLoading(true);
 
     try {
-      console.log("discout is a", discount);
       const { data } = await axios.patch(
         BASE_URL + `/discount/${id}`,
         discount,

@@ -51,20 +51,20 @@ export default function PosItems() {
     }
   };
 
-  const getProducts = async () => {
-    setLoading(true);
-    let resData = await getApi("/product", token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    if (resData.status) {
-      setLoading(false);
-      //const filteredProduct = resData.data.filter((pd) => pd.active === true);
-      // setProducts(filteredProduct);
-    } else {
-      setLoading(true);
-    }
-  };
+  // const getProducts = async () => {
+  //   setLoading(true);
+  //   let resData = await getApi("/product", token.accessToken);
+  //   if (resData.message == "Token Expire , Please Login Again") {
+  //     dipatch(removeData(null));
+  //   }
+  //   if (resData.status) {
+  //     setLoading(false);
+  //     //const filteredProduct = resData.data.filter((pd) => pd.active === true);
+  //     // setProducts(filteredProduct);
+  //   } else {
+  //     setLoading(true);
+  //   }
+  // };
 
   const getCategorysApi = async () => {
     let resData = await getApi("/category", token.accessToken);
@@ -121,7 +121,7 @@ export default function PosItems() {
   const getStock = async () => {
     setLoadingData(true);
     const resData = await getApi("/stock", token.accessToken);
-    console.log("res data is a", resData);
+    
     let selectedLocationId;
     if (user.role.name === "user") {
       setLoca(location);
@@ -149,7 +149,7 @@ export default function PosItems() {
     setLoadingData(false);
   };
   useEffect(() => {
-    getProducts();
+    //getProducts();
     getCategorysApi();
     getLocation();
     getStock();

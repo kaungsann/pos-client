@@ -33,7 +33,6 @@ export default function PurchaseOverview() {
   const getPurchase = async () => {
     setLoading(true);
     let resData = await getApi("/purchase", token.accessToken);
-    console.log("purchase view is", resData);
     if (resData.message == "Token Expire , Please Login Again") {
       dipatch(removeData(null));
     }

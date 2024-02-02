@@ -193,7 +193,6 @@ const AccoutingOverView = () => {
           setLoading(false);
           setTotalYear(response.data?.data);
         }
-        console.log("api isa", ACCOUNT_API.YEAR + `?year=${selectedYear}`);
       } catch (error) {
         setLoading(false);
         console.error("Error fetching year cost:", error.response?.data);
@@ -202,8 +201,6 @@ const AccoutingOverView = () => {
     fetchAccountData();
     fetchYearlyData();
   }, [token, handleDateSelection, handleAccountYearly]);
-
-  console.log(totalYear);
 
   return (
     <>

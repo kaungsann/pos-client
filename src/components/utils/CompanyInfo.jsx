@@ -22,7 +22,6 @@ export default function CompanyInfo() {
         setInfo(response.data[0]);
         setId(response.data[0].id);
       } else {
-        console.log("No company data found");
         setInfo(null);
       }
     } finally {

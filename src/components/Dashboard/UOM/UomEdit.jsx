@@ -115,11 +115,6 @@ export default function UomEdit() {
     getUom();
   }, []);
 
-  console.log("uom form data is a", uom);
-
-  // console.log("uom cat is a", uomCats);
-  // console.log("uom  is a", uom);
-
   return (
     <>
       <ToastContainer

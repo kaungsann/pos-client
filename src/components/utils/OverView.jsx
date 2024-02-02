@@ -111,17 +111,7 @@ export default function OverView() {
       //   token.accessToken
       // );
 
-      console.log(
-        "api is a",
-        (apiUrl += `${
-          locationId ? "&" : "?"
-        }startDate=${startDate}&endDate=${endDate}`)
-      );
-
-      console.log("res overview data is ", resData);
       if (resData.status) {
-        console.log("resdata overview", resData.data);
-
         setTotalPurchaseAmount(resData.data.purchases.totalAmount);
         setTotalPurchaseOrders(resData.data.purchases.totalOrders);
         setTotalPurchaseQty(resData.data.purchases.totalQty);

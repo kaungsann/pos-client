@@ -33,7 +33,6 @@ export default function UomCatTemplate() {
           },
         });
 
-        console.log("res data is ", response);
         let filterActiveUomCategorys = response.data?.data.filter(
           (ct) => ct.active === true
         );
@@ -46,8 +45,6 @@ export default function UomCatTemplate() {
 
     fetchUomCategoryData();
   }, [token, refresh]);
-
-  console.log("uom cat is", uomCategorys);
 
   const handleFilterChange = (selected) => {
     setFilteredKeywords((prevFilter) => ({

@@ -57,7 +57,6 @@ function TaxTemplate() {
   }, [token]);
 
   const handleFilterChange = (selected) => {
-    console.log("filter selected is  a", selected);
     setFilteredKeywords((prevFilter) => ({
       ...prevFilter,
       ...selected,
