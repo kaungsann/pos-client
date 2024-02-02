@@ -126,19 +126,19 @@ export default function VariableCostCreateForm() {
                   value={formData.name}
                   onChange={(e) => handleInputChange(e)}
                 >
-                  <SelectItem key="utility" value="utility">
+                  <SelectItem key="Utility" value="Utility">
                     Utility
                   </SelectItem>
-                  <SelectItem key="sales commission" value="sales commission">
+                  <SelectItem key="Sales Commission" value="Sales Commission">
                     Sales Commission
                   </SelectItem>
                   <SelectItem
-                    key="incentive or Bonus"
-                    value="incentive or Bonus"
+                    key="Incentive or Bonus"
+                    value="Incentive or Bonus"
                   >
                     Incentive or Bonus
                   </SelectItem>
-                  <SelectItem key="packaging" value="packaging">
+                  <SelectItem key="Packaging" value="Packaging">
                     Packaging
                   </SelectItem>
                 </Select>

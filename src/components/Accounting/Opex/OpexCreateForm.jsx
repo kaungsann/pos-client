@@ -133,32 +133,32 @@ export default function OpexCreateForm() {
                   value={formData.name}
                   onChange={(e) => handleInputChange(e)}
                 >
-                  <SelectItem key="fuel" value="fuel">
+                  <SelectItem key="Fuel" value="Fuel">
                     Fuel
                   </SelectItem>
-                  <SelectItem key="salary" value="salary">
+                  <SelectItem key="Salary" value="Salary">
                     Salary
                   </SelectItem>
                   <SelectItem
-                    key="incentive or Bonus"
-                    value="incentive or Bonus"
+                    key="Incentive or Bonus"
+                    value="Incentive or Bonus"
                   >
                     Incentive or Bonus
                   </SelectItem>
                   <SelectItem
-                    key="maintaince & repair"
-                    value="maintaince & repair"
+                    key="Mantaince & Repair"
+                    value="Mantaince & Repair"
                   >
                     Mantaince & Repair
                   </SelectItem>
                   <SelectItem
-                    key="software & License"
-                    value="software & License"
+                    key="Software & License"
+                    value="Software & License"
                   >
                     Software & License
                   </SelectItem>
-                  <SelectItem key="3rd party hiring" value="3rd party hiring">
-                    3rd party hiring
+                  <SelectItem key="3rd Party Hiring" value="3rd Party Hiring">
+                    3rd Party Hiring
                   </SelectItem>
                 </Select>
               </div>
