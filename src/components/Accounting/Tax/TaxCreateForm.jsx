@@ -19,8 +19,6 @@ export default function TaxCreateForm() {
     taxRate: 0,
   });
 
-  console.log("forma data is a", formData);
-
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };

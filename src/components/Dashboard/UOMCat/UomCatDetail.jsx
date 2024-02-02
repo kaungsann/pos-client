@@ -14,8 +14,6 @@ export default function UomCatDetail() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  console.log("id is a", id);
-
   const token = useSelector((state) => state.IduniqueData);
   const dispatch = useDispatch();
 

@@ -238,8 +238,6 @@ export default function ListTemplate({ items, columns, options }) {
     );
   }, [selectedKeys, totalItems, page, isLastPage, isFirstPage, totalPages]);
 
-  console.log(items);
-
   return (
     <>
       <Table

@@ -56,8 +56,6 @@ export default function Register() {
     formData.append("location", locationId);
     formData.append("password", password);
 
-    console.log("formadata is a", formData);
-
     let response = await FormPostApi("/user", formData, token.accessToken);
 
     if (response.status) {

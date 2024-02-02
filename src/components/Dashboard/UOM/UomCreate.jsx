@@ -82,8 +82,6 @@ export default function UomCreate() {
     getUomCats();
   }, [token.accessToken]);
 
-  console.log("formdata is a", formData);
-
   return (
     <>
       <ToastContainer

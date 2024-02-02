@@ -65,8 +65,6 @@ export default function SaleView() {
       `/orders/totals?startDate=${todayDate.toString()}`,
       token.accessToken
     );
-
-    console.log("total res data is a", resData.data);
     if (resData.status) {
       //setTotalAmount(resData.data.sales.totalAmount);
       setTotalGrossSale(resData.data.sales.totalGrossSale);
@@ -96,7 +94,7 @@ export default function SaleView() {
     };
 
     fetchData();
-  }, [getStockApi, getTotals]);
+  }, []);
 
   const currentStock = stock.filter(
     (stk) => format(new Date(stk.updatedAt), "MM-dd-yyyy") === todayDate

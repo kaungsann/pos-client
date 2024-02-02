@@ -40,8 +40,6 @@ export default function UomCatEdit() {
         token.accessToken
       );
 
-      console.log(resData);
-
       if (resData.status) {
         navigate("/admin/uom-category/all");
       } else {

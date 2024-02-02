@@ -41,8 +41,6 @@ export default function SaleOrderDetail() {
     try {
       let resData = await getApi(`/sale/${id}`, token.accessToken);
 
-      console.log("res detail data is a", resData);
-
       if (resData.message === "Token Expire , Please Login Again") {
         dispatch(removeData(null));
       }

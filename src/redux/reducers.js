@@ -186,7 +186,6 @@ const saleOrderReducer = (state = INIT_SALEORDER_STATE, { type, payload }) => {
     }
     case "removeLineFromSaleOrder": {
       let { productID, uomID } = payload;
-      console.log(productID);
       const lineToRemove = state.lines.find(
         (line) => line.product._id === productID && line.uom.id === uomID
       );
