@@ -134,16 +134,19 @@ export default function FixedCostCreateForm() {
                   value={formData.name}
                   onChange={(e) => handleInputChange(e)}
                 >
-                  <SelectItem key="rental" value="rental">
+                  <SelectItem key="Rental" value="Rental">
                     Rental
                   </SelectItem>
-                  <SelectItem key="insurance" value="insurance">
+                  <SelectItem key="Insurance" value="Insurance">
                     Insurance
                   </SelectItem>
-                  <SelectItem key="loan" value="loan">
+                  <SelectItem key="Loan" value="Loan">
                     Loan
                   </SelectItem>
-                  <SelectItem key="depreciation" value="depreciation">
+                  <SelectItem
+                    key="Depreciation"
+                    value="depreciatDepreciationion"
+                  >
                     Depreciation
                   </SelectItem>
                 </Select>
