@@ -21,6 +21,7 @@ const columns = [
   { name: "Product", uid: "product" },
   { name: "Location", uid: "location" },
   { name: "OnHand", uid: "onHand", sortable: true },
+  { name: "Uom", uid: "uom" },
 ];
 
 export default function StockList({ stocks }) {
@@ -90,6 +91,11 @@ export default function StockList({ stocks }) {
       onhand: () => (
         <>
           <h3>{stock.onHand}</h3>
+        </>
+      ),
+      uom: () => (
+        <>
+          <h3>unit</h3>
         </>
       ),
     };

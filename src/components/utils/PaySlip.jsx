@@ -75,7 +75,7 @@ export default function PaySlip({
                 key={pd._id}
                 className="text-lg font-bold text-black flex justify-evenly"
               >
-                <h4 className="w-2/5 extrabold">{pd.name}</h4>
+                <h4 className="w-2/5 extrabold">{pd.name.substring(0, 12)}</h4>
                 <h4 className="extrabold">x{pd.quantity}</h4>
 
                 <div className="flex items-center">

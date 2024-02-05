@@ -294,7 +294,15 @@ export default function OverView() {
 
   const saleAndCostByProduct = calTotalByProduct(saleLines, purchaseLines);
 
+  const saleAndCostByProductLimited = saleAndCostByProduct
+    ? saleAndCostByProduct.slice(0, 5)
+    : [];
+
   const saleQtyByProduct = calQtyByProduct(saleLines, purchaseLines);
+
+  const saleQtyByProductLimited = saleQtyByProduct
+    ? saleQtyByProduct.slice(0, 5)
+    : [];
 
   const onApplyCustomDate = () => {
     setSelectedDate(
@@ -774,7 +782,7 @@ export default function OverView() {
                 <BarChart
                   width={500}
                   height={300}
-                  data={saleAndCostByProduct}
+                  data={saleAndCostByProductLimited}
                   margin={{
                     top: 5,
                     right: 30,
@@ -877,7 +885,7 @@ export default function OverView() {
                 <BarChart
                   width={500}
                   height={300}
-                  data={saleQtyByProduct}
+                  data={saleQtyByProductLimited}
                   margin={{
                     top: 5,
                     right: 30,
