@@ -41,6 +41,17 @@ export default function ChoosePay({ totalCost, change, tax, subTotal, locId }) {
       return;
     }
 
+    console.log("totla cost is", totalCost);
+    console.log("cash pay is", display);
+
+    if (display < totalCost) {
+      toast.error(
+        "You can't sell to the customer with the payment lower than the total cost"
+      );
+
+      return;
+    }
+
     const orderLines = [];
     orderData.forEach((item) => {
       const orderLine = {
