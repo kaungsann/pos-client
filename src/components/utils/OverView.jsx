@@ -12,6 +12,7 @@ import {
   BarChart,
   Bar,
   Rectangle,
+  Label,
 } from "recharts";
 import {
   format,
@@ -79,6 +80,9 @@ export default function OverView() {
     startDate: "",
     endDate: "",
   });
+
+  console.log("totla sale products is a", popularSaleProducts);
+  console.log("totla purchase products is a", popularPurchaseProducts);
 
   const getTotals = async () => {
     try {
@@ -783,17 +787,23 @@ export default function OverView() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div className="w-1/5 bg-white rounded-lg shadow-md p-4 mx-3">
-              <h2 className="text-slate-600 text-lg font-semibold my-3">
+            <div className="w-1/5 bg-white rounded-lg shadow-md p-3 mx-3">
+              <h2 className="text-slate-600 text-lg font-semibold my-1.5">
                 Top Purchased Items
               </h2>
               <ResponsiveContainer height={300} className="text-center">
                 <PieChart>
-                  <Legend layout="vertical" verticalAlign="top" align="top" />
+                  <Legend
+                    layout="vertical"
+                    verticalAlign="top"
+                    align="top"
+                    iconSize={10}
+                    wrapperStyle={{ fontSize: "12px" }}
+                  />
                   <Pie
-                    data={popularPurchaseProducts}
+                    data={popularPurchaseProducts.slice(0, 3)}
                     cx="50%"
-                    cy="50%"
+                    cy="0%"
                     labelLine={false}
                     label={renderCustomizedLabel}
                     outerRadius={80}
@@ -810,22 +820,29 @@ export default function OverView() {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="w-1/5 bg-white rounded-lg shadow-md p-4">
-              <h2 className="text-slate-600 text-lg font-semibold my-3">
+            <div className="w-1/5 bg-white rounded-lg shadow-md p-3 mx-3">
+              <h2 className="text-slate-600 text-lg font-semibold my-1.5">
                 Top Selling Items
               </h2>
               <ResponsiveContainer height={300} className="text-center">
                 <PieChart>
-                  <Legend layout="vertical" verticalAlign="top" align="top" />
+                  <Legend
+                    layout="vertical"
+                    verticalAlign="top"
+                    align="top"
+                    iconSize={10}
+                    wrapperStyle={{ fontSize: "12px" }}
+                  />
                   <Pie
-                    data={popularSaleProducts}
+                    data={popularSaleProducts.slice(0, 3)}
                     cx="50%"
-                    cy="50%"
+                    cy="0%"
                     labelLine={false}
                     label={renderCustomizedLabel}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="count"
+                    className="bg-red-400"
                   >
                     {popularSaleProducts.map((entry, index) => (
                       <Cell
