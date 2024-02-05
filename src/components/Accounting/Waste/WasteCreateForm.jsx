@@ -236,6 +236,7 @@ export default function WasteCreateForm() {
                 <Input
                   type="number"
                   name="amount"
+                  isDisabled
                   label="Amount"
                   value={formData.amount}
                   placeholder="Enter amount..."
