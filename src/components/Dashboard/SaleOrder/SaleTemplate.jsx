@@ -5,7 +5,7 @@ import { BASE_URL } from "../../Api";
 import SaleList from "./SaleList";
 import SearchCompo from "../../utils/SearchCompo";
 import FilterBox from "./FilterBox";
-import ExcelExportButton from "../../ExcelExportButton";
+// import ExcelExportButton from "../../ExcelExportButton";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@nextui-org/react";
 
@@ -181,12 +181,12 @@ export default function SaleTemplate() {
             Add
           </Button>
           <FilterBox onFilter={handleFilterChange} />
-          <div className="mx-3">
+          {/* <div className="mx-3">
             <ExcelExportButton
               token={token.accessToken}
               apiEndpoint={SALE_API.EXPORT}
             />
-          </div>
+          </div> */}
         </div>
       </div>
       <SaleList orders={filteredSale} />
