@@ -21,6 +21,8 @@ export default function CategoryDetail() {
     try {
       let resData = await getApi(`/category/${id}`, token.accessToken);
 
+      console.log("category datail is a", resData);
+
       if (resData.message === "Token Expire , Please Login Again") {
         dispatch(removeData(null));
       }
@@ -104,6 +106,14 @@ export default function CategoryDetail() {
                       : ""}
                   </h3>
                 </div>
+              </div>
+              <div className="flex justify-between items-center">
+                <h4 className="space-y-8 font-semibold text-sm">
+                  Category Code
+                </h4>
+                <h3 className=" text-blue-500 font-semibold">
+                  {detail[0].code ? detail[0].code : ""}
+                </h3>
               </div>
             </div>
           </div>

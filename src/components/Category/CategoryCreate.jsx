@@ -41,6 +41,7 @@ export default function CategoryCreate() {
         navigate("/admin/categorys/all");
       }
     } catch (error) {
+      toast.error(error.response.data.message);
       console.error("Error creating category:", error);
     }
   };
