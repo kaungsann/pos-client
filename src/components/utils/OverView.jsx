@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import {
   PieChart,
   Pie,
@@ -12,7 +13,6 @@ import {
   BarChart,
   Bar,
   Rectangle,
-  Label,
 } from "recharts";
 import {
   format,
@@ -44,6 +44,22 @@ import {
 import { getApi } from "../Api";
 import { useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
+
+const truncateLabel = (label, maxLength) => {
+  return label.length > maxLength
+    ? `${label.substring(0, maxLength)}...`
+    : label;
+};
+
+const CustomizedAxisTick = ({ x, y, payload }) => {
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text x={0} y={0} dy={16} textAnchor="end" fill="#666">
+        {truncateLabel(payload.value, 15)}
+      </text>
+    </g>
+  );
+};
 
 export default function OverView() {
   const [loading, setLoading] = useState(false);
@@ -80,9 +96,6 @@ export default function OverView() {
     startDate: "",
     endDate: "",
   });
-
-  console.log("totla sale products is a", popularSaleProducts);
-  console.log("totla purchase products is a", popularPurchaseProducts);
 
   const getTotals = async () => {
     try {
@@ -770,7 +783,7 @@ export default function OverView() {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="product" />
+                  <XAxis dataKey="product" tick={<CustomizedAxisTick />} />
                   <YAxis />
                   <Tooltip />
                   <Legend />
@@ -801,7 +814,7 @@ export default function OverView() {
                     wrapperStyle={{ fontSize: "12px" }}
                   />
                   <Pie
-                    data={popularPurchaseProducts.slice(0, 3)}
+                    data={popularPurchaseProducts}
                     cx="50%"
                     cy="0%"
                     labelLine={false}
@@ -834,7 +847,7 @@ export default function OverView() {
                     wrapperStyle={{ fontSize: "12px" }}
                   />
                   <Pie
-                    data={popularSaleProducts.slice(0, 3)}
+                    data={popularSaleProducts}
                     cx="50%"
                     cy="0%"
                     labelLine={false}
@@ -873,7 +886,7 @@ export default function OverView() {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="product" />
+                  <XAxis dataKey="product" tick={<CustomizedAxisTick />} />
                   <YAxis />
                   <Tooltip />
                   <Legend />
@@ -907,7 +920,7 @@ export default function OverView() {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
+                  <XAxis dataKey="name" tick={<CustomizedAxisTick />} />
                   <YAxis />
                   <Tooltip />
                   <Legend />
@@ -930,3 +943,9 @@ export default function OverView() {
     </>
   );
 }
+
+CustomizedAxisTick.propTypes = {
+  x: PropTypes.string,
+  y: PropTypes.string,
+  payload: PropTypes.string,
+};
