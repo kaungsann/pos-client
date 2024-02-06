@@ -65,6 +65,8 @@ const CustomizedAxisTick = ({ x, y, payload }) => {
 export default function OverView() {
   const windowSize = useWindowSize();
 
+  const xAxisLabelAngle = windowSize.width >= 1280 ? -45 : 0;
+
   const calculateOuterRadius = () => {
     if (windowSize.width >= 1280) {
       // Desktop screen size
@@ -755,7 +757,7 @@ export default function OverView() {
               <ResponsiveContainer height={400} width="100%">
                 <BarChart
                   width={800}
-                  height={500}
+                  height={400}
                   data={saleAndCostByProductLimited}
                   margin={{
                     top: 5,
@@ -766,7 +768,12 @@ export default function OverView() {
                 >
                   <CartesianGrid strokeDasharray="3 3" />
 
-                  <XAxis dataKey="product" tick={<CustomizedAxisTick />} />
+                  <XAxis
+                    dataKey="product"
+                    tick={<CustomizedAxisTick />}
+                    angle={xAxisLabelAngle}
+                    textAnchor={xAxisLabelAngle === -45 ? "end" : "middle"}
+                  />
                   <YAxis />
                   <Tooltip />
                   <Legend />
@@ -783,72 +790,74 @@ export default function OverView() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div className="w-1/5 bg-white rounded-lg shadow-md p-2 mx-3">
-              <h2 className="text-slate-600 text-lg font-semibold my-1.5 lg:text-md">
-                Top Purchased Items
-              </h2>
-              <ResponsiveContainer height={400}>
-                <PieChart>
-                  <Legend
-                    layout="vertical"
-                    verticalAlign="top"
-                    align="top"
-                    iconSize={10}
-                    wrapperStyle={{ fontSize: "12px" }}
-                  />
+            <div className="w-2/5 ml-1.5 flex">
+              <div className="w-2/4 bg-white rounded-lg shadow-md p-2 mr-1.5">
+                <h2 className="text-slate-600 sm:text-sm md:text-sm text-lg font-semibold my-1.5 lg:text-md">
+                  Top Purchased Items
+                </h2>
+                <ResponsiveContainer height={400}>
+                  <PieChart>
+                    <Legend
+                      layout="vertical"
+                      verticalAlign="top"
+                      align="top"
+                      iconSize={10}
+                      wrapperStyle={{ fontSize: "12px" }}
+                    />
 
-                  <Pie
-                    data={popularPurchaseProducts}
-                    cx="50%"
-                    cy="30%"
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    outerRadius={outerRadius}
-                    fill="#8884d8"
-                    dataKey="count"
-                  >
-                    {popularPurchaseProducts.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="w-1/5 bg-white relative rounded-lg shadow-md p-2 mx-3">
-              <h2 className="text-slate-600 text-lg font-semibold my-1.5 lg:text-md">
-                Top Selling Items
-              </h2>
-              <ResponsiveContainer height={400}>
-                <PieChart>
-                  <Legend
-                    layout="vertical"
-                    verticalAlign="top"
-                    align="top"
-                    iconSize={10}
-                    wrapperStyle={{ fontSize: "12px" }}
-                  />
-                  <Pie
-                    data={popularSaleProducts}
-                    cx="50%"
-                    cy="30%"
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    outerRadius={outerRadius}
-                    fill="#8884d8"
-                    dataKey="count"
-                  >
-                    {popularSaleProducts.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
+                    <Pie
+                      data={popularPurchaseProducts}
+                      cx="50%"
+                      cy="30%"
+                      labelLine={false}
+                      label={renderCustomizedLabel}
+                      outerRadius={outerRadius}
+                      fill="#8884d8"
+                      dataKey="count"
+                    >
+                      {popularPurchaseProducts.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="w-2/4 bg-white  rounded-lg shadow-md p-2">
+                <h2 className="text-slate-600 sm:text-sm md:text-sm text-lg font-semibold my-1.5 lg:text-md">
+                  Top Selling Items
+                </h2>
+                <ResponsiveContainer height={400}>
+                  <PieChart>
+                    <Legend
+                      layout="vertical"
+                      verticalAlign="top"
+                      align="top"
+                      iconSize={10}
+                      wrapperStyle={{ fontSize: "12px" }}
+                    />
+                    <Pie
+                      data={popularSaleProducts}
+                      cx="50%"
+                      cy="30%"
+                      labelLine={false}
+                      label={renderCustomizedLabel}
+                      outerRadius={outerRadius}
+                      fill="#8884d8"
+                      dataKey="count"
+                    >
+                      {popularSaleProducts.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
           <div className="flex my-4">
