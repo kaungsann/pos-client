@@ -47,6 +47,7 @@ const ExcelImportButton = ({ token, apiEndpoint, onSuccess, templateLink }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log("error is a", response);
       if (response.status) {
         setIsLoading(false);
         setSelectedFileName(null);
@@ -55,9 +56,11 @@ const ExcelImportButton = ({ token, apiEndpoint, onSuccess, templateLink }) => {
         onSuccess();
         toast.success(response.data.message);
       } else {
+        setIsLoading(false);
         toast.error(response.data.message);
       }
     } catch (error) {
+      setIsLoading(false);
       toast.error(error.response.data.message);
       console.error("Error uploading file:", error);
     }
@@ -97,6 +100,7 @@ const ExcelImportButton = ({ token, apiEndpoint, onSuccess, templateLink }) => {
             onClick={() => {
               setSelectedFile(null);
               setSelectedFileName("");
+              setIsLoading(false);
             }}
             className="text-sm font-semibold text-slate-500 text-end mr-8 cursor-pointer hover:opacity-80"
           >

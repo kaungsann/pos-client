@@ -119,6 +119,7 @@ export default function OverView() {
           locationId ? "&" : "?"
         }startDate=${startDate}&endDate=${endDate}`;
       }
+      console.log("location filter is a", apiUrl);
 
       let resData = await getApi(apiUrl, token.accessToken);
 
@@ -808,11 +809,11 @@ export default function OverView() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div className="w-1/5 bg-white rounded-lg shadow-md p-3 mx-3">
+            <div className="w-1/5 bg-white rounded-lg shadow-md p-2 mx-3">
               <h2 className="text-slate-600 text-lg font-semibold my-1.5">
                 Top Purchased Items
               </h2>
-              <ResponsiveContainer height={300} className="text-center">
+              <ResponsiveContainer height={400}>
                 <PieChart>
                   <Legend
                     layout="vertical"
@@ -821,10 +822,11 @@ export default function OverView() {
                     iconSize={10}
                     wrapperStyle={{ fontSize: "12px" }}
                   />
+
                   <Pie
                     data={popularPurchaseProducts}
                     cx="50%"
-                    cy="0%"
+                    cy="20%"
                     labelLine={false}
                     label={renderCustomizedLabel}
                     outerRadius={80}
@@ -841,11 +843,11 @@ export default function OverView() {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="w-1/5 bg-white rounded-lg shadow-md p-3 mx-3">
+            <div className="w-1/5 relative bg-white rounded-lg shadow-md p-3 mx-3">
               <h2 className="text-slate-600 text-lg font-semibold my-1.5">
                 Top Selling Items
               </h2>
-              <ResponsiveContainer height={300} className="text-center">
+              <ResponsiveContainer height={400}>
                 <PieChart>
                   <Legend
                     layout="vertical"
@@ -857,13 +859,13 @@ export default function OverView() {
                   <Pie
                     data={popularSaleProducts}
                     cx="50%"
-                    cy="0%"
+                    cy="20%"
                     labelLine={false}
                     label={renderCustomizedLabel}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="count"
-                    className="bg-red-400"
+                    className="fixed top-0"
                   >
                     {popularSaleProducts.map((entry, index) => (
                       <Cell

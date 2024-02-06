@@ -209,13 +209,13 @@ export default function PurchaseView() {
               </h4>
             </div>
           </div> */}
-          <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-2 mx-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icons8:buy"
               className="text-5xl text-blue-700 font-semibold"
             />
 
-            <div className="">
+            <div className="mx-2">
               <h3 className="font-bold text-slate-600 text-lg">Total Orders</h3>
               <h4 className="text-lg font-bold text-slate-600">
                 {totalOrders}
@@ -223,7 +223,7 @@ export default function PurchaseView() {
             </div>
           </div>
 
-          <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-2  py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon icon="fa:users" className="text-4xl text-[#8884d8]" />
             <div>
               <h3 className="font-bold text-slate-600 text-lg">
@@ -239,7 +239,7 @@ export default function PurchaseView() {
             </div>
           </div>
 
-          <div className="px-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-2 mx-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="fluent-mdl2:product-variant"
               className="text-4xl text-green-500"
