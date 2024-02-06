@@ -88,7 +88,7 @@ const ProductTemplate = () => {
         const isStockValid = () => {
           if (!price.value || !price.comparison) return true;
 
-          const salePrice = product.salePrice;
+          const salePrice = product?.salePrice;
 
           return (
             (price.comparison === COMPARISION.LESS &&
@@ -113,7 +113,7 @@ const ProductTemplate = () => {
         };
 
         return (
-          product.name.toLowerCase().includes(name.toLowerCase()) &&
+          product?.name?.toLowerCase()?.includes(name.toLowerCase()) &&
           (!startDate || new Date(product.expiredAt) >= new Date(startDate)) &&
           (!endDate || new Date(product.expiredAt) <= new Date(endDate)) &&
           isCategory() &&

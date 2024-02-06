@@ -52,6 +52,7 @@ export default function ProductDetails() {
           dipatch(removeData(null));
         }
         setProduct({ ...product, ...data.data[0] });
+        console.log("res data is a", data.data[0]);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -122,15 +123,13 @@ export default function ProductDetails() {
                         <div>
                           <h4 className="text-md text-slate-500">Name</h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                            {product.name}
+                            {product.name ? product.name : ""}
                           </h2>
                         </div>
                         <div className="my-6">
                           <h4 className="text-md text-slate-500">Category</h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                            {product.category.name
-                              ? product.category.name
-                              : "None"}
+                            {product.category ? product.category.name : "None"}
                           </h2>
                         </div>
                         <div>
