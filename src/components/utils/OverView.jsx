@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import useWindowSize from "./WindowSize";
 import {
   PieChart,
   Pie,
@@ -62,6 +63,20 @@ const CustomizedAxisTick = ({ x, y, payload }) => {
 };
 
 export default function OverView() {
+  const windowSize = useWindowSize();
+
+  const calculateOuterRadius = () => {
+    if (windowSize.width >= 1280) {
+      // Desktop screen size
+      return 80;
+    } else if (windowSize.width >= 1024) {
+      return 60;
+    } else {
+      return 40;
+    }
+  };
+  const outerRadius = calculateOuterRadius();
+
   const [loading, setLoading] = useState(false);
 
   const [location, setLocation] = useState([]);
@@ -305,6 +320,8 @@ export default function OverView() {
     ? saleQtyByProduct.slice(0, 5)
     : [];
 
+  const lowStockLimited = lowStock ? lowStock.slice(0, 5) : [];
+
   const onApplyCustomDate = () => {
     setSelectedDate(
       getDateRangeString(customDateRange.startDate, customDateRange.endDate)
@@ -363,51 +380,7 @@ export default function OverView() {
       ) : (
         <div className="relative">
           <div className="flex justify-end mb-3">
-            {/* {locationId ? (
-              <h1 className="font-bold w-48 text-slate-500 text-xl">
-                {" ( " +
-                  location.find((loc) => loc.id === locationId)?.name +
-                  " ) "}
-              </h1>
-            ) : (
-              <h1 className="font-bold w-48 text-slate-500 text-xl"></h1>
-            )} */}
-
             <div className="flex w-full justify-center items-center">
-              {/* <Popover
-                placement="bottom"
-                classNames={{
-                  base: ["p-0 rounded-sm"],
-                  content: ["p-0 mx-2 rounded-sm"],
-                }}
-              >
-                <PopoverTrigger>
-                  <Button
-                    size="sm"
-                    className="rounded-sm ml-3 transition shadow-sm flex items-centertext-[#4338ca] border-[#4338ca] hover:bg-[#4338ca]
-                 border-2 hover:opacity-75 text-sm hover:text-white bg-white  font-bold px-3 py-1.5`"
-                  >
-                    <Icon icon="tdesign:location" className="text-md" />
-                    <span className="text-sm ml-1">Filter</span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <Listbox
-                    aria-label="Select location"
-                    onAction={(key) => setLocationId(key)}
-                  >
-                    {location.map((loc) => (
-                      <ListboxItem
-                        className="rounded-none"
-                        key={loc.id}
-                        value={loc.id}
-                      >
-                        {loc.name}
-                      </ListboxItem>
-                    ))}
-                  </Listbox>
-                </PopoverContent>
-              </Popover> */}
               <Select
                 aria-label="location"
                 variant="bordered"
@@ -545,8 +518,8 @@ export default function OverView() {
                   </div>
                 </PopoverContent>
               </Popover>
-              <div className="w-56 flex shadow-sm justify-center px-3 mx-3 py-1 bg-white border-2 text-center rounded-sm ring-2 ring-purple-500  ring-offset-slate-50 dark:ring-offset-slate-900">
-                <h4 className="text-slate-500 items-center font-semibold ">
+              <div className="w-56 flex shadow-sm justify-center lg:px-1 lg:mx-1.5 px-3 lg:px-1/5 mx-3 py-1 bg-white border-2 text-center rounded-sm ring-2 ring-purple-500 ring-offset-slate-50 dark:ring-offset-slate-900">
+                <h4 className="text-slate-500 items-center font-semibold">
                   {selectedDate ?? "None"}
                 </h4>
               </div>
@@ -554,140 +527,140 @@ export default function OverView() {
           </div>
           <div className="flex">
             {/* Sale Order  */}
-            <div className="w-4/5	bg-white p-4 border-2 rounded-lg shadow-md">
+            <div className="w-4/5 lg:w-3/5	bg-white p-4 border-2 rounded-lg shadow-md">
               <div className="flex justify-between">
-                <h3 className="text-lg font-semibold text-slate-700">
+                <h3 className="text-lg lg:text-md font-semibold text-slate-700">
                   Sales Overview
                 </h3>
               </div>
-              <div className=" my-3 px-4 flex">
-                <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-blue-200 rounded-md">
+              <div className="xl:my-3 px-4 flex lg:my-4">
+                <div className="flex items-center xl:w-2/4 lg:w-2/5">
+                  <div className="xl:p-3 2xl:p-4 bg-blue-200 lg:p-1 rounded-md">
                     <Icon
                       icon="solar:cart-4-outline"
-                      className="text-4xl text-cyan-600 font-extrabold"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-cyan-600 font-extrabold"
                     />
                   </div>
-                  <div className="mx-3">
-                    <h2 className="text-slate-400 text-md font-semibold w-full">
+                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm w-full xl:text-md 2xl:text-lg font-semibold">
                       Gross Sales
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold my-2">
                       {totalGrossSale}
                     </h2>
                   </div>
                 </div>
-                <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-yellow-100 rounded-md">
+                <div className="flex items-center w-2/4 lg:md-2/5">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-yellow-100 rounded-md">
                     <Icon
                       icon="tdesign:undertake-transaction"
-                      className="text-4xl text-yellow-600 font-extrabold"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-yellow-600 font-extrabold"
                     />
                   </div>
-                  <div className="px-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Gross Profit
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold  my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold my-2">
                       {totalGrossProfit}
                     </h2>
                   </div>
                 </div>
-                <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-violet-300 rounded-md">
+                <div className="flex items-center w-2/4 lg:md-2/5">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-violet-300 rounded-md">
                     <Icon
                       icon="solar:sale-linear"
-                      className="text-4xl text-violet-600 font-extrabold"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-violet-600 font-extrabold"
                     />
                   </div>
-                  <div className="px-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Net Sales
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold  my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold  my-2">
                       {totalGrossSale - totalDiscount}
                     </h2>
                   </div>
                 </div>
-                <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-pink-100 rounded-md">
+                <div className="flex items-center w-2/4 lg:md-2/5">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-pink-100 rounded-md">
                     <Icon
                       icon="la:cart-arrow-down"
-                      className="text-4xl text-rose-600 font-extrabold"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-rose-600 font-extrabold"
                     />
                   </div>
-                  <div className="px-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Orders
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold  my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold  my-2">
                       {totalSaleOrders}
                     </h2>
                   </div>
                 </div>
               </div>
 
-              <div className=" my-3 px-4 flex">
-                <div className="flex items-center w-2/4	">
-                  <div className="p-4 bg-orange-200 rounded-md">
+              <div className="xl:my-3 lg:my-1.5 px-4 flex">
+                <div className="flex items-center xl:w-2/4 lg:w-2/5">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-orange-200 rounded-md">
                     <Icon
                       icon="carbon:purchase"
-                      className="text-4xl text-orange-600 font-extrabold"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-orange-600 font-extrabold"
                     />
                   </div>
-                  <div className="mx-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Tax
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold  my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold my-2">
                       {totalTax}
                     </h2>
                   </div>
                 </div>
-                <div className="flex items-center w-2/4	">
-                  <div className="p-4 bg-green-100 rounded-md">
+                <div className="flex items-center lg:w-2/5 xl:w-2/4">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-green-100 rounded-md">
                     <Icon
                       icon="uil:file-graph"
-                      className="text-4xl text-green-600 font-extrabold"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-green-600 font-extrabold"
                     />
                   </div>
-                  <div className="px-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Discount
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold  my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold my-2">
                       {totalDiscount}
                     </h2>
                   </div>
                 </div>
-                <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-[#d9f99d] rounded-md">
+                <div className="flex items-center lg:w-2/5 xl:w-2/4">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-[#d9f99d] rounded-md">
                     <Icon
                       icon="fluent-mdl2:product"
-                      className="text-4xl text-[#8AAF22] font-extrabold"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-[#8AAF22] font-extrabold"
                     />
                   </div>
-                  <div className="px-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Items
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold  my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold  my-2">
                       {totalSaleItems}
                     </h2>
                   </div>
                 </div>
-                <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-orange-100 rounded-md">
+                <div className="flex items-center lg:w-2/5 xl:w-2/4">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-orange-100 rounded-md">
                     <Icon
                       icon="fluent-mdl2:product-variant"
-                      className="text-4xl text-orange-600"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-orange-600"
                     />
                   </div>
-                  <div className="px-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Quantity
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold  my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold  my-2">
                       {totalSaleQty}
                     </h2>
                   </div>
@@ -703,70 +676,70 @@ export default function OverView() {
                 </h3>
               </div>
               {/* Annula Purchase */}
-              <div className=" my-3 px-4 flex">
-                <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-violet-300 rounded-md">
+              <div className="xl:my-3  px-4 flex lg:justify-between lg:my-4">
+                <div className="flex items-center lg:w-2/5 xl:w-2/4">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-orange-100 rounded-md">
                     <Icon
                       icon="la:cart-plus"
-                      className="text-4xl text-violet-600 font-extrabold"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-violet-600 font-extrabold"
                     />
                   </div>
-                  <div className="mx-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Cost
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold my-2">
                       {totalPurchaseAmount}
                     </h2>
                   </div>
                 </div>
-                <div className="flex items-center w-2/4">
-                  <div className="p-4 bg-pink-100 rounded-md">
+                <div className="flex items-center lg:w-2/5 xl:w-2/4">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-orange-100 rounded-md">
                     <Icon
                       icon="la:cart-arrow-down"
-                      className="text-4xl text-rose-600 font-extrabold"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-rose-600 font-extrabold"
                     />
                   </div>
-                  <div className="px-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Orders
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold my-2">
                       {totalPurchaseOrders}
                     </h2>
                   </div>
                 </div>
               </div>
               {/* Monthly Sales */}
-              <div className=" my-3 px-4 flex">
-                <div className="flex items-center w-2/4	">
-                  <div className="p-4 bg-[#d9f99d] rounded-md">
+              <div className="xl:my-3 lg:my-1.5 px-4 flex lg:justify-between">
+                <div className="flex items-center lg:w-2/5 xl:w-2/4">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-[#d9f99d] rounded-md">
                     <Icon
                       icon="fluent-mdl2:product"
-                      className="text-4xl text-[#8AAF22] font-extrabold"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-[#8AAF22] font-extrabold"
                     />
                   </div>
-                  <div className="mx-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Products
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold my-2">
                       {totalPurchaseItems}
                     </h2>
                   </div>
                 </div>
-                <div className="flex items-center w-2/4	">
-                  <div className="p-4 bg-orange-100 rounded-md">
+                <div className="flex items-center lg:w-2/5 xl:w-2/4">
+                  <div className="xl:p-3 2xl:p-4 lg:p-1 bg-orange-100 rounded-md">
                     <Icon
                       icon="fluent-mdl2:product-variant"
-                      className="text-4xl text-orange-600"
+                      className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-orange-600"
                     />
                   </div>
-                  <div className="px-3">
-                    <h2 className="text-slate-400 text-md font-semibold">
+                  <div className="lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                    <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Quantity
                     </h2>
-                    <h2 className="text-slate-800 text-xl font-extrabold my-2">
+                    <h2 className="text-slate-800 lg:text-sm xl:text-lg 2xl:text-xl font-extrabold my-2">
                       {totalPurchaseQty}
                     </h2>
                   </div>
@@ -775,14 +748,14 @@ export default function OverView() {
             </div>
           </div>
           <div className="flex my-4">
-            <div className="w-3/5 bg-white rounded-lg shadow-md p-4">
+            <div className="w-3/5 bg-white rounded-lg shadow-md p-2">
               <h2 className="text-slate-600 text-lg font-semibold my-3">
                 Gross Sales vs Cost by Product
               </h2>
-              <ResponsiveContainer height={300} width="100%">
+              <ResponsiveContainer height={400} width="100%">
                 <BarChart
-                  width={500}
-                  height={300}
+                  width={800}
+                  height={500}
                   data={saleAndCostByProductLimited}
                   margin={{
                     top: 5,
@@ -792,6 +765,7 @@ export default function OverView() {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
+
                   <XAxis dataKey="product" tick={<CustomizedAxisTick />} />
                   <YAxis />
                   <Tooltip />
@@ -810,7 +784,7 @@ export default function OverView() {
               </ResponsiveContainer>
             </div>
             <div className="w-1/5 bg-white rounded-lg shadow-md p-2 mx-3">
-              <h2 className="text-slate-600 text-lg font-semibold my-1.5">
+              <h2 className="text-slate-600 text-lg font-semibold my-1.5 lg:text-md">
                 Top Purchased Items
               </h2>
               <ResponsiveContainer height={400}>
@@ -826,10 +800,10 @@ export default function OverView() {
                   <Pie
                     data={popularPurchaseProducts}
                     cx="50%"
-                    cy="20%"
+                    cy="30%"
                     labelLine={false}
                     label={renderCustomizedLabel}
-                    outerRadius={80}
+                    outerRadius={outerRadius}
                     fill="#8884d8"
                     dataKey="count"
                   >
@@ -843,8 +817,8 @@ export default function OverView() {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="w-1/5 relative bg-white rounded-lg shadow-md p-3 mx-3">
-              <h2 className="text-slate-600 text-lg font-semibold my-1.5">
+            <div className="w-1/5 bg-white relative rounded-lg shadow-md p-2 mx-3">
+              <h2 className="text-slate-600 text-lg font-semibold my-1.5 lg:text-md">
                 Top Selling Items
               </h2>
               <ResponsiveContainer height={400}>
@@ -859,13 +833,12 @@ export default function OverView() {
                   <Pie
                     data={popularSaleProducts}
                     cx="50%"
-                    cy="20%"
+                    cy="30%"
                     labelLine={false}
                     label={renderCustomizedLabel}
-                    outerRadius={80}
+                    outerRadius={outerRadius}
                     fill="#8884d8"
                     dataKey="count"
-                    className="fixed top-0"
                   >
                     {popularSaleProducts.map((entry, index) => (
                       <Cell
@@ -883,9 +856,9 @@ export default function OverView() {
               <h2 className="text-slate-600 text-lg font-semibold my-3">
                 Sales - Purchases Qty by Product
               </h2>
-              <ResponsiveContainer height={300} width="100%">
+              <ResponsiveContainer height={400} width="100%">
                 <BarChart
-                  width={500}
+                  width={800}
                   height={300}
                   data={saleQtyByProductLimited}
                   margin={{
@@ -917,18 +890,8 @@ export default function OverView() {
               <h2 className="text-slate-600 text-lg font-semibold my-3">
                 Low Stock Qty by Product
               </h2>
-              <ResponsiveContainer height={300} width="100%">
-                <BarChart
-                  width={500}
-                  height={300}
-                  data={lowStock}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
+              <ResponsiveContainer height={400} width="100%">
+                <BarChart width={500} height={400} data={lowStockLimited} x>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" tick={<CustomizedAxisTick />} />
                   <YAxis />
@@ -941,11 +904,6 @@ export default function OverView() {
                   />
                 </BarChart>
               </ResponsiveContainer>
-              {/* <ResponsiveContainer width="100%" height={300}>
-                <BarChart width={500} height={300} data={lowStock}>
-                  <Bar dataKey="onHand" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer> */}
             </div>
           </div>
         </div>
