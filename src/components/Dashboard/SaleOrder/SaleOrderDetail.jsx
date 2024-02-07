@@ -87,9 +87,9 @@ export default function SaleOrderDetail() {
       case "unitprice":
         return <h3>{lines.unitPrice}</h3>;
       case "uom":
-        return <h3>{lines.uom.name}</h3>;
+        return <h3>{lines.uom?.name}</h3>;
       case "uomratio":
-        return <h3>{lines.uom.ratio}</h3>;
+        return <h3>{lines.uom?.ratio}</h3>;
       case "tax":
         return <h3>{lines.tax}</h3>;
       case "qty":

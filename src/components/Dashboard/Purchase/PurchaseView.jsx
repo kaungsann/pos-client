@@ -184,19 +184,22 @@ export default function PurchaseView() {
           Daily Dashboard
         </h1>
         <div className="w-full flex justify-between">
-          <div className="px-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-2 md:py-2 mr-2 lg:py-3 xl:py-4 sm:w-52 md:w-56 lg:w-60 xl:w-64 2xl:w-w-72 flex  items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icon-park-solid:buy"
-              className="text-4xl text-cyan-700 font-semibold"
+              className="sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl text-cyan-700 font-semibold"
             />
 
             <div>
-              <h3 className="font-bold text-slate-600 text-lg">Total Cost</h3>
-              <h4 className="text-lg font-bold text-slate-600">
+              <h3 className="font-bold text-slate-600  md:text-sm lg:text-md xl:text-lg 2xl:text-xl">
+                Total Cost
+              </h3>
+              <h4 className="text-lg xl:text:xl font-bold text-slate-600">
                 {totalAmount}
               </h4>
             </div>
           </div>
+
           {/* <div className="px-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icon-park-solid:buy"
@@ -209,27 +212,33 @@ export default function PurchaseView() {
               </h4>
             </div>
           </div> */}
-          <div className="px-2 mx-2 py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+
+          <div className="px-2 md:py-2 lg:py-3 xl:py-4 sm:w-52 md:w-56 lg:w-60 xl:w-64 2xl:w-w-72 flex  items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icons8:buy"
-              className="text-5xl text-blue-700 font-semibold"
+              className="sm:text-lg md:text-2xl lg:text-3xl xl:text-5xl text-blue-700 font-semibold"
             />
 
             <div className="mx-2">
-              <h3 className="font-bold text-slate-600 text-lg">Total Orders</h3>
-              <h4 className="text-lg font-bold text-slate-600">
+              <h3 className="font-bold text-slate-600 md:text-sm lg:text-md xl:text-lg 2xl:text-xl">
+                Total Orders
+              </h3>
+              <h4 className="text-lg xl:text:xl font-bold text-slate-600">
                 {totalOrders}
               </h4>
             </div>
           </div>
 
-          <div className="px-2  py-4 w-64 flex  items-center bg-white justify-evenly rounded-md shadow-md">
-            <Icon icon="fa:users" className="text-4xl text-[#8884d8]" />
+          <div className="px-2 mx-2 md:py-2 lg:py-3 xl:py-4 sm:w-52 md:w-56 lg:w-60 xl:w-64 2xl:w-w-72 flex  items-center bg-white justify-evenly rounded-md shadow-md">
+            <Icon
+              icon="fa:users"
+              className="sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl text-[#8884d8]"
+            />
             <div>
-              <h3 className="font-bold text-slate-600 text-lg">
+              <h3 className="font-bold text-slate-600 md:text-sm lg:text-md xl:text-lg 2xl:text-xl">
                 Total Vendors
               </h3>
-              <h4 className="text-lg font-bold text-slate-600">
+              <h4 className="text-lg xl:text:xl font-bold text-slate-600">
                 {
                   new Set(
                     orderList.map((line) => line.partner && line.partner._id)
@@ -239,28 +248,33 @@ export default function PurchaseView() {
             </div>
           </div>
 
-          <div className="px-2 mx-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-2 md:py-2 lg:py-3 xl:py-4 sm:w-52 md:w-56 lg:w-60 xl:w-64 2xl:w-w-72 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="fluent-mdl2:product-variant"
-              className="text-4xl text-green-500"
+              className="sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl text-green-500"
             />
             <div>
-              <h3 className="font-bold text-slate-600 text-lg">
+              <h3 className="font-bold text-slate-600 md:text-sm lg:text-md xl:text-lg 2xl:text-xl">
                 Total Products
               </h3>
-              <h4 className="text-lg font-bold text-slate-600">{totalItems}</h4>
+              <h4 className="text-lg xl:text:xl font-bold text-slate-600">
+                {totalItems}
+              </h4>
             </div>
           </div>
-          <div className="px-2 py-4 w-64 flex items-center bg-white justify-evenly rounded-md shadow-md">
+
+          <div className="px-2 ml-2 md:py-2 lg:py-3 xl:py-4 sm:w-52 md:w-56 lg:w-60 xl:w-64 2xl:w-w-72 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="fluent-mdl2:product-variant"
-              className="text-4xl text-green-500"
+              className="sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl text-green-500"
             />
             <div>
               <h3 className="font-bold text-slate-600 text-lg">
                 Total Quantity
               </h3>
-              <h4 className="text-lg font-bold text-slate-600">{totalQty}</h4>
+              <h4 className="text-lg xl:text:xl font-bold text-slate-600">
+                {totalQty}
+              </h4>
             </div>
           </div>
         </div>
