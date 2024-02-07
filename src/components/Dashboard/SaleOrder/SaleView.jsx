@@ -239,7 +239,7 @@ export default function SaleView() {
             <Icon
               icon="solar:money-bag-bold-duotone"
               color="#3d417a"
-              className="text-md xl:text-xl 2xl:text-3xl text-cyan-700 font-semibold"
+              className="text-3xl text-cyan-700 font-semibold"
             />
             <Popover placement="top">
               <Popover placement="top" offset={12} showArrow>
@@ -261,7 +261,7 @@ export default function SaleView() {
             <div className="ml-2">
               <h3 className="font-bold text-slate-600 text-md">Gross Sales</h3>
 
-              <h4 className="lg:text-md xl:text-md 2xl:text-lg font-bold text-slate-600 text-center">
+              <h4 className="text-md font-bold text-slate-600 text-center">
                 {totalGrossSale}
               </h4>
             </div>
@@ -273,28 +273,28 @@ export default function SaleView() {
               className="text-3xl text-cyan-700 font-semibold"
             />
             <div>
-              <h3 className="font-bold text-slate-600 text-md">Tax Total</h3>
+              <h3 className="font-bold text-slate-600 md:text-sm lg:text-sm xl:text-md">
+                Tax Total
+              </h3>
               <h4 className="text-md font-bold text-slate-600 text-center">
                 {totalTax}
               </h4>
             </div>
           </div>
-          <div className="px-3 mr-1.5 w-44 lg:w-48 xl:w-52 2xl:w-60 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 mr-1.5 w-44 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="ic:twotone-discount"
               color="#3b6664"
-              className="sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl text-blue-700 font-semibold"
+              className="text-2xl text-blue-700 font-semibold"
             />
             <div className="">
-              <h3 className="font-bold text-slate-600 text:sm xl:text-md 2xl:text-md">
-                Discounts
-              </h3>
+              <h3 className="font-bold text-slate-600 text-md ">Discounts</h3>
               <h4 className="text-md font-bold text-slate-600 text-center">
                 {totalDiscount}
               </h4>
             </div>
           </div>
-          <div className="px-3 relative mr-1.5 w-56 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 relative mr-1.5 w-44 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="icons8:buy"
               className="text-3xl text-blue-700 font-semibold"
@@ -327,7 +327,7 @@ export default function SaleView() {
               </h4>
             </div>
           </div>
-          <div className="px-3 relative mr-1.5 w-60 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 relative mr-1.5 w-56 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="fluent-emoji-high-contrast:money-bag"
               color="#8a882b"

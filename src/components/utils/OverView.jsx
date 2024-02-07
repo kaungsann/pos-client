@@ -526,13 +526,13 @@ export default function OverView() {
           </div>
           <div className="flex">
             {/* Sale Order  */}
-            <div className="w-4/5 lg:w-3/5	bg-white p-4 border-2 rounded-lg shadow-md">
+            <div className="w-4/5 bg-white p-4 border-2 rounded-lg shadow-md">
               <div className="flex justify-between">
                 <h3 className="text-lg lg:text-md font-semibold text-slate-700">
                   Sales Overview
                 </h3>
               </div>
-              <div className="xl:my-3 px-4 flex lg:my-4">
+              <div className="flex px-4 mt-6">
                 <div className="flex items-center xl:w-2/4 lg:w-2/5">
                   <div className="xl:p-3 2xl:p-4 bg-blue-200 lg:p-1 rounded-md">
                     <Icon
@@ -540,7 +540,7 @@ export default function OverView() {
                       className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-cyan-600 font-extrabold"
                     />
                   </div>
-                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3">
                     <h2 className="text-slate-400 lg:text-sm w-full xl:text-md 2xl:text-lg font-semibold">
                       Gross Sales
                     </h2>
@@ -556,7 +556,7 @@ export default function OverView() {
                       className="xl:text-3xl 2xl:text-4xl lg:text-2xl text-yellow-600 font-extrabold"
                     />
                   </div>
-                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3 lg:w-20">
+                  <div className="w-full lg:mx-1.5 xl:mx-2 2xl:mx-3">
                     <h2 className="text-slate-400 lg:text-sm xl:text-md 2xl:text-lg font-semibold">
                       Gross Profit
                     </h2>
@@ -599,7 +599,7 @@ export default function OverView() {
                 </div>
               </div>
 
-              <div className="xl:my-3 lg:my-1.5 px-4 flex">
+              <div className="flex px-4 my-6">
                 <div className="flex items-center xl:w-2/4 lg:w-2/5">
                   <div className="xl:p-3 2xl:p-4 lg:p-1 bg-orange-200 rounded-md">
                     <Icon
@@ -675,7 +675,7 @@ export default function OverView() {
                 </h3>
               </div>
               {/* Annula Purchase */}
-              <div className="xl:my-3  px-4 flex lg:justify-between lg:my-4">
+              <div className="flex px-4 mt-6">
                 <div className="flex items-center lg:w-2/5 xl:w-2/4">
                   <div className="xl:p-3 2xl:p-4 lg:p-1 bg-orange-100 rounded-md">
                     <Icon
@@ -710,7 +710,7 @@ export default function OverView() {
                 </div>
               </div>
               {/* Monthly Sales */}
-              <div className="xl:my-3 lg:my-1.5 px-4 flex lg:justify-between">
+              <div className="flex px-4 my-6">
                 <div className="flex items-center lg:w-2/5 xl:w-2/4">
                   <div className="xl:p-3 2xl:p-4 lg:p-1 bg-[#d9f99d] rounded-md">
                     <Icon
