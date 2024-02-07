@@ -52,7 +52,6 @@ export default function ProductDetails() {
           dipatch(removeData(null));
         }
         setProduct({ ...product, ...data.data[0] });
-        console.log("res data is a", data.data[0]);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {

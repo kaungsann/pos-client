@@ -21,8 +21,6 @@ export default function CategoryDetail() {
     try {
       let resData = await getApi(`/category/${id}`, token.accessToken);
 
-      console.log("category datail is a", resData);
-
       if (resData.message === "Token Expire , Please Login Again") {
         dispatch(removeData(null));
       }

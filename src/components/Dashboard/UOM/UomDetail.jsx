@@ -37,7 +37,7 @@ export default function UomDetail() {
           <div className="container bg-white p-5 rounded-md max-w-6xl">
             <div className="flex gap-2 pb-4">
               <Link
-                to="/admin/discount/all"
+                to="/admin/uom/all"
                 className="font-bold rounded-sm shadow-sm flex items-center text-gray-700 border-gray-500 border-2 hover:opacity-75 text-sm hover:text-white hover:bg-gray-500 px-3 py-1.5"
               >
                 Back
