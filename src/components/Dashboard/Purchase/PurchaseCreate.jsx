@@ -228,7 +228,7 @@ export default function PurchaseCreate() {
               Save
             </Button>
 
-            <Link to="/admin/saleOrders/all">
+            <Link to="/admin/purchase/all">
               <Button
                 onClick={() => {
                   dispatch(removeAllLinesFromPurchaseOrder());
