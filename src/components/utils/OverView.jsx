@@ -387,7 +387,7 @@ export default function OverView() {
                 name="location"
                 classNames={{
                   base: "w-52",
-                  trigger: "h-10 py-3 rounded-md",
+                  trigger: "h-9 py-4 rounded-md",
                 }}
                 selectedKeys={[locationId]?.filter(Boolean) || []}
                 placeholder="Select an location"
@@ -517,8 +517,8 @@ export default function OverView() {
                   </div>
                 </PopoverContent>
               </Popover>
-              <div className="w-56 flex shadow-sm justify-center lg:px-1 lg:mx-1.5 px-3 lg:px-1/5 mx-3 py-1 bg-white border-2 text-center rounded-sm ring-2 ring-purple-500 ring-offset-slate-50 dark:ring-offset-slate-900">
-                <h4 className="text-slate-500 items-center font-semibold">
+              <div className="w-56 flex shadow-sm justify-center mx-3 bg-white border-2 text-center rounded-sm ring-2 ring-purple-500 ring-offset-slate-50 dark:ring-offset-slate-900">
+                <h4 className="text-slate-500 items-center py-0.5 font-semibold">
                   {selectedDate ?? "None"}
                 </h4>
               </div>

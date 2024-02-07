@@ -269,7 +269,7 @@ export default function PurchaseView() {
               className="sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl text-green-500"
             />
             <div>
-              <h3 className="font-bold text-slate-600 text-lg">
+              <h3 className="font-bold text-slate-600 md:text-sm lg:text-md xl:text-lg 2xl:text-xl">
                 Total Quantity
               </h3>
               <h4 className="text-lg xl:text:xl font-bold text-slate-600">

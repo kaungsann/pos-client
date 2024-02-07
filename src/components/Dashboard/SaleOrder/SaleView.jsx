@@ -231,22 +231,22 @@ export default function SaleView() {
   return (
     <>
       <div className="px-8 w-full">
-        <h1 className="text-xl font-bold text-slate-600 py-5">
+        <h1 className="md:text-md lg:text-lg xl:text-xl 2xl:text-2xl font-bold text-slate-600 py-5">
           Daily Dashboard
         </h1>
         <div className="w-full flex justify-between">
-          <div className="px-3 relative mr-1.5 w-64 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="lg:px-2 xl:px-3 2xl:px-4 relative mr-1.5 w-64 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="solar:money-bag-bold-duotone"
               color="#3d417a"
-              className="text-3xl text-cyan-700 font-semibold"
+              className="text-md xl:text-xl 2xl:text-3xl text-cyan-700 font-semibold"
             />
             <Popover placement="top">
               <Popover placement="top" offset={12} showArrow>
                 <PopoverTrigger>
                   <Icon
                     icon="lucide:info"
-                    className="text-sm ml-0.5 absolute top-2 right-2"
+                    className="lg:text-tiny md:text-sm xl:text-md ml-0.5 absolute top-2 right-2"
                   />
                 </PopoverTrigger>
                 <PopoverContent className="rounded-md">
@@ -259,9 +259,9 @@ export default function SaleView() {
               </Popover>
             </Popover>
             <div className="ml-2">
-              <h3 className="font-bold text-slate-600 text-md ">Gross Sales</h3>
+              <h3 className="font-bold text-slate-600 text-md">Gross Sales</h3>
 
-              <h4 className="text-md font-bold text-slate-600 text-center">
+              <h4 className="lg:text-md xl:text-md 2xl:text-lg font-bold text-slate-600 text-center">
                 {totalGrossSale}
               </h4>
             </div>
@@ -279,14 +279,16 @@ export default function SaleView() {
               </h4>
             </div>
           </div>
-          <div className="px-3 mr-1.5 w-52 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
+          <div className="px-3 mr-1.5 w-44 lg:w-48 xl:w-52 2xl:w-60 h-20 flex items-center bg-white justify-evenly rounded-md shadow-md">
             <Icon
               icon="ic:twotone-discount"
               color="#3b6664"
-              className="text-2xl text-blue-700 font-semibold"
+              className="sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl text-blue-700 font-semibold"
             />
             <div className="">
-              <h3 className="font-bold text-slate-600 text-md">Discounts</h3>
+              <h3 className="font-bold text-slate-600 text:sm xl:text-md 2xl:text-md">
+                Discounts
+              </h3>
               <h4 className="text-md font-bold text-slate-600 text-center">
                 {totalDiscount}
               </h4>
