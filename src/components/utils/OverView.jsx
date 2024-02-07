@@ -65,8 +65,6 @@ const CustomizedAxisTick = ({ x, y, payload }) => {
 export default function OverView() {
   const windowSize = useWindowSize();
 
-  const xAxisLabelAngle = windowSize.width >= 1280 ? -45 : 0;
-
   const calculateOuterRadius = () => {
     if (windowSize.width >= 1280) {
       // Desktop screen size
@@ -136,7 +134,6 @@ export default function OverView() {
           locationId ? "&" : "?"
         }startDate=${startDate}&endDate=${endDate}`;
       }
-      console.log("location filter is a", apiUrl);
 
       let resData = await getApi(apiUrl, token.accessToken);
 
@@ -768,12 +765,7 @@ export default function OverView() {
                 >
                   <CartesianGrid strokeDasharray="3 3" />
 
-                  <XAxis
-                    dataKey="product"
-                    tick={<CustomizedAxisTick />}
-                    angle={xAxisLabelAngle}
-                    textAnchor={xAxisLabelAngle === -45 ? "end" : "middle"}
-                  />
+                  <XAxis dataKey="product" tick={<CustomizedAxisTick />} />
                   <YAxis />
                   <Tooltip />
                   <Legend />
@@ -792,7 +784,7 @@ export default function OverView() {
             </div>
             <div className="w-2/5 ml-1.5 flex">
               <div className="w-2/4 bg-white rounded-lg shadow-md p-2 mr-1.5">
-                <h2 className="text-slate-600 sm:text-sm md:text-sm text-lg font-semibold my-1.5 lg:text-md">
+                <h2 className="text-slate-600 sm:text-sm md:text-sm lg:text-md xl:text-lg font-semibold my-1.5 lg:text-md">
                   Top Purchased Items
                 </h2>
                 <ResponsiveContainer height={400}>
@@ -826,7 +818,7 @@ export default function OverView() {
                 </ResponsiveContainer>
               </div>
               <div className="w-2/4 bg-white  rounded-lg shadow-md p-2">
-                <h2 className="text-slate-600 sm:text-sm md:text-sm text-lg font-semibold my-1.5 lg:text-md">
+                <h2 className="text-slate-600 stext-slate-600 sm:text-sm md:text-sm lg:text-md xl:text-lg font-semibold my-1.5 lg:text-md">
                   Top Selling Items
                 </h2>
                 <ResponsiveContainer height={400}>

@@ -200,6 +200,22 @@ export default function ProductDetails() {
                               : "none"}
                           </h2>
                         </div>
+                        <div className="my-6">
+                          <h4 className="text-md text-slate-500">Ref</h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.ref ? product.ref : "None"}
+                          </h2>
+                        </div>
+                        <div>
+                          <h4 className="text-md text-slate-500">
+                            Updated Date
+                          </h4>
+                          <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                            {product.updatedAt
+                              ? new Date(product.updatedAt).toLocaleDateString()
+                              : "None"}
+                          </h2>
+                        </div>
                       </div>
                     </div>
                   </div>
