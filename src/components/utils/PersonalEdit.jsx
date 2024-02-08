@@ -55,6 +55,8 @@ function PersonalEdit() {
   const user = useSelector((state) => state.loginData);
   const dispatch = useDispatch();
 
+  console.log("user is a", user);
+
   //const isPageRefreshed = useSelector((state) => state.pageRefresh);
 
   const dipatch = useDispatch();
@@ -93,6 +95,8 @@ function PersonalEdit() {
         formData.append("image", selectFile);
       }
       formData.append("location", user.location);
+
+      console.log("form data is a", formData);
 
       for (let key in updateInfo) {
         formData.append(key, updateInfo[key]);
@@ -160,6 +164,9 @@ function PersonalEdit() {
     fetchData();
   }, []);
 
+  // console.log("location set info ", info);
+  // console.log("location updatet info ", updateInfo);
+
   return (
     <div>
       <ToastContainer
@@ -174,8 +181,15 @@ function PersonalEdit() {
         pauseOnHover
         theme="light"
       />
-      <div className="flex justify-between w-full mt-4 text-slate-700 pb-3 px-4">
-        <h3 className="text-2xl font-bold">Personal Information</h3>
+      <div className="flex justify-between items-center w-full mt-4 text-slate-700 pb-3 px-4">
+        <div className="flex items-center">
+          <h3 className="text-2xl font-bold">Personal Information</h3>
+          {user.role.name === "user" && (
+            <span className="mx-3 text-slate-500 font-semibold">
+              {" ( " + info.location.name + " ) "}
+            </span>
+          )}
+        </div>
 
         <Button
           type="submit"
@@ -305,6 +319,7 @@ function PersonalEdit() {
               onChange={(e) => inputChangeHandler(e)}
             />
           </div>
+
           <div className="w-60">
             <Input
               type="text"

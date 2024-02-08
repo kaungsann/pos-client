@@ -35,8 +35,6 @@ export default function StaffEdit() {
 
   const dispatch = useDispatch();
 
-  console.log("stock doc is ", staff);
-
   const inputChangeHandler = (event) => {
     const { name, value } = event.target;
 

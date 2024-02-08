@@ -15,7 +15,7 @@ import PersonalEdit from "./PersonalEdit";
 import axios from "axios";
 
 export default function Profile() {
-  const [userInfo, setUserInfo] = useState(false);
+  const [userInfo, setUserInfo] = useState([]);
   const [logout, setLogout] = useState(false);
   const dispatch = useDispatch();
   const [activeSection, setActiveSection] = useState("personal");
