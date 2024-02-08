@@ -75,7 +75,7 @@ export default function StaffDetail() {
                   Personal Data
                 </h1>
               </div>
-              <div className="mb-4 flex p-4 items-center w-4/5">
+              <div className="mb-4 flex p-4 items-center w-full">
                 <img
                   src={detail[0].image ? detail[0].image : user}
                   className="w-48 h-52 rounded-lg shadow-md"
@@ -110,10 +110,11 @@ export default function StaffDetail() {
                         {detail[0].role ? detail[0].role.name : "None"}
                       </h2>
                     </div>
+
                     <div className="my-6">
-                      <h4 className="text-md text-slate-500">Account-ID</h4>
+                      <h4 className="text-md text-slate-500">Gender</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].accountId ? detail[0].accountId : "None"}
+                        {detail[0].gender ? detail[0].gender : "None"}
                       </h2>
                     </div>
                     <div>
@@ -139,11 +140,19 @@ export default function StaffDetail() {
                         {detail[0].address ? detail[0].address : "None"}
                       </h2>
                     </div>
+                  </div>
 
+                  <div>
                     <div>
-                      <h4 className="text-md text-slate-500">Gender</h4>
+                      <h4 className="text-md text-slate-500">Loaction</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].gender ? detail[0].gender : "None"}
+                        {detail[0].location ? detail[0].location.name : "None"}
+                      </h2>
+                    </div>
+                    <div className="my-6">
+                      <h4 className="text-md text-slate-500">Account-ID</h4>
+                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
+                        {detail[0].accountId ? detail[0].accountId : "None"}
                       </h2>
                     </div>
                   </div>

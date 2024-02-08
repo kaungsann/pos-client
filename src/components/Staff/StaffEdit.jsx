@@ -20,8 +20,16 @@ export default function StaffEdit() {
   const [showBox, setShowBox] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [locations, setLocations] = useState([]);
+  const [location, setLocation] = useState("");
+  const [locationId, setLocationId] = useState("");
+
   const token = useSelector((state) => state.IduniqueData);
   const dipatch = useDispatch();
+
+  const user = useSelector((state) => state.loginData);
+
+  console.log("user daata is a", user);
 
   const navigate = useNavigate();
 
@@ -38,7 +46,10 @@ export default function StaffEdit() {
       setPhone(response.data[0].phone ? response.data[0].phone : null);
       setCity(response.data[0].city ? response.data[0].city : null);
       setGender(response.data[0].gender ? response.data[0].gender : null);
+      setLocation(response.data[0].location ? response.data[0].location : null);
     }
+
+    console.log("staff data is a ", response);
   };
 
   const EditStaffInfoApi = async () => {
@@ -66,6 +77,11 @@ export default function StaffEdit() {
     if (gender) {
       formData.append("gender", gender);
     }
+    if (locationId) {
+      formData.append("location", locationId);
+    }
+
+    console.log("form data is a", formData);
 
     let resData = await FormPathApi(`/user/${id}`, formData, token.accessToken);
     if (resData.message == "Token Expire , Please Login Again") {
@@ -86,6 +102,14 @@ export default function StaffEdit() {
   };
 
   useEffect(() => {
+    const getLocation = async () => {
+      const resData = await getApi("/location", token.accessToken);
+      const filteredLocation = resData.data.filter((la) => la.active === true);
+      setLocations(filteredLocation);
+    };
+
+    getLocation();
+
     getSingleStaff();
   }, []);
 
@@ -201,6 +225,24 @@ export default function StaffEdit() {
                   placeholder="Enter reference..."
                   labelPlacement="outside"
                 />
+              </div>
+              <div className="w-60">
+                <Select
+                  labelPlacement="outside"
+                  label="Location"
+                  name="location"
+                  required
+                  placeholder="Select an location"
+                  value={location}
+                  onChange={(e) => setLocationId(e.target.value)}
+                  className="w-60"
+                >
+                  {locations.map((loc) => (
+                    <SelectItem key={loc.id} value={loc.id}>
+                      {loc.name}
+                    </SelectItem>
+                  ))}
+                </Select>
               </div>
               <div className="w-60">
                 <Input
