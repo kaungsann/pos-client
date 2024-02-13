@@ -30,7 +30,6 @@ function PersonalEdit() {
     email: "",
     address: "",
     image: "",
-    location: "",
     city: "",
     birthdate: "",
     gender: "",
