@@ -46,17 +46,19 @@ function PersonalEdit() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = React.useState(false);
 
+  const [updated, setUpdated] = useState(false);
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const fileInputRef = useRef(null);
   const { id } = useParams();
   const token = useSelector((state) => state.IduniqueData);
-  const user = useSelector((state) => state.loginData);
+  //const user = useSelector((state) => state.loginData);
 
   //console.log("user is a", user);
   const dispatch = useDispatch();
 
-  //const isPageRefreshed = useSelector((state) => state.pageRefresh);
+  // const isPageRefreshed = useSelector((state) => state.pageRefresh);
 
   const dipatch = useDispatch();
 
@@ -112,8 +114,9 @@ function PersonalEdit() {
           }
           toast.warn(data.message);
         } else {
-          dispatch(pageRefresh());
+          dispatch(pageRefresh(true));
           toast.success(data.message);
+          setUpdated(!updated);
 
           onOpenChange();
         }
@@ -157,9 +160,7 @@ function PersonalEdit() {
     };
 
     fetchData();
-  }, []);
-
-  console.log("info data is a", info);
+  }, [updated]);
 
   return (
     <div>
@@ -201,6 +202,7 @@ function PersonalEdit() {
         <div>
           <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
             <img
+              key={selectedImage || info.image || "default"}
               src={
                 selectedImage
                   ? selectedImage
@@ -210,16 +212,11 @@ function PersonalEdit() {
               }
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = user;
+                e.target.src = userIcons;
               }}
               className="absolute object-cover w-full h-full"
               alt="User"
             />
-
-            {/* // <img
-              //   src={userIcons}
-              //   className="absolute object-cover w-full h-full"
-              // /> */}
           </div>
           <div
             onClick={() => {

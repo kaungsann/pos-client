@@ -31,9 +31,9 @@ const refreshReducer = (state = initialState, action) => {
     case "refresh":
       return {
         ...state,
-        pageRefresh: !state.pageRefresh, // Toggle the value
+        pageRefresh: !state.pageRefresh,
       };
-    // ... other cases
+
     default:
       return state;
   }
