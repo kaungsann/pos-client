@@ -53,9 +53,9 @@ function PersonalEdit() {
   const { id } = useParams();
   const token = useSelector((state) => state.IduniqueData);
   const user = useSelector((state) => state.loginData);
-  const dispatch = useDispatch();
 
-  console.log("user is a", user);
+  //console.log("user is a", user);
+  const dispatch = useDispatch();
 
   //const isPageRefreshed = useSelector((state) => state.pageRefresh);
 
@@ -96,7 +96,7 @@ function PersonalEdit() {
       }
       formData.append("location", user.location);
 
-      console.log("form data is a", formData);
+      // console.log("form data is a", formData);
 
       for (let key in updateInfo) {
         formData.append(key, updateInfo[key]);
@@ -152,6 +152,7 @@ function PersonalEdit() {
         const image = adminData?.image;
         if (image) setAdminImg(image);
         setInfo({ ...info, ...adminData });
+        console.log("admin data is a", adminData);
         setUpdateInfo({
           username: adminData.username,
           email: adminData.email,
@@ -163,9 +164,6 @@ function PersonalEdit() {
 
     fetchData();
   }, []);
-
-  // console.log("location set info ", info);
-  // console.log("location updatet info ", updateInfo);
 
   return (
     <div>

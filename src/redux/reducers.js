@@ -295,9 +295,7 @@ const purchaseOrderReducer = (
       return {
         ...state,
         lines: state.lines.filter(
-          (item) =>
-            item.product.id !== productID ||
-            item.uom.id !== uomID
+          (item) => item.product.id !== productID || item.uom.id !== uomID
         ),
         total: state.total - lineToRemove.subTotal,
         taxTotal: state.taxTotal - lineToRemove.subTaxTotal,
