@@ -7,8 +7,8 @@ import { getApi } from "../../Api";
 import { Select, SelectItem, Spinner } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  filterLocations,
   itemsAdd,
-  removeAllItems,
   updateItemQuantity,
 } from "../../../redux/actions";
 import { removeData } from "../../../redux/actions";
@@ -104,34 +104,43 @@ export default function PosItems() {
 
   const getStock = async () => {
     setLoadingData(true);
-    const resData = await getApi("/stock", token.accessToken);
 
-    let selectedLocationId;
-    if (user.role.name === "user") {
-      setLoca(location);
-    }
-    if (loca === "") {
-      selectedLocationId = null;
-    } else {
-      selectedLocationId = loca;
-    }
+    try {
+      const resData = await getApi("/stock", token.accessToken);
 
-    const filteredStock = resData.data.filter(
-      (item) =>
-        item.active === true &&
-        (!selectedLocationId || item.location._id === selectedLocationId)
-    );
+      // let selectedLocationId;
+      // if (user.role.name === "user") {
+      //   setLoca(location);
+      // }
+      // if (loca === "") {
+      //   selectedLocationId = null;
+      // } else {
+      //   selectedLocationId = loca;
+      // }
 
-    if (selectedLocationId !== null) {
+      const filteredStock = resData.data.filter(
+        (item) => item.active === true && item.location._id === loca
+        // (!selectedLocationId || item.location._id === selectedLocationId)
+      );
+
       setProducts([...filteredStock.map((item) => item.product)]);
 
-      dipatch(removeAllItems());
-    } else {
-      setProducts([]);
-      dipatch(removeAllItems());
+      // if (selectedLocationId !== null) {
+      //   setProducts([...filteredStock.map((item) => item.product)]);
+
+      //   dipatch(removeAllItems());
+      // } else {
+      //   setProducts([]);
+      //   dipatch(removeAllItems());
+      // }
+    } catch (error) {
+      // Handle the error here, such as showing an error message to the user
+      console.error("Error fetching stock:", error);
+    } finally {
+      setLoadingData(false);
     }
-    setLoadingData(false);
   };
+
   useEffect(() => {
     //getProducts();
     getCategorysApi();
@@ -141,7 +150,16 @@ export default function PosItems() {
     if (search) {
       handleBarcodeDetected(search);
     }
-  }, [search, location, loca]);
+  }, [search, loca]);
+
+  const handleLocationSelect = (e) => {
+    const selectedLocationId = e.target.value;
+    const selectedLocation = locations.find(
+      (location) => location.id === selectedLocationId
+    );
+    dipatch(filterLocations(selectedLocation));
+    setLoca(selectedLocationId);
+  };
 
   return (
     <>
@@ -155,7 +173,7 @@ export default function PosItems() {
             <div className="flex justify-between items-center p-3">
               <div className="flex items-center w-3/6">
                 <h3 className="font-semibold text-xl">Avaliable Items</h3>
-                {user.role.name === "root" || user.role.name === "admin" ? (
+                {/* {user.role.name === "root" || user.role.name === "admin" ? (
                   <Select
                     name="location"
                     placeholder="Select a location"
@@ -171,7 +189,24 @@ export default function PosItems() {
                       </SelectItem>
                     ))}
                   </Select>
-                ) : null}
+                ) : null} */}
+
+                <Select
+                  name="location"
+                  placeholder="Select a location"
+                  classNames={{
+                    base: "w-40 mx-4",
+                    trigger: "h-10",
+                  }}
+                  // onChange={(e) => setLoca(e.target.value)}
+                  onChange={handleLocationSelect}
+                >
+                  {locations.map((ct) => (
+                    <SelectItem key={ct.id} value={ct.id}>
+                      {ct.name}
+                    </SelectItem>
+                  ))}
+                </Select>
               </div>
 
               <div className="flex relative">

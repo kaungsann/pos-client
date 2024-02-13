@@ -140,16 +140,7 @@ export default function StaffDetail() {
                         {detail[0].address ? detail[0].address : "None"}
                       </h2>
                     </div>
-                  </div>
-
-                  <div>
                     <div>
-                      <h4 className="text-md text-slate-500">Loaction</h4>
-                      <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                        {detail[0].location ? detail[0].location.name : "None"}
-                      </h2>
-                    </div>
-                    <div className="my-6">
                       <h4 className="text-md text-slate-500">Account-ID</h4>
                       <h2 className="text-md text-slate-600 mt-1 font-semibold">
                         {detail[0].accountId ? detail[0].accountId : "None"}

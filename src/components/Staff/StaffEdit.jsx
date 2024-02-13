@@ -15,21 +15,21 @@ export default function StaffEdit() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [locations, setLocations] = useState([]);
+  //const [locations, setLocations] = useState([]);
 
   const token = useSelector((state) => state.IduniqueData);
 
   const navigate = useNavigate();
 
   const staffDoc = {
-    name: "",
+    username: "",
     email: "",
     phone: 0,
     gender: "",
     address: "",
     birthdate: "",
     city: "",
-    location: "",
+    // location: "",
   };
   const [staff, setStaff] = useState(staffDoc);
 
@@ -53,7 +53,7 @@ export default function StaffEdit() {
         city: response.data[0].city,
         address: response.data[0].address,
         birthdate: response.data[0].birthdate,
-        location: response.data[0].location.id,
+        //  location: response.data[0].location.id,
       });
     }
   };
@@ -87,13 +87,13 @@ export default function StaffEdit() {
   };
 
   useEffect(() => {
-    const getLocation = async () => {
-      const resData = await getApi("/location", token.accessToken);
-      const filteredLocation = resData.data.filter((la) => la.active === true);
-      setLocations(filteredLocation);
-    };
+    // const getLocation = async () => {
+    //   const resData = await getApi("/location", token.accessToken);
+    //   const filteredLocation = resData.data.filter((la) => la.active === true);
+    //   setLocations(filteredLocation);
+    // };
 
-    getLocation();
+    // getLocation();
 
     getSingleStaff();
   }, []);
@@ -193,8 +193,8 @@ export default function StaffEdit() {
                 <Input
                   type="text"
                   label="Name"
-                  name="name"
-                  value={staff.name}
+                  name="username"
+                  value={staff.username}
                   onChange={(e) => inputChangeHandler(e)}
                   // onChange={(e) => setName(e.target.value)}
                   placeholder="Enter Staff name..."
@@ -212,7 +212,7 @@ export default function StaffEdit() {
                   labelPlacement="outside"
                 />
               </div>
-              <div className="w-60">
+              {/* <div className="w-60">
                 <Select
                   labelPlacement="outside"
                   label="Location"
@@ -228,7 +228,7 @@ export default function StaffEdit() {
                     </SelectItem>
                   ))}
                 </Select>
-              </div>
+              </div> */}
               <div className="w-60">
                 <Input
                   type="text"
@@ -244,7 +244,7 @@ export default function StaffEdit() {
                 <span className="text-sm">Date of Birth</span>
                 <Input
                   type="date"
-                  name="dob"
+                  name="birthdate"
                   labelPlacement="outside"
                   onChange={(e) => inputChangeHandler(e)}
                   value={

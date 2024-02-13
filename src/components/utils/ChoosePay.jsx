@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Button, Select, SelectItem } from "@nextui-org/react";
 import PropTypes from "prop-types";
 
-export default function ChoosePay({ totalCost, change, tax, subTotal, locId }) {
+export default function ChoosePay({ totalCost, change, tax, subTotal }) {
   const [display, setDisplay] = useState("");
   const [partner, setPartner] = useState([]);
   const [payslip, setPaySlip] = useState(false);
@@ -21,6 +21,10 @@ export default function ChoosePay({ totalCost, change, tax, subTotal, locId }) {
   const user = useSelector((state) => state.loginData);
   const token = useSelector((state) => state.IduniqueData);
   const [isLoading, setIsLoading] = useState(false);
+
+  const locationData = useSelector((state) => state.location);
+
+  console.log("locatin is a", locationData.id);
 
   const dispatch = useDispatch();
   dispatch(add(true));
@@ -73,10 +77,7 @@ export default function ChoosePay({ totalCost, change, tax, subTotal, locId }) {
 
     const data = {
       user: user._id,
-      location:
-        user.role.name === "root" || user.role.name === "admin"
-          ? locId
-          : user.location,
+      location: locationData.id,
       partner: name,
       // discount: discountId,
       taxTotal: totalCost,
@@ -354,5 +355,4 @@ ChoosePay.propTypes = {
   change: PropTypes.func,
   tax: PropTypes.number,
   subTotal: PropTypes.number,
-  locId: PropTypes.string,
 };

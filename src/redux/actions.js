@@ -104,7 +104,7 @@ export const removeLineFromSaleOrder = (productID, uomID) => ({
   type: "removeLineFromSaleOrder",
   payload: {
     productID,
-    uomID
+    uomID,
   },
 });
 
@@ -197,10 +197,15 @@ export const removeLineFromPurchaseOrder = (productID, uomID) => ({
   type: "removeLineFromPurchaseOrder",
   payload: {
     productID,
-    uomID
+    uomID,
   },
 });
 
 export const removeAllLinesFromPurchaseOrder = () => ({
   type: "removeAllLinesFromPurchaseOrder",
+});
+
+export const filterLocations = (filteredLocations) => ({
+  type: "FILTER_LOCATIONS",
+  payload: filteredLocations,
 });

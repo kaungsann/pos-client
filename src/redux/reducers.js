@@ -308,6 +308,15 @@ const purchaseOrderReducer = (
   }
 };
 
+export const locationsReducer = (state = [], action) => {
+  switch (action.type) {
+    case "FILTER_LOCATIONS":
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const reducers = combineReducers({
   IduniqueData: idReducers,
   loginData: userReducers,
@@ -316,6 +325,7 @@ const reducers = combineReducers({
   refresh: refreshReducer,
   saleOrder: saleOrderReducer,
   purchaseOrder: purchaseOrderReducer,
+  location: locationsReducer,
 });
 
 export default reducers;
