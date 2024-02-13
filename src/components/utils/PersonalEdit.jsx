@@ -93,8 +93,6 @@ function PersonalEdit() {
       if (isSelected) {
         formData.append("image", selectFile);
       }
-      formData.append("location", user.location);
-
       // console.log("form data is a", formData);
 
       for (let key in updateInfo) {
