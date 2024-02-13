@@ -22,6 +22,9 @@ import { useSelector } from "react-redux";
 import DeleteAlert from "../utils/DeleteAlert";
 import ChangePassword from "../utils/ChangePassword";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 let INITIAL_VISIBLE_COLUMNS = ["role", "name", "email", "lastlogin", "actions"];
 
 let columns = [
@@ -319,6 +322,18 @@ export default function StaffList({ staffs, onDeleteSuccess }) {
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Table
         aria-label="Example table with custom cells, pagination and sorting"
         isHeaderSticky

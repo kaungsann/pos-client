@@ -1,91 +1,100 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { FormPathApi, getApi } from "../Api";
+import { BASE_URL, getApi } from "../Api";
 import { removeData } from "../../redux/actions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button, Input, Progress, Select, SelectItem } from "@nextui-org/react";
+import axios from "axios";
 
 export default function StaffEdit() {
   const { id } = useParams();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [birth, setBirth] = useState("");
-  const [gender, setGender] = useState("");
-  const [password, setPassword] = useState("");
+
   const [showBox, setShowBox] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
 
+  const [locations, setLocations] = useState([]);
+
   const token = useSelector((state) => state.IduniqueData);
-  const dipatch = useDispatch();
 
   const navigate = useNavigate();
 
+  const staffDoc = {
+    name: "",
+    email: "",
+    phone: 0,
+    gender: "",
+    address: "",
+    birthdate: "",
+    city: "",
+    location: "",
+  };
+  const [staff, setStaff] = useState(staffDoc);
+
+  const dispatch = useDispatch();
+
+  const inputChangeHandler = (event) => {
+    const { name, value } = event.target;
+
+    setStaff({ ...staff, [name]: value });
+  };
+
   const getSingleStaff = async () => {
     const response = await getApi(`/user/${id}`, token.accessToken);
+
     if (response.status) {
-      const formattedExpireDate = response.data[0].birthdate
-        ? new Date(response.data[0].birthdate).toISOString().split("T")[0]
-        : "";
-      setBirth(formattedExpireDate);
-      setName(response.data[0].username);
-      setEmail(response.data[0].email);
-      setAddress(response.data[0].address ? response.data[0].address : null);
-      setPhone(response.data[0].phone ? response.data[0].phone : null);
-      setCity(response.data[0].city ? response.data[0].city : null);
-      setGender(response.data[0].gender ? response.data[0].gender : null);
+      setStaff({
+        username: response.data[0].username,
+        email: response.data[0].email,
+        phone: response.data[0].phone,
+        gender: response.data[0].gender,
+        city: response.data[0].city,
+        address: response.data[0].address,
+        birthdate: response.data[0].birthdate,
+        location: response.data[0].location.id,
+      });
     }
   };
 
-  const EditStaffInfoApi = async () => {
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append("password", password);
-    if (name) {
-      formData.append("username", name);
-    }
-    if (email) {
-      formData.append("email", email);
-    }
-    if (phone) {
-      formData.append("phone", phone);
-    }
-    if (address) {
-      formData.append("address", address);
-    }
-    if (birth) {
-      formData.append("birthdate", birth);
-    }
-    if (city) {
-      formData.append("city", city);
-    }
-    if (gender) {
-      formData.append("gender", gender);
-    }
 
-    let resData = await FormPathApi(`/user/${id}`, formData, token.accessToken);
-    if (resData.message == "Token Expire , Please Login Again") {
-      dipatch(removeData(null));
-    }
-    if (resData.status) {
-      setIsLoading(false);
-      navigate("/admin/user/all");
-    } else {
-      setIsLoading(false);
-      toast.error(resData.message);
-    }
-  };
+    try {
+      const { data } = await axios.patch(BASE_URL + `/user/${id}`, staff, {
+        headers: {
+          Authorization: `Bearer ${token.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    EditStaffInfoApi();
+      if (!data.status) {
+        if (data?.message === "Token Expire , Please Login Again") {
+          dispatch(removeData(null));
+        }
+        toast.warn(data.message);
+      } else {
+        navigate("/admin/user/all");
+      }
+    } catch (error) {
+      console.error("Error updating staff:", error);
+      toast.error(error.response?.data?.message || "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
+    const getLocation = async () => {
+      const resData = await getApi("/location", token.accessToken);
+      const filteredLocation = resData.data.filter((la) => la.active === true);
+      setLocations(filteredLocation);
+    };
+
+    getLocation();
+
     getSingleStaff();
   }, []);
 
@@ -154,7 +163,7 @@ export default function StaffEdit() {
 
                   <div className="mt-2">
                     <input
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => inputChangeHandler(e)}
                       id="password"
                       name="password"
                       type="password"
@@ -163,7 +172,7 @@ export default function StaffEdit() {
                       className=" px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 "
                     />
                     <button
-                      onClick={handleSubmit}
+                      onClick={onSubmitHandler}
                       className="w-72 my-3 items-center flex justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
                       Submit
@@ -185,8 +194,9 @@ export default function StaffEdit() {
                   type="text"
                   label="Name"
                   name="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={staff.name}
+                  onChange={(e) => inputChangeHandler(e)}
+                  // onChange={(e) => setName(e.target.value)}
                   placeholder="Enter Staff name..."
                   labelPlacement="outside"
                 />
@@ -196,19 +206,36 @@ export default function StaffEdit() {
                   type="email"
                   name="email"
                   label="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={staff.email}
+                  onChange={(e) => inputChangeHandler(e)}
                   placeholder="Enter reference..."
                   labelPlacement="outside"
                 />
+              </div>
+              <div className="w-60">
+                <Select
+                  labelPlacement="outside"
+                  label="Location"
+                  name="location"
+                  placeholder="Select an location"
+                  selectedKeys={staff.location ? [staff.location] : false}
+                  onChange={(e) => inputChangeHandler(e)}
+                  className="w-60"
+                >
+                  {locations.map((loc) => (
+                    <SelectItem key={loc.id} value={loc.id}>
+                      {loc.name}
+                    </SelectItem>
+                  ))}
+                </Select>
               </div>
               <div className="w-60">
                 <Input
                   type="text"
                   name="address"
                   label="Address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  value={staff.address}
+                  onChange={(e) => inputChangeHandler(e)}
                   placeholder="Enter Address..."
                   labelPlacement="outside"
                 />
@@ -219,9 +246,11 @@ export default function StaffEdit() {
                   type="date"
                   name="dob"
                   labelPlacement="outside"
-                  onChange={(e) => setBirth(e.target.value)}
+                  onChange={(e) => inputChangeHandler(e)}
                   value={
-                    birth ? new Date(birth).toISOString().split("T")[0] : ""
+                    staff.birthdate
+                      ? new Date(staff.birthdate).toISOString().split("T")[0]
+                      : ""
                   }
                 />
               </div>
@@ -230,8 +259,8 @@ export default function StaffEdit() {
                   type="number"
                   name="phone"
                   label="Phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  value={staff.phone}
+                  onChange={(e) => inputChangeHandler(e)}
                   placeholder="Enter Phone..."
                   labelPlacement="outside"
                 />
@@ -241,8 +270,8 @@ export default function StaffEdit() {
                   type="text"
                   name="city"
                   label="City"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
+                  value={staff.city}
+                  onChange={(e) => inputChangeHandler(e)}
                   placeholder="Enter City..."
                   labelPlacement="outside"
                 />
@@ -253,10 +282,10 @@ export default function StaffEdit() {
                     labelPlacement="outside"
                     label="Gender"
                     name="gender"
-                    value={gender}
+                    value={staff.gender}
+                    onChange={(e) => inputChangeHandler(e)}
                     placeholder="Select an gender"
-                    selectedKeys={gender ? [gender] : false}
-                    onChange={(e) => setGender(e.target.value)}
+                    selectedKeys={staff.gender ? [staff.gender] : false}
                     className="max-w-xs"
                   >
                     <SelectItem value="male" key="male">

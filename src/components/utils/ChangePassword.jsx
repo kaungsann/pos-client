@@ -23,7 +23,7 @@ export default function ChangePassword({ close, id }) {
       );
 
       if (resData.status) {
-        toast(resData.message);
+        toast.success(resData.message);
         handleClose();
       } else {
         toast.error(resData.message);
