@@ -68,7 +68,7 @@ export default function Profile() {
               loading="eager | lazy"
               src={userInfo.image ? userInfo.image : user}
               alt="image"
-              className="w-40 h-36 rounded-full"
+              className="w-40 h-36 rounded-full object-cover"
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = user;

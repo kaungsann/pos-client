@@ -5,6 +5,7 @@ import { removeData, pageRefresh } from "../../redux/actions";
 import { AiOutlinePlus } from "react-icons/ai";
 import axios from "axios";
 import { BASE_URL } from "../Api";
+import userIcons from "../../assets/icon.png";
 
 import {
   Input,
@@ -30,7 +31,6 @@ function PersonalEdit() {
     email: "",
     address: "",
     image: "",
-    location: "",
     city: "",
     birthdate: "",
     gender: "",
@@ -38,7 +38,6 @@ function PersonalEdit() {
 
   const [info, setInfo] = useState(userDoc);
   const [updateInfo, setUpdateInfo] = useState({});
-  const [adminImg, setAdminImg] = useState(null);
 
   const [isSelected, setIsSelected] = useState(false);
   const [selectFile, setSelectedFile] = useState(null);
@@ -94,9 +93,6 @@ function PersonalEdit() {
       if (isSelected) {
         formData.append("image", selectFile);
       }
-      formData.append("location", user.location);
-
-      // console.log("form data is a", formData);
 
       for (let key in updateInfo) {
         formData.append(key, updateInfo[key]);
@@ -109,7 +105,6 @@ function PersonalEdit() {
             "Content-Type": "multipart/form-data",
           },
         });
-
         if (!data.status) {
           if (data?.message == "Token Expire , Please Login Again") {
             dipatch(removeData(null));
@@ -118,8 +113,8 @@ function PersonalEdit() {
         } else {
           dispatch(pageRefresh());
           toast.success(data.message);
+
           onOpenChange();
-          ModalBody;
         }
       } catch (error) {
         console.error("Error fetching admin info:", error);
@@ -149,10 +144,8 @@ function PersonalEdit() {
 
         const adminData = data.data[0];
 
-        const image = adminData?.image;
-        if (image) setAdminImg(image);
         setInfo({ ...info, ...adminData });
-        console.log("admin data is a", adminData);
+
         setUpdateInfo({
           username: adminData.username,
           email: adminData.email,
@@ -164,6 +157,8 @@ function PersonalEdit() {
 
     fetchData();
   }, []);
+
+  console.log("info data is a", info);
 
   return (
     <div>
@@ -182,11 +177,6 @@ function PersonalEdit() {
       <div className="flex justify-between items-center w-full mt-4 text-slate-700 pb-3 px-4">
         <div className="flex items-center">
           <h3 className="text-2xl font-bold">Personal Information</h3>
-          {user.role.name === "user" && (
-            <span className="mx-3 text-slate-500 font-semibold">
-              {" ( " + info.location.name + " ) "}
-            </span>
-          )}
         </div>
 
         <Button
@@ -209,28 +199,26 @@ function PersonalEdit() {
       <form className="flex justify-between gap-10 p-5">
         <div>
           <div className="relative w-36 h-36 mt-4 flex justify-center items-center p-8 bg-white border-2 rounded-md shadow-md">
-            {isSelected ? (
-              <img
-                src={selectedImage}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = user;
-                }}
-                className="absolute object-cover w-full h-full"
-              />
-            ) : adminImg ? (
-              <img
-                src={adminImg}
-                alt={info.name}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = user;
-                }}
-                className="absolute object-cover w-full h-full"
-              />
-            ) : (
-              <img src={user} className="absolute object-cover w-full h-full" />
-            )}
+            <img
+              src={
+                selectedImage
+                  ? selectedImage
+                  : info.image
+                  ? info.image
+                  : userIcons
+              }
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = user;
+              }}
+              className="absolute object-cover w-full h-full"
+              alt="User"
+            />
+
+            {/* // <img
+              //   src={userIcons}
+              //   className="absolute object-cover w-full h-full"
+              // /> */}
           </div>
           <div
             onClick={() => {

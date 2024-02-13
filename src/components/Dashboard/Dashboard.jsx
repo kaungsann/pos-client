@@ -91,7 +91,7 @@ export default function Admin() {
                   <img
                     src={user.image ? user.image : userIcons}
                     alt="User Icon"
-                    className="w-12 h-10 rounded-full shadow-sm hover:opacity-75"
+                    className="w-12 h-10 rounded-full object-cover shadow-sm hover:opacity-75"
                     onError={(e) => {
                       e.target.src = userIcons;
                     }}
