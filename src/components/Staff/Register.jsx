@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Progress, Select, SelectItem } from "@nextui-org/react";
-import { FormPostApi, getApi } from "../Api";
+import { FormPostApi } from "../Api";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,8 +16,8 @@ export default function Register() {
   const [birth, setBirth] = useState("");
   const [gender, setGender] = useState("");
   const [city, setCity] = useState("");
-  const [locations, setLocations] = useState([]);
-  const [locationId, setLocationId] = useState("");
+  // const [locations, setLocations] = useState([]);
+  //const [locationId, setLocationId] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -53,7 +53,7 @@ export default function Register() {
     // }
     formData.append("username", name);
     formData.append("email", email);
-    formData.append("location", locationId);
+    //formData.append("location", locationId);
     formData.append("password", password);
 
     let response = await FormPostApi("/user", formData, token.accessToken);
@@ -67,15 +67,15 @@ export default function Register() {
     }
   };
 
-  const getLocation = async () => {
-    const resData = await getApi("/location", token.accessToken);
-    const filteredLocation = resData.data.filter((la) => la.active === true);
-    setLocations(filteredLocation);
-  };
+  // const getLocation = async () => {
+  //   const resData = await getApi("/location", token.accessToken);
+  //   const filteredLocation = resData.data.filter((la) => la.active === true);
+  //   setLocations(filteredLocation);
+  // };
 
-  useEffect(() => {
-    getLocation();
-  }, []);
+  // useEffect(() => {
+  //   getLocation();
+  // }, []);
 
   return (
     <div>
@@ -140,7 +140,7 @@ export default function Register() {
                 />
               </div>
 
-              <div className="w-60">
+              {/* <div className="w-60">
                 <Select
                   labelPlacement="outside"
                   label="Location"
@@ -155,7 +155,7 @@ export default function Register() {
                     </SelectItem>
                   ))}
                 </Select>
-              </div>
+              </div> */}
 
               <div className="w-60">
                 <Input
