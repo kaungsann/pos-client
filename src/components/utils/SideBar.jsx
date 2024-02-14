@@ -998,152 +998,140 @@ export default function SideBar() {
               <div className="overflow-hidden transition-all w-full">
                 <ul className="cursor-pointer mt-2 w-full">
                   <li
-                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/inventory/overview"
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/inventory/overview");
                     }}
                   >
                     <Icon
                       icon="fluent-mdl2:analytics-view"
-                      className="text-slate-600 text-xl"
+                      className="text-xl"
                     />
                     <h3 className="ml-3">Overview</h3>
                   </li>
                   <li
-                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/products/all" ||
                       location.pathname === "/admin/products/create" ||
                       location.pathname === `/admin/products/edit/${id}` ||
                       location.pathname === `/admin/products/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/products/all");
                     }}
                   >
-                    <Icon
-                      icon="fluent-mdl2:product"
-                      className="text-slate-600 text-xl"
-                    />
+                    <Icon icon="fluent-mdl2:product" className="text-xl" />
 
                     <h3 className="ml-3">Product</h3>
                   </li>
                   <li
-                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/categorys/all" ||
                       location.pathname === "/admin/categorys/create" ||
                       location.pathname === `/admin/categorys/edit/${id}` ||
                       location.pathname === `/admin/categorys/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/categorys/all");
                     }}
                   >
-                    <Icon
-                      icon="tabler:category-plus"
-                      className="text-slate-500 text-2xl"
-                    />
+                    <Icon icon="tabler:category-plus" className=" text-xl" />
 
-                    <h3 className="ml-2">Category</h3>
+                    <h3 className="ml-3">Category</h3>
                   </li>
                   <li
-                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/uom-category/all" ||
                       location.pathname === "/admin/uom-category/create" ||
                       location.pathname === `/admin/uom-category/edit/${id}` ||
                       location.pathname === `/admin/uom-category/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/uom-category/all");
                     }}
                   >
-                    <Icon
-                      icon="carbon:category"
-                      className="text-slate-500 text-2xl"
-                    />
+                    <Icon icon="carbon:category" className="text-xl" />
 
-                    <h3 className="ml-2">UOM Catg</h3>
+                    <h3 className="ml-3">UOM Catg</h3>
                   </li>
                   <li
-                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/uom/all" ||
                       location.pathname === "/admin/uom/create" ||
                       location.pathname === `/admin/uom/edit/${id}` ||
                       location.pathname === `/admin/uom/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/uom/all");
                     }}
                   >
-                    <Icon icon="ph:ruler" className="text-slate-500 text-2xl" />
+                    <Icon icon="ph:ruler" className="text-xl" />
 
-                    <h3 className="ml-2">UOM</h3>
+                    <h3 className="ml-3">UOM</h3>
                   </li>
                   <li
-                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/stock/all" ||
                       location.pathname === "/admin/stock/create" ||
                       location.pathname === `/admin/stock/edit/${id}` ||
                       location.pathname === `/admin/stock/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/stock/all");
                     }}
                   >
                     <Icon
                       icon="healthicons:rdt-result-out-stock-outline"
-                      className="text-slate-500 text-2xl"
+                      className="text-xl"
                     />
 
-                    <h3 className="ml-2">Stock</h3>
+                    <h3 className="ml-3">Stock</h3>
                   </li>
                   <li
-                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/adjustment/view"
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/adjustment/view");
                     }}
                   >
                     <Icon
                       icon="tabler:adjustments-horizontal"
-                      className="text-slate-500 text-xl"
+                      className="text-xl"
                     />
 
                     <h3 className="ml-3">Adjustment</h3>
                   </li>
                   <li
-                    className={`p-1 ml-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/locations/all" ||
                       location.pathname === "/admin/locations/create" ||
                       location.pathname === `/admin/locations/edit/${id}` ||
                       location.pathname === `/admin/locations/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/locations/all");
                     }}
                   >
-                    <Icon
-                      icon="ep:location"
-                      className="text-slate-600 text-xl"
-                    />
+                    <Icon icon="ep:location" className="text-xl" />
                     <h3 className="ml-3">Location</h3>
                   </li>
                 </ul>
@@ -1161,52 +1149,46 @@ export default function SideBar() {
               <div className="overflow-hidden transition-all w-full">
                 <ul className="cursor-pointer mt-2">
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/purchase/view"
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/purchase/view");
                     }}
                   >
-                    <Icon
-                      icon="uim:analytics"
-                      className="text-slate-500 text-xl"
-                    />
+                    <Icon icon="uim:analytics" className="text-xl" />
 
                     <span className="ml-3">Overview</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/purchase/all" ||
                       location.pathname === "/admin/purchase/create" ||
                       location.pathname === `/admin/purchase/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/purchase/all");
                     }}
                   >
-                    <Icon
-                      icon="icons8:buy"
-                      className="text-slate-500 text-xl"
-                    />
+                    <Icon icon="icons8:buy" className="text-xl" />
                     <span className="ml-3"> Purchase Orders</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex items-center rounded-sm text-md hover:bg-slate-100 text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/customers/vendors" ||
                       location.pathname === `/admin/customers/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/customers/vendors");
                     }}
                   >
-                    <Icon icon="ph:user" className="text-slate-500 text-xl" />
+                    <Icon icon="ph:user" className="text-xl" />
 
                     <span className="ml-3">Vendor</span>
                   </li>
@@ -1226,51 +1208,45 @@ export default function SideBar() {
               <div className="overflow-hidden transition-all w-full">
                 <ul className="cursor-pointer mt-2">
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/saleorders/view"
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/saleorders/view");
                     }}
                   >
-                    <Icon
-                      icon="uim:analytics"
-                      className="text-slate-500 text-xl"
-                    />
+                    <Icon icon="uim:analytics" className="text-xl" />
                     <span className="ml-3">Overview</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex hover:bg-slate-100 items-center rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/saleorders/all" ||
                       location.pathname === "/admin/saleorders/create" ||
                       location.pathname === `/admin/saleorders/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/saleorders/all");
                     }}
                   >
-                    <Icon
-                      icon="icon-park-outline:buy"
-                      className="text-slate-500 text-xl"
-                    />
+                    <Icon icon="icon-park-outline:buy" className="text-xl" />
 
                     <span className="ml-3">Sale Orders</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/customers/all"
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/customers/all");
                     }}
                   >
-                    <Icon icon="ph:user" className="text-slate-500 text-xl" />
+                    <Icon icon="ph:user" className="text-xl" />
                     <span className="ml-3">Customer</span>
                   </li>
                 </ul>
@@ -1288,62 +1264,52 @@ export default function SideBar() {
               <div className="overflow-hidden transition-all w-full">
                 <ul className="cursor-pointer mt-2">
                   <li
-                    className={`p-1 px-3 flex items-center rounded-sm hover:bg-slate-100 text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/partners/all" ||
                       location.pathname === "/admin/partners/create" ||
                       location.pathname === `/admin/partners/edit/${id}` ||
                       location.pathname === `/admin/partners/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/partners/all");
                     }}
                   >
-                    <Icon
-                      icon="ph:users-three"
-                      className="text-slate-500 text-xl"
-                    />
+                    <Icon icon="ph:users-three" className="text-xl" />
 
                     <span className="ml-3">Partner</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/employee/all" ||
                       location.pathname === "/admin/employee/create" ||
                       location.pathname === `/admin/employee/edit/${id}` ||
                       location.pathname === `/admin/employee/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/employee/all");
                     }}
                   >
-                    <Icon
-                      icon="clarity:employee-line"
-                      className="text-slate-500 text-xl"
-                    />
+                    <Icon icon="clarity:employee-line" className="text-xl" />
                     <span className="ml-3">Employee</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/user/all" ||
                       location.pathname === "/admin/user/create" ||
                       location.pathname === `/admin/user/edit/${id}` ||
                       location.pathname === `/admin/user/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/user/all");
                     }}
                   >
-                    <Icon
-                      icon="solar:user-id-outline"
-                      className="text-slate-500 text-xl"
-                    />
-
+                    <Icon icon="solar:user-id-outline" className="text-xl" />
                     <span className="ml-3">Staff</span>
                   </li>
                 </ul>
@@ -1361,91 +1327,81 @@ export default function SideBar() {
               <div className="overflow-hidden transition-all w-full">
                 <ul className="cursor-pointer mt-2">
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/account/overview"
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/account/overview");
                     }}
                   >
-                    <Icon
-                      icon="carbon:account"
-                      className="tet-slate-500 text-xl"
-                    />
-
+                    <Icon icon="carbon:account" className="text-xl" />
                     <span className="ml-3">Overview</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/discount/all" ||
                       location.pathname === "/admin/discount/create" ||
                       location.pathname === `/admin/discount/edit/${id}` ||
                       location.pathname === `/admin/discount/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/discount/all");
                     }}
                   >
-                    <Icon
-                      icon="iconamoon:discount"
-                      className="tet-slate-500 text-xl"
-                    />
+                    <Icon icon="iconamoon:discount" className="text-xl" />
 
                     <span className="ml-3">Discount</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/opex/all" ||
                       location.pathname === "/admin/opex/create" ||
                       location.pathname === `/admin/opex/edit/${id}` ||
                       location.pathname === `/admin/opex/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/opex/all");
                     }}
                   >
                     <Icon
                       icon="icon-park-outline:table-report"
-                      className="tet-slate-500 text-xl"
+                      className=" text-xl"
                     />
 
                     <span className="ml-3">Opex</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/fixed-cost/all" ||
                       location.pathname === "/admin/fixed-cost/create" ||
                       location.pathname === `/admin/fixed-cost/edit/${id}` ||
                       location.pathname === `/admin/fixed-cost/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/fixed-cost/all");
                     }}
                   >
-                    <Icon
-                      icon="bi:file-text"
-                      className="tet-slate-500 text-xl"
-                    />
+                    <Icon icon="bi:file-text" className="text-xl" />
 
                     <span className="ml-3">Fixed Cost</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/variable-cost/all" ||
                       location.pathname === "/admin/variable-cost/create" ||
                       location.pathname === `/admin/variable-cost/edit/${id}` ||
                       location.pathname === `/admin/variable-cost/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/variable-cost/all");
                     }}
@@ -1458,22 +1414,19 @@ export default function SideBar() {
                     <span className="ml-3"> Variable Cost</span>
                   </li>
                   <li
-                    className={`p-1 px-3 flex items-center hover:bg-slate-100 rounded-sm text-md text-slate-500 ${
+                    className={`p-1 px-3 flex items-center hover:text-white hover:bg-[#6890c1] rounded-sm text-md ${
                       location.pathname === "/admin/waste/all" ||
                       location.pathname === "/admin/waste/create" ||
                       location.pathname === `/admin/waste/edit/${id}` ||
                       location.pathname === `/admin/waste/detail/${id}`
-                        ? "text-white bg-slate-300 "
-                        : ""
-                    }}`}
+                        ? "text-white bg-[#6890c1]"
+                        : "text-slate-500"
+                    }`}
                     onClick={() => {
                       navigate("/admin/waste/all");
                     }}
                   >
-                    <Icon
-                      icon="fluent:feed-28-regular"
-                      className="tet-slate-500 text-xl"
-                    />
+                    <Icon icon="fluent:feed-28-regular" className="text-xl" />
 
                     <span className="ml-3">Waste</span>
                   </li>
