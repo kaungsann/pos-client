@@ -8,6 +8,7 @@ import FilterBox from "./FilterBox";
 // import ExcelExportButton from "../../ExcelExportButton";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@nextui-org/react";
+import ExcelExportButton from "../../ExcelExportButton";
 
 export default function SaleTemplate() {
   const [sales, setSales] = useState([]);
@@ -37,7 +38,7 @@ export default function SaleTemplate() {
   const SALE_API = {
     INDEX: BASE_URL + "/sale",
     IMPORT: BASE_URL + "/sale/import-excel",
-    EXPORT: BASE_URL + "/purchaselines/export-excel",
+    EXPORT: BASE_URL + "/sale/export-excel",
   };
 
   const fetchSaleData = async () => {
@@ -181,12 +182,12 @@ export default function SaleTemplate() {
             Add
           </Button>
           <FilterBox onFilter={handleFilterChange} />
-          {/* <div className="mx-3">
+          <div className="mx-3">
             <ExcelExportButton
               token={token.accessToken}
               apiEndpoint={SALE_API.EXPORT}
             />
-          </div> */}
+          </div>
         </div>
       </div>
       <SaleList orders={filteredSale} />

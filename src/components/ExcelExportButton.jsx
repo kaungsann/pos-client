@@ -12,6 +12,8 @@ const ExcelExportButton = ({ token, apiEndpoint }) => {
         responseType: "blob",
       });
 
+      console.log("reponse data is a", response);
+
       if (!response.status === 200) {
         throw new Error("Failed to fetch Excel file");
       }
