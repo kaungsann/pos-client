@@ -128,7 +128,9 @@ export default function ProductDetails() {
                         <div className="my-6">
                           <h4 className="text-md text-slate-500">Category</h4>
                           <h2 className="text-md text-slate-600 mt-1 font-semibold">
-                            {product.category ? product.category.name : "None"}
+                            {product.category?.name
+                              ? product.category.name
+                              : "None"}
                           </h2>
                         </div>
                         <div>

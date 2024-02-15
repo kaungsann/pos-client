@@ -1,18 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { getApi, sendJsonToApi } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import { BsTrash } from "react-icons/bs";
-import {
-  Input,
-  Select,
-  SelectItem,
-  TableCell,
-  TableRow,
-} from "@nextui-org/react";
 import {
   addCustomerToPurchaseOrder,
   addDateToPurchaseOrder,
@@ -26,6 +18,11 @@ import {
 import { Icon } from "@iconify/react";
 
 import {
+  Input,
+  Select,
+  SelectItem,
+  TableCell,
+  TableRow,
   Table,
   TableHeader,
   TableColumn,
@@ -186,6 +183,12 @@ export default function PurchaseCreate() {
     setLine(INIT_LINE_STATE);
   };
 
+  const handleDiscard = (e) => {
+    e.preventDefault();
+    dispatch(removeAllLinesFromPurchaseOrder());
+    navigate("/admin/purchase/all");
+  };
+
   useEffect(() => {
     getPartner();
     getProduct();
@@ -228,16 +231,12 @@ export default function PurchaseCreate() {
               Save
             </Button>
 
-            <Link to="/admin/purchase/all">
-              <Button
-                onClick={() => {
-                  dispatch(removeAllLinesFromPurchaseOrder());
-                }}
-                className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5"
-              >
-                Discard
-              </Button>
-            </Link>
+            <Button
+              onClick={handleDiscard}
+              className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5"
+            >
+              Discard
+            </Button>
           </div>
         </div>
 
@@ -260,10 +259,10 @@ export default function PurchaseCreate() {
                     }}
                     className="max-w-xs"
                   >
-                    <SelectItem value="bank" key="bank">
+                    <SelectItem value="bank" key="bank" textValue="Bank">
                       Bank
                     </SelectItem>
-                    <SelectItem value="cash" key="cash">
+                    <SelectItem value="cash" key="cash" textValue="Cash">
                       Cash
                     </SelectItem>
                   </Select>
@@ -298,7 +297,7 @@ export default function PurchaseCreate() {
                     className="max-w-xs"
                   >
                     {partners.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>
+                      <SelectItem key={p.id} value={p.id} textValue={p.name}>
                         {p.name}
                       </SelectItem>
                     ))}
@@ -335,7 +334,7 @@ export default function PurchaseCreate() {
                     className="max-w-xs"
                   >
                     {locations.map((ct) => (
-                      <SelectItem key={ct.id} value={ct.id}>
+                      <SelectItem key={ct.id} value={ct.id} textValue={ct.name}>
                         {ct.name}
                       </SelectItem>
                     ))}
@@ -423,7 +422,7 @@ export default function PurchaseCreate() {
                     className="max-w-xs"
                   >
                     {products.map((pt) => (
-                      <SelectItem key={pt.id} value={pt.id}>
+                      <SelectItem key={pt.id} value={pt.id} textValue={pt.name}>
                         {pt.name}
                       </SelectItem>
                     ))}
@@ -501,7 +500,11 @@ export default function PurchaseCreate() {
                     }}
                   >
                     {uoms.map((uom) => (
-                      <SelectItem key={uom.id} value={uom.id}>
+                      <SelectItem
+                        key={uom.id}
+                        value={uom.id}
+                        textValue={uom.name}
+                      >
                         {uom.name}
                       </SelectItem>
                     ))}

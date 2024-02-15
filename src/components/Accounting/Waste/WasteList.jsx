@@ -53,7 +53,7 @@ export default function WasteList({ opexs, refresh }) {
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "",
+    column: "name",
     direction: "ascending",
   });
 

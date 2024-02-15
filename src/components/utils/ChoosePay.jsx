@@ -24,8 +24,6 @@ export default function ChoosePay({ totalCost, change, tax, subTotal }) {
 
   const locationData = useSelector((state) => state.location);
 
-  console.log("locatin is a", locationData.id);
-
   const dispatch = useDispatch();
   dispatch(add(true));
 

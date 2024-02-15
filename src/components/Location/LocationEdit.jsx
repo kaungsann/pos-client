@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { getApi, PathData } from "../Api";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
@@ -10,7 +9,7 @@ import { Input, Button, Progress } from "@nextui-org/react";
 
 export default function LocationEdit() {
   let [name, setName] = useState("");
-  const [code, setCode] = useState("");
+  const [shortName, setShortName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const token = useSelector((state) => state.IduniqueData);
@@ -25,7 +24,7 @@ export default function LocationEdit() {
         dipatch(removeData(null));
       }
       setName(response.data[0].name);
-      setCode(response.data[0].code);
+      setShortName(response.data[0].shortName);
     } catch (error) {
       console.error("Error fetching location:", error);
     }
@@ -33,7 +32,7 @@ export default function LocationEdit() {
 
   const editCategoryApi = async () => {
     setIsLoading(true);
-    const data = { name, code };
+    const data = { name, shortName };
     try {
       let resData = await PathData(`/location/${id}`, data, token.accessToken);
       if (resData.status) {
@@ -53,6 +52,11 @@ export default function LocationEdit() {
   const handleSubmit = (e) => {
     e.preventDefault();
     editCategoryApi();
+  };
+
+  const handleDiscard = (e) => {
+    e.preventDefault();
+    navigate("/admin/locations/all");
   };
 
   useEffect(() => {
@@ -93,11 +97,12 @@ export default function LocationEdit() {
               Save
             </Button>
 
-            <Link to="/admin/locations/all">
-              <Button className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5">
-                Discard
-              </Button>
-            </Link>
+            <Button
+              onClick={handleDiscard}
+              className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5"
+            >
+              Discard
+            </Button>
           </div>
         </div>
         <div className="container bg-white p-5 rounded-lg max-w-6xl">
@@ -123,9 +128,9 @@ export default function LocationEdit() {
                 <Input
                   type="text"
                   label="Short Name"
-                  name="code"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
+                  name="shortName"
+                  value={shortName}
+                  onChange={(e) => setShortName(e.target.value)}
                   placeholder="Enter short name..."
                   labelPlacement="outside"
                 />

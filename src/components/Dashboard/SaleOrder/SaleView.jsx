@@ -515,23 +515,25 @@ export default function SaleView() {
                 Recent Sale Orders
               </h2>
               <table className="w-full mb-6">
-                <tr className="bg-[#e2e8f0]">
-                  <th className="lg:px-4 py-2 text-center text-slate-800">
-                    Customer Name
-                  </th>
-                  <th className="lg:px-4 py-2 text-center text-slate-800">
-                    Order Date
-                  </th>
-                  <th className="lg:px-4 py-2 text-center text-slate-800">
-                    Total (Inc. Tax)
-                  </th>
-                  <th className="lg:px-4 py-2 text-center text-slate-800">
-                    Address
-                  </th>
-                  <th className="lg:px-4 py-2 text-center text-slate-800">
-                    Order Status
-                  </th>
-                </tr>
+                <thead>
+                  <tr className="bg-[#e2e8f0]">
+                    <th className="lg:px-4 py-2 text-center text-slate-800">
+                      Customer Name
+                    </th>
+                    <th className="lg:px-4 py-2 text-center text-slate-800">
+                      Order Date
+                    </th>
+                    <th className="lg:px-4 py-2 text-center text-slate-800">
+                      Total (Inc. Tax)
+                    </th>
+                    <th className="lg:px-4 py-2 text-center text-slate-800">
+                      Address
+                    </th>
+                    <th className="lg:px-4 py-2 text-center text-slate-800">
+                      Order Status
+                    </th>
+                  </tr>
+                </thead>
 
                 <tbody className="w-full space-y-10 relative">
                   {orderList.length > 0 ? (

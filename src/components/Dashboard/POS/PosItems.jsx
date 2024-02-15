@@ -193,10 +193,12 @@ export default function PosItems() {
 
                 <Select
                   name="location"
-                  placeholder="Select a location"
+                  //labelPlacement="inside"
+                  label="Select a location"
+                  variant="bordered"
                   classNames={{
-                    base: "w-40 mx-4",
-                    trigger: "h-10",
+                    base: "w-72 mx-4",
+                    trigger: "h-12 p-4",
                   }}
                   // onChange={(e) => setLoca(e.target.value)}
                   onChange={handleLocationSelect}

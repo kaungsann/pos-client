@@ -163,7 +163,7 @@ export default function PaySlip({
 
 PaySlip.propTypes = {
   total: PropTypes.number,
-  cash: PropTypes.number,
+  cash: PropTypes.string,
   pay: PropTypes.number,
   tax: PropTypes.number,
   sub: PropTypes.number,

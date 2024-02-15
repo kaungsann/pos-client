@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { getApi, sendJsonToApi } from "../../Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -239,6 +238,12 @@ export default function SaleOrderCreate() {
     setLine(INIT_LINE_STATE);
   };
 
+  const handleDiscard = (e) => {
+    e.preventDefault();
+    dispatch(removeAllLinesFromSaleOrder());
+    navigate("/admin/saleOrders/all");
+  };
+
   useEffect(() => {
     getPartner();
     getDiscount();
@@ -281,16 +286,12 @@ export default function SaleOrderCreate() {
               Save
             </Button>
 
-            <Link to="/admin/saleOrders/all">
-              <Button
-                onClick={() => {
-                  dispatch(removeAllLinesFromSaleOrder());
-                }}
-                className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5"
-              >
-                Discard
-              </Button>
-            </Link>
+            <Button
+              onClick={handleDiscard}
+              className="rounded-sm shadow-sm flex items-center  text-red-500 border-red-500 bg-white border-2 hover:opacity-75 text-sm hover:text-white hover:bg-red-500 font-bold px-3 py-1.5"
+            >
+              Discard
+            </Button>
           </div>
         </div>
 
@@ -702,7 +703,10 @@ export default function SaleOrderCreate() {
                             className="text-center text-[#ef4444] text-lg font-bold hover:text-[#991b1b]"
                             onClick={() =>
                               dispatch(
-                                removeLineFromSaleOrder(line.product?._id, line.uom?.id)
+                                removeLineFromSaleOrder(
+                                  line.product?._id,
+                                  line.uom?.id
+                                )
                               )
                             }
                           />
