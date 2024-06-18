@@ -28,6 +28,8 @@ export default function Login() {
         user
       );
 
+      // console.log("dasta is a", data);
+
       if (success) {
         setLoading(false);
         toast(message);
