@@ -5,7 +5,8 @@
 // export const BASE_URL =
 ("https://80a2e3emcc.execute-api.ap-southeast-1.amazonaws.com");
 
-export const BASE_URL = "https://52.74.250.225";
+export const BASE_URL =
+  "https://uzebbxwv2i.execute-api.ap-southeast-1.amazonaws.com";
 
 export const getApi = async (route, token = null) => {
   const headers = {
